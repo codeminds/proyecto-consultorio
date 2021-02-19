@@ -1,0 +1,109 @@
+.form-field{
+    padding: 5px;
+}
+
+.form-field label{
+    display: inline-block;
+    font-size: 1.4rem;
+    margin-bottom: 5px;
+}
+
+.form-field input:not([type="radio"]):not([type="checkbox"]), .form-field select, .form-field textarea{
+    display: inline-block;
+    width: 100%;
+    height: 2.5rem;
+    padding: 0px 5px;
+    border: solid 1px #cccccc;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.2);
+    color: inherit;
+    outline: 0;
+}
+
+.form-field input:not([type="radio"]):not([type="checkbox"]), .form-field select:focus, .form-field textarea:focus{
+    border-color: #a7a7a7;
+}
+
+.form-field textarea{
+    min-height: 150px;
+    resize: vertical;
+}
+
+.form-field .check{
+    cursor: pointer;
+    display: block;
+}
+
+.form-field .check i{
+    display: inline-block;
+    width: 1.5rem;
+    height: 1.5rem;
+    border: solid 1px #cccccc;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
+    vertical-align: middle;
+    margin-right: 5px;
+}
+
+.form-field .check span{
+    vertical-align: middle;
+}
+
+.form-field .check input{
+    display: none;
+}
+
+.form-field .check :checked + i{
+    background: green;
+}
+
+.button{
+    display: inline-block;
+    text-decoration: none;
+    padding: 8px 18px;
+    font-size: 1.3rem;
+    border-radius: 2px;
+    background-color: transparent;
+    border: 1px solid #000000;
+    color: inherit;
+}
+
+.button.success{
+    background-color: #0bbe23;
+    border-color: #0b5e12;
+    color: #fff;
+}
+
+.button.success:hover{
+    background-color: #4ac95b;
+}
+
+.button.reset{
+    background-color: #817676;
+    border-color: #3f3d3d;
+    color: #fff;
+}
+
+.button.reset:hover{
+    background-color: #5a5656;
+}
+
+.button.danger{
+    background-color: #b53d3d;
+    border-color: #580707;
+    color: #fff;
+}
+
+.button.danger:hover{
+    background-color: #ca6666;
+}
+
+.errors .item{
+    margin-bottom: 0.2rem;
+    padding: 0.5rem;
+    background: #b53d3d;
+    border: #580707 1px solid;
+    border-radius: 3px;
+    color: #fff;
+
+}

@@ -1,0 +1,42 @@
+.table table{
+    width: 100%;
+    table-layout: fixed;
+}
+
+.table th, .table td{
+    padding: 5px;
+    border: solid 1px;
+}
+
+.table th{
+    text-align: left;
+    font-weight: bold;
+    border-color: #ffc591;
+    background: #ffc591;
+    color: #343434;
+}
+
+.table td{
+    border-color: #e6e6e6;
+}
+
+.table td.center{
+    text-align: center;
+}
+
+.table tbody tr:nth-child(odd){
+    background: #f0f0f0;
+}
+
+.table > div{
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.table .controls{
+    margin-bottom: 0.5rem;
+}
+
+.table td button{
+    margin: 0 0.1rem;
+}

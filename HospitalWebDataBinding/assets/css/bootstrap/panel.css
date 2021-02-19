@@ -1,0 +1,38 @@
+.panel{
+    box-shadow: 3px 3px 5px -3px #000;
+    border-radius: 2px;
+    padding: 1rem;
+    border: solid 1px #e6e6e6;
+    margin-bottom: 1rem;
+    background: #f7f7f7;
+}
+
+.panel .title{
+    border-bottom: 1px solid #888;
+}
+
+.panel .toggle-section{
+    display: none;
+}
+
+.panel .toggle-section.open{
+    display: block;
+}
+
+.panel .toggle{
+    position: relative;
+    cursor: pointer;
+}
+
+.panel .toggle::after{
+    content: '>';
+    position: absolute;
+    right: 0;
+    font-size: 1.5rem;
+    bottom: 2px;
+}
+
+.panel .toggle.open::after{
+    transform: rotateZ(90deg);
+}
+

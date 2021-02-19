@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="/assets/css/bootstrap/reset.css" />
+        <link rel="stylesheet" href="/assets/css/bootstrap/grid.css" />
+        <link rel="stylesheet" href="/assets/css/bootstrap/panel.css" />
+        <link rel="stylesheet" href="/assets/css/bootstrap/table.css" />
+        <link rel="stylesheet" href="/assets/css/bootstrap/modal.css" />
+        <link rel="stylesheet" href="/assets/css/bootstrap/form.css" />
+        <link rel="stylesheet" href="/assets/css/site.css" />
+        <script type="module" src="/assets/js/view-models/appointment.js"></script>
+        <title>Appointments</title>
+    </head>
+    <body>
+        <header class="main-header">
+            <nav>
+                <ul>
+                    <li>
+                        <a href="/" class="active">Appointments</a>
+                    </li>
+                    <li>
+                        <a href="/patient-admin.html">Patients</a>
+                    </li>
+                    <li>
+                        <a href="/doctor-admin.html">Doctors</a>
+                    </li>
+                </ul>
+            </nav>
+        </header>
+        <main>
+            <h1>Appointments</h1>
+            <form>
+                <div class="panel" data-panel>
+                    <h3 class="title toggle" data-toggle>Doctor</h3>
+                    <div class="toggle-section row" data-toggle-section>
+                        <div class="form-field col col-4">
+                            <label for="f-doctor-id">Identification</label>
+                            <input type="number" id="f-doctor-id" data-doctor-filter="documentId" placeholder="123456789" />
+                        </div>
+                        <div class="form-field col col-4">
+                            <label for="f-doctor-first-name">First Name</label>
+                            <input type="text" id="f-doctor-first-name" data-doctor-filter="firstName" placeholder="John" />
+                        </div>
+                        <div class="form-field col col-4">
+                            <label for="f-doctor-last-name">Last Name</label>
+                            <input type="text" id="f-doctor-last-name" data-doctor-filter="lastName" placeholder="Smith" />
+                        </div>
+                        <div class="form-field col col-4">
+                            <label for="f-doctor-field">Field</label>
+                            <select id="f-doctor-field" data-doctor-filter="fieldId" data-list="field" data-template="field-list" data-format="nullToEmpty"></select>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel" data-panel>
+                    <h3 class="title toggle" data-toggle>Patient</h3>
+                    <div class="toggle-section row" data-toggle-section>
+                        <div class="form-field col col-3">
+                            <label for="f-patient-id">Identification</label>
+                            <input type="number" id="f-patient-id" data-patient-filter="documentId" placeholder="123456789" />
+                        </div>
+                        <div class="form-field col col-3">
+                            <label for="f-patient-first-name">First Name</label>
+                            <input type="text" id="f-patient-first-name" data-patient-filter="firstName" placeholder="John" />
+                        </div>
+                        <div class="form-field col col-3">
+                            <label for="f-patient-last-name">Last Name</label>
+                            <input type="text" id="f-patient-last-name" data-patient-filter="lastName" placholder="Smith" />
+                        </div>
+                        <div class="form-field col col-3">
+                            <label for="f-patient-date-from">From</label>
+                            <input type="datetime-local" id="f-patient-date-from" data-patient-filter="dateFrom" data-format="dateString" />
+                        </div>
+                        <div class="form-field col col-3">
+                            <label for="f-patient-date-to" >To</label>
+                            <input type="datetime-local" id="f-patient-date-to" data-patient-filter="dateTo" data-format="dateString" />
+                        </div>
+                    </div>
+                </div>
+                <div class="panel">
+                    <h3 class="title">Search</h3>
+                    <div class="row">
+                        <div class="form-field col col-2">
+                            <label for="f-date-from">From</label>
+                            <input type="datetime-local" id="f-date-from" data-filter="dateFrom" data-format="dateString" />
+                        </div>
+                        <div class="form-field col col-2">
+                            <label for="f-date-to">To</label>
+                            <input type="datetime-local" id="f-date-to" data-filter="dateTo" data-format="dateString" />
+                        </div>
+                        <div class="form-field">
+                            <button class="button success" type="button" data-search>Search</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="table">
+                <div class="controls">
+                    <button class="button success" data-new>New Appointment</button>
+                </div>
+                <div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 200%">Date</th>
+                                <th style="width: 150%">Patient</th>
+                                <th style="width: 150%">Doctor</th>
+                                <th style="width: 150%">Field</th>
+                                <th style="width: 150%"></th>
+                            </tr>
+                        </thead>
+                        <tbody data-results data-template="appointments"></tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+        <div class="modal" data-modal>
+            <div class="content">
+                <section>
+                    <h3>Appointment</h3>
+                </section>
+                <form name="saveAppointment">
+                    <div class="form-field">
+                        <label for="m-date">Date</label>
+                        <input type="datetime-local" id="m-date" data-field="date" />
+                    </div>
+                    <div class="form-field">
+                        <label for="m-patient">Patient</label>
+                        <select id="m-patient" data-field="patientId" name="patient" data-template="patient-list" data-list="patient"></select>
+                    </div>
+                    <div class="form-field">
+                        <label for="m-doctor">Doctor</label>
+                        <select id="m-doctor" data-field="doctorId" data-template="doctor-list" data-list="doctor"></select>
+                    </div>
+                    <div class="form-field">
+                        <button class="button success" type="button" data-save>Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <template id="doctor-list">
+            <option data-value="id" data-attr="value">
+                <span data-value="firstName"></span>
+                <span data-value="lastName"></span> 
+                (<span data-value="field"></span>)
+            </option>
+        </template>
+        <template id="patient-list">
+            <option data-value="id" data-attr="value">
+                <span data-value="firstName"></span>
+                <span data-value="lastName"></span> 
+                (<span data-value="documentId"></span>)
+            </option>
+        </template>
+        <template id="field-list">
+            <option data-value="id" data-attr="value">
+                <span data-value="name"></span>
+            </option>
+        </template>
+        <template id="appointments">
+            <tr>
+                <td data-value="date" data-format="date"></td>
+                <td data-value="patientName"></td>
+                <td data-value="doctorName"></td>
+                <td data-value="doctorField"></td>
+                <td class="center">
+                    <button class="button success" data-click="edit" data-value="id" data-attr="data-id">Edit</button>
+                    <button class="button danger" data-click="delete" data-value="id" data-attr="data-id">Delete</button>
+                </td>
+            </tr>
+        </template>
+    </body>
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="/assets/css/bootstrap/reset.css" />
+        <link rel="stylesheet" href="/assets/css/bootstrap/grid.css" />
+        <link rel="stylesheet" href="/assets/css/bootstrap/panel.css" />
+        <link rel="stylesheet" href="/assets/css/bootstrap/table.css" />
+        <link rel="stylesheet" href="/assets/css/bootstrap/modal.css" />
+        <link rel="stylesheet" href="/assets/css/bootstrap/form.css" />
+        <link rel="stylesheet" href="/assets/css/site.css" />
+        <script type="module" src="assets/js/view-models/doctor.js"></script>
+        <title>Doctor Administration</title>
+    </head>
+    <body>
+        <header class="main-header">
+            <nav>
+                <ul>
+                    <li>
+                        <a href="/">Appointments</a>
+                    </li>
+                    <li>
+                        <a href="/patient-admin.html">Patients</a>
+                    </li>
+                    <li>
+                        <a href="/doctor-admin.html" class="active">Doctors</a>
+                    </li>
+                </ul>
+            </nav>
+        </header>
+        <main>
+            <h1>Doctor Administration</h1>
+            <form>
+                <div class="panel">
+                    <h3 class="title">Search</h3>
+                    <div class="row">
+                        <div class="form-field col col-4">
+                            <label for="document-id">Identification</label>
+                            <input type="number" id="document-id" data-filter="documentId" placeholder="123456789" />
+                        </div>
+                        <div class="form-field col col-4">
+                            <label for="first-name">First Name</label>
+                            <input type="text" id="first-name" data-filter="firstName" placeholder="John" />
+                        </div>
+                        <div class="form-field col col-4">
+                            <label for="last-name">Last Name</label>
+                            <input type="text" id="last-name" data-filter="lastName" placeholder="Smith" />
+                        </div>
+                        <div class="form-field col col-4">
+                            <label for="field">Field</label>
+                            <select data-filter="fieldId" id="field" data-list="filter" data-template="field-list" data-format="nullToEmpty"></select>
+                        </div>
+                        <div class="form-field col col-1">
+                            <button class="button success" type="button" data-search>Search</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="table">
+                <div class="controls">
+                    <button class="button success" data-new>New Doctor</button>
+                </div>
+                <div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 100%">Identification</th>
+                                <th style="width: 200%">Name</th>
+                                <th style="width: 120%">Field</th>
+                                <th style="width: 100%"></th>
+                            </tr>
+                        </thead>
+                        <tbody data-results data-template="doctors">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+        <div class="modal" data-modal>
+            <div class="content">
+                <section>
+                    <h3>Doctor</h3>
+                </section>
+                <form>
+                    <div class="form-field">
+                        <ul class="errors" data-errors data-template="errors"></ul>
+                    </div>
+                    <div class="form-field">
+                        <label for="m-identification">Identification</label>
+                        <input type="text" id="m-identification" placeholder="123456789" data-field="documentId" />
+                    </div>
+                    <div class="form-field">
+                        <label for="m-first-name">First Name</label>
+                        <input type="text" id="m-first-name" placeholder="John" data-field="firstName" />
+                    </div>
+                    <div class="form-field">
+                        <label for="m-last-name">Last Name</label>
+                        <input type="text" id="m-last-name" placeholder="Smith" data-field="lastName" />
+                    </div>
+                    <div class="form-field">
+                        <label for="m-field">Field</label>
+                        <select name="field" id="m-field" data-field="fieldId" data-template="field-list" data-list="field"></select>
+                    </div>
+                    <div class="form-field">
+                        <button class="button success" type="button" data-save>Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <template id="field-list">
+            <option data-value="id" data-attr="value">
+                <span data-value="name"></span>
+            </option>
+        </template>
+        <template id="errors">
+            <li class="item" data-value></li>
+        </template>
+        <template id="doctors">
+            <tr>
+                <td data-value="identification"></td>
+                <td>
+                    <span data-value="firstName"></span>
+                    <span data-value="lastName"></span>
+                </td>
+                <td data-value="field.name"></td>
+                <td class="center">
+                    <button class="button success" data-click="edit" data-value="id" data-attr="data-id">Edit</button>
+                    <button class="button danger" data-click="delete" data-value="id" data-attr="data-id">Delete</button>
+                </td>
+            </tr>
+        </template>
+    </body>
+</html>
