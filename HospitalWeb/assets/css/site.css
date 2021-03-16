@@ -1,0 +1,115 @@
+/* STRUCTURE */
+html{
+    font-size: 10px;
+    height: 100%;
+}
+
+body{
+    background: #f1f1f1;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    font-size: 1.4rem;
+    height: 100%;
+    overflow: hidden;
+    color: #292929;
+}
+
+h1{
+    font-size: 4rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+h2{
+    font-size: 3.3rem;
+    font-weight: 700;
+    margin-bottom: 0.8rem;
+}
+
+h3{
+    font-size: 2rem;
+    font-weight: 400;
+    margin-bottom: 0.5rem;
+}
+
+p{
+    margin-bottom: 0.5rem;
+}
+
+/* LAYOUT */
+.navbar{
+    background: #e8e8e8;
+    padding: 5px;
+    box-shadow: 0px 0px 8px -4px #1d1d1d;
+}
+
+.navbar figure{
+    width: 70px;
+    display: inline-block;
+}
+
+.wrapper{
+    height: calc(100% - 71px);
+}
+
+.sidenav{
+    float: left;
+    width: 250px;
+    height: 100%;
+    background: #292929;
+    box-shadow: 1px 1px 3px 0px #1d1d1d;
+    color: #fff;
+    padding: 10px;
+    overflow: auto;
+    box-sizing: border-box;
+}
+
+.sidenav .category{
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: #afafaf;
+}
+
+.sidenav .menu{
+    margin-left: 3px;
+    margin-bottom: 3rem;
+}
+
+.sidenav .menu li{
+    font-size: 2rem;
+    border-left: #00aae3 3px solid;
+    margin: 4px 4px 6px 4px;
+    border-radius: 3px;
+    overflow: hidden;
+    transition: border-color 0.2s linear, box-shadow 0.2s linear;
+
+}
+
+.sidenav .menu li:hover, .sidenav .menu li.active{
+    border-color: #5ccdcc;
+    box-shadow: 0px 3px 0px 0px #5ccdcc;
+}
+
+.sidenav .menu a{
+    display: block;
+    padding: 0.5rem;
+}
+
+main{
+    float: left;
+    width: calc(100% - 250px);
+    overflow: auto;
+    box-sizing: border-box;
+    padding: 20px;
+    height: 100%;
+}
+
+.clear::after{
+    clear: both;
+    display: block;
+    content: '';
+}
+
+p a{
+    color: #5ba1b6;
+}

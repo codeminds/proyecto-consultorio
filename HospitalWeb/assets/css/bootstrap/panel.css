@@ -1,0 +1,29 @@
+.panel{
+    margin: 10px;
+    box-shadow: 8px 8px 0px -1px #adadad;
+    border-radius: 5px;
+    padding: 10px;
+    border: 1px solid #d8d8d8;
+}
+
+.panel .title{
+    border-bottom: 1px solid #d8d8d8;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.panel .title::after{
+    content: '\025B8';
+}
+
+.panel .title.open::after{
+    content: '\025BE';
+}
+
+.panel .toggle-section{
+    display: none;
+}
+
+.panel .toggle-section.open{
+    display: block;
+}
