@@ -1,0 +1,43 @@
+.table table{
+    width: 100%;
+    table-layout: fixed;
+}
+
+.table.with-controls{
+    margin-top: 7rem;
+    position: relative;
+}
+
+.table .controls{
+    position: absolute;
+    left: 0;
+    top: -3.5rem;
+}
+
+.table th, .table td{
+    padding: 5px;
+}
+
+.table th{
+    text-align: left;
+    font-weight: 700;
+    padding: 8px 5px;
+}
+
+.table tbody tr:nth-child(odd){
+    background: #d6d6d6;
+}
+
+.table td button:not(:last-child){
+    margin-right: 0.5rem;
+}
+
+.table td.buttons{
+    text-align: right;
+    letter-spacing: 0;
+}
+
+.table-controls{
+    padding: 5px;
+    text-align: right;
+}

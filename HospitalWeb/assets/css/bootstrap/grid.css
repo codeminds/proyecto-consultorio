@@ -6,7 +6,6 @@
 
 .col{
     float: left;
-    box-sizing: border-box;
 }
 
 .col.col-1{

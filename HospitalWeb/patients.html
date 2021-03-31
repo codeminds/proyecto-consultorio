@@ -27,41 +27,59 @@
                     <li>
                         <a href="/">Citas</a>
                     </li>
-                    <li class="active">
+                    <li>
                         <a href="/doctors.html">Doctores</a>
                     </li>
-                    <li>
+                    <li class="active"> 
                         <a href="/patients.html">Pacientes</a>
                     </li>
                 </ul>
             </nav>
         </div>
         <main>
-            <h1>Doctores</h1>
+            <h1>Pacientes</h1>
             <div class="panel">
                 <h3 class="title toggle">B&uacute;squeda</h3>
                 <form class="row toggle-section open">
-                    <div class="form-field col col-4">
+                    <div class="form-field col col-3">
                         <label>C&eacute;dula</label>
                         <input type="text" />
                     </div>
-                    <div class="form-field col col-4">
+                    <div class="form-field col col-3">
                         <label>Nombre</label>
                         <input type="text" />
                     </div>
-                    <div class="form-field col col-4">
+                    <div class="form-field col col-3">
                         <label>Apellido</label>
                         <input type="text" />
                     </div>
-                    <div class="form-field col col-4">
-                        <label>Especialidad</label>
-                        <select>
-                            <option value="1">Doctor General</option>
-                            <option value="2">Dentista</option>
-                            <option value="3">Pediatra</option>
-                            <option value="4">Onc&oacute;logo</option>
-                            <option value="5">Cirujano</option>
-                        </select>
+                    <div class="form-field col col-3">
+                        <label>Desde</label>
+                        <input type="datetime-local" />
+                    </div>
+                    <div class="form-field col col-3">
+                        <label>Hasta</label>
+                        <input type="datetime-local" />
+                    </div>
+                    <div class="form-field col col-3">
+                        <label>Género</label>
+                        <div>
+                            <label class="check inline">
+                                <input type="checkbox" name="gender" checked value="" />
+                                <i></i>
+                                <span>Todos</span>
+                            </label>
+                            <label class="check inline">
+                                <input type="checkbox" name="gender" value="1" />
+                                <i></i>
+                                <span>Masculino</span>
+                            </label>
+                            <label class="check inline">
+                                <input type="checkbox" name="gender" value="2" />
+                                <i></i>
+                                <span>Femenino</span>
+                            </label>
+                        </div>
                     </div>
                     <div class="form-field col col-1">
                         <button class="button success">Buscar</button>

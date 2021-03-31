@@ -53,5 +53,21 @@ figure img{
 
 a{
     color: inherit;
+}
+
+a:hover{
     text-decoration: none;
+}
+
+input{
+	margin: 0;
+	padding: 0;
+}
+
+select, button{
+	cursor: pointer;
+}
+
+*{
+    box-sizing: border-box;
 }

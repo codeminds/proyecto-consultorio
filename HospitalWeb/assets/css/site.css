@@ -14,6 +14,8 @@ body{
     color: #292929;
 }
 
+
+
 h1{
     font-size: 4rem;
     font-weight: 700;
@@ -61,7 +63,6 @@ p{
     color: #fff;
     padding: 10px;
     overflow: auto;
-    box-sizing: border-box;
 }
 
 .sidenav .category{
@@ -77,29 +78,27 @@ p{
 
 .sidenav .menu li{
     font-size: 2rem;
-    border-left: #00aae3 3px solid;
     margin: 4px 4px 6px 4px;
-    border-radius: 3px;
+    border-radius: 4px;
     overflow: hidden;
-    transition: border-color 0.2s linear, box-shadow 0.2s linear;
-
+    transition: box-shadow 0.2s linear;
+    border-bottom: 1px solid #363636;
 }
 
 .sidenav .menu li:hover, .sidenav .menu li.active{
-    border-color: #5ccdcc;
-    box-shadow: 0px 3px 0px 0px #5ccdcc;
+    box-shadow: 4px 4px 0px -1px #5ccdcc;
 }
 
 .sidenav .menu a{
     display: block;
     padding: 0.5rem;
+    text-decoration: none;
 }
 
 main{
     float: left;
     width: calc(100% - 250px);
     overflow: auto;
-    box-sizing: border-box;
     padding: 20px;
     height: 100%;
 }
@@ -112,4 +111,8 @@ main{
 
 p a{
     color: #5ba1b6;
+}
+
+.lock{
+    overflow: hidden;
 }
