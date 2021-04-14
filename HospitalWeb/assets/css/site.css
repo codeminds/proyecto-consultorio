@@ -48,6 +48,24 @@ p{
 .navbar figure{
     width: 70px;
     display: inline-block;
+    vertical-align: middle;
+}
+
+.navbar .menu{
+    display: none;
+    vertical-align: unset;
+    font-size: 2rem;
+    margin: 0 15px;
+    font-family: none;
+    padding: 10px 15px;
+    border-radius: 50px;
+    border: none;
+    transition: background linear 0.2s;
+    background: none;
+}
+
+.navbar .menu:hover{
+    background: rgba(0, 0, 0, 0.1)
 }
 
 .wrapper{
@@ -63,6 +81,17 @@ p{
     color: #fff;
     padding: 10px;
     overflow: auto;
+    scrollbar-color: rgba(255,255,255,0.1) rgba(255,255,255,0.1);
+    scrollbar-width: thin;
+}
+
+.sidenav::-webkit-scrollbar-thumb{
+    background: rgba(255,255,255,0.1);
+}
+
+.sidenav::-webkit-scrollbar {
+    background: rgba(255,255,255,0.1);
+    width: 1rem;
 }
 
 .sidenav .category{
@@ -115,4 +144,39 @@ p a{
 
 .lock{
     overflow: hidden;
+}
+
+@media screen and (max-width: 1024px){
+    .wrapper{
+        position: relative;
+    }
+
+    .navbar figure{
+        width: 60px;
+        margin: 5px;
+    }
+
+    .navbar .menu{
+        display: inline-block;
+    }
+
+    .sidenav{
+        position: absolute;
+        top: 0;
+        left: -80%;
+        max-width: 250px;
+        z-index: 100;
+        padding: 10px;
+        width: 80%;
+        transition: left ease-in 0.6s;
+    }
+
+    .sidenav.open{
+        left: 0px;
+        transition: left ease-out 0.6s;        
+    }
+
+    main{
+        width: 100%;
+    }
 }

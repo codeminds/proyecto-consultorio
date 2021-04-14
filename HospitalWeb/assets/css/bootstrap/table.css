@@ -41,3 +41,39 @@
     padding: 5px;
     text-align: right;
 }
+
+.table td.mobile{
+    display: none;
+    padding: 10px;
+    font-size: 1.5rem;
+}
+
+.table .label{
+    font-weight: 700;
+}
+
+.table td.mobile div{
+    margin-top: 1rem;
+}
+
+.table td.mobile h3{
+    margin-bottom: 1rem;
+}
+
+.table td.mobile p{
+    margin-bottom: 0.5rem;
+}
+
+@media screen and (max-width: 1024px){
+    .table table thead{
+        display: none;
+    }
+
+    .table td{
+        display: none;
+    }
+
+    .table td.mobile{
+        display: block;
+    }
+}

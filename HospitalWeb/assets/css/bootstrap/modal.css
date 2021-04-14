@@ -38,3 +38,11 @@
 .modal .modal-content.large{
     width: min(1000px, 80%);
 }
+
+@media screen and (max-width: 1024px){
+    .modal .modal-content.small,
+    .modal .modal-content.medium,
+    .modal .modal-content.large{
+        width: 95%;
+    }
+}

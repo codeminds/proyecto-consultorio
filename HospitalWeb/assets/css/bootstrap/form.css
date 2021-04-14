@@ -111,3 +111,9 @@
     background: #8f8c8c;
     border-color: #666565;
 }
+
+@media screen and (max-width: 1024px){
+    .form-field .check.inline{
+        display: block;
+    }
+}
