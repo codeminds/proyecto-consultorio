@@ -3,20 +3,19 @@ using API.DataTransferObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace API.Validators
 {
-    public class DoctorValidator : IDoctorValidator
+    public class PatientValidator : IPatientValidator
     {
         private readonly HospitalDB _database;
 
-        public DoctorValidator(HospitalDB database)
+        public PatientValidator(HospitalDB database)
         {
             this._database = database;
         }
 
-        public bool ValidateInsert(CreateUpdateDoctorDTO data, List<string> messages)
+        public bool ValidateInsert(CreateUpdatePatientDTO data, List<string> messages)
         {
             List<string> innerMessages = new List<string>();
 
@@ -33,7 +32,7 @@ namespace API.Validators
             {
                 innerMessages.Add("Identification can only contain numbers");
             }
-            else if (this._database.Doctors.Any(d => d.Identification == data.Identification))
+            else if (this._database.Patients.Any(d => d.Identification == data.Identification))
             {
                 innerMessages.Add("Identification number already exists in the system");
             }
@@ -58,10 +57,10 @@ namespace API.Validators
                 innerMessages.Add("Last Name can only contain 50 characters");
             }
 
-            //Field
-            if (!this._database.Fields.Any(f => f.Id == data.FieldId))
+            //BirthDate
+            if (data.BirthDate > DateTime.Now)
             {
-                innerMessages.Add("Field is not valid");
+                innerMessages.Add("Birth Date cannot be greated than current date");
             }
 
             messages.AddRange(innerMessages);
@@ -69,7 +68,7 @@ namespace API.Validators
             return !innerMessages.Any();
         }
 
-        public bool ValidateUpdate(int id, CreateUpdateDoctorDTO data, List<string> messages)
+        public bool ValidateUpdate(int id, CreateUpdatePatientDTO data, List<string> messages)
         {
             List<string> innerMessages = new List<string>();
 
@@ -86,7 +85,7 @@ namespace API.Validators
             {
                 innerMessages.Add("Identification can only contain numbers");
             }
-            else if (this._database.Doctors.Any(d => d.Identification == data.Identification && d.Id != id))
+            else if (this._database.Patients.Any(d => d.Identification == data.Identification && d.Id != id))
             {
                 innerMessages.Add("Identification number already exists in the system");
             }
@@ -111,10 +110,10 @@ namespace API.Validators
                 innerMessages.Add("Last Name can only contain 50 characters");
             }
 
-            //Field
-            if (!this._database.Fields.Any(f => f.Id == data.FieldId))
+            //BirthDate
+            if (data.BirthDate > DateTime.Now)
             {
-                innerMessages.Add("Field is not valid");
+                innerMessages.Add("Birth Date cannot be greated than current date");
             }
 
             messages.AddRange(innerMessages);
@@ -126,9 +125,9 @@ namespace API.Validators
         {
             List<string> innerMessages = new List<string>();
 
-            if (this._database.Appointments.Any(a => a.DoctorId == id))
+            if (this._database.Appointments.Any(a => a.PatientId == id))
             {
-                innerMessages.Add("Can't delete this record. Doctor has appointments associated to it");
+                innerMessages.Add("Can't delete this record. Patient has appointments associated to it");
             }
 
             messages.AddRange(innerMessages);

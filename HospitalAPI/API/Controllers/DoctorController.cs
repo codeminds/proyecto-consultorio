@@ -27,7 +27,6 @@ namespace API.Controllers
         [Route("{id}")]
         public async Task<ActionResult<APIResponse>> Get(int id)
         {
-            throw new Exception("Wtf");
             APIResponse response = new APIResponse();
             GetDoctorDTO doctor = await this._doctorService.Get(id);
 
