@@ -1,48 +1,52 @@
-.modal{
+.modal {
     position: fixed;
     height: 100%;
     width: 100%;
-    top: 0;
     left: 0;
+    top: 0;
     background: rgba(0, 0, 0, 0.4);
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
     z-index: 100;
-    display: none;
     padding: 10px;
+    box-sizing: border-box;
+    display: none;
     overflow: auto;
+    scrollbar-color: var(--modal-scrollbar-thumb) var(--modal-scrollbar-background);
+    scrollbar-width: thin;
 }
 
-.modal.open{
-    display: flex;
+.modal::-webkit-scrollbar-thumb {
+    background: var(--modal-scrollbar-thumb);
 }
 
-.modal .modal-content{
-    width: 80%;
+.modal::-webkit-scrollbar {
+    width: 0.7rem;
+    background: var(--modal-scrollbar-background);
+}
+
+.modal.open {
+    display: flex;;
+}
+
+.modal .modal-content {
+    width: 90%;
     background: #f1f1f1;
     padding: 10px;
-    border-radius: 4px;
+    border-radius: 2px;
     border: 1px solid #d8d8d8;
     box-shadow: 2px 2px 6px -3px #2d2d2d;
 }
 
-.modal .modal-content.small{
-    width: min(400px, 80%);
+.modal .modal-content.small {
+    width: min(400px, 95%);
 }
 
-.modal .modal-content.medium{
-    width: min(700px, 80%);
+.modal .modal-content.medium {
+    width: min(700px, 95%);
 }
 
-.modal .modal-content.large{
-    width: min(1000px, 80%);
-}
-
-@media screen and (max-width: 1024px){
-    .modal .modal-content.small,
-    .modal .modal-content.medium,
-    .modal .modal-content.large{
-        width: 95%;
-    }
+.modal .modal-content.large {
+    width: min(1000px, 95%);
 }

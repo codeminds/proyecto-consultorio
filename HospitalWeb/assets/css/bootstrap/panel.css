@@ -1,20 +1,23 @@
-.panel{
+.panel {
     margin: 10px;
-    box-shadow: 8px 8px 0px -1px #adadad;
-    border-radius: 5px;
+    box-shadow: 1px 1px 0px 0px #adadad;
+    border-radius: 3px;
     padding: 10px;
     border: 1px solid #d8d8d8;
 }
 
-.panel.flat{
+.panel.flat {
     padding: 0;
 }
 
-.panel .title{
+.panel .title {
     border-bottom: 1px solid #d8d8d8;
     margin-bottom: 10px;
-    cursor: pointer;
     font-size: 2rem;
+}
+
+.panel .title.toggle {
+    cursor: pointer;
 }
 
 .panel .title.toggle::after{
@@ -25,10 +28,10 @@
     content: '\025BE';
 }
 
-.panel .toggle-section{
+.panel .toggle-section {
     display: none;
 }
 
-.panel .toggle-section.open{
+.panel .toggle-section.open {
     display: block;
 }

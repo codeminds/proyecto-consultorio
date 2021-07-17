@@ -1,93 +1,216 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="/assets/img/favicon.ico" type="image/x-icon" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;700&display=swap" />
-    <link rel="stylesheet" href="/assets/css/reset.css" />
     <link rel="stylesheet" href="/assets/css/site.css" />
     <link rel="stylesheet" href="/assets/css/bootstrap/grid.css" />
-    <link rel="stylesheet" href="/assets/css//bootstrap/panel.css" />
     <link rel="stylesheet" href="/assets/css/bootstrap/form.css" />
-    <title>Pacientes - Hospital Web</title>
+    <link rel="stylesheet" href="/assets/css/bootstrap/panel.css" />
+    <link rel="stylesheet" href="/assets/css/bootstrap/table.css" />
+    <link rel="stylesheet" href="/assets/css/bootstrap/modal.css" />
+    <title>Hospital Web | Pacientes</title>
 </head>
 <body>
     <header class="navbar">
+        <button class="menu">&equiv;</button>
         <figure>
             <img src="/assets/img/code-minds.png" alt="Code Minds" />
         </figure>
     </header>
     <section class="wrapper">
-        <div class="sidenav">
-            <nav>
-                <h3 class="category">Menú Principal</h3>
-                <ul class="menu">
-                    <li>
-                        <a href="/">Citas</a>
-                    </li>
-                    <li>
-                        <a href="/doctors.html">Doctores</a>
-                    </li>
-                    <li class="active"> 
-                        <a href="/patients.html">Pacientes</a>
-                    </li>
-                </ul>
-            </nav>
-        </div>
+        <nav class="sidenav">
+            <h3 class="category">Men&uacute; Principal</h3>
+            <ul class="menu">
+                <li>
+                    <a href="/">
+                        <span>Citas</span> 
+                    </a>
+                </li>
+                <li>
+                    <a href="/doctors.html">
+                        <span>Doctores</span>
+                    </a>
+                </li>
+                <li class="active">
+                    <a href="/patients.html">
+                        <span>Pacientes</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
         <main>
             <h1>Pacientes</h1>
             <div class="panel">
-                <h3 class="title toggle">B&uacute;squeda</h3>
-                <form class="row toggle-section open">
+                <h3 class="title">B&uacute;squeda</h3>
+                <form class="row">
                     <div class="form-field col col-3">
-                        <label>C&eacute;dula</label>
-                        <input type="text" />
+                        <label for="patient-filter-id">C&eacute;dula</label>
+                        <input type="text" id="patient-filter-id" />
                     </div>
                     <div class="form-field col col-3">
-                        <label>Nombre</label>
-                        <input type="text" />
+                        <label for="patient-filter-name">Nombre</label>
+                        <input type="text" id="patient-filter-name" />
                     </div>
                     <div class="form-field col col-3">
-                        <label>Apellido</label>
-                        <input type="text" />
+                        <label for="patient-filter-last-name">Apellido</label>
+                        <input type="text" id="patient-filter-last-name" />
                     </div>
                     <div class="form-field col col-3">
-                        <label>Desde</label>
-                        <input type="datetime-local" />
+                        <label for="patient-filter-birthdate-from">Desde</label>
+                        <input type="datetime-local" id="patient-filter-birthdate-from" />
                     </div>
                     <div class="form-field col col-3">
-                        <label>Hasta</label>
-                        <input type="datetime-local" />
+                        <label for="patient-filter-birthdate-to">Hasta</label>
+                        <input type="datetime-local" id="patient-filter-birthdate-to" />
                     </div>
                     <div class="form-field col col-3">
-                        <label>Género</label>
+                        <label>G&eacute;nero</label>
                         <div>
                             <label class="check inline">
-                                <input type="checkbox" name="gender" checked value="" />
+                                <input type="radio" name="gender" checked value="" />
                                 <i></i>
                                 <span>Todos</span>
                             </label>
                             <label class="check inline">
-                                <input type="checkbox" name="gender" value="1" />
-                                <i></i>
-                                <span>Masculino</span>
-                            </label>
-                            <label class="check inline">
-                                <input type="checkbox" name="gender" value="2" />
+                                <input type="radio" name="gender" value="0" />
                                 <i></i>
                                 <span>Femenino</span>
+                            </label>
+                            <label class="check inline">
+                                <input type="radio" name="gender" value="1" />
+                                <i></i>
+                                <span>Masculino</span>
                             </label>
                         </div>
                     </div>
                     <div class="form-field col col-1">
-                        <button class="button success">Buscar</button>
+                        <button class="button success" type="button">Buscar</button>
                     </div>
                 </form>
             </div>
+            <div class="table panel flat with-controls">
+                <div class="controls">
+                    <button class="button success">Agregar</button>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 100%;">C&eacute;dula</th>
+                            <th style="width: 200%">Nombre</th>
+                            <th style="width: 100%">Nacimiento</th>
+                            <th style="width: 100%">G&eacute;nero</th>
+                            <th style="width: 250%"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>123456789</td>
+                            <td>Victor Herrera</td>
+                            <td>28/03/2022 11:30AM</td>
+                            <td>Masculino</td>
+                            <td class="buttons">
+                                <button class="button success">Editar</button>
+                                <button class="button danger">Borrar</button>
+                            </td>
+                            <td class="mobile">
+                                <h3>123456789</h3>
+                                <p><span class="label">Nombre:</span> Victor Herrera</p>
+                                <p><span class="label">Nacimiento:</span> 28/03/2022 11:30AM</p>
+                                <p><span class="label">G&acute;nero:</span> Masculino</p>
+                                <div>
+                                    <button class="button success">Editar</button>
+                                    <button class="button danger">Borrar</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>123456789</td>
+                            <td>Victor Herrera</td>
+                            <td>28/03/2022 11:30AM</td>
+                            <td>Masculino</td>
+                            <td class="buttons">
+                                <button class="button success">Editar</button>
+                                <button class="button danger">Borrar</button>
+                            </td>
+                            <td class="mobile">
+                                <h3>123456789</h3>
+                                <p><span class="label">Nombre:</span> Victor Herrera</p>
+                                <p><span class="label">Nacimiento:</span> 28/03/2022 11:30AM</p>
+                                <p><span class="label">G&acute;nero:</span> Masculino</p>
+                                <div>
+                                    <button class="button success">Editar</button>
+                                    <button class="button danger">Borrar</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>123456789</td>
+                            <td>Victor Herrera</td>
+                            <td>28/03/2022 11:30AM</td>
+                            <td>Masculino</td>
+                            <td class="buttons">
+                                <button class="button success">Editar</button>
+                                <button class="button danger">Borrar</button>
+                            </td>
+                            <td class="mobile">
+                                <h3>123456789</h3>
+                                <p><span class="label">Nombre:</span> Victor Herrera</p>
+                                <p><span class="label">Nacimiento:</span> 28/03/2022 11:30AM</p>
+                                <p><span class="label">G&acute;nero:</span> Masculino</p>
+                                <div>
+                                    <button class="button success">Editar</button>
+                                    <button class="button danger">Borrar</button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </main>
     </section>
+    <div class="modal">
+        <div class="modal-content medium">
+            <h2>Agregar Paciente</h2>
+            <form>
+                <div class="form-field">
+                    <label>C&eacute;dula</label>
+                    <input type="text" />
+                </div>
+                <div class="form-field">
+                    <label>Nombre</label>
+                    <input type="text" />
+                </div>
+                <div class="form-field">
+                    <label>Apellido</label>
+                    <input type="text" />
+                </div>
+                <div class="form-field">
+                    <label>Nacimiento</label>
+                    <input type="datetime-local" />
+                </div>
+                <div class="form-field">
+                    <label>G&eacute;nero</label>
+                    <div>
+                        <label class="check inline">
+                            <input type="radio" name="gender" checked value="0" />
+                            <i></i>
+                            <span>Femenino</span>
+                        </label>
+                        <label class="check inline">
+                            <input type="radio" name="gender" value="1" />
+                            <i></i>
+                            <span>Masculino</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="form-field">
+                    <button class="button success" type="button">Guardar</button>
+                    <button clasS="button reset" type="button">Cancelar</button>
+                </div>
+            </form>
+        </div>
 </body>
 </html>

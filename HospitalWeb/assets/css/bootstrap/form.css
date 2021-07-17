@@ -1,8 +1,10 @@
-.form-field{
+@import 'theme.css';
+
+.form-field {
     padding: 5px;
 }
 
-.form-field label{
+.form-field label {
     display: inline-block;
     font-weight: 700;
     cursor: pointer;
@@ -10,62 +12,62 @@
     font-size: 1.4rem;
 }
 
-.form-field input:not([type="radio"]):not([type="checkbox"]), .form-field select, .form-field textarea{
+.form-field input:not([type="radio"]):not([type="checkbox"]), .form-field select, .form-field textarea {
     display: inline-block;
     width: 100%;
     padding: 5px;
     height: 2.8rem;
     background: rgba(255, 255, 255, 0.2);
-    border: solid 1px #ccc;
     color: inherit;
+    border: solid 1px #ccc;
     border-radius: 2px;
     outline: 0;
 }
 
-.form-field textarea{
-    min-height: 150px;
-    resize: vertical;
-}
-
-.form-field .form-field input:not([type="radio"]):not([type="checkbox"]):focus, .form-field select:focus, .form-field textarea:focus{
+.form-field input:not([type="radio"]):not([type="checkbox"]):focus, .form-field select:focus, .form-field textarea:focus {
     border-color: #a7a7a7;
 }
 
-.form-field .check{
+.form-field textarea {
+    resize: vertical;
+    min-height: 150px;
+}
+
+.form-field .check {
     cursor: pointer;
     display: block;
 }
 
-.form-field .check.inline{
+.form-field .check.inline {
     display: inline-block;
     margin-right: 5px;
     margin-bottom: 0.8rem;
 }
 
-.form-field .check input{
-    display: none;
-}
-
-.form-field .check span{
+.form-field .check span {
     vertical-align: text-bottom;
 }
 
-.form-field .check i{
+.form-field .check i {
     display: inline-block;
     width: 2rem;
     height: 2rem;
     border: solid 1px #ccc;
     background: rgba(255, 255, 255, 0.2);
-    border-radius:  2px;
-    vertical-align: middle;
+    border-radius: 2px;
     margin-right: 2px;
+    vertical-align: middle;
 }
 
-.form-field .check :checked + i{
-    background-color: #5ccdcc;
+.form-field .check input {
+    display: none;
 }
 
-.button{
+.form-field .check :checked + i {
+    background-color: var(--color-main);
+}
+
+.button {
     display: inline-block;
     padding: 0.8rem 1.8rem;
     font-size: 1.3rem;
@@ -79,41 +81,38 @@
     transition: background-color 0.1s linear;
 }
 
-.button.success{
-    background: #4ca8a7;
-    border-color: #428d8c;
+.button.success {
+    background: var(--success-primary);
+    border-color: var(--success-tertiary); 
     color: #fff;
 }
 
-.button.success:hover{
-    background: #5ccdcc;
-    border-color: #54b3b1;
+.button.success:hover {
+    background: var(--success-secondary);
 }
 
-.button.danger{
-    background: #b6446a;
-    border-color: #9b3a5a;
+.button.danger {
+    background: var(--danger-primary);
+    border-color: var(--danger-tertiary); 
     color: #fff;
 }
-
-.button.danger:hover{
-    background: #75243f;
-    border-color: #662038;
+ 
+.button.danger:hover {
+    background: var(--danger-secondary);
 }
 
-.button.reset{
-    background: #afa9a9;
-    border-color: #8d8585;
+.button.reset {
+    background: var(--reset-primary);
+    border-color: var(--reset-tertiary); 
     color: #fff;
 }
-
-.button.reset:hover{
-    background: #8f8c8c;
-    border-color: #666565;
+ 
+.button.reset:hover {
+    background: var(--reset-secondary);
 }
 
-@media screen and (max-width: 1024px){
-    .form-field .check.inline{
+@media screen and (max-width: 1024px) {
+    .form-field .check.inline {
         display: block;
     }
 }

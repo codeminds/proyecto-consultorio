@@ -1,75 +1,197 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="/assets/img/favicon.ico" type="image/x-icon" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;700&display=swap" />
-    <link rel="stylesheet" href="/assets/css/reset.css" />
     <link rel="stylesheet" href="/assets/css/site.css" />
     <link rel="stylesheet" href="/assets/css/bootstrap/grid.css" />
-    <link rel="stylesheet" href="/assets/css//bootstrap/panel.css" />
     <link rel="stylesheet" href="/assets/css/bootstrap/form.css" />
-    <title>Doctores - Hospital Web</title>
+    <link rel="stylesheet" href="/assets/css/bootstrap/panel.css" />
+    <link rel="stylesheet" href="/assets/css/bootstrap/table.css" />
+    <link rel="stylesheet" href="/assets/css/bootstrap/modal.css" />
+    <title>Hospital Web | Doctores</title>
 </head>
 <body>
     <header class="navbar">
+        <button class="menu">&equiv;</button>
         <figure>
             <img src="/assets/img/code-minds.png" alt="Code Minds" />
         </figure>
     </header>
     <section class="wrapper">
-        <div class="sidenav">
-            <nav>
-                <h3 class="category">Menú Principal</h3>
-                <ul class="menu">
-                    <li>
-                        <a href="/">Citas</a>
-                    </li>
-                    <li class="active">
-                        <a href="/doctors.html">Doctores</a>
-                    </li>
-                    <li>
-                        <a href="/patients.html">Pacientes</a>
-                    </li>
-                </ul>
-            </nav>
-        </div>
+        <nav class="sidenav">
+            <h3 class="category">Men&uacute; Principal</h3>
+            <ul class="menu">
+                <li>
+                    <a href="/">
+                        <span>Citas</span> 
+                    </a>
+                </li>
+                <li class="active">
+                    <a href="/doctors.html">
+                        <span>Doctores</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/patients.html">
+                        <span>Pacientes</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
         <main>
             <h1>Doctores</h1>
             <div class="panel">
-                <h3 class="title toggle">B&uacute;squeda</h3>
-                <form class="row toggle-section open">
+                <h3 class="title">B&uacute;squeda</h3>
+                <form class="row">
                     <div class="form-field col col-4">
-                        <label>C&eacute;dula</label>
-                        <input type="text" />
+                        <label for="doctor-filter-id">C&eacute;dula</label>
+                        <input type="text" id="doctor-filter-id" />
                     </div>
                     <div class="form-field col col-4">
-                        <label>Nombre</label>
-                        <input type="text" />
+                        <label for="doctor-filter-name">Nombre</label>
+                        <input type="text" id="doctor-filter-name" />
                     </div>
                     <div class="form-field col col-4">
-                        <label>Apellido</label>
-                        <input type="text" />
+                        <label for="doctor-filter-last-name">Apellido</label>
+                        <input type="text" id="doctor-filter-last-name" />
                     </div>
                     <div class="form-field col col-4">
-                        <label>Especialidad</label>
-                        <select>
+                        <label for="doctor-filter-field">Especialidad</label>
+                        <select id="doctor-filter-field">
                             <option value="1">Doctor General</option>
                             <option value="2">Dentista</option>
                             <option value="3">Pediatra</option>
                             <option value="4">Onc&oacute;logo</option>
-                            <option value="5">Cirujano</option>
+                            <option value="1">Cirujano</option>
                         </select>
                     </div>
                     <div class="form-field col col-1">
-                        <button class="button success">Buscar</button>
+                        <button class="button success" type="button">Buscar</button>
                     </div>
                 </form>
             </div>
+            <div class="table panel flat with-controls">
+                <div class="controls">
+                    <button class="button success">Agregar</button>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 100%;">C&eacute;dula</th>
+                            <th style="width: 200%">Nombre</th>
+                            <th style="width: 100%">Especialidad</th>
+                            <th style="width: 250%"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>123456789</td>
+                            <td>Victor Herrera</td>
+                            <td>Dentista</td>
+                            <td class="buttons">
+                                <button class="button success">Editar</button>
+                                <button class="button danger">Borrar</button>
+                            </td>
+                            <td class="mobile">
+                                <h3>123456789</h3>
+                                <p><span class="label">Nombre:</span> Victor Herrera</p>
+                                <p><span class="label">Especialidad:</span> Dentista</p>
+                                <div>
+                                    <button class="button success">Editar</button>
+                                    <button class="button danger">Borrar</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>123456789</td>
+                            <td>Victor Herrera</td>
+                            <td>Dentista</td>
+                            <td class="buttons">
+                                <button class="button success">Editar</button>
+                                <button class="button danger">Borrar</button>
+                            </td>
+                            <td class="mobile">
+                                <h3>123456789</h3>
+                                <p><span class="label">Nombre:</span> Victor Herrera</p>
+                                <p><span class="label">Especialidad:</span> Dentista</p>
+                                <div>
+                                    <button class="button success">Editar</button>
+                                    <button class="button danger">Borrar</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>123456789</td>
+                            <td>Victor Herrera</td>
+                            <td>Dentista</td>
+                            <td class="buttons">
+                                <button class="button success">Editar</button>
+                                <button class="button danger">Borrar</button>
+                            </td>
+                            <td class="mobile">
+                                <h3>123456789</h3>
+                                <p><span class="label">Nombre:</span> Victor Herrera</p>
+                                <p><span class="label">Especialidad:</span> Dentista</p>
+                                <div>
+                                    <button class="button success">Editar</button>
+                                    <button class="button danger">Borrar</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>123456789</td>
+                            <td>Victor Herrera</td>
+                            <td>Dentista</td>
+                            <td class="buttons">
+                                <button class="button success">Editar</button>
+                                <button class="button danger">Borrar</button>
+                            </td>
+                            <td class="mobile">
+                                <h3>123456789</h3>
+                                <p><span class="label">Nombre:</span> Victor Herrera</p>
+                                <p><span class="label">Especialidad:</span> Dentista</p>
+                                <div>
+                                    <button class="button success">Editar</button>
+                                    <button class="button danger">Borrar</button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </main>
     </section>
+    <div class="modal">
+        <div class="modal-content medium">
+            <h2>Agregar Doctor</h2>
+            <form>
+                <div class="form-field">
+                    <label>C&eacute;dula</label>
+                    <input type="text" />
+                </div>
+                <div class="form-field">
+                    <label>Nombre</label>
+                    <input type="text" />
+                </div>
+                <div class="form-field">
+                    <label>Apellido</label>
+                    <input type="text" />
+                </div>
+                <div class="form-field">
+                    <label>Especialidad</label>
+                    <select>
+                        <option value="1">Doctor General</option>
+                        <option value="2">Dentista</option>
+                    </select>
+                </div>
+                <div class="form-field">
+                    <button class="button success" type="button">Guardar</button>
+                    <button clasS="button reset" type="button">Cancelar</button>
+                </div>
+            </form>
+        </div>
 </body>
 </html>

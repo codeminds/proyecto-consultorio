@@ -23,9 +23,10 @@ time, mark, audio, video {
 	font: inherit;
 	vertical-align: baseline;
 }
+
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure, 
-footer, header, hgroup, menu, nav, section {
+footer, header, hgroup, menu, nav, section, main {
 	display: block;
 }
 body {
@@ -47,27 +48,27 @@ table {
 	border-spacing: 0;
 }
 
-figure img{
+figure img {
     max-width: 100%;
 }
 
-a{
+a {
     color: inherit;
 }
 
-a:hover{
+a:hover {
     text-decoration: none;
 }
 
-input{
-	margin: 0;
-	padding: 0;
+input {
+    margin: 0;
+    padding: 0;
 }
 
-select, button{
-	cursor: pointer;
+select, button {
+    cursor: pointer;
 }
 
-*{
+* {
     box-sizing: border-box;
 }

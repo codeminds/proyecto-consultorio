@@ -1,0 +1,32 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;700&display=swap');
+
+:root {
+    /* LAYOUT */
+    --font-main: 'Roboto', Helvetica, sans-serif;
+    --color-navbar: #e8e8e8;
+    --color-sidenav: #292929;
+    --sidenav-menu-active: #4d4d4d;
+    --sidenav-text: #fff;
+    --sidenav-category: #313131;
+    --sidenav-scrollbar: rgba(255,255,255,0.1);
+    --main-scrollbar: rgba(0, 0, 0, 0.1);
+    --modal-scrollbar-thumb: rgba(0, 0, 0, 0.4);
+    --modal-scrollbar-background: rgb(70, 70, 70);
+
+    /* MAIN COLORS */
+    --color-main: #5ccdcc;
+    --color-secondary: #02aae3;
+    --main-background: #f1f1f1;
+    --main-text: #292929;
+
+    /*ALERT COLORS */
+    --success-primary: #4ca8a7;
+    --success-secondary: #56bfbe;
+    --success-tertiary: #428d8c;
+    --danger-primary:#b6446a;
+    --danger-secondary:#75243f;
+    --danger-tertiary:#9b3a5a;
+    --reset-primary:#afa9a9;
+    --reset-secondary:#8f8c8c;
+    --reset-tertiary:#8d8585;
+}
