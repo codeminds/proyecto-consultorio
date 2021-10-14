@@ -1,0 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=Stick+No+Bills:wght@200;300;400;700&display=swap');
+
+:root {
+    /* LAYOUT */
+    --font-main: 'Stick No Bills', Helvetica, sans-serif;
+    --color-navbar: #F9B4ED;
+    --color-sidenav: #919b9d;
+    --color-sidenav-text: #ffffff;
+    --color-sidenav-category: #101e1f;
+    --color-sidenav-active: #F9B4ED;
+
+    /* MAIN COLORS */
+    --color-main: #ffffff;
+    --color-background: #485a5c;
+    --color-text: #ffffff;
+    --color-shadow-dark: #101e1f;
+    --color-shadow-light: #919b9d;
+    --color-scrollbar-dark: rgba(255,255,255,0.1);
+    --color-scrollbar-light: rgba(0,0,0,0.1);
+
+    /* PANEL COLORS */
+    --color-panel-border: #F9B4ED;
+
+    /* FORM COLORS */
+    --color-placeholder: #bfbfbf;
+    --color-form-field-input: #F9B4ED;
+    --color-form-field-focus:#ffffff;
+
+    /* ALERT COLORS */
+    --color-success-primary: #28897f;
+    --color-success-secondary: #206e65;
+    --color-success-tertiary: #18524c;
+    --color-danger-primary: #b20052;
+    --color-danger-secondary: #8e0042;
+    --color-danger-tertiary: #6b0031;
+    --color-neutral-rimary: #c2c1c7;
+    --color-neutral-secondary: #afacb6;
+    --color-neutral-tertiary: #9c9ba5;
+}

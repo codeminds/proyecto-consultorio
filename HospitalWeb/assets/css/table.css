@@ -1,4 +1,4 @@
-.table table{ 
+.table table {
     width: 100%;
     table-layout: fixed;
 }
@@ -6,6 +6,12 @@
 .table.with-controls {
     margin-top: 7rem;
     position: relative;
+}
+
+.table .controls {
+    position: absolute;
+    left: 0;
+    top: -4rem;
 }
 
 .table td {
@@ -18,7 +24,7 @@
 }
 
 .table td button:not(:last-child) {
-    margin-right: 0.5rem;
+    margin-right: 0.2rem;
 }
 
 .table th {
@@ -29,12 +35,6 @@
 
 .table tbody tr:nth-child(odd) {
     background: #d6d6d6;
-}
-
-.table .controls {
-    position: absolute;
-    left: 0;
-    top: -3.5rem;
 }
 
 .table td.mobile {
@@ -61,7 +61,7 @@
     .table table thead {
         display: none;
     }
-    
+
     .table td {
         display: none;
     }
