@@ -34,7 +34,7 @@
 }
 
 .table tbody tr:nth-child(odd) {
-    background: #d6d6d6;
+    background: var(--color-table-nth-child-background);
 }
 
 .table td.mobile {

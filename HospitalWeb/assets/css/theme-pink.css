@@ -4,10 +4,10 @@
     /* LAYOUT */
     --font-main: 'Stick No Bills', Helvetica, sans-serif;
     --color-navbar: #F9B4ED;
-    --color-sidenav: #919b9d;
+    --color-sidenav: #5f6f70;
     --color-sidenav-text: #ffffff;
     --color-sidenav-category: #101e1f;
-    --color-sidenav-active: #F9B4ED;
+    --color-sidenav-active: #d3a0d3;
 
     /* MAIN COLORS */
     --color-main: #ffffff;
@@ -21,19 +21,27 @@
     /* PANEL COLORS */
     --color-panel-border: #F9B4ED;
 
+    /* TABLE COLORS */
+    --color-table-nth-child-background:#5f6f70;
+
+    /* MODAL COLORS */
+    --color-modal-content-background:#5f6f70;
+    --color-modal-content-border:#F9B4ED;
+
     /* FORM COLORS */
     --color-placeholder: #bfbfbf;
     --color-form-field-input: #F9B4ED;
     --color-form-field-focus:#ffffff;
+    --color-form-field-select: rgba(0, 0, 0, 0.6);
 
     /* ALERT COLORS */
-    --color-success-primary: #28897f;
-    --color-success-secondary: #206e65;
-    --color-success-tertiary: #18524c;
-    --color-danger-primary: #b20052;
-    --color-danger-secondary: #8e0042;
-    --color-danger-tertiary: #6b0031;
-    --color-neutral-rimary: #c2c1c7;
-    --color-neutral-secondary: #afacb6;
-    --color-neutral-tertiary: #9c9ba5;
+    --color-success-primary: #043565;
+    --color-success-secondary: #052b50;
+    --color-success-tertiary: #4f87be;
+    --color-danger-primary: #80004D;
+    --color-danger-secondary: #730046;
+    --color-danger-tertiary: #c04d92;
+    --color-neutral-rimary: #4d4d53;
+    --color-neutral-secondary: #3f3f44;
+    --color-neutral-tertiary: #7a7a7a;
 }
