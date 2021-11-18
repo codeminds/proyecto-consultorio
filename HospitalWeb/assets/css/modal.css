@@ -39,14 +39,14 @@
     box-shadow: 2px 2px 6px -3px var(--color-shadow-light);
 }
 
-.modal .modal-content.small {
+.modal.small .modal-content {
     width: min(400px, 95%);
 }
 
-.modal .modal-content.medium {
+.modal.medium .modal-content {
     width: min(700px, 95%);
 }
 
-.modal .modal-content.large {
+.modal.large .modal-content {
     width: min(1000px, 95%);
 }

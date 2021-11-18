@@ -59,7 +59,7 @@ namespace API
 
             app.UseExceptionHandler("/errors/500");
             app.UseStatusCodePagesWithReExecute("/errors/{0}");
-
+            
             app.UseRouting();
             app.UseEndpoints(endpoints =>
             {

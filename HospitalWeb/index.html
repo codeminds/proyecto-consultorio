@@ -1,264 +1,306 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="shortcut icon" href="/assets/img/favicon.ico" type="image/x-icon" />
-    <link rel="stylesheet" href="/assets/css/site.css" />
-    <link rel="stylesheet" href="/assets/css/bootstrap/grid.css" />
-    <link rel="stylesheet" href="/assets/css/bootstrap/form.css" />
-    <link rel="stylesheet" href="/assets/css/bootstrap/panel.css" />
-    <link rel="stylesheet" href="/assets/css/bootstrap/table.css" />
-    <link rel="stylesheet" href="/assets/css/bootstrap/modal.css" />
-    <title>Hospital Web | Citas</title>
-</head>
-<body>
-    <header class="navbar">
-        <button class="menu">&equiv;</button>
-        <figure>
-            <img src="/assets/img/code-minds.png" alt="Code Minds" />
-        </figure>
-    </header>
-    <section class="wrapper">
-        <nav class="sidenav">
-            <h3 class="category">Men&uacute; Principal</h3>
-            <ul class="menu">
-                <li class="active">
-                    <a href="/">
-                        <span>Citas</span> 
-                    </a>
-                </li>
-                <li>
-                    <a href="/doctors.html">
-                        <span>Doctores</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="/patients.html">
-                        <span>Pacientes</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-        <main>
-            <h1>Citas</h1>
-            <div class="panel">
-                <h3 class="title toggle open">Pacientes</h3>
-                <form class="row toggle-section open">
-                    <div class="form-field col col-3">
-                        <label for="patient-filter-id">C&eacute;dula</label>
-                        <input type="text" id="patient-filter-id" />
-                    </div>
-                    <div class="form-field col col-3">
-                        <label for="patient-filter-name">Nombre</label>
-                        <input type="text" id="patient-filter-name" />
-                    </div>
-                    <div class="form-field col col-3">
-                        <label for="patient-filter-last-name">Apellido</label>
-                        <input type="text" id="patient-filter-last-name" />
-                    </div>
-                    <div class="form-field col col-3">
-                        <label for="patient-filter-birthdate-from">Desde</label>
-                        <input type="datetime-local" id="patient-filter-birthdate-from" />
-                    </div>
-                    <div class="form-field col col-3">
-                        <label for="patient-filter-birthdate-to">Hasta</label>
-                        <input type="datetime-local" id="patient-filter-birthdate-to" />
-                    </div>
-                    <div class="form-field col col-3">
-                        <label>G&eacute;nero</label>
-                        <div>
-                            <label class="check inline">
-                                <input type="radio" name="gender" checked value="" />
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="shortcut icon" href="/assets/img/favicon.ico" type="image/x-icon" />
+        <link rel="stylesheet" href="/assets/css/site.css" />
+        <script src="/assets/js/view-models/appointment.js" type="module"></script>
+        <title>Hospital Web | Citas</title>
+    </head>
+    <body>
+        <header class="navbar">
+            <button class="menu" data-menu-button>&equiv;</button>
+            <figure>
+                <img src="/assets/img/code-minds.png" alt="Code Minds" />
+            </figure>
+        </header>
+        <section class="wrapper">
+            <nav class="sidenav" data-menu>
+                <h3 class="category">Men&uacute; Principal</h3>
+                <ul class="menu">
+                    <li class="active">
+                        <a href="/">
+                            <span>Citas</span> 
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/doctors.html">
+                            <span>Doctores</span> 
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/patients.html">
+                            <span>Pacientes</span> 
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <main>
+                <h1>Citas</h1>
+                <section class="panel" data-panel>
+                    <h3 class="title toggle open" data-toggle>Doctor</h3>
+                    <form class="toggle-section row open" data-toggle-section>
+                        <div class="form-field col col-4">
+                            <label for="">C&eacute;dula</label>
+                            <input type="text" />
+                        </div>
+                        <div class="form-field col col-4">
+                            <label for="">Nombre</label>
+                            <input type="text" />
+                        </div>
+                        <div class="form-field col col-4">
+                            <label for="">Apellido</label>
+                            <input type="text" />
+                        </div>
+                        <div class="form-field col col-4">
+                            <label for="">Especialidad</label>
+                            <select>
+                                <option value="1">Doctor General</option>
+                                <option value="2">Dentista</option>
+                                <option value="3">Pediatra</option>
+                                <option value="4">Onc&oacute;logo</option>
+                                <option value="5">Cirujano</option>
+                            </select>                          
+                        </div>                      
+                    </form>
+                </section>
+                <section class="panel" data-panel>
+                    <h3 class="title toggle open" data-toggle>Paciente</h3>
+                    <form class="toggle-section row open" data-toggle-section>
+                        <div class="form-field col col-3">
+                            <label for="">C&eacute;dula</label>
+                            <input type="text" />
+                        </div>
+                        <div class="form-field col col-3">
+                            <label for="">Nombre</label>
+                            <input type="text" />
+                        </div>
+                        <div class="form-field col col-3">
+                            <label for="">Apellido</label>
+                            <input type="text" />
+                        </div>
+                        <div class="form-field col col-3">
+                            <label for="">Fecha Desde</label>
+                            <input type="date" />
+                        </div>
+                        <div class="form-field col col-3">
+                            <label for="">Fecha Hasta</label>
+                            <input type="date" />
+                        </div>  
+                        <div class="form-field col col-3">
+                            <label class= check>G&eacute;nero</label>
+                            <label class="check inline">                          
+                                <input type="radio" name = "gender" id= "checkbox1" value="" checked />
                                 <i></i>
                                 <span>Todos</span>
                             </label>
-                            <label class="check inline">
-                                <input type="radio" name="gender" value="0" />
-                                <i></i>
-                                <span>Femenino</span>
-                            </label>
-                            <label class="check inline">
-                                <input type="radio" name="gender" value="1" />
+                            <label class="check inline">                          
+                                <input type="radio" name = "gender" id= "checkbox2" value="1" />
                                 <i></i>
                                 <span>Masculino</span>
                             </label>
+                            <label class="check inline">                          
+                                <input type="radio" name = "gender" id= "checkbox3" value="2" />
+                                <i></i>
+                                <span>Femenino</span>
+                            </label>
+                        </div>                     
+                    </form>
+                </section>
+                <section class="panel" data-panel>
+                    <h3 class="title toggle open" data-toggle>Fecha de Cita</h3>
+                    <form class="toggle-section row open" data-toggle-section>
+                        <div class="form-field col col-2">
+                            <label for="">Fecha Desde</label>
+                            <input type="datetime-local" />
                         </div>
+                        <div class="form-field col col-2">
+                            <label for="">Fecha Hasta</label>
+                            <input type="datetime-local" />
+                        </div>
+                        <div class="form-field col col-1">
+                            <button class="button success" type="button">Buscar</button>
+                        </div>
+                    </form>
+                </section>
+                <section class="table panel flat with-controls">
+                    <div class="controls">
+                        <button class="button success">Nueva Cita</button>
                     </div>
-                </form>
-            </div>
-            <div class="panel">
-                <h3 class="title toggle open">Doctores</h3>
-                <form class="row toggle-section open">
-                    <div class="form-field col col-4">
-                        <label for="doctor-filter-id">C&eacute;dula</label>
-                        <input type="text" id="doctor-filter-id" />
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 175%">Fecha</th>
+                                <th style="width: 130%">Paciente</th>
+                                <th style="width: 130%">Doctor</th>
+                                <th style="width: 80%">Especialidad</th>
+                                <th style="width: 250%"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>28/03/2022 11:30AM</td>
+                                <td>Victor Herrera</td>
+                                <td>Carlos Sanchez</td>
+                                <td>Dentista</td>
+                                <td class="buttons">
+                                    <button class="button success">Editar</button>
+                                    <button class="button danger">Borrar</button>
+                                </td>
+                                <td class="mobile">
+                                    <h3>28/03/2022 11:30AM</h3>
+                                    <p><span class="label">Paciente:</span> Victor Herrera</p>
+                                    <p><span class="label">Doctor:</span> Carlos Sánchez</p>
+                                    <p><span class="label">Especialidad:</span> Dentista</p>
+                                    <div>
+                                        <button class="button success">Editar</button>
+                                        <button class="button danger">Borrar</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>28/03/2022 11:30AM</td>
+                                <td>Victor Herrera</td>
+                                <td>Carlos Sanchez</td>
+                                <td>Dentista</td>
+                                <td class="buttons">
+                                    <button class="button success">Editar</button>
+                                    <button class="button danger">Borrar</button>
+                                </td>
+                                <td class="mobile">
+                                    <h3>28/03/2022 11:30AM</h3>
+                                    <p><span class="label">Paciente:</span> Victor Herrera</p>
+                                    <p><span class="label">Doctor:</span> Carlos Sánchez</p>
+                                    <p><span class="label">Especialidad:</span> Dentista</p>
+                                    <div>
+                                        <button class="button success">Editar</button>
+                                        <button class="button danger">Borrar</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>28/03/2022 11:30AM</td>
+                                <td>Victor Herrera</td>
+                                <td>Carlos Sanchez</td>
+                                <td>Dentista</td>
+                                <td class="buttons">
+                                    <button class="button success">Editar</button>
+                                    <button class="button danger">Borrar</button>
+                                </td>
+                                <td class="mobile">
+                                    <h3>28/03/2022 11:30AM</h3>
+                                    <p><span class="label">Paciente:</span> Victor Herrera</p>
+                                    <p><span class="label">Doctor:</span> Carlos Sánchez</p>
+                                    <p><span class="label">Especialidad:</span> Dentista</p>
+                                    <div>
+                                        <button class="button success">Editar</button>
+                                        <button class="button danger">Borrar</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>28/03/2022 11:30AM</td>
+                                <td>Victor Herrera</td>
+                                <td>Carlos Sanchez</td>
+                                <td>Dentista</td>
+                                <td class="buttons">
+                                    <button class="button success">Editar</button>
+                                    <button class="button danger">Borrar</button>
+                                </td>
+                                <td class="mobile">
+                                    <h3>28/03/2022 11:30AM</h3>
+                                    <p><span class="label">Paciente:</span> Victor Herrera</p>
+                                    <p><span class="label">Doctor:</span> Carlos Sánchez</p>
+                                    <p><span class="label">Especialidad:</span> Dentista</p>
+                                    <div>
+                                        <button class="button success">Editar</button>
+                                        <button class="button danger">Borrar</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </main>
+        </section>
+        <div class="modal">
+            <div class="modal-content medium">
+                <h2>Agregar Cita</h2>
+                <h3>Doctor</h3>
+                <form>
+                    <div class="form-field">
+                        <label for="">C&eacute;dula</label>
+                        <input type="text" />
                     </div>
-                    <div class="form-field col col-4">
-                        <label for="doctor-filter-name">Nombre</label>
-                        <input type="text" id="doctor-filter-name" />
+                    <div class="form-field">
+                        <label for="">Nombre</label>
+                        <input type="text" />
                     </div>
-                    <div class="form-field col col-4">
-                        <label for="doctor-filter-last-name">Apellido</label>
-                        <input type="text" id="doctor-filter-last-name" />
+                    <div class="form-field">
+                        <label for="">Apellido</label>
+                        <input type="text" />
                     </div>
-                    <div class="form-field col col-4">
-                        <label for="doctor-filter-field">Especialidad</label>
-                        <select id="doctor-filter-field">
+                    <div class="form-field">
+                        <label for="">Especialidad</label>
+                        <select class="select-doctor-type">
                             <option value="1">Doctor General</option>
                             <option value="2">Dentista</option>
                             <option value="3">Pediatra</option>
                             <option value="4">Onc&oacute;logo</option>
-                            <option value="1">Cirujano</option>
+                            <option value="5">Cirujano</option>
                         </select>
                     </div>
+                    <h3>Paciente</h3>
+                    <div class="form-field">
+                        <label for="">C&eacute;dula</label>
+                        <input type="text" />
+                    </div>
+                    <div class="form-field">
+                        <label for="">Nombre</label>
+                        <input type="text" />
+                    </div>
+                    <div class="form-field">
+                        <label for="">Apellido</label>
+                        <input type="text" />
+                    </div>
+                    <div class="form-field">
+                        <label class= check>G&eacute;nero</label>
+                            <label class="check inline">                          
+                                <input type="radio" name = "gender" id= "checkbox1" value="1" />
+                                <i></i>
+                                <span>Masculino</span>
+                            </label>
+                            <label class="check inline">                          
+                                <input type="radio" name = "gender" id= "checkbox2" value="2" />
+                                <i></i>
+                                <span>Femenino</span>
+                            </label>
+                    </div>
+                    <div class="form-field">
+                        <label for="">Fecha de Nacimiento</label>
+                        <input type="date" />
+                    </div>
+                    <div class="form-field">
+                        <label for="">Fecha Actual</label>
+                        <input type="date" />
+                    <h3>Fecha de Cita</h3>
+                    <div class="form-field">
+                        <label for="">Inicio de Cita</label>
+                        <input type="date" />
+                    </div>
+                    <div class="form-field">
+                        <label for="">Fin de Cita</label>
+                        <input type="date" />
+                    </div>
+                   
+                    <div class="form-field">
+                        <button class="button success" type="button">Guardar</button>
+                        <button class="button neutral" type="button">Cancelar</button>
+                    </div>
                 </form>
             </div>
-            <div class="panel">
-                <h3 class="title">Fecha</h3>
-                <form class="row">
-                    <div class="form-field col col-2">
-                        <label for="filter-birthdate-from">Desde</label>
-                        <input type="datetime-local" id="filter-birthdate-from" />
-                    </div>
-                    <div class="form-field col col-2">
-                        <label for="filter-birthdate-to">Hasta</label>
-                        <input type="datetime-local" id="filter-birthdate-to" />
-                    </div>
-                    <div class="form-field col col-1">
-                        <button class="button success" type="button">Buscar</button>
-                    </div>
-                </form>
-            </div>
-            <div class="table panel flat with-controls">
-                <div class="controls">
-                    <button class="button success">Agregar</button>
-                </div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th style="width: 175%;">Fecha</th>
-                            <th style="width: 130%">Paciente</th>
-                            <th style="width: 130%">Doctor</th>
-                            <th style="width: 80%">Especialidad</th>
-                            <th style="width: 250%"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>28/03/2022 11:30AM</td>
-                            <td>Victor Herrera</td>
-                            <td>Carlos Sanchez</td>
-                            <td>Dentista</td>
-                            <td class="buttons">
-                                <button class="button success">Editar</button>
-                                <button class="button danger">Borrar</button>
-                            </td>
-                            <td class="mobile">
-                                <h3>28/03/2022 11:30AM</h3>
-                                <p><span class="label">Paciente:</span> Victor Herrera</p>
-                                <p><span class="label">Doctor:</span> Carlos Sanchez</p>
-                                <p><span class="label">Especialidad:</span> Dentista</p>
-                                <div>
-                                    <button class="button success">Editar</button>
-                                    <button class="button danger">Borrar</button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>28/03/2022 11:30AM</td>
-                            <td>Victor Herrera</td>
-                            <td>Carlos Sanchez</td>
-                            <td>Dentista</td>
-                            <td class="buttons">
-                                <button class="button success">Editar</button>
-                                <button class="button danger">Borrar</button>
-                            </td>
-                            <td class="mobile">
-                                <h3>28/03/2022 11:30AM</h3>
-                                <p><span class="label">Paciente:</span> Victor Herrera</p>
-                                <p><span class="label">Doctor:</span> Carlos Sanchez</p>
-                                <p><span class="label">Especialidad:</span> Dentista</p>
-                                <div>
-                                    <button class="button success">Editar</button>
-                                    <button class="button danger">Borrar</button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>28/03/2022 11:30AM</td>
-                            <td>Victor Herrera</td>
-                            <td>Carlos Sanchez</td>
-                            <td>Dentista</td>
-                            <td class="buttons">
-                                <button class="button success">Editar</button>
-                                <button class="button danger">Borrar</button>
-                            </td>
-                            <td class="mobile">
-                                <h3>28/03/2022 11:30AM</h3>
-                                <p><span class="label">Paciente:</span> Victor Herrera</p>
-                                <p><span class="label">Doctor:</span> Carlos Sanchez</p>
-                                <p><span class="label">Especialidad:</span> Dentista</p>
-                                <div>
-                                    <button class="button success">Editar</button>
-                                    <button class="button danger">Borrar</button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>28/03/2022 11:30AM</td>
-                            <td>Victor Herrera</td>
-                            <td>Carlos Sanchez</td>
-                            <td>Dentista</td>
-                            <td class="buttons">
-                                <button class="button success">Editar</button>
-                                <button class="button danger">Borrar</button>
-                            </td>
-                            <td class="mobile">
-                                <h3>28/03/2022 11:30AM</h3>
-                                <p><span class="label">Paciente:</span> Victor Herrera</p>
-                                <p><span class="label">Doctor:</span> Carlos Sanchez</p>
-                                <p><span class="label">Especialidad:</span> Dentista</p>
-                                <div>
-                                    <button class="button success">Editar</button>
-                                    <button class="button danger">Borrar</button>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </main>
-    </section>
-    <div class="modal">
-        <div class="modal-content medium">
-            <h2>Agregar Cita</h2>
-            <form>
-                <div class="form-field">
-                    <label>Fecha</label>
-                    <input type="datetime-local" />
-                </div>
-                <div class="form-field">
-                    <label>Doctor</label>
-                    <select>
-                        <option value="1">Victor Herrera</option>
-                        <option value="2">Carlos Sanchez</option>
-                    </select>
-                </div>
-                <div class="form-field">
-                    <label>Paciente</label>
-                    <select>
-                        <option value="1">Victor Herrera</option>
-                        <option value="2">Carlos Sanchez</option>
-                    </select>
-                </div>
-                <div class="form-field">
-                    <button class="button success" type="button">Guardar</button>
-                    <button clasS="button reset" type="button">Cancelar</button>
-                </div>
-            </form>
         </div>
-    </div>
-</body>
+    </body>
 </html>
