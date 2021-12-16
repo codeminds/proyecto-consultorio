@@ -43,6 +43,7 @@
 
 .table .label {
     font-weight: 700;
+    margin-right: 5px;
 }
 
 .table td.mobile div {
