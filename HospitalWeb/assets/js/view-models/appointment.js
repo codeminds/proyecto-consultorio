@@ -248,10 +248,9 @@ class ViewModel extends BaseViewModel {
         //La función filter sólo incluye los valores de la colección original que no sean string vacío o nulo
         //La función trim elimina espacios en blanco a la derecha e izquiera para no ignorar multiples espacios en blanco
         const filters = search.split(' ').filter((filter) => filter.trim());
+        this.#doctorSearchResults.innerHTML = '';
 
         DoctorService.search(filters, (result) => {
-            this.#doctorSearchResults.innerHTML = '';
-
             for(let i = 0; i < result.length; i++) {
                 const doctor = result[i];
 
@@ -278,10 +277,9 @@ class ViewModel extends BaseViewModel {
         //La función filter sólo incluye los valores de la colección original que no sean string vacío o nulo
         //La función trim elimina espacios en blanco a la derecha e izquiera para no ignorar multiples espacios en blanco
         const filters = search.split(' ').filter((filter) => filter.trim());
+        this.#patientSearchResults.innerHTML = '';
 
         PatientService.search(filters, (result) => {
-            this.#patientSearchResults.innerHTML = '';
-
             for(let i = 0; i < result.length; i++) {
                 const patient = result[i];
                 //Nueva opción
