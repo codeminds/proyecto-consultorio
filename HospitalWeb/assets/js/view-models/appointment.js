@@ -38,7 +38,9 @@ class ViewModel extends BaseViewModel {
     #initModal() {
         this.#modal = new Modal(document.querySelector('[data-modal]'), 'medium', () => {
             this.#id = null;
+            document.forms.createUpdate.doctorSearch.value = null;
             document.forms.createUpdate.doctor.value = null;
+            document.forms.createUpdate.patientSearch.value = null;
             document.forms.createUpdate.patient.value = null;
             document.forms.createUpdate.date.value = null;
 
@@ -75,26 +77,20 @@ class ViewModel extends BaseViewModel {
                                 //Hay que utilizar el servicio de doctor para obtener los detalles ya que por medio de la cita sólo se tiene el id
                                 DoctorService.get(result.doctorId, (doctor) => {
                                     if(doctor != null) {
-                                        //Debido a que al cargar el formulario la lista de resultados está vacía
-                                        //Es necesario realizar una búsqueda que traiga de vuelta el resultado
-                                        //seleccionado (por medio de la cédula aseguramos que esa opción esté).
-                                        //Luego hay que llenar el valor del campo de texto de manera similar a como se llena
-                                        //como cuando se escoge una opción de los resultados
-                                        this.#searchDoctors(doctor.documentId);
-                                        document.forms.createUpdate.doctor.value = '(' + doctor.documentId + ') ' + doctor.firstName + ' ' + doctor.lastName;
+                                        //Hay que llenar el valor del campo de texto de manera similar a como se llena
+                                        //al escoger una opción de los resultados
+                                        document.forms.createUpdate.doctorSearch.value = doctor.firstName + ' ' + doctor.lastName;
+                                        document.forms.createUpdate.doctor.value = doctor.id;
                                     }
                                 });
 
                                 //Hay que utilizar el servicio de paciente para obtener los detalles ya que por medio de la cita sólo se tiene el id
                                 PatientService.get(result.patientId, (patient) => {
                                     if(patient != null) {
-                                        //Debido a que al cargar el formulario la lista de resultados está vacía
-                                        //Es necesario realizar una búsqueda que traiga de vuelta el resultado
-                                        //seleccionado (por medio de la cédula aseguramos que esa opción esté).
-                                        //Luego hay que llenar el valor del campo de texto de manera similar a como se llena
-                                        //como cuando se escoge una opción de los resultados
-                                        this.#searchPatients(patient.documentId);
-                                        document.forms.createUpdate.patient.value = '(' + patient.documentId + ') ' + patient.firstName + ' ' + patient.lastName;
+                                        //Hay que llenar el valor del campo de texto de manera similar a como se llena
+                                        //al escoger una opción de los resultados
+                                        document.forms.createUpdate.patientSearch.value = patient.firstName + ' ' + patient.lastName;
+                                        document.forms.createUpdate.patient.value = patient.id;
                                     }
                                 });
 
@@ -157,42 +153,71 @@ class ViewModel extends BaseViewModel {
 
         //Filtra resultados cada vez que se escribe sobre el campo de texto (no necesita un botón para buscar)
         document.querySelector('[data-autocomplete="doctors"]').addEventListener('input', (e) => {
-            //Previene rebuscar cuando se selecciona una opción de la lista
-            //Tambén evita un defecto visual que hace que al rebuscar la lista no desaparezca después de seleccionar
+            //Cuando el tipo de evento calza con los descrito es porque
+            //el valor no es a causa del usuario escribiendo, si no de seleccionar
+            //una opción de la lista.
             //Explicación en https://stackoverflow.com/a/68087847
             if (!(e instanceof InputEvent) || e.inputType == 'insertReplacementText') {
-                return;
-            }
+                //Buscamos acorde al valor del campo de texto el item de la lista
+                for(const item of this.#doctorSearchResults.children) {
+                    if(item.value == e.target.value) {
+                        //El valor real a guardar se inserta en el campo escondido, no
+                        //en el campo de búsqueda.
+                        document.forms.createUpdate.doctor.value = item.getAttribute('data-id');
+                        break;
+                    }
+                }
 
-            //Para datos reales controlar cuando se busca, trabar durante búsqueda
-            this.#searchDoctors(e.target.value);
+                //Después de utilizar el valor exacto para extraer o no una opción específica
+                //removemos el número de índice del campo de texto
+                e.target.value = e.target.value.substr(e.target.value.indexOf('.') + 2);
+            } else {
+                //El campo de texto es sólo un buscador, así que al usuario cambiar el valor
+                //por medio de escribir de nuevo debe anular la opción anterior
+                document.forms.createUpdate.doctor.value = null;
+
+                //Para datos reales controlar cuando se busca, trabar durante búsqueda
+                this.#searchDoctors(e.target.value);
+            }
         });
 
         //Filtra resultados cada vez que se escribe sobre el campo de texto (no necesita un botón para buscar)
         document.querySelector('[data-autocomplete="patients"]').addEventListener('input', (e) => {
-            //Previene rebuscar cuando se selecciona una opción de la lista
-            //Tambén evita un defecto visual que hace que al rebuscar la lista no desaparezca después de seleccionar
+            //Cuando el tipo de evento calza con los descrito es porque
+            //el valor no es a causa del usuario escribiendo, si no de seleccionar
+            //una opción de la lista.
             //Explicación en https://stackoverflow.com/a/68087847
             if (!(e instanceof InputEvent) || e.inputType == 'insertReplacementText') {
-                return;
-            }
+                //Buscamos acorde al valor del campo de texto el item de la lista
+                for(const item of this.#patientSearchResults.children) {
+                    if(item.value == e.target.value) {
+                        //El valor real a guardar se inserta en el campo escondido, no
+                        //en el campo de búsqueda.
+                        document.forms.createUpdate.patient.value = item.getAttribute('data-id');
+                        break;
+                    }
+                }
 
-            //Para datos reales controlar cuando se busca, trabar durante búsqueda
-            this.#searchPatients(e.target.value);
+                //Después de utilizar el valor exacto para extraer o no una opción específica
+                //removemos el número de índice del campo de texto
+                e.target.value = e.target.value.substr(e.target.value.indexOf('.') + 2);
+            } else {
+                //El campo de texto es sólo un buscador, así que al usuario cambiar el valor
+                //por medio de escribir de nuevo debe anular la opción anterior
+                document.forms.createUpdate.patient.value = null;
+
+                //Para datos reales controlar cuando se busca, trabar durante búsqueda
+                this.#searchPatients(e.target.value);
+            }
         })
     }
 
     #save() {
         const date = document.forms.createUpdate.date.value;
 
-        //Los ids se retraen del valor textual del input mapeado a la opción cuyo atributo "value" tenga el mismo valor.
-        //Una vez retraído el elemento específico se puede sacar el id que se encuentra en el atributo data-id
-        const doctorId = this.#doctorSearchResults.querySelector('[value="' + document.forms.createUpdate.doctor.value + '"]').getAttribute('data-id');
-        const patientId = this.#patientSearchResults.querySelector('[value="' + document.forms.createUpdate.patient.value + '"]').getAttribute('data-id');
-
         const data = {
-            doctorId: doctorId,
-            patientId: patientId,
+            doctorId: document.forms.createUpdate.doctor.value,
+            patientId: document.forms.createUpdate.patient.value,
             date: date ? new Date(date) : null
         };
 
@@ -222,16 +247,23 @@ class ViewModel extends BaseViewModel {
         //Cada item de la colección es la separación del string completo por cada espacio en blanco.
         //La función filter sólo incluye los valores de la colección original que no sean string vacío o nulo
         //La función trim elimina espacios en blanco a la derecha e izquiera para no ignorar multiples espacios en blanco
-        const filters = search.split(' ').filter((filter) => filter.trim());;
+        const filters = search.split(' ').filter((filter) => filter.trim());
 
         DoctorService.search(filters, (result) => {
             this.#doctorSearchResults.innerHTML = '';
 
-            for(const doctor of result) {
+            for(let i = 0; i < result.length; i++) {
+                const doctor = result[i];
+
                 //Nueva opción
                 const option = document.createElement('option');
+
+                //El valor real está en un atributo escondido
                 option.setAttribute('data-id', doctor.id);
-                option.value = '(' + doctor.documentId + ') ' + doctor.firstName + ' ' + doctor.lastName;
+
+                //Agregamos el índice de la iteración para asegurarnos que los valores sean
+                //siempre únicos aunque haya resultados con nombre y apellido similar
+                option.value = (i + 1) + '. ' + doctor.firstName + ' ' + doctor.lastName;
                 option.textContent = doctor.field;
 
                 //Agregar opción completa a la lista de doctores
@@ -250,11 +282,18 @@ class ViewModel extends BaseViewModel {
         PatientService.search(filters, (result) => {
             this.#patientSearchResults.innerHTML = '';
 
-            for(const patient of result) {
+            for(let i = 0; i < result.length; i++) {
+                const patient = result[i];
                 //Nueva opción
                 const option = document.createElement('option');
+
+                //El valor real está en un atributo escondido
                 option.setAttribute('data-id', patient.id);
-                option.value = '(' + patient.documentId + ') ' + patient.firstName + ' ' + patient.lastName;
+
+                //Agregamos el índice de la iteración para asegurarnos que los valores sean
+                //siempre únicos aunque haya resultados con nombre y apellido similar
+                option.value = (i + 1) + '. ' + patient.firstName + ' ' + patient.lastName;
+                option.textContent = patient.documentId;
 
                 //Agregar opción completa a la lista de doctores
                 this.#patientSearchResults.appendChild(option);

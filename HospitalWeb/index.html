@@ -146,12 +146,14 @@
                 <form name="createUpdate">
                     <div class="form-field">
                         <label for="form-doctor">Doctor</label>
-                        <input list="doctor-autocomplete" autocomplete="off" name="doctor" data-autocomplete="doctors" id="form-doctor" placeholder="John Smith" />
+                        <input list="doctor-autocomplete" name="doctorSearch" autocomplete="off" data-autocomplete="doctors" id="form-doctor" placeholder="John Smith" />
+                        <input type="hidden" name="doctor" />
                         <datalist id="doctor-autocomplete" data-autocomplete-results="doctors"></datalist>                         
                     </div>  
                     <div class="form-field">
                         <label for="form-patient">Paciente</label>
-                        <input list="patient-autocomplete" autocomplete="off" name="patient" data-autocomplete="patients" id="form-patient" placeholder="John Smith" />
+                        <input list="patient-autocomplete" name="patientSearch" autocomplete="off" data-autocomplete="patients" id="form-patient" placeholder="John Smith" />
+                        <input type="hidden" name="patient" />
                         <datalist id="patient-autocomplete" data-autocomplete-results="patients"></datalist>                          
                     </div>  
                     <div class="form-field">
