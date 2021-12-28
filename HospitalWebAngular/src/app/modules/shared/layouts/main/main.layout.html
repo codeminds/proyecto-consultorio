@@ -1,0 +1,41 @@
+<!-- Sintaxis para obsevables con async pipes -->
+<ng-container *ngIf="($appSettings | async) as appSettings">
+    <header class="navbar">
+        <button class="menu" (click)="toggleMenu($event)">&equiv;</button>
+        <figure>
+            <img src="/assets/img/code-minds.png" alt="Code Minds" />
+        </figure>
+    </header>
+    <section class="wrapper">
+        <!-- El evitar el event bubbling en el sidenav evita que este se cierre por el host listener de body  -->
+        <nav class="sidenav" (click)="$event.stopPropagation()" [ngClass]="{open: menuOpen}">
+            <h3 class="category main">Men&uacute; Principal</h3>
+            <!-- 
+            A pesar que el evento click del padre "sidenav" evita la propagación para que el menú se cierre,
+            con el evento click en menu queremos que al navegar correctamente en una de las opciones el menú 
+            se cierre para que el usuario pueda ver la pantalla.
+            -->
+            <ul class="menu" (click)="handleMenuNavigate()">
+                <li routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                    <a routerLink="/">
+                        <span>Citas</span> 
+                    </a>
+                </li>
+                <li routerLinkActive="active">
+                    <a routerLink="/admin/doctors">
+                        <span>Doctores</span> 
+                    </a>
+                </li>
+                <li routerLinkActive="active">
+                    <a routerLink="/admin/patients">
+                        <span>Pacientes</span> 
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <main>
+            <h1>{{appSettings.title}}</h1>
+            <router-outlet></router-outlet>
+        </main>
+    </section>
+</ng-container>

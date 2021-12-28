@@ -31,7 +31,7 @@ namespace API.Controllers
                     response.Messages.Add("Resource not found");
                     break;
                 case HttpStatusCode.InternalServerError:
-                    response.Messages.Add("An unknown error occurred");
+                    response.Messages.Add("Internal server error");
                     if (this._env.IsDevelopment())
                     {
                         var ex = HttpContext.Features.Get<IExceptionHandlerPathFeature>()?.Error;

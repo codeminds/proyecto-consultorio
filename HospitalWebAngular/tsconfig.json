@@ -22,9 +22,10 @@
       "dom"
     ],
     "paths": {
+      "@administration/*": ["src/app/modules/administration/*"],
+      "@appointments/*": ["src/app/modules/appointments/*"],
       "@services/*": ["src/app/services/*"],
-      "@appointments/*": ["src/app/appointments/*"],
-      "@administration/*": ["src/app/administration/*"]
+      "@shared/*": ["src/app/modules/shared/*"]
     }
   },
   "angularCompilerOptions": {

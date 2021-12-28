@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Data, NavigationEnd, Router, RouterEvent } from '@angular/router';
 import { AppService } from '@services/app/app.service';
-import { filter, map } from 'rxjs';
+import { AppSettings } from '@services/app/app.settings';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -30,7 +31,7 @@ export class AppComponent implements OnInit {
           //por estas razones hay que crear funcionalidad especial para cambiar el título
           //de la pestaña del browser con cada navegación 
           const routeData = this.getRouteData();
-          this.appService.setTitle(routeData.title);
+          this.appService.state = new AppSettings(routeData);
           break;
       }
     });
