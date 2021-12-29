@@ -2,12 +2,12 @@
     padding: 0.7rem;
 }
 
-.form-field ::placeholder{
+::placeholder{
     color: var(--color-placeholder);
     opacity: 1;
 }
 
-.form-field label {
+label {
     display: inline-block;
     font-weight: 700;
     cursor: pointer;
@@ -15,7 +15,7 @@
     font-size: 1.4rem;
 }
 
-.form-field input:not([type="radio"]):not([type="checkbox"]), .form-field textarea, .form-field select {
+input:not([type="radio"]):not([type="checkbox"]), textarea, select {
     display: inline-block;
     width: 100%;
     padding: 0.5rem;
@@ -27,37 +27,37 @@
     outline: 0;
 }
 
-.form-field select option {
+select option {
     background: var(--color-form-field-select);
 }
 
-.form-field input:not([type="radio"]):not([type="checkbox"]):focus, .form-field textarea:focus, .form-field select:focus {
+input:not([type="radio"]):not([type="checkbox"]):focus, textarea:focus, select:focus {
     border-color: var(--color-form-field-focus);
 }
 
-.form-field textarea {
+textarea {
     min-height: 150px;
     resize: vertical;
 }
 
-.form-field label.check {
+label.check {
     display: block;
 }
 
-.form-field label.check:last-of-type {
+label.check:last-of-type {
     margin-bottom: 0;
 }
 
-.form-field label.check.inline {
+label.check.inline {
     display: inline-block;
     margin-right: 0.8rem;
 }
 
-.form-field label.check span {
+label.check span {
     vertical-align: text-bottom;
 }
 
-.form-field label.check i {
+label.check i {
     display: inline-block;
     width: 2rem;
     height: 2rem;
@@ -68,11 +68,11 @@
     vertical-align: middle;
 }
 
-.form-field label.check :checked + i {
+label.check :checked + i {
     background-color: var(--color-main);
 }
 
-.form-field label.check input {
+label.check input {
     display: none;
 }
 

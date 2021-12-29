@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { InputType } from '@shared/components/form-field/form-field.types';
 
 @Component({
   selector: 'app-doctors',
@@ -6,8 +7,17 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./doctors.page.css']
 })
 export class DoctorsPage implements OnInit {
+  public name: string;
+  public check: boolean;
+  public gender: boolean;
 
-  constructor() { }
+  public InputType = InputType;
+
+  constructor() { 
+    this.name = null;
+    this.check = false;
+    this.gender = false;
+  }
 
   ngOnInit(): void {
   }

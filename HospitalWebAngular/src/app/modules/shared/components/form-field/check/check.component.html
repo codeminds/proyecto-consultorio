@@ -1,0 +1,8 @@
+<div class="form-field">
+    <label *ngIf="!inline" [for]="id">{{label}}</label>
+    <label class="check">                          
+        <input type="checkbox" [name]="name" [id]="id" [(ngModel)]="model" (ngModelChange)="onModelChange($event)" />
+        <i></i>
+        <span *ngIf="inline">{{label}}</span>
+    </label>
+</div>

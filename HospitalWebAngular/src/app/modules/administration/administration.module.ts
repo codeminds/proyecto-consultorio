@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { AdministrationRoutingModule } from './administration-routing.module';
 import { PatientsPage } from './pages/patients/patients.page';
 import { DoctorsPage } from './pages/doctors/doctors.page';
+import { SharedModule } from '@shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -12,7 +13,8 @@ import { DoctorsPage } from './pages/doctors/doctors.page';
   ],
   imports: [
     CommonModule,
-    AdministrationRoutingModule
+    AdministrationRoutingModule,
+    SharedModule
   ]
 })
 export class AdministrationModule { }

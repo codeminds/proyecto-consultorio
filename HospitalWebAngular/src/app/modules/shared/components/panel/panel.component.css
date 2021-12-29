@@ -18,28 +18,28 @@
     margin-bottom: 0;
 }
 
-.panel .title{
+.title{
     border-bottom: 1px solid var(--color-panel-border);
     margin-bottom: 1rem;
     font-size: 2rem;
 }
 
-.panel .title.toggle {
+.title.toggle {
     cursor: pointer;
 }
 
-.panel .title.toggle::after {
+.title.toggle::after {
     content: '\025B8';
 }
 
-.panel .title.toggle.open::after {
+.title.toggle.open::after {
     content: '\025BE';
 }
 
-.panel .toggle-section {
+.toggle-section {
     display: none;
 }
 
-.panel .toggle-section.open {
+.toggle-section.open {
     display: block;
 }

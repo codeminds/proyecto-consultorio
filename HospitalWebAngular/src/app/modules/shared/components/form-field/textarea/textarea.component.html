@@ -1,0 +1,4 @@
+<div class="form-field">
+    <label *ngIf="label" [for]="id">{{label}}</label>
+    <textarea [id]="id" [name]="name" [placeholder]="placeholder" [(ngModel)]="model" (ngModelChange)="onModelChange($event)"></textarea>
+</div>

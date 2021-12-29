@@ -18,11 +18,17 @@ export class DoctorService{
   }
 
   public list(filter: QueryParams): Observable<Doctor[]> {
-    return this.httpService.get(this._api, filter).pipe<Doctor[]>(map((response: APIResponse) => response.data.map((item: any) => new Doctor(item))));
+    return this.httpService.get(this._api, filter)
+      .pipe<Doctor[]>(
+        map((response: APIResponse) => response.data.map((item: any) => new Doctor(item)))
+      );
   }
 
   public get(id: number): Observable<Doctor> {
-    return this.httpService.get(`${this._api}/${id}`).pipe(map((response: APIResponse) => new Doctor(response.data)));
+    return this.httpService.get(`${this._api}/${id}`)
+      .pipe<Doctor>(
+        map((response: APIResponse) => new Doctor(response.data))
+      );
   }
 
   public post(data: Doctor): Observable<APIResponse> {

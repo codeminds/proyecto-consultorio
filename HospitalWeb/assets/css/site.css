@@ -42,7 +42,7 @@ h3 {
 /* LAYOUT */
 .navbar {
     background: var(--color-navbar);
-    padding: 5px;
+    padding: 0.5rem;
     box-shadow: 0px 0px 8px -4px var(--color-shadow-dark);
 }
 
@@ -64,8 +64,13 @@ h3 {
 }
 
 .navbar figure {
-    width: 7rem;
+    height: 6rem;
     display: inline-block;
+}
+
+.navbar figure img {
+    max-height: 100%;
+    width: auto;
 }
 
 .wrapper {
@@ -73,7 +78,7 @@ h3 {
     Restamos el alto del navbar acorde al elemento de mayor altura
     para calzar con la pantalla de manera perfecta 
     */
-    height: calc(100% - 4.1rem);
+    height: calc(100% - 7rem);
 }
 
 .wrapper::after {

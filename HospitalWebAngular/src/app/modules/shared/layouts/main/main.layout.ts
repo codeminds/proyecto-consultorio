@@ -17,7 +17,6 @@ export class MainLayout implements OnInit {
   @HostListener('body: click')
   public onBodyClick(): void {
     this.menuOpen = false;
-    this.$appSettings = null;
   }
 
   constructor(

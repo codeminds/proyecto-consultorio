@@ -1,0 +1,6 @@
+<div class="panel">
+    <h3 *ngIf="title" class="title" (click)="toggleOpen()" [ngClass]="{'toggle': expandable, 'open': open}">{{title}}</h3>
+    <section [ngClass]="{'toggle-section': expandable, 'open': open}">
+        <ng-content></ng-content>
+    </section>
+</div>
