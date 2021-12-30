@@ -166,6 +166,11 @@ main::-webkit-scrollbar {
 
 @media screen and (max-width: 1024px) {
     .wrapper {
+        /*
+        Recalculamos en pantallas móviles ya que cambia el elemento
+        que mostramos en el navbar
+        */
+        height: calc(100% - 5.2rem);
         position: relative;
     }
 

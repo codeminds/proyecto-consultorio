@@ -4,7 +4,7 @@
 
 .form-field ::placeholder{
     color: var(--color-placeholder);
-    opacity: 1;
+    font-size: inherit;
 }
 
 .form-field label {
@@ -20,6 +20,7 @@
     width: 100%;
     padding: 0.5rem;
     height: 2.8rem;
+    font-size: inherit;
     background: rgba(255, 255, 255, 0.2);
     color: inherit;
     border: solid 1px var(--color-form-field-input);
@@ -36,7 +37,7 @@
 }
 
 .form-field textarea {
-    min-height: 150px;
+    min-height: 15rem;
     resize: vertical;
 }
 
@@ -50,7 +51,7 @@
 
 .form-field label.check.inline {
     display: inline-block;
-    margin-right: 0.8rem;
+    margin-right: 1.2rem;
 }
 
 .form-field label.check span {
@@ -64,7 +65,7 @@
     border: solid 1px #ccc;
     background: rgba(255, 255, 255, 0.2);
     border-radius: 2px;
-    margin-right: 2px;
+    margin-right: 0.4rem;
     vertical-align: middle;
 }
 

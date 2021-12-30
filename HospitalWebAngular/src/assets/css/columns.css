@@ -1,52 +1,50 @@
-.row::after {
-    content: '';
-    clear: both;
-    display: block;
+.row {
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .col {
     box-sizing: border-box;
-    float: left;
 }
 
 .col.col-1 {
-    width: 100%;
+    flex-basis: 100%;
 }
 
 .col.col-2 {
-    width: 50%;
+    flex-basis: 50%;
 }
 
 .col.col-3 {
-    width: 33.33%;
+    flex-basis: 33.33%;
 }
 
 .col.col-4 {
-    width: 25%;
+    flex-basis: 25%;
 }
 
 .col.col-5 {
-    width: 20%;
+    flex-basis: 20%;
 }
 
 .col.col-6 {
-    width: 16.66%;
+    flex-basis: 16.66%;
 }
 
 .col.col-7 {
-    width: 14.28%;
+    flex-basis: 14.28%;
 }
 
 .col.col-8 {
-    width: 12.5%;
+    flex-basis: 12.5%;
 }
 
 .col.col-9 {
-    width: 11.11%;
+    flex-basis: 11.11%;
 }
 
 .col.col-10 {
-    width: 10%;
+    flex-basis: 10%;
 }
 
 .col.space-x {
@@ -70,7 +68,7 @@
 @media screen and (max-width: 1024px) {
     .col.col-1, .col.col-2, .col.col-3, .col.col-4, .col.col-5,
     .col.col-6, .col.col-7, .col.col-8, .col.col-9, .col.col-10 {
-        width: 100%;
+        flex-basis: 100%;
     }
 
     .col.space-x, .col.space-x:last-child {

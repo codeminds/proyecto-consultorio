@@ -1,0 +1,8 @@
+<div class="modal {{size}}" [ngClass]="{'open': open, 'transparent': transparent}" (click)="onClickOutside()">
+    <div class="content" (click)="$event.stopPropagation()">
+        <header *ngIf="modalTitle">
+            <h3>{{modalTitle}}</h3>
+        </header>
+        <ng-content></ng-content>
+    </div>
+</div>

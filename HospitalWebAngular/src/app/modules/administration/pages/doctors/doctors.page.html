@@ -1,5 +1,7 @@
 <div>
     <button (click)="open = !open">toggle</button>
+    <button (click)="modal1Open = true">Open 1</button>
+    <button (click)="modal2Open = true">Open 2</button>
     <app-panel panelTitle="Filter" contentClass="row"  [expandable]="true" [open]="open">
         <app-panel panelTitle="Doctores" class="col col-2 space-x flat slim">
             <form>
@@ -65,6 +67,7 @@
                     [hasAll]="true"
                 ></app-select>
                 <app-textarea 
+                    class="col col-1"
                     name="name" 
                     form="filter" 
                     label="Name"
@@ -72,19 +75,20 @@
                     placeholder="John"
                 ></app-textarea>
                 <app-check
-                    name="name" 
+                    class="col col-1"
+                    name="a" 
                     form="filter" 
                     label="Name"
                     [(model)]="check"
                 ></app-check>
                 <app-radio
+                    class="col col-1"
                     name="gender"
                     form="filter"
                     label="Gender"
                     (modelChange)="gender = $event"
                     [options]="[{label: 'Female', value: false}, {label: 'Male', value: true}]"
                     [hasAll]="true"
-                    [inline]="true"
                 ></app-radio>
             </form>
         </app-panel>
@@ -131,6 +135,141 @@
             ></app-radio>
         </form>
     </app-panel>
+    <app-modal [(open)]="modal1Open" modalTitle="Modal 1" [size]="ModalSize.Medium" [transparent]="true">
+        <app-panel panelTitle="Filter" contentClass="row" [expandable]="true" [open]="open">
+            <app-panel panelTitle="Doctores" class="col col-2 space-x flat slim">
+                <form>
+                    <app-input 
+                        name="name" 
+                        form="filter" 
+                        label="Name"
+                        [type]="InputType.Text" 
+                        [(model)]="name"
+                        [attributes]="{'placeholder': 'John'}"
+                    ></app-input>
+                    <app-textarea 
+                        name="name" 
+                        form="filter" 
+                        label="Name"
+                        [(model)]="name"
+                        placeholder="John"
+                    ></app-textarea>
+                    <app-check
+                        name="name" 
+                        form="filter" 
+                        label="Name"
+                        [(model)]="check"
+                    ></app-check>
+                    <app-select
+                        name="gender"
+                        form="filter"
+                        label="Gender"
+                        [(model)]="gender"
+                        [options]="[{label: 'Female', value: false}, {label: 'Male', value: true}]"
+                        [hasAll]="true"
+                    ></app-select>
+                    <app-radio
+                        name="gender"
+                        form="filter"
+                        label="Gender"
+                        (modelChange)="gender = $event"
+                        [options]="[{label: 'Female', value: false}, {label: 'Male', value: true}]"
+                        [hasAll]="true"
+                        [inline]="true"
+                    ></app-radio>
+                    <p *ngIf="name">{{name}}</p>
+                </form>
+            </app-panel>
+            <app-panel panelTitle="Pacientes" class="col col-2 space-x flat slim">
+                <form class="row">
+                    <app-input 
+                        class="col col-2"
+                        name="name" 
+                        form="filter" 
+                        label="Name"
+                        [type]="InputType.Text" 
+                        [(model)]="name"
+                        [attributes]="{'placeholder': 'John'}"
+                    ></app-input>
+                    <app-select
+                        class="col col-2"
+                        name="gender"
+                        form="filter"
+                        label="Gender"
+                        [(model)]="gender"
+                        [options]="[{label: 'Female', value: false}, {label: 'Male', value: true}]"
+                        [hasAll]="true"
+                    ></app-select>
+                    <app-textarea 
+                        name="name" 
+                        form="filter" 
+                        label="Name"
+                        [(model)]="name"
+                        placeholder="John"
+                    ></app-textarea>
+                    <app-check
+                        name="name" 
+                        form="filter" 
+                        label="Name"
+                        [(model)]="check"
+                    ></app-check>
+                    <app-radio
+                        name="gender"
+                        form="filter"
+                        label="Gender"
+                        (modelChange)="gender = $event"
+                        [options]="[{label: 'Female', value: false}, {label: 'Male', value: true}]"
+                        [hasAll]="true"
+                        [inline]="true"
+                    ></app-radio>
+                </form>
+            </app-panel>
+        </app-panel>
+    </app-modal>
+    <app-modal [(open)]="modal2Open" modalTitle="Modal 2" [size]="ModalSize.Large">
+        <app-panel panelTitle="Test">
+            <form>
+                <app-input 
+                    name="name" 
+                    form="filter" 
+                    label="Name"
+                    [type]="InputType.Text" 
+                    [(model)]="name"
+                    [attributes]="{'placeholder': 'John'}"
+                ></app-input>
+                <app-textarea 
+                    name="name" 
+                    form="filter" 
+                    label="Name"
+                    [(model)]="name"
+                    placeholder="John"
+                ></app-textarea>
+                <app-check
+                    name="name" 
+                    form="filter" 
+                    label="Name"
+                    [(model)]="check"
+                ></app-check>
+                <app-select
+                    name="gender"
+                    form="filter"
+                    label="Gender"
+                    [(model)]="gender"
+                    [options]="[{label: 'Female', value: false}, {label: 'Male', value: true}]"
+                    [hasAll]="true"
+                ></app-select>
+                <app-radio
+                    name="gender"
+                    form="filter"
+                    label="Gender"
+                    (modelChange)="gender = $event"
+                    [options]="[{label: 'Female', value: false}, {label: 'Male', value: true}]"
+                    [hasAll]="true"
+                    [inline]="true"
+                ></app-radio>
+            </form>
+        </app-panel>
+    </app-modal>
 </div>
 
 

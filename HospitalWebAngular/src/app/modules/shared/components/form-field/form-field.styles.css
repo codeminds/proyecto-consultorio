@@ -4,7 +4,7 @@
 
 ::placeholder{
     color: var(--color-placeholder);
-    opacity: 1;
+    font-size: inherit;
 }
 
 label {
@@ -20,6 +20,7 @@ input:not([type="radio"]):not([type="checkbox"]), textarea, select {
     width: 100%;
     padding: 0.5rem;
     height: 2.8rem;
+    font-size: inherit;
     background: rgba(255, 255, 255, 0.2);
     color: inherit;
     border: solid 1px var(--color-form-field-input);
@@ -36,21 +37,27 @@ input:not([type="radio"]):not([type="checkbox"]):focus, textarea:focus, select:f
 }
 
 textarea {
-    min-height: 150px;
+    min-height: 15rem;
     resize: vertical;
 }
 
-label.check {
-    display: block;
+.check-container {
+    margin-bottom: 0.5rem;
 }
 
-label.check:last-of-type {
+.check-container:last-child {
     margin-bottom: 0;
 }
 
-label.check.inline {
+.check-container.inline {
     display: inline-block;
-    margin-right: 0.8rem;
+    margin-right: 1rem;
+    margin-bottom: 0;
+}
+
+label.check {
+    display: inline-block;
+    margin-bottom: 0;
 }
 
 label.check span {
@@ -64,7 +71,7 @@ label.check i {
     border: solid 1px #ccc;
     background: rgba(255, 255, 255, 0.2);
     border-radius: 2px;
-    margin-right: 2px;
+    margin-right: 0.4rem;
     vertical-align: middle;
 }
 
@@ -121,8 +128,13 @@ label.check input {
 }
 
 @media screen and (max-width: 1024px) {
-    .form-field label.check.inline {
+    .check-container.inline {
         display: block;
         margin-right: 0;
+        margin-bottom: 0.5rem;
+    }
+
+    .check-container.inline:last-child {
+        margin-bottom: 0;
     }
 }
