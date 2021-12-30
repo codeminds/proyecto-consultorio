@@ -50,9 +50,9 @@ h3 {
     display: none;
     font-size: 2.5rem;
     font-weight: 500;
-    margin: 0 2px;
+    margin: 0 0.2rem;
     padding: 0.8rem 1.6rem;
-    border-radius: 50px;
+    border-radius: 5rem;
     border: none;
     background: none;
     transition: background-color 0.2s linear;
@@ -89,12 +89,12 @@ h3 {
 
 .sidenav {
     float: left;
-    width: 250px;
+    width: 25rem;
     height: 100%;
     background: var(--color-sidenav);
     color: var(--color-sidenav-text);
     overflow: auto;
-    box-shadow: 1px 1px 3px 0px var(--color-shadow-dark);
+    box-shadow: 0.1rem 0.1rem 0.3rem 0 var(--color-shadow-dark);
     scrollbar-color: var(--color-scrollbar-dark) var(--color-scrollbar-dark);
     scrollbar-width: thin;
 }
@@ -110,9 +110,9 @@ h3 {
 
 .sidenav .category {
     font-size: 2.2rem;
-    padding: 15px 10px;
+    padding: 1.5rem 1rem;
     margin: 0;
-    font-size: 300;
+    font-weight: 300;
     background: var(--color-sidenav-category);
 }
 
@@ -123,21 +123,21 @@ h3 {
 }
 
 .sidenav .menu li:hover, .sidenav .menu li.active {
-    border-right: 4px solid var(--color-main);
+    border-right: 0.4rem solid var(--color-main);
     background: var(--color-sidenav-active);
 }
 
 .sidenav .menu a {
     text-decoration: none;
     display: block;
-    padding: 12px;
+    padding: 1.2rem;
 }
 
 .sidenav .menu a::before {
     content: '\25C6';
     font-size: 1rem;
     vertical-align: middle;
-    margin-right: 5px;
+    margin-right: 0.5rem;
 }
 
 .sidenav .menu a span {
@@ -146,9 +146,9 @@ h3 {
 
 main {
     float: left;
-    width: calc(100% - 250px);
+    width: calc(100% - 25rem);
     height: 100%;
-    padding: 20px;
+    padding: 2rem;
     overflow: auto;
     scrollbar-color: var(--color-scrollbar-light) var(--color-scrollbar-light);
     scrollbar-width: thin;
@@ -187,7 +187,7 @@ main::-webkit-scrollbar {
         z-index: 90;
         top: 0;
         width: 80%;
-        max-width: 250px;
+        max-width: 25rem;
         left: -80%;
         transition: left 0.6s ease-in;
     }

@@ -5,7 +5,7 @@
     height: 100%;
     width: 100%;
     background: rgba(0, 0, 0, 0.8);
-    padding: 20px;
+    padding: 2rem;
     box-sizing: border-box;
     overflow-y: auto;    
     scrollbar-color: var(--color-scrollbar-dark) var(--color-scrollbar-dark);
@@ -40,20 +40,20 @@
 .modal .content {
     width: 90%;
     background: var(--color-modal-content-background);
-    padding: 10px;
-    border-radius: 2px;
-    border: 1px solid var(--color-modal-content-border);
-    box-shadow: 2px 2px 6px -3px var(--color-shadow-light);
+    padding: 1rem;
+    border-radius: 0.2rem;
+    border: 0.1rem solid var(--color-modal-content-border);
+    box-shadow: 0.2rem 0.2rem 0.6rem -0.3rem var(--color-shadow-light);
 }
 
 .modal.small .content {
-    width: min(400px, 95%);
+    width: min(40rem, 95%);
 }
 
 .modal.medium .content {
-    width: min(700px, 95%);
+    width: min(70rem, 95%);
 }
 
 .modal.large .content {
-    width: min(1000px, 95%);
+    width: min(100rem, 95%);
 }

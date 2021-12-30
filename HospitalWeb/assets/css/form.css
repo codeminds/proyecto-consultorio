@@ -23,8 +23,8 @@
     font-size: inherit;
     background: rgba(255, 255, 255, 0.2);
     color: inherit;
-    border: solid 1px var(--color-form-field-input);
-    border-radius: 2px;
+    border: solid 0.1rem var(--color-form-field-input);
+    border-radius: 0.2rem;
     outline: 0;
 }
 
@@ -62,9 +62,9 @@
     display: inline-block;
     width: 2rem;
     height: 2rem;
-    border: solid 1px #ccc;
+    border: solid 0.1rem #ccc;
     background: rgba(255, 255, 255, 0.2);
-    border-radius: 2px;
+    border-radius: 0.2rem;
     margin-right: 0.4rem;
     vertical-align: middle;
 }
@@ -80,10 +80,10 @@
 .button {
     display: inline-block;
     padding: 0.8rem 1.8rem;
-    border: 1px solid #ccc;
+    border: 0.2rem solid #ccc;
     background: rgba(255, 255, 255, 0.2);
     text-decoration: none;
-    border-radius: 2px;
+    border-radius: 0.2rem;
     font-weight: 400;
     font-size: 1.3rem;
     line-height: 1.3;
