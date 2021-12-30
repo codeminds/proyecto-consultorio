@@ -3,7 +3,7 @@
     <button class="button success" (click)="modal1Open = true">Open 1</button>
     <button class="button success" (click)="modal2Open = true">Open 2</button>
     <app-panel panelTitle="Filter" contentClass="row"  [expandable]="true" [open]="open">
-        <app-panel panelTitle="Doctores" class="col col-2 space-x flat slim">
+        <app-panel panelTitle="Doctores" class="col-2 space-x flat slim">
             <form>
                 <app-input 
                     name="name" 
@@ -46,7 +46,7 @@
                 <p *ngIf="name">{{name}}</p>
             </form>
         </app-panel>
-        <app-panel panelTitle="Pacientes" class="col col-2 space-x flat slim">
+        <app-panel panelTitle="Pacientes" class="col-2 space-x flat slim">
             <form class="row">
                 <app-input 
                     class="col col-2"
@@ -267,7 +267,10 @@
                     [hasAll]="true"
                     [inline]="true"
                 ></app-radio>
-                <app-button [type]="ButtonType.Success" (clicked)="modal2Open = false">Save</app-button>
+                <div class="row">
+                    <app-button [type]="ButtonType.Success" (clicked)="modal2Open = false">Save</app-button>
+                    <app-button [type]="ButtonType.Danger" (clicked)="modal2Open = false">Cancel</app-button>
+                </div>
             </form>
         </app-panel>
     </app-modal>

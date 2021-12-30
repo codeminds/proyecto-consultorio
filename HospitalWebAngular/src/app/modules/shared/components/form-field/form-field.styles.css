@@ -59,16 +59,16 @@ textarea.resizable {
     margin-bottom: 0;
 }
 
-label.check {
+.check {
     display: inline-block;
     margin-bottom: 0;
 }
 
-label.check span {
+.check span {
     vertical-align: text-bottom;
 }
 
-label.check i {
+.check i {
     display: inline-block;
     width: 2rem;
     height: 2rem;
@@ -79,11 +79,11 @@ label.check i {
     vertical-align: middle;
 }
 
-label.check :checked + i {
+.check :checked + i {
     background-color: var(--color-main);
 }
 
-label.check input {
+.check input {
     display: none;
 }
 

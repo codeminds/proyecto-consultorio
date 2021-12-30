@@ -19,7 +19,7 @@
     transition: opacity 0.3s ease-out, z-index 0.3s ease-out;
 }
 
-.modal.transparent {
+.transparent {
     background: none;
 }
 
@@ -32,28 +32,29 @@
     background: var(--color-scrollbar-dark);
 }
 
-.modal.open {
+.open {
     z-index: 100;
     opacity: 1;
 }
 
-.modal .content {
+.content {
     width: 90%;
     background: var(--color-modal-content-background);
     padding: 1rem;
     border-radius: 0.2rem;
     border: 0.1rem solid var(--color-modal-content-border);
     box-shadow: 0.2rem 0.2rem 0.6rem -0.3rem var(--color-shadow-light);
+    overflow: hidden;
 }
 
-.modal.small .content {
+.small .content {
     width: min(40rem, 95%);
 }
 
-.modal.medium .content {
+.medium .content {
     width: min(70rem, 95%);
 }
 
-.modal.large .content {
+.large .content {
     width: min(100rem, 95%);
 }

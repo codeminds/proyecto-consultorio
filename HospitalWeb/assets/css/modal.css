@@ -30,7 +30,7 @@
     display: flex;
 }
 
-.modal .modal-content {
+.modal > .content {
     width: 90%;
     background: var(--color-modal-content-background);
     padding: 1rem;
@@ -39,14 +39,14 @@
     box-shadow: 0.2rem 0.2rem 0.6rem -0.3rem var(--color-shadow-light);
 }
 
-.modal.small .modal-content {
+.modal.small > .content {
     width: min(40rem, 95%);
 }
 
-.modal.medium .modal-content {
+.modal.medium > .content {
     width: min(70rem, 95%);
 }
 
-.modal.large .modal-content {
+.modal.large > .content {
     width: min(100rem, 95%);
 }
