@@ -26,14 +26,14 @@ namespace API.DataTransferObjects
         public DateTime? DateTo { get; set; }
 
         //Patient Filter
-        public string PatientIdentification { get; set; }
+        public string PatientDocumentId { get; set; }
         public string PatientFirstName { get; set; }
         public string PatientLastName { get; set; }
         public DateTime? PatientBirthDateFrom { get; set; }
         public DateTime? PatientBirthDateTo { get; set; }
 
         //Doctor Filter
-        public string DoctorIdentification { get; set; }
+        public string DoctorDocumentId { get; set; }
         public string DoctorFirstName { get; set; }
         public string DoctorLastName { get; set; }
         public int? DoctorFieldId { get; set; }

@@ -40,7 +40,7 @@ namespace API.Services
         public async Task<List<GetAppointmentDTO>> List(FilterAppointmentDTO filter)
         {
             FilterDoctorDTO doctorFilter = new FilterDoctorDTO();
-            doctorFilter.Identification = filter.DoctorIdentification;
+            doctorFilter.DocumentId = filter.DoctorDocumentId;
             doctorFilter.FirstName = filter.DoctorFirstName;
             doctorFilter.LastName = filter.DoctorLastName;
             doctorFilter.FieldId = filter.DoctorFieldId;
@@ -48,7 +48,7 @@ namespace API.Services
             List<int> doctorIds = (await this._doctorService.List(doctorFilter)).Select(d => d.Id).ToList();
 
             FilterPatientDTO patientFilter = new FilterPatientDTO();
-            patientFilter.Identification = filter.PatientIdentification;
+            patientFilter.DocumentId = filter.PatientDocumentId;
             patientFilter.FirstName = filter.PatientFirstName;
             patientFilter.LastName = filter.PatientLastName;
             patientFilter.BirthDateFrom = filter.PatientBirthDateFrom;

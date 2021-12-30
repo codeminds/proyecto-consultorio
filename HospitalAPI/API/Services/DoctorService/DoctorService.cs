@@ -36,7 +36,7 @@ namespace API.Services
         {
             return await this._database.Doctors
                                            .Include(d => d.Field)
-                                           .Where(d => (string.IsNullOrWhiteSpace(filter.Identification) || d.Identification.Contains(filter.Identification))
+                                           .Where(d => (string.IsNullOrWhiteSpace(filter.DocumentId) || d.DocumentId.Contains(filter.DocumentId))
                                                        && (string.IsNullOrWhiteSpace(filter.FirstName) || d.FirstName.Contains(filter.FirstName))
                                                        && (string.IsNullOrWhiteSpace(filter.LastName) || d.LastName.Contains(filter.LastName))
                                                        && (!filter.FieldId.HasValue || d.FieldId == filter.FieldId))

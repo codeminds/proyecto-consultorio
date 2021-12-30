@@ -56,7 +56,7 @@ namespace API.Data
             {
                 entity.ToTable("Doctor");
 
-                entity.HasIndex(e => e.Identification, "UXDoctorIdentification")
+                entity.HasIndex(e => e.DocumentId, "UXDoctorDocumentId")
                     .IsUnique();
 
                 entity.Property(e => e.FirstName)
@@ -64,7 +64,7 @@ namespace API.Data
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Identification)
+                entity.Property(e => e.DocumentId)
                     .IsRequired()
                     .HasMaxLength(9)
                     .IsUnicode(false);
@@ -95,7 +95,7 @@ namespace API.Data
             {
                 entity.ToTable("Patient");
 
-                entity.HasIndex(e => e.Identification, "UXPatientIdentification")
+                entity.HasIndex(e => e.DocumentId, "UXPatientDocumentId")
                     .IsUnique();
 
                 entity.Property(e => e.FirstName)
@@ -103,7 +103,7 @@ namespace API.Data
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Identification)
+                entity.Property(e => e.DocumentId)
                     .IsRequired()
                     .HasMaxLength(9)
                     .IsUnicode(false);

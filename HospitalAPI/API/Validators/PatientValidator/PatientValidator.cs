@@ -19,22 +19,22 @@ namespace API.Validators
         {
             List<string> innerMessages = new List<string>();
 
-            //Identification
-            if (string.IsNullOrWhiteSpace(data.Identification))
+            //DocumentId
+            if (string.IsNullOrWhiteSpace(data.DocumentId))
             {
-                innerMessages.Add("Identification is required");
+                innerMessages.Add("DocumentId is required");
             }
-            else if (data.Identification.Trim().Length != 9)
+            else if (data.DocumentId.Trim().Length != 9)
             {
-                innerMessages.Add("Identification must have 9 digits");
+                innerMessages.Add("DocumentId must have 9 digits");
             }
-            else if (!int.TryParse(data.Identification, out int num) || num < 0)
+            else if (!int.TryParse(data.DocumentId, out int num) || num < 0)
             {
-                innerMessages.Add("Identification can only contain numbers");
+                innerMessages.Add("DocumentId can only contain numbers");
             }
-            else if (this._database.Patients.Any(d => d.Identification == data.Identification))
+            else if (this._database.Patients.Any(d => d.DocumentId == data.DocumentId))
             {
-                innerMessages.Add("Identification number already exists in the system");
+                innerMessages.Add("DocumentId number already exists in the system");
             }
 
             //First Name
@@ -72,22 +72,22 @@ namespace API.Validators
         {
             List<string> innerMessages = new List<string>();
 
-            //Identification
-            if (string.IsNullOrWhiteSpace(data.Identification))
+            //DocumentId
+            if (string.IsNullOrWhiteSpace(data.DocumentId))
             {
-                innerMessages.Add("Identification is required");
+                innerMessages.Add("DocumentId is required");
             }
-            else if (data.Identification.Trim().Length != 9)
+            else if (data.DocumentId.Trim().Length != 9)
             {
-                innerMessages.Add("Identification must have 9 digits");
+                innerMessages.Add("DocumentId must have 9 digits");
             }
-            else if (!int.TryParse(data.Identification, out int num) || num < 0)
+            else if (!int.TryParse(data.DocumentId, out int num) || num < 0)
             {
-                innerMessages.Add("Identification can only contain numbers");
+                innerMessages.Add("DocumentId can only contain numbers");
             }
-            else if (this._database.Patients.Any(d => d.Identification == data.Identification && d.Id != id))
+            else if (this._database.Patients.Any(d => d.DocumentId == data.DocumentId && d.Id != id))
             {
-                innerMessages.Add("Identification number already exists in the system");
+                innerMessages.Add("DocumentId number already exists in the system");
             }
 
             //First Name

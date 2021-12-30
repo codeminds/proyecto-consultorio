@@ -5,7 +5,7 @@ namespace API.DataTransferObjects
     public class GetPatientDTO
     {
         public int Id { get; set; }
-        public string Identification { get; set; }
+        public string DocumentId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public DateTime BirthDate { get; set; }
@@ -13,7 +13,7 @@ namespace API.DataTransferObjects
 
     public class CreateUpdatePatientDTO
     {
-        public string Identification { get; set; }
+        public string DocumentId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public DateTime BirthDate { get; set; }
@@ -21,7 +21,7 @@ namespace API.DataTransferObjects
 
     public class FilterPatientDTO
     {
-        public string Identification { get; set; }
+        public string DocumentId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public DateTime? BirthDateFrom { get; set; }

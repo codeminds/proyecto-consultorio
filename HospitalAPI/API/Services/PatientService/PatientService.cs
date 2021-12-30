@@ -35,7 +35,7 @@ namespace API.Services
         public async Task<List<GetPatientDTO>> List(FilterPatientDTO filter)
         {
             return await this._database.Patients
-                                           .Where(p => (string.IsNullOrWhiteSpace(filter.Identification) || p.Identification.Contains(filter.Identification))
+                                           .Where(p => (string.IsNullOrWhiteSpace(filter.DocumentId) || p.DocumentId.Contains(filter.DocumentId))
                                                        && (string.IsNullOrWhiteSpace(filter.FirstName) || p.FirstName.Contains(filter.FirstName))
                                                        && (string.IsNullOrWhiteSpace(filter.LastName) || p.LastName.Contains(filter.LastName))
                                                        && (!filter.BirthDateFrom.HasValue || p.BirthDate >= filter.BirthDateFrom)
