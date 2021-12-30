@@ -226,53 +226,51 @@
             </app-panel>
         </app-panel>
     </app-modal>
-    <app-modal [(open)]="modal2Open" modalTitle="Modal 2" [size]="ModalSize.Large">
-        <app-panel panelTitle="Test">
-            <form>
-                <app-input 
-                    name="name" 
-                    form="filter" 
-                    label="Name"
-                    [type]="InputType.Text" 
-                    [(model)]="name"
-                    [attributes]="{'placeholder': 'John'}"
-                ></app-input>
-                <app-textarea 
-                    name="name" 
-                    form="filter" 
-                    label="Name"
-                    [(model)]="name"
-                    placeholder="John"
-                ></app-textarea>
-                <app-check
-                    name="name" 
-                    form="filter" 
-                    label="Name"
-                    [(model)]="check"
-                ></app-check>
-                <app-select
-                    name="gender"
-                    form="filter"
-                    label="Gender"
-                    [(model)]="gender"
-                    [options]="[{label: 'Female', value: false}, {label: 'Male', value: true}]"
-                    [hasAll]="true"
-                ></app-select>
-                <app-radio
-                    name="gender"
-                    form="filter"
-                    label="Gender"
-                    (modelChange)="gender = $event"
-                    [options]="[{label: 'Female', value: false}, {label: 'Male', value: true}]"
-                    [hasAll]="true"
-                    [inline]="true"
-                ></app-radio>
-                <div class="row">
-                    <app-button [type]="ButtonType.Success" (clicked)="modal2Open = false">Save</app-button>
-                    <app-button [type]="ButtonType.Danger" (clicked)="modal2Open = false">Cancel</app-button>
-                </div>
-            </form>
-        </app-panel>
+    <app-modal [(open)]="modal2Open" modalTitle="Modal 2" [size]="ModalSize.Small">
+        <form>
+            <app-input 
+                name="name" 
+                form="filter" 
+                label="Name"
+                [type]="InputType.Text" 
+                [(model)]="name"
+                [attributes]="{'placeholder': 'John'}"
+            ></app-input>
+            <app-textarea 
+                name="name" 
+                form="filter" 
+                label="Name"
+                [(model)]="name"
+                placeholder="John"
+            ></app-textarea>
+            <app-check
+                name="name" 
+                form="filter" 
+                label="Name"
+                [(model)]="check"
+            ></app-check>
+            <app-select
+                name="gender"
+                form="filter"
+                label="Gender"
+                [(model)]="gender"
+                [options]="[{label: 'Female', value: false}, {label: 'Male', value: true}]"
+                [hasAll]="true"
+            ></app-select>
+            <app-radio
+                name="gender"
+                form="filter"
+                label="Gender"
+                (modelChange)="gender = $event"
+                [options]="[{label: 'Female', value: false}, {label: 'Male', value: true}]"
+                [hasAll]="true"
+                [inline]="true"
+            ></app-radio>
+            <div class="row">
+                <app-button [type]="ButtonType.Success" (clicked)="modal2Open = false">Save</app-button>
+                <app-button [type]="ButtonType.Danger" (clicked)="modal2Open = false">Cancel</app-button>
+            </div>
+        </form>
     </app-modal>
 </div>
 

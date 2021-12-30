@@ -19,6 +19,11 @@
     display: block;
 }
 
+.modal .title{
+    padding-bottom: 0.2rem;
+    border-bottom: 0.1rem solid var(--color-panel-border);
+}
+
 .modal .content{
     background: #f7f7f7;
     border: 1px solid #c0c0c0;

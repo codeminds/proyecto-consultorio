@@ -30,9 +30,8 @@
 }
 
 .title{
+    padding-bottom: 0.2rem;
     border-bottom: 0.1rem solid var(--color-panel-border);
-    margin-bottom: 1rem;
-    font-size: 2rem;
 }
 
 .toggle {

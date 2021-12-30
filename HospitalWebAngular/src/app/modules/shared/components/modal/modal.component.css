@@ -32,6 +32,11 @@
     background: var(--color-scrollbar-dark);
 }
 
+.title{
+    padding-bottom: 0.2rem;
+    border-bottom: 0.1rem solid var(--color-panel-border);
+}
+
 .open {
     z-index: 100;
     opacity: 1;

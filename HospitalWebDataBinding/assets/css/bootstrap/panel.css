@@ -8,8 +8,10 @@
 }
 
 .panel .title{
-    border-bottom: 1px solid #888;
+    padding-bottom: 0.2rem;
+    border-bottom: 0.1rem solid var(--color-panel-border);
 }
+
 
 .panel .toggle-section{
     display: none;
