@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { InputType } from '@shared/components/form-field/form-field.types';
+import { ButtonType, InputType } from '@shared/components/form-field/form-field.types';
 import { ModalSize } from '@shared/components/modal/modal.types';
 
 @Component({
@@ -17,6 +17,7 @@ export class DoctorsPage {
 
   public InputType = InputType;
   public ModalSize = ModalSize;
+  public ButtonType = ButtonType;
 
   constructor() { 
     this.name = null;

@@ -10,6 +10,7 @@ import { CheckComponent } from './components/form-field/check/check.component';
 import { RadioComponent } from './components/form-field/radio/radio.component';
 import { FormsModule } from '@angular/forms';
 import { ModalComponent } from './components/modal/modal.component';
+import { ButtonComponent } from './components/form-field/button/button.component';
 
 
 
@@ -22,7 +23,8 @@ import { ModalComponent } from './components/modal/modal.component';
     TextareaComponent,
     CheckComponent,
     RadioComponent,
-    ModalComponent
+    ModalComponent,
+    ButtonComponent
   ],
   imports: [
     CommonModule,
@@ -36,7 +38,8 @@ import { ModalComponent } from './components/modal/modal.component';
     TextareaComponent,
     CheckComponent,
     RadioComponent,
-    ModalComponent
+    ModalComponent,
+    ButtonComponent
   ]
 })
 export class SharedModule { }

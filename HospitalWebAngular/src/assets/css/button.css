@@ -1,0 +1,48 @@
+.button {
+    display: inline-block;
+    padding: 0.8rem 1.8rem;
+    border: 0.1rem solid #ccc;
+    background: rgba(255, 255, 255, 0.2);
+    text-decoration: none;
+    border-radius: 0.2rem;
+    font-weight: 400;
+    font-size: 1.3rem;
+    line-height: 1.3;
+    color: inherit;
+    transition: background-color 0.1s linear;
+    margin-right: 0.5rem;
+}
+
+.button:last-child {
+    margin-right: 0;
+}
+
+.button.success {
+    background: var(--color-success-primary);
+    border-color: var(--color-success-secondary);
+    color: #fff;
+}
+
+.button.success:hover {
+    background: var(--color-success-tertiary);
+}
+
+.button.danger {
+    background: var(--color-danger-primary);
+    border-color: var(--color-danger-secondary);
+    color: #fff;
+}
+
+.button.danger:hover {
+    background: var(--color-danger-tertiary);
+}
+
+.button.neutral {
+    background: var(--color-neutral-rimary);
+    border-color: var(--color-neutral-secondary);
+    color: #fff;
+}
+
+.button.neutral:hover {
+    background: var(--color-neutral-tertiary);
+}

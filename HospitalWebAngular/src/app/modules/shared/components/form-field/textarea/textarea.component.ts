@@ -19,9 +19,11 @@ export class TextareaComponent implements OnInit {
   @Input()
   public model?: string;
 
-
   @Input()
   public placeholder?: string;
+
+  @Input()
+  public resizable?: boolean;
 
   @Output()
   public modelChange: EventEmitter<string>;
@@ -40,6 +42,7 @@ export class TextareaComponent implements OnInit {
     this.label = null;
     this.model = null;
     this.placeholder = null;
+    this.resizable = false;
     this.modelChange = new EventEmitter();
   }
 

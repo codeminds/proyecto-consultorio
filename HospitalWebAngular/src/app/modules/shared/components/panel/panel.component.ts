@@ -41,7 +41,7 @@ export class PanelComponent implements AfterViewChecked, OnChanges {
     if(this.expandable) {
       style = '';
       if(this.open){
-        style += `height: ${this.contentHeight}px;`;
+        style += `height: ${this.contentHeight / 10}rem;`;
       }
 
       if(this.contentHeightAnimated) {

@@ -1,7 +1,7 @@
 <div>
-    <button (click)="open = !open">toggle</button>
-    <button (click)="modal1Open = true">Open 1</button>
-    <button (click)="modal2Open = true">Open 2</button>
+    <button class="button neutral" (click)="open = !open">toggle</button>
+    <button class="button success" (click)="modal1Open = true">Open 1</button>
+    <button class="button success" (click)="modal2Open = true">Open 2</button>
     <app-panel panelTitle="Filter" contentClass="row"  [expandable]="true" [open]="open">
         <app-panel panelTitle="Doctores" class="col col-2 space-x flat slim">
             <form>
@@ -267,6 +267,7 @@
                     [hasAll]="true"
                     [inline]="true"
                 ></app-radio>
+                <app-button [type]="ButtonType.Success" (clicked)="modal2Open = false">Save</app-button>
             </form>
         </app-panel>
     </app-modal>
