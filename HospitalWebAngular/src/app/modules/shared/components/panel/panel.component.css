@@ -1,21 +1,28 @@
+:host {
+    display: flex;
+    align-items: stretch;
+    margin-bottom: 1rem;
+}
+
+:host.flat {
+    margin-bottom: 0;
+}
+
+:host.flat .panel {
+    border: 0;
+    box-shadow: none;
+}
+
+:host.slim .panel {
+    padding: 0;
+}
+
 .panel {
-    margin: 1rem 0;
+    flex-grow: 1;
     box-shadow: 1px 1px 0 0 var(--color-shadow-light);
     border-radius: 2px;
     padding: 1rem;
     border: 1px solid var(--color-panel-border);
-}
-
-.panel.flat {
-    padding: 0;
-}
-
-.panel:first-child {
-    margin-top: 0;
-}
-
-.panel:last-child {
-    margin-bottom: 0;
 }
 
 .title{
@@ -37,9 +44,6 @@
 }
 
 .toggle-section {
-    display: none;
-}
-
-.toggle-section.open {
-    display: block;
+    height: 0;
+    overflow: hidden;
 }

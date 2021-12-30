@@ -49,15 +49,21 @@
     width: 10%;
 }
 
-.col.space {
-    padding: 1rem;
+.col.space-x {
+    padding-left: 1rem;
+    padding-right: 1rem;
 }
 
-.col.space:first-child {
+.col.space-y {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+.col.space-x:first-child {
     padding-left: 0;
 }
 
-.col.space:last-child {
+.col.space-x:last-child {
     padding-right: 0;
 }
 
@@ -67,7 +73,11 @@
         width: 100%;
     }
 
-    .col.space {
-        padding: 1rem 0;
+    .col.space-x, .col.space-x:last-child {
+        padding: 1rem 0 0;
+    }
+
+    .col.space-x:first-child {
+        padding: 0 0 1rem;
     }
 }

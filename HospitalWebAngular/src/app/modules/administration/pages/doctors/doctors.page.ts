@@ -10,6 +10,7 @@ export class DoctorsPage implements OnInit {
   public name: string;
   public check: boolean;
   public gender: boolean;
+  public open: boolean;
 
   public InputType = InputType;
 
@@ -17,6 +18,7 @@ export class DoctorsPage implements OnInit {
     this.name = null;
     this.check = false;
     this.gender = false;
+    this.open = true;
   }
 
   ngOnInit(): void {
