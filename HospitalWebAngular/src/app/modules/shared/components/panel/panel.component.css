@@ -1,3 +1,12 @@
+/*
+Usamos la clase flat, slim y el flexbox en el :host por si
+el desarrollador quisiera hacer paneles flex que se alineen
+entre ellos, de esta manera no hay que introducir lógica extra,
+sólo tiene que crear paneles dentro de un contenedor flex. 
+Si en vez las clases flat y slim fueran parte del panel interior
+los paneles no crecerían junto con el contenedor flex,
+sólo el contenedor :host invisible.
+*/
 :host {
     display: flex;
     align-items: stretch;
@@ -17,7 +26,7 @@
     box-shadow: none;
 }
 
-.slim .panel {
+:host.slim .panel {
     padding: 0;
 }
 

@@ -35,6 +35,31 @@ h3 {
     margin-bottom: 0.5rem;
 }
 
+p {
+    margin-bottom: 0.5rem;
+}
+
 .no-selection {
     user-select: none;
+}
+
+.mobile-row h3{
+    margin-bottom: 1rem;
+}
+
+.mobile-row p {
+    font-size: 1.5rem;
+}
+
+.mobile-row div {
+    margin-top: 1rem;
+}
+
+.mobile-row .label {
+    font-weight: 700;
+    margin-right: 0.5rem;
+}
+
+.table-buttons {
+    text-align: right;
 }

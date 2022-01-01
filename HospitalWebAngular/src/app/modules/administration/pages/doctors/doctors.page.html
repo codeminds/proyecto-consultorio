@@ -2,7 +2,38 @@
     <button class="button neutral" (click)="open = !open">toggle</button>
     <button class="button success" (click)="modal1Open = true">Open 1</button>
     <button class="button success" (click)="modal2Open = true">Open 2</button>
-    <app-panel panelTitle="Filter" contentClass="row"  [expandable]="true" [open]="open">
+    <div>
+        <button class="button success">Nuevo Doctor</button>
+    </div>
+    <app-panel class="slim" *ngIf="(doctors | async).length > 0">
+        <app-table [headers]="headers" [template]="doctorRow" [template-mobile]="doctorRowMobile" [source]="doctors">
+            <ng-template #doctorRow let-doctor>
+                <td>{{doctor.field.name}}</td>
+                <td>{{doctor.documentId}}</td>
+                <td>{{doctor.firstName}} {{doctor.lastName}}</td>    
+                <td class="table-buttons">
+                    <button class="button success" (click)="click('Edit')">Editar</button>
+                    <button class="button danger" (click)="click('Delete')">Borrar</button>
+                </td>
+            </ng-template>
+            <ng-template #doctorRowMobile let-doctor>
+                <div class="mobile-row">
+                    <h3>{{doctor.field.name}}</h3>
+                    <p>
+                        <span class="label">Cédula:</span> {{doctor.documentId}}
+                    </p>
+                    <p>
+                        <span class="label">Nombre:</span> {{doctor.firstName}} {{doctor.lastName}}
+                    </p>
+                    <div>
+                        <button class="button success" (click)="click('Edit')">Editar</button>
+                        <button class="button danger" (click)="click('Delete')">Borrar</button>
+                    </div>
+                </div>
+            </ng-template>
+        </app-table>
+    </app-panel>
+    <app-panel panelTitle="Filter" content-class="row"  [expandable]="true" [open]="open">
         <app-panel panelTitle="Doctores" class="col-2 space-x flat slim">
             <form>
                 <app-input 
@@ -136,7 +167,7 @@
         </form>
     </app-panel>
     <app-modal [(open)]="modal1Open" modalTitle="Modal 1" [size]="ModalSize.Medium" [transparent]="true">
-        <app-panel panelTitle="Filter" contentClass="row" [expandable]="true" [open]="open">
+        <app-panel panelTitle="Filter" content-class="row" [expandable]="true" [open]="open">
             <app-panel panelTitle="Doctores" class="col col-2 space-x flat slim">
                 <form>
                     <app-input 

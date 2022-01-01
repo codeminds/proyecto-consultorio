@@ -6,7 +6,7 @@
     border: 0.1rem solid var(--color-panel-border);
 }
 
-.panel.flat {
+.panel.slim {
     padding: 0;
 }
 

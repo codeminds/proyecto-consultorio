@@ -1,0 +1,15 @@
+<table [ngClass]="{'mobile': templateMobile != null}">
+    <thead *ngIf="headers.length > 0">
+        <tr>
+            <th *ngFor="let header of headers" [attr.style]="getHeaderWidth(header.size)">{{header.label}}</th>
+        </tr>
+    </thead>
+    <tbody #items>
+        <tr *ngFor="let row of (source | async)">
+            <ng-container *ngTemplateOutlet="template; context: {$implicit: row}"></ng-container>
+            <td class="mobile">
+                <ng-container *ngTemplateOutlet="templateMobile; context: {$implicit: row}"></ng-container>
+            </td>
+        </tr>
+    </tbody>
+</table>

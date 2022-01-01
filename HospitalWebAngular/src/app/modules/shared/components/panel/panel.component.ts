@@ -20,7 +20,7 @@ export class PanelComponent implements AfterViewChecked, OnChanges {
   @Input()
   public open?: boolean;
 
-  @Input()
+  @Input('content-class')
   public contentClass?: string;
 
   @Output()
@@ -81,7 +81,7 @@ export class PanelComponent implements AfterViewChecked, OnChanges {
 
   private refreshContentHeight(): void {
     if(this.expandable) { 
-      this.contentHeightNext = this.content.nativeElement.offsetHeight;
+      this.contentHeightNext = this.content?.nativeElement.offsetHeight;
       if(!this.contentHeightTimeout && this.contentHeight != this.contentHeightNext) {
         this.contentHeightTimeout = setTimeout(() => {
           this.contentHeight = this.contentHeightNext;
