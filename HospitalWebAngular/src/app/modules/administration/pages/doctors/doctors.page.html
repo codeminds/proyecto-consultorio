@@ -6,13 +6,20 @@
         <button class="button success">Nuevo Doctor</button>
     </div>
     <app-panel class="slim" *ngIf="(doctors | async).length > 0">
-        <app-table [headers]="headers" [template]="doctorRow" [template-mobile]="doctorRowMobile" [source]="doctors">
+        <app-table 
+            [headers]="[{ label: 'Especialidad' },
+                        { label: 'Cédula' },
+                        { label: 'Nombre', size: 2 },
+                        { size: 2.5 }]" 
+            [template]="doctorRow" 
+            [template-mobile]="doctorRowMobile" 
+            [source]="doctors">
             <ng-template #doctorRow let-doctor>
                 <td>{{doctor.field.name}}</td>
                 <td>{{doctor.documentId}}</td>
                 <td>{{doctor.firstName}} {{doctor.lastName}}</td>    
                 <td class="table-buttons">
-                    <button class="button success" (click)="click('Edit')">Editar</button>
+                    <button class="button success" (click)="click(doctor.field.name)">Editar</button>
                     <button class="button danger" (click)="click('Delete')">Borrar</button>
                 </td>
             </ng-template>
@@ -176,7 +183,7 @@
                         label="Name"
                         [type]="InputType.Text" 
                         [(model)]="name"
-                        [attributes]="{'placeholder': 'John'}"
+                        [attributes]="{ 'placeholder': 'John' }"
                     ></app-input>
                     <app-textarea 
                         name="name" 
@@ -265,7 +272,7 @@
                 label="Name"
                 [type]="InputType.Text" 
                 [(model)]="name"
-                [attributes]="{'placeholder': 'John'}"
+                [attributes]="{ 'placeholder': 'John' }"
             ></app-input>
             <app-textarea 
                 name="name" 
@@ -285,7 +292,7 @@
                 form="filter"
                 label="Gender"
                 [(model)]="gender"
-                [options]="[{label: 'Female', value: false}, {label: 'Male', value: true}]"
+                [options]="[{ label: 'Female', value: false }, { label: 'Male', value: true }]"
                 [hasAll]="true"
             ></app-select>
             <app-radio
@@ -293,7 +300,7 @@
                 form="filter"
                 label="Gender"
                 (modelChange)="gender = $event"
-                [options]="[{label: 'Female', value: false}, {label: 'Male', value: true}]"
+                [options]="[ {label: 'Female', value: false }, { label: 'Male', value: true }]"
                 [hasAll]="true"
                 [inline]="true"
             ></app-radio>

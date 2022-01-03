@@ -12,6 +12,7 @@ import { FormsModule } from '@angular/forms';
 import { ModalComponent } from './components/modal/modal.component';
 import { ButtonComponent } from './components/form-field/button/button.component';
 import { TableComponent } from './components/table/table.component';
+import { SnackbarComponent } from './components/snackbar/snackbar.component';
 
 
 
@@ -26,7 +27,8 @@ import { TableComponent } from './components/table/table.component';
     RadioComponent,
     ModalComponent,
     ButtonComponent,
-    TableComponent
+    TableComponent,
+    SnackbarComponent
   ],
   imports: [
     CommonModule,
@@ -42,7 +44,8 @@ import { TableComponent } from './components/table/table.component';
     RadioComponent,
     ModalComponent,
     ButtonComponent,
-    TableComponent
+    TableComponent,
+    SnackbarComponent
   ]
 })
 export class SharedModule { }

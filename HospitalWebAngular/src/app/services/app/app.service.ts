@@ -10,7 +10,6 @@ import { AppSettings } from './app.settings';
 })
 export class AppService extends State<AppSettings>{
   private _siteMessage: BehaviorSubject<Message>;
-  private _siteMessageInterval: NodeJS.Timeout;
 
   public get $siteMessage(): Observable<Message> {
     return this._siteMessage.asObservable();
@@ -19,17 +18,17 @@ export class AppService extends State<AppSettings>{
   public set siteMessage(value: Message) {
     this._siteMessage.next(value);
     
-    if(this._siteMessageInterval != null) {
-      clearInterval(this._siteMessageInterval);
-      this._siteMessageInterval = null;
+    /*if(this._siteMessageTimeout != null) {
+      clearTimeout(this._siteMessageTimeout);
+      this._siteMessageTimeout = null;
     }
 
     if(value != null) {
-      this._siteMessageInterval = setInterval(() => {
+      this._siteMessageTimeout = setTimeout(() => {
         this._siteMessage.next(null);
-        this._siteMessageInterval = null;
+        this._siteMessageTimeout = null;
       }, 5000);
-    }
+    }*/
   }
 
   constructor(
@@ -38,6 +37,5 @@ export class AppService extends State<AppSettings>{
     //Cuando el state principal de AppService cambia se modifica el título de la pestaña
     super((state: AppSettings) => { this.title.setTitle(`Hospital Angular${state.title ? ' | ' + state.title : ''}`) });
     this._siteMessage = new BehaviorSubject(null);
-    this._siteMessageInterval = null;
   }
 }

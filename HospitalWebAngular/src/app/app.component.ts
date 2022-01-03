@@ -2,7 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Data, NavigationEnd, Router, RouterEvent } from '@angular/router';
 import { AppService } from '@services/app/app.service';
 import { AppSettings } from '@services/app/app.settings';
-import { filter } from 'rxjs';
+import { Message, MessageType } from '@services/http/http.types';
+import { SnackbarType } from '@shared/components/snackbar/snackbar.types';
+import { info } from 'console';
+import { filter, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -10,6 +13,8 @@ import { filter } from 'rxjs';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
+  public $message: Observable<Message>;
+
   constructor(
     private appService: AppService,
     private router: Router,
@@ -17,6 +22,8 @@ export class AppComponent implements OnInit {
   ){}
 
   public ngOnInit(): void {
+    this.$message = this.appService.$siteMessage;
+    this.appService.siteMessage = { text: 'This is a message', type: MessageType.Success };
     this.router.events.pipe(
       //Obtiene un evento del router específico
       filter((e): e is RouterEvent => e instanceof RouterEvent)
@@ -35,6 +42,25 @@ export class AppComponent implements OnInit {
           break;
       }
     });
+  }
+
+  public getSnackbarType(type: MessageType): SnackbarType {
+    switch(type) {
+      case MessageType.Info:
+        return SnackbarType.Info;
+      case MessageType.Success:
+        return SnackbarType.Success;
+      case MessageType.Warning:
+        return SnackbarType.Warning;
+      case MessageType.Error:
+        return SnackbarType.Danger;
+      default:
+        return SnackbarType.Neutral;
+    }
+  }
+
+  public dismissMessage(): void {
+    this.appService.siteMessage = null;
   }
 
   private getRouteData(): Data {

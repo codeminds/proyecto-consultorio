@@ -31,12 +31,6 @@ export class DoctorsPage {
     this.open = true;
     this.modal1Open = false;
     this.modal2Open = false;
-    this.headers = [
-      { label: 'Especialidad' },
-      { label: 'Cédula' },
-      { label: 'Nombre', size: 2 },
-      { size: 2.5 }
-    ];
     this.doctors = of([]);
 
     setTimeout(() => {

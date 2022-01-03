@@ -35,6 +35,9 @@
     --color-form-field-select: rgba(0, 0, 0, 0.1);
 
     /* ALERT COLORS */
+    --color-info-primary: #4c61a8;
+    --color-info-secondary: #364575;
+    --color-info-tertiary: #435796;
     --color-success-primary: #4ca8a7;
     --color-success-secondary: #307676;
     --color-success-tertiary: #428d8c;
