@@ -23,7 +23,6 @@ export class AppComponent implements OnInit {
 
   public ngOnInit(): void {
     this.$message = this.appService.$siteMessage;
-    this.appService.siteMessage = { text: 'This is a message', type: MessageType.Success };
     this.router.events.pipe(
       //Obtiene un evento del router específico
       filter((e): e is RouterEvent => e instanceof RouterEvent)

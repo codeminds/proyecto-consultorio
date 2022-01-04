@@ -1,318 +1,98 @@
-<div>
-    <button class="button neutral" (click)="open = !open">toggle</button>
-    <button class="button success" (click)="modal1Open = true">Open 1</button>
-    <button class="button success" (click)="modal2Open = true">Open 2</button>
-    <div>
-        <button class="button success">Nuevo Doctor</button>
-    </div>
-    <app-panel class="slim" *ngIf="(doctors | async).length > 0">
-        <app-table 
-            [headers]="[{ label: 'Especialidad' },
-                        { label: 'Cédula' },
-                        { label: 'Nombre', size: 2 },
-                        { size: 2.5 }]" 
-            [template]="doctorRow" 
-            [template-mobile]="doctorRowMobile" 
-            [source]="doctors">
-            <ng-template #doctorRow let-doctor>
-                <td>{{doctor.field.name}}</td>
-                <td>{{doctor.documentId}}</td>
-                <td>{{doctor.firstName}} {{doctor.lastName}}</td>    
-                <td class="table-buttons">
-                    <button class="button success" (click)="click(doctor.field.name)">Editar</button>
-                    <button class="button danger" (click)="click('Delete')">Borrar</button>
-                </td>
-            </ng-template>
-            <ng-template #doctorRowMobile let-doctor>
-                <div class="mobile-row">
-                    <h3>{{doctor.field.name}}</h3>
-                    <p>
-                        <span class="label">Cédula:</span> {{doctor.documentId}}
-                    </p>
-                    <p>
-                        <span class="label">Nombre:</span> {{doctor.firstName}} {{doctor.lastName}}
-                    </p>
-                    <div>
-                        <button class="button success" (click)="click('Edit')">Editar</button>
-                        <button class="button danger" (click)="click('Delete')">Borrar</button>
-                    </div>
-                </div>
-            </ng-template>
-        </app-table>
-    </app-panel>
-    <app-panel panelTitle="Filter" content-class="row"  [expandable]="true" [open]="open">
-        <app-panel panelTitle="Doctores" class="col-2 space-x flat slim">
-            <form>
-                <app-input 
-                    name="name" 
-                    form="filter" 
-                    label="Name"
-                    [type]="InputType.Text" 
-                    [(model)]="name"
-                    [attributes]="{'placeholder': 'John'}"
-                ></app-input>
-                <app-textarea 
-                    name="name" 
-                    form="filter" 
-                    label="Name"
-                    [(model)]="name"
-                    placeholder="John"
-                ></app-textarea>
-                <app-check
-                    name="name" 
-                    form="filter" 
-                    label="Name"
-                    [(model)]="check"
-                ></app-check>
-                <app-select
-                    name="gender"
-                    form="filter"
-                    label="Gender"
-                    [(model)]="gender"
-                    [options]="[{label: 'Female', value: false}, {label: 'Male', value: true}]"
-                    [hasAll]="true"
-                ></app-select>
-                <app-radio
-                    name="gender"
-                    form="filter"
-                    label="Gender"
-                    (modelChange)="gender = $event"
-                    [options]="[{label: 'Female', value: false}, {label: 'Male', value: true}]"
-                    [hasAll]="true"
-                    [inline]="true"
-                ></app-radio>
-                <p *ngIf="name">{{name}}</p>
-            </form>
-        </app-panel>
-        <app-panel panelTitle="Pacientes" class="col-2 space-x flat slim">
-            <form class="row">
-                <app-input 
-                    class="col col-2"
-                    name="name" 
-                    form="filter" 
-                    label="Name"
-                    [type]="InputType.Text" 
-                    [(model)]="name"
-                    [attributes]="{'placeholder': 'John'}"
-                ></app-input>
-                <app-select
-                    class="col col-2"
-                    name="gender"
-                    form="filter"
-                    label="Gender"
-                    [(model)]="gender"
-                    [options]="[{label: 'Female', value: false}, {label: 'Male', value: true}]"
-                    [hasAll]="true"
-                ></app-select>
-                <app-textarea 
-                    class="col col-1"
-                    name="name" 
-                    form="filter" 
-                    label="Name"
-                    [(model)]="name"
-                    placeholder="John"
-                ></app-textarea>
-                <app-check
-                    class="col col-1"
-                    name="a" 
-                    form="filter" 
-                    label="Name"
-                    [(model)]="check"
-                ></app-check>
-                <app-radio
-                    class="col col-1"
-                    name="gender"
-                    form="filter"
-                    label="Gender"
-                    (modelChange)="gender = $event"
-                    [options]="[{label: 'Female', value: false}, {label: 'Male', value: true}]"
-                    [hasAll]="true"
-                ></app-radio>
-            </form>
-        </app-panel>
-    </app-panel>
-    <app-panel panelTitle="Test">
-        <form>
-            <app-input 
-                name="name" 
-                form="filter" 
-                label="Name"
-                [type]="InputType.Text" 
-                [(model)]="name"
-                [attributes]="{'placeholder': 'John'}"
-            ></app-input>
-            <app-textarea 
-                name="name" 
-                form="filter" 
-                label="Name"
-                [(model)]="name"
-                placeholder="John"
-            ></app-textarea>
-            <app-check
-                name="name" 
-                form="filter" 
-                label="Name"
-                [(model)]="check"
-            ></app-check>
-            <app-select
-                name="gender"
-                form="filter"
-                label="Gender"
-                [(model)]="gender"
-                [options]="[{label: 'Female', value: false}, {label: 'Male', value: true}]"
-                [hasAll]="true"
-            ></app-select>
-            <app-radio
-                name="gender"
-                form="filter"
-                label="Gender"
-                (modelChange)="gender = $event"
-                [options]="[{label: 'Female', value: false}, {label: 'Male', value: true}]"
-                [hasAll]="true"
-                [inline]="true"
-            ></app-radio>
-        </form>
-    </app-panel>
-    <app-modal [(open)]="modal1Open" modalTitle="Modal 1" [size]="ModalSize.Medium" [transparent]="true">
-        <app-panel panelTitle="Filter" content-class="row" [expandable]="true" [open]="open">
-            <app-panel panelTitle="Doctores" class="col col-2 space-x flat slim">
-                <form>
-                    <app-input 
-                        name="name" 
-                        form="filter" 
-                        label="Name"
-                        [type]="InputType.Text" 
-                        [(model)]="name"
-                        [attributes]="{ 'placeholder': 'John' }"
-                    ></app-input>
-                    <app-textarea 
-                        name="name" 
-                        form="filter" 
-                        label="Name"
-                        [(model)]="name"
-                        placeholder="John"
-                    ></app-textarea>
-                    <app-check
-                        name="name" 
-                        form="filter" 
-                        label="Name"
-                        [(model)]="check"
-                    ></app-check>
-                    <app-select
-                        name="gender"
-                        form="filter"
-                        label="Gender"
-                        [(model)]="gender"
-                        [options]="[{label: 'Female', value: false}, {label: 'Male', value: true}]"
-                        [hasAll]="true"
-                    ></app-select>
-                    <app-radio
-                        name="gender"
-                        form="filter"
-                        label="Gender"
-                        (modelChange)="gender = $event"
-                        [options]="[{label: 'Female', value: false}, {label: 'Male', value: true}]"
-                        [hasAll]="true"
-                        [inline]="true"
-                    ></app-radio>
-                    <p *ngIf="name">{{name}}</p>
-                </form>
-            </app-panel>
-            <app-panel panelTitle="Pacientes" class="col col-2 space-x flat slim">
-                <form class="row">
-                    <app-input 
-                        class="col col-2"
-                        name="name" 
-                        form="filter" 
-                        label="Name"
-                        [type]="InputType.Text" 
-                        [(model)]="name"
-                        [attributes]="{'placeholder': 'John'}"
-                    ></app-input>
-                    <app-select
-                        class="col col-2"
-                        name="gender"
-                        form="filter"
-                        label="Gender"
-                        [(model)]="gender"
-                        [options]="[{label: 'Female', value: false}, {label: 'Male', value: true}]"
-                        [hasAll]="true"
-                    ></app-select>
-                    <app-textarea 
-                        name="name" 
-                        form="filter" 
-                        label="Name"
-                        [(model)]="name"
-                        placeholder="John"
-                    ></app-textarea>
-                    <app-check
-                        name="name" 
-                        form="filter" 
-                        label="Name"
-                        [(model)]="check"
-                    ></app-check>
-                    <app-radio
-                        name="gender"
-                        form="filter"
-                        label="Gender"
-                        (modelChange)="gender = $event"
-                        [options]="[{label: 'Female', value: false}, {label: 'Male', value: true}]"
-                        [hasAll]="true"
-                        [inline]="true"
-                    ></app-radio>
-                </form>
-            </app-panel>
-        </app-panel>
-    </app-modal>
-    <app-modal [(open)]="modal2Open" modalTitle="Modal 2" [size]="ModalSize.Small">
-        <form>
-            <app-input 
-                name="name" 
-                form="filter" 
-                label="Name"
-                [type]="InputType.Text" 
-                [(model)]="name"
-                [attributes]="{ 'placeholder': 'John' }"
-            ></app-input>
-            <app-textarea 
-                name="name" 
-                form="filter" 
-                label="Name"
-                [(model)]="name"
-                placeholder="John"
-            ></app-textarea>
-            <app-check
-                name="name" 
-                form="filter" 
-                label="Name"
-                [(model)]="check"
-            ></app-check>
-            <app-select
-                name="gender"
-                form="filter"
-                label="Gender"
-                [(model)]="gender"
-                [options]="[{ label: 'Female', value: false }, { label: 'Male', value: true }]"
-                [hasAll]="true"
-            ></app-select>
-            <app-radio
-                name="gender"
-                form="filter"
-                label="Gender"
-                (modelChange)="gender = $event"
-                [options]="[ {label: 'Female', value: false }, { label: 'Male', value: true }]"
-                [hasAll]="true"
-                [inline]="true"
-            ></app-radio>
-            <div class="row">
-                <app-button [type]="ButtonType.Success" (clicked)="modal2Open = false">Save</app-button>
-                <app-button [type]="ButtonType.Danger" (clicked)="modal2Open = false">Cancel</app-button>
-            </div>
-        </form>
-    </app-modal>
+
+<app-panel panelTitle="Búsqueda" [expandable]="true">
+    <form class="row">
+        <app-input 
+            name="documentId" 
+            form="filter" 
+            label="Cédula"
+            class="col-4"
+            [type]="InputType.Text" 
+            [(model)]="filter.documentId"
+            [attributes]="{'placeholder': '123456789'}"
+        ></app-input>
+        <app-input 
+            name="firstName" 
+            form="filter" 
+            label="Nombre"
+            class="col-4"
+            [type]="InputType.Text" 
+            [(model)]="filter.firstName"
+            [attributes]="{'placeholder': 'John'}"
+        ></app-input>
+        <app-input 
+            name="lastName" 
+            form="filter" 
+            label="Apellido"
+            class="col-4"
+            [type]="InputType.Text" 
+            [(model)]="filter.lastName"
+            [attributes]="{'placeholder': 'Smith'}"
+        ></app-input>
+        <app-select
+            name="field"
+            form="filter"
+            label="Especialidad"
+            class="col-4"
+            [(model)]="filter.fieldId"
+            [options]="($fields | async)"
+            [hasAll]="true"
+        ></app-select>
+        <app-button [type]="ButtonType.Success" (clicked)="list()">Buscar</app-button>
+    </form>
+</app-panel>
+<div class="controls">
+    <button class="button success" (click)="createUpdate()">Nuevo Doctor</button>
 </div>
+<app-panel class="slim">
+    <app-table 
+        [headers]="[{ label: 'Especialidad' },
+                    { label: 'Cédula' },
+                    { label: 'Nombre', size: 2 },
+                    { size: 2.5 }]" 
+        [template]="doctorRow" 
+        [template-mobile]="doctorRowMobile" 
+        [source]="$doctors"
+        no-results-text="No se han encontrado resultados">
+        <ng-template #doctorRow let-doctor>
+            <td>{{doctor.field.name}}</td>
+            <td>{{doctor.documentId}}</td>
+            <td>{{doctor.firstName}} {{doctor.lastName}}</td>    
+            <td class="table-buttons">
+                <button class="button success" (click)="createUpdate(doctor)">Editar</button>
+                <button class="button danger" (click)="click('Delete')">Borrar</button>
+            </td>
+        </ng-template>
+        <ng-template #doctorRowMobile let-doctor>
+            <div class="mobile-row">
+                <h3>{{doctor.field.name}}</h3>
+                <p>
+                    <span class="label">Cédula:</span> {{doctor.documentId}}
+                </p>
+                <p>
+                    <span class="label">Nombre:</span> {{doctor.firstName}} {{doctor.lastName}}
+                </p>
+                <div>
+                    <button class="button success" (click)="click('Edit')">Editar</button>
+                    <button class="button danger" (click)="click('Delete')">Borrar</button>
+                </div>
+            </div>
+        </ng-template>
+    </app-table>
+</app-panel>
 
-
-<p>Value of Name: {{name == null ? 'null' : name}}</p>
-<p>Value of Check: {{check}}</p>
-<p>Value of Gender: {{gender == null ? 'null' : gender}}</p>
+<app-modal [(open)]="modalOpen" modalTitle="Modal" [size]="ModalSize.Medium" (onClose)="doctor = null">
+    <form *ngIf="doctor">
+        <app-input 
+            name="documentId" 
+            form="createUpdate" 
+            label="Cédula"
+            [type]="InputType.Text" 
+            [(model)]="doctor.documentId"
+            [attributes]="{ 'placeholder': '123456789' }"
+        ></app-input>
+        <div class="row">
+            <app-button [type]="ButtonType.Success" (clicked)="modalOpen = false">Save</app-button>
+            <app-button [type]="ButtonType.Danger" (clicked)="modalOpen = false">Cancel</app-button>
+        </div>
+    </form>
+</app-modal>

@@ -49,7 +49,7 @@ export class SelectComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    if(this.options == null || this.options.length == 0) {
+    if(this.options == null) {
       throw new Error('Property options is required');
     }
 

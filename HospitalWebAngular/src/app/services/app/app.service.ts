@@ -16,19 +16,13 @@ export class AppService extends State<AppSettings>{
   }
 
   public set siteMessage(value: Message) {
-    this._siteMessage.next(value);
-    
-    /*if(this._siteMessageTimeout != null) {
-      clearTimeout(this._siteMessageTimeout);
-      this._siteMessageTimeout = null;
+    if(value != null && this._siteMessage != null) {
+      this._siteMessage.next(null);
     }
 
-    if(value != null) {
-      this._siteMessageTimeout = setTimeout(() => {
-        this._siteMessage.next(null);
-        this._siteMessageTimeout = null;
-      }, 5000);
-    }*/
+    setTimeout(() => {
+      this._siteMessage.next(value);
+    }, 100);
   }
 
   constructor(

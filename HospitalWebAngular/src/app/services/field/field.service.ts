@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpService } from '@services/http/http.service';
 import { APIResponse } from '@services/http/http.types';
-import { map, Observable } from 'rxjs';
+import { map, Observable, tap } from 'rxjs';
 import { Field } from './field.model';
 
 @Injectable({
@@ -16,10 +16,10 @@ export class FieldService {
     this._api = "api/fields";
   }
 
-  public list(): Observable<Field> {
+  public list(): Observable<Field[]> {
     return this.httpService.get(this._api)
-      .pipe<Field>(
-        map((response: APIResponse) => response.data.map((item: any) => new Field(item)))
+      .pipe<Field[]>(
+        map((response: APIResponse) => response?.data.map((item: any) => new Field(item)))
       );
   }
 }

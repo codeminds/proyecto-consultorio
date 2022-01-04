@@ -38,7 +38,6 @@ export class ModalComponent implements OnInit{
     if(this.open == null) {
       throw new Error('Property open is required');
     }
-
   }
 
   public onOpenChange(value: boolean) {

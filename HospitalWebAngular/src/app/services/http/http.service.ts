@@ -64,11 +64,13 @@ export class HttpService{
       type: MessageType.Error
     }
 
-    for(const message of response.error.messages) {
-      console.error(`HTTP Response: ${message}`);
+    if(response.error?.messages) {
+      for(const message of response.error.messages) {
+        console.error(`HTTP Response: ${message}`);
+      }
     }
-
-    switch(response.status) {
+  
+    switch(response?.status) {
       case HttpStatusCode.Forbidden:
         message.text = 'You are not authorized to perform this action';
         break;

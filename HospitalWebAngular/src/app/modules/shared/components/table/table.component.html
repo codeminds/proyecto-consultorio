@@ -11,5 +11,9 @@
                 <ng-container *ngTemplateOutlet="templateMobile; context: {$implicit: row}"></ng-container>
             </td>
         </tr>
+        <tr *ngIf="(source | async)?.length == 0" class="no-results">
+            <td [attr.colspan]="headers.length">{{noResultsText}}</td>
+            <td class="mobile">{{noResultsText}}</td>
+        </tr>
     </tbody>
 </table>

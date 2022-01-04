@@ -22,6 +22,10 @@ td.mobile {
     padding: 1rem;
 }
 
+tr.no-results td.mobile {
+    text-align: center;
+}
+
 @media screen and (max-width: 1024px) {
     thead {
         display: none;

@@ -1,52 +1,74 @@
-import { Component, ContentChild, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Doctor } from '@services/doctor/doctor.model';
-import { ButtonType, InputType } from '@shared/components/form-field/form-field.types';
+import { DoctorService } from '@services/doctor/doctor.service';
+import { FieldService } from '@services/field/field.service';
+import {  } from '@services/http/http.types';
+import { ButtonType, InputType, Option } from '@shared/components/form-field/form-field.types';
 import { ModalSize } from '@shared/components/modal/modal.types';
-import { TableHeader } from '@shared/components/table/table.types';
-import { Observable, of } from 'rxjs';
+import { defaultIfEmpty, map, Observable, of, startWith } from 'rxjs';
 
 @Component({
   selector: 'app-doctors',
   templateUrl: './doctors.page.html',
   styleUrls: ['./doctors.page.css']
 })
-export class DoctorsPage {
-  public name: string;
-  public check: boolean;
-  public gender: boolean;
-  public open: boolean;
-  public modal1Open: boolean;
-  public modal2Open: boolean;
-  public headers: TableHeader[];
-  public doctors: Observable<Doctor[]>;
+export class DoctorsPage implements OnInit{
+  public $doctors: Observable<Doctor[]>;
+  public $fields: Observable<Option[]>;
+
+  public modalOpen: boolean;
+  public doctor: Doctor;
+  public loading: boolean;
+  public filter: any;
 
   public InputType = InputType;
   public ModalSize = ModalSize;
   public ButtonType = ButtonType;
 
-  constructor() { 
-    this.name = null;
-    this.check = false;
-    this.gender = false;
-    this.open = true;
-    this.modal1Open = false;
-    this.modal2Open = false;
-    this.doctors = of([]);
+  constructor(
+    private doctorService: DoctorService,
+    private fieldService: FieldService
+  ) { 
+    this.$doctors = of([]);
+    this.$fields = of([]);
+    this.modalOpen = false;
+    this.doctor = null;
+    this.loading = false;
+    this.filter = {
+      documentId: null,
+      firstName: null,
+      lastName: null,
+      fieldId: null 
+    };
+  }
 
-    setTimeout(() => {
-      this.doctors = of([
-        new Doctor({documentId: '123', firstName: 'Hugo', lastName: 'Doctor', field: { name: 'Doctor General '}}),
-        new Doctor({documentId: '123', firstName: 'Hugo', lastName: 'Doctor', field: { name: 'Doctor General '}}),
-        new Doctor({documentId: '123', firstName: 'Hugo', lastName: 'Doctor', field: { name: 'Doctor General '}}),
-        new Doctor({documentId: '123', firstName: 'Hugo', lastName: 'Doctor', field: { name: 'Doctor General '}}),
-        new Doctor({documentId: '123', firstName: 'Hugo', lastName: 'Doctor', field: { name: 'Doctor General '}}),
-        new Doctor({documentId: '123', firstName: 'Hugo', lastName: 'Doctor', field: { name: 'Doctor General '}}),
-      ])
-    }, 1000)
-
+  public ngOnInit(): void {
+      this.list();
+      this.$fields = this.fieldService.list()
+        .pipe(
+          map((fields) => fields?.map((item) => ({ label: item.name, value: item.id }))),
+          startWith([])
+        );
   }
 
   public click(text: string): void {
     alert(text)
+  }
+
+  public list(): void {
+    this.loading = true;
+    this.$doctors = this.doctorService.list(this.filter)
+      .pipe(
+        map((doctors) => { 
+          this.loading = false;
+          return doctors;
+        })
+      );
+    console.log(this.$doctors);
+  }
+
+  public createUpdate(doctor?: Doctor) {
+    this.doctor = doctor;
+    this.modalOpen = true;
   }
 }

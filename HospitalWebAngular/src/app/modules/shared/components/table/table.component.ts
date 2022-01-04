@@ -23,11 +23,15 @@ export class TableComponent implements OnInit {
   @Input()
   public source: Observable<any[]>;
 
+  @Input('no-results-text')
+  public noResultsText?: string;
+
   constructor() {
     this.headers = [];
     this.template = null;
     this.templateMobile = null;
     this.source = of([]);
+    this.noResultsText = null;
   }
 
   public ngOnInit(): void {
