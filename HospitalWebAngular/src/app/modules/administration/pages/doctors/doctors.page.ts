@@ -5,7 +5,7 @@ import { FieldService } from '@services/field/field.service';
 import {  } from '@services/http/http.types';
 import { ButtonType, InputType, Option } from '@shared/components/form-field/form-field.types';
 import { ModalSize } from '@shared/components/modal/modal.types';
-import { endWith, map, Observable, of, startWith, tap } from 'rxjs';
+import { defaultIfEmpty, endWith, map, Observable, of, startWith, tap } from 'rxjs';
 
 @Component({
   selector: 'app-doctors',
@@ -46,8 +46,8 @@ export class DoctorsPage implements OnInit{
       this.list();
       this.$fields = this.fieldService.list()
         .pipe(
-          map((fields) => fields?.map((item) => ({ label: item.name, value: item.id }))),
-          startWith([])
+          startWith([]),
+          map((fields) => fields?.map((item) => ({ label: item.name, value: item.id })))
         );
   }
 
@@ -61,13 +61,12 @@ export class DoctorsPage implements OnInit{
       .pipe(
         tap(() => {
           this.loading = false;
-        }),
-        endWith([])
+        })
       );
   }
 
-  public createUpdate(doctor?: Doctor) {
-    this.doctor = doctor;
+  public createUpdate(data: Doctor = null) {
+    this.doctor = new Doctor(data);
     this.modalOpen = true;
   }
 }

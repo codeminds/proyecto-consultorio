@@ -13,9 +13,14 @@
                     <ng-container *ngTemplateOutlet="templateMobile; context: {$implicit: row}"></ng-container>
                 </td>
             </tr>
-            <tr *ngIf="!loading && source?.length == 0" class="no-results">
+            <tr *ngIf="!loading && (!source || source.length == 0)" class="no-results">
                 <td [attr.colspan]="headers.length">{{noResultsText}}</td>
                 <td class="mobile">{{noResultsText}}</td>
+            </tr>
+            <tr *ngIf="loading" class="loading">
+                <td class="mobile">
+                    <i *ngIf="loading" class="material-icons">data_saver_off</i>
+                </td>
             </tr>
         </tbody>
     </table>

@@ -1,6 +1,15 @@
 
 <app-panel panelTitle="Búsqueda" [expandable]="true">
     <form class="row">
+        <app-select
+            name="field"
+            form="filter"
+            label="Especialidad"
+            class="col-4"
+            [(model)]="filter.fieldId"
+            [options]="$fields | async"
+            [hasAll]="true"
+        ></app-select>
         <app-input 
             name="documentId" 
             form="filter" 
@@ -28,57 +37,69 @@
             [(model)]="filter.lastName"
             [attributes]="{'placeholder': 'Smith'}"
         ></app-input>
-        <app-select
-            name="field"
-            form="filter"
-            label="Especialidad"
-            class="col-4"
-            [(model)]="filter.fieldId"
-            [options]="$fields | async"
-            [hasAll]="true"
-        ></app-select>
-        <app-button [type]="ButtonType.Success" (clicked)="list()">Buscar</app-button>
+        <app-button [type]="ButtonType.Success" (clicked)="list()">
+            <i class="material-icons">search</i>
+            <span>Buscar</span>
+        </app-button>
     </form>
 </app-panel>
-<div class="controls">
-    <button class="button success" (click)="createUpdate()">Nuevo Doctor <i class="material-icons">person_add</i></button>
-</div>
-<app-panel class="slim">
-    <app-table 
-        [headers]="[{ label: 'Especialidad' },
-                    { label: 'Cédula' },
-                    { label: 'Nombre', size: 2 },
-                    { size: 2.5 }]" 
-        [template]="doctorRow" 
-        [template-mobile]="doctorRowMobile" 
-        [source]="$doctors | async"
-        [loading]="loading"
-        no-results-text="No se han encontrado resultados">
-        <ng-template #doctorRow let-doctor>
-            <td>{{doctor.field.name}}</td>
-            <td>{{doctor.documentId}}</td>
-            <td>{{doctor.firstName}} {{doctor.lastName}}</td>    
-            <td class="table-buttons">
-                <button class="button success" (click)="createUpdate(doctor)">Editar <i class="material-icons">edit</i></button>
-                <button class="button danger" (click)="click('Delete')">Borrar <i class="material-icons">delete</i></button>
-            </td>
-        </ng-template>
-        <ng-template #doctorRowMobile let-doctor>
-            <div class="mobile-row">
-                <h3>{{doctor.field.name}}</h3>
-                <p>
-                    <span class="label">Cédula:</span> {{doctor.documentId}}
-                </p>
-                <p>
-                    <span class="label">Nombre:</span> {{doctor.firstName}} {{doctor.lastName}}
-                </p>
-                <div>
-                    <button class="button success" (click)="click('Edit')">Editar <i class="material-icons">edit</i></button>
-                    <button class="button danger" (click)="click('Delete')">Borrar <i class="material-icons">delete</i></button>
+<app-panel>
+    <div class="controls">
+        <button title="Agregar" class="button success" (click)="createUpdate()">
+            <i class="material-icons">person_add</i>
+            <span>Agregar</span>
+        </button>
+    </div>
+    <app-panel class="slim">
+        <app-table 
+            [headers]="[{ label: 'Especialidad' },
+                        { label: 'Cédula' },
+                        { label: 'Nombre', size: 2 },
+                        { size: 2.5 }]" 
+            [template]="doctorRow" 
+            [template-mobile]="doctorRowMobile" 
+            [source]="$doctors | async"
+            [loading]="loading"
+            no-results-text="No se han encontrado resultados">
+            <ng-template #doctorRow let-doctor>
+                <td>{{doctor.field.name}}</td>
+                <td>{{doctor.documentId}}</td>
+                <td>{{doctor.firstName}} {{doctor.lastName}}</td>    
+                <td class="table-buttons">
+                    <button class="button success" title="Editar" (click)="createUpdate(doctor)">
+                        <i class="material-icons">edit</i>
+                        <span>Editar</span>
+                    </button>
+                    <button class="button danger" title="Borrar" (click)="click('Delete')">
+                        <i class="material-icons">delete</i>
+                        <span>Borrar</span>
+                    </button>
+                </td>
+            </ng-template>
+            <ng-template #doctorRowMobile let-doctor>
+                <div class="mobile-row">
+                    <h3>{{doctor.field.name}}</h3>
+                    <p>
+                        <span class="label">Cédula:</span> {{doctor.documentId}}
+                    </p>
+                    <p>
+                        <span class="label">Nombre:</span> {{doctor.firstName}} {{doctor.lastName}}
+                    </p>
+                    <div>
+                        <button class="button success" title="Editar" (click)="createUpdate(doctor)">
+                            <i class="material-icons">edit</i>
+                            <span>Editar</span>
+                        </button>
+                        <button class="button danger" title="Borrar" (click)="click('Delete')">
+                            <i class="material-icons">delete</i>
+                            <span>Borrar</span>
+                        </button>
+                    </div>
                 </div>
-            </div>
-        </ng-template>
-    </app-table>
+            </ng-template>
+        </app-table>
+    </app-panel>
+    
 </app-panel>
 
 <app-modal [(open)]="modalOpen" modalTitle="Modal" [size]="ModalSize.Medium" (onClose)="doctor = null">
