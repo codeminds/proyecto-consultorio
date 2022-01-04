@@ -9,7 +9,6 @@ import { SnackbarType } from './snackbar.types';
 export class SnackbarComponent implements OnInit, AfterViewInit {
   @HostListener('window: resize')
   public onWindowResize() {
-    console.log('window resize');
     this.refreshSnackbarWidth();
   }
 
@@ -28,10 +27,12 @@ export class SnackbarComponent implements OnInit, AfterViewInit {
   @ViewChild('snackbar')
   private snackbar: ElementRef;
 
+  public closeSnackbar: boolean;
   public snackbarWidth: number;
-  
+
   private snackbarWidthNext: number;
   private snackbarWidthTimeout: NodeJS.Timeout;
+  private snackbarTimeout: NodeJS.Timeout;
 
   public get style(): string {
     return this.snackbarWidth ? `left: calc(50% - ${this.snackbarWidth / 2}px)` : null;
@@ -41,6 +42,7 @@ export class SnackbarComponent implements OnInit, AfterViewInit {
     this.text = null;
     this.type = null;
     this.timeout = null;
+    this.closeSnackbar = false
     this.snackbarWidth = null;
     this.snackbarWidthNext = null;
     this.snackbarWidthTimeout = null;
@@ -57,9 +59,9 @@ export class SnackbarComponent implements OnInit, AfterViewInit {
     }
 
     if(this.timeout) {
-      setTimeout(() => {
+      this.snackbarTimeout = setTimeout(() => {
         this.close();
-      }, this.timeout + 800);
+      }, this.timeout);
     }
   }
 
@@ -68,10 +70,18 @@ export class SnackbarComponent implements OnInit, AfterViewInit {
   }
   
   public close(): void {
-    this.text = null;
-    this.type = null;
-    this.timeout = null;
-    this.onClose.emit();
+    this.closeSnackbar = true;
+    if(this.timeout) {
+      clearTimeout(this.snackbarTimeout);
+      this.snackbarTimeout = null;
+    }
+
+    setTimeout(() => {
+      this.text = null;
+      this.type = null;
+      this.timeout = null;
+      this.onClose.emit();
+    }, 800);
   }
 
   private refreshSnackbarWidth(): void {

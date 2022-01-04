@@ -4,11 +4,17 @@ div {
     align-items: flex-start;
     color: #fff;
     position: fixed;
-    bottom: 1rem;
     align-items: flex-start;
     border-radius: 0.2rem;
     border: 0.1rem solid;
     padding: 0.8rem 0.8rem 0.8rem 1.2rem;
+    animation: slide-in 0.7s ease-out forwards;
+}
+
+.close {
+    bottom: 1rem;
+    animation-name: slide-out;
+    animation-timing-function: ease-in;
 }
 
 p {
@@ -76,5 +82,36 @@ i:hover{
 
     div {
         max-width: calc(100% - 2.5rem);
+    }
+}
+
+@keyframes slide-in {
+    0% {
+        bottom: -50vh;   
+    }
+
+    10% {
+        transform: scale(0);
+    }
+
+    100% {
+        bottom: 1rem;
+        transform: scale(1);
+    }
+}
+
+@keyframes slide-out {
+    0% {
+        transform: scale(1);
+         
+    }
+
+    10% {
+        bottom: 1rem;  
+    }
+
+    100% {
+        bottom: -50vh;
+        transform: scale(0);
     }
 }
