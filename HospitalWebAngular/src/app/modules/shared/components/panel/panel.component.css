@@ -1,5 +1,5 @@
 /*
-Usamos la clase flat, slim y el flexbox en el :host por si
+Usamos las clases unboxed, flat, slim y el flexbox en el :host por si
 el desarrollador quisiera hacer paneles flex que se alineen
 entre ellos, de esta manera no hay que introducir lógica extra,
 sólo tiene que crear paneles dentro de un contenedor flex. 
@@ -17,12 +17,16 @@ sólo el contenedor :host invisible.
     margin-bottom: 0;
 }
 
-:host.flat {
+:host.unboxed {
     margin-bottom: 0;
 }
 
-:host.flat .panel {
+:host.unboxed .panel {
     border: 0;
+    box-shadow: none;
+}
+
+:host.flat .panel {
     box-shadow: none;
 }
 

@@ -50,7 +50,7 @@
             <span>Agregar</span>
         </button>
     </div>
-    <app-panel class="slim">
+    <app-panel class="slim flat">
         <app-table 
             [headers]="[{ label: 'Especialidad' },
                         { label: 'Cédula' },
@@ -99,9 +99,7 @@
             </ng-template>
         </app-table>
     </app-panel>
-    
 </app-panel>
-
 <app-modal [(open)]="modalOpen" modalTitle="Modal" [size]="ModalSize.Medium" (onClose)="doctor = null">
     <form *ngIf="doctor">
         <app-input 
