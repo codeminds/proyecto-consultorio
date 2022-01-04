@@ -5,7 +5,7 @@ import { FieldService } from '@services/field/field.service';
 import {  } from '@services/http/http.types';
 import { ButtonType, InputType, Option } from '@shared/components/form-field/form-field.types';
 import { ModalSize } from '@shared/components/modal/modal.types';
-import { defaultIfEmpty, map, Observable, of, startWith } from 'rxjs';
+import { endWith, map, Observable, of, startWith, tap } from 'rxjs';
 
 @Component({
   selector: 'app-doctors',
@@ -59,12 +59,11 @@ export class DoctorsPage implements OnInit{
     this.loading = true;
     this.$doctors = this.doctorService.list(this.filter)
       .pipe(
-        map((doctors) => { 
+        tap(() => {
           this.loading = false;
-          return doctors;
-        })
+        }),
+        endWith([])
       );
-    console.log(this.$doctors);
   }
 
   public createUpdate(doctor?: Doctor) {

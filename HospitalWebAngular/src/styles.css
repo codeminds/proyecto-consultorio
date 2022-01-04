@@ -63,3 +63,9 @@ p {
 .table-buttons {
     text-align: right;
 }
+
+.material-icons {
+    vertical-align: bottom;
+    font-size: 2rem;
+    margin-left: 0.2rem;
+}

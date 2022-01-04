@@ -34,14 +34,14 @@
             label="Especialidad"
             class="col-4"
             [(model)]="filter.fieldId"
-            [options]="($fields | async)"
+            [options]="$fields | async"
             [hasAll]="true"
         ></app-select>
         <app-button [type]="ButtonType.Success" (clicked)="list()">Buscar</app-button>
     </form>
 </app-panel>
 <div class="controls">
-    <button class="button success" (click)="createUpdate()">Nuevo Doctor</button>
+    <button class="button success" (click)="createUpdate()">Nuevo Doctor <i class="material-icons">person_add</i></button>
 </div>
 <app-panel class="slim">
     <app-table 
@@ -51,15 +51,16 @@
                     { size: 2.5 }]" 
         [template]="doctorRow" 
         [template-mobile]="doctorRowMobile" 
-        [source]="$doctors"
+        [source]="$doctors | async"
+        [loading]="loading"
         no-results-text="No se han encontrado resultados">
         <ng-template #doctorRow let-doctor>
             <td>{{doctor.field.name}}</td>
             <td>{{doctor.documentId}}</td>
             <td>{{doctor.firstName}} {{doctor.lastName}}</td>    
             <td class="table-buttons">
-                <button class="button success" (click)="createUpdate(doctor)">Editar</button>
-                <button class="button danger" (click)="click('Delete')">Borrar</button>
+                <button class="button success" (click)="createUpdate(doctor)">Editar <i class="material-icons">edit</i></button>
+                <button class="button danger" (click)="click('Delete')">Borrar <i class="material-icons">delete</i></button>
             </td>
         </ng-template>
         <ng-template #doctorRowMobile let-doctor>
@@ -72,8 +73,8 @@
                     <span class="label">Nombre:</span> {{doctor.firstName}} {{doctor.lastName}}
                 </p>
                 <div>
-                    <button class="button success" (click)="click('Edit')">Editar</button>
-                    <button class="button danger" (click)="click('Delete')">Borrar</button>
+                    <button class="button success" (click)="click('Edit')">Editar <i class="material-icons">edit</i></button>
+                    <button class="button danger" (click)="click('Delete')">Borrar <i class="material-icons">delete</i></button>
                 </div>
             </div>
         </ng-template>

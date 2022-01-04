@@ -21,17 +21,21 @@ export class TableComponent implements OnInit {
   public templateMobile: TemplateRef<any>;
 
   @Input()
-  public source: Observable<any[]>;
+  public source: any[];
 
   @Input('no-results-text')
   public noResultsText?: string;
+
+  @Input()
+  public loading: boolean;
 
   constructor() {
     this.headers = [];
     this.template = null;
     this.templateMobile = null;
-    this.source = of([]);
+    this.source = null;
     this.noResultsText = null;
+    this.loading = false;
   }
 
   public ngOnInit(): void {

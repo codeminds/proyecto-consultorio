@@ -72,13 +72,13 @@ export class HttpService{
   
     switch(response?.status) {
       case HttpStatusCode.Forbidden:
-        message.text = 'You are not authorized to perform this action';
+        message.text = 'No está autorizado para realizar esta acción';
         break;
       case HttpStatusCode.Unauthorized:
-        message.text = 'You are not authenticated or your session has expired. Please login to continue';
+        message.text = 'No está autenticado o su sesión ha expirado. Por favor ingresar de nuevo';
         break;
       default:
-        message.text = `An error occured while ${method == HttpMethod.GET ? 'retrieving your data' : 'processing your request'}`;
+        message.text = `Ha ocurrido un error ${method == HttpMethod.GET ? 'obteniendo los datos' : 'procesando los datos'}`;
         break;
     }
 

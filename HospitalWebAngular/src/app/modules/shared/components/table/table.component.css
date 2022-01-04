@@ -1,3 +1,15 @@
+div {
+    position: relative;
+}
+
+i {
+    position: absolute;
+    font-size: 2.1rem;
+    top: 0.4rem;
+    right: 0.4rem;
+    animation: rotate 1s ease-out infinite;
+}
+
 table {
     width: 100%;
     table-layout: fixed;
@@ -13,6 +25,10 @@ th {
     padding: 0.8rem 0.5rem;
 }
 
+th:last-child {
+    padding-right: 2.5rem;
+}
+
 tbody tr:nth-child(odd) {
     background: var(--color-table-nth-child-background);
 }
@@ -22,7 +38,7 @@ td.mobile {
     padding: 1rem;
 }
 
-tr.no-results td.mobile {
+tr.no-results td {
     text-align: center;
 }
 
@@ -37,5 +53,19 @@ tr.no-results td.mobile {
 
     table.mobile td.mobile {
         display: block;
+    }
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotateZ(10deg);
+    }
+
+    80% {
+        transform: rotateZ(340deg);
+    }
+
+    100% {
+        transform: rotateZ(360deg);
     }
 }
