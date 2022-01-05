@@ -69,7 +69,7 @@
                     <i class="material-icons">edit</i>
                     <span>Editar</span>
                 </button>
-                <button class="button danger" title="Borrar" (click)="click('Delete')">
+                <button class="button danger" title="Borrar" (click)="deleteDoctor(doctor.id)">
                     <i class="material-icons">delete</i>
                     <span>Borrar</span>
                 </button>
@@ -89,7 +89,7 @@
                         <i class="material-icons">edit</i>
                         <span>Editar</span>
                     </button>
-                    <button class="button danger" title="Borrar" (click)="click('Delete')">
+                    <button class="button danger" title="Borrar" (click)="deleteDoctor(doctor.id)">
                         <i class="material-icons">delete</i>
                         <span>Borrar</span>
                     </button>
@@ -109,8 +109,16 @@
             [attributes]="{ 'placeholder': '123456789' }"
         ></app-input>
         <div class="row">
-            <app-button [type]="ButtonType.Success" (clicked)="modalOpen = false">Save</app-button>
-            <app-button [type]="ButtonType.Danger" (clicked)="modalOpen = false">Cancel</app-button>
+            <app-button [type]="ButtonType.Success" (clicked)="modalOpen = false">Guardar</app-button>
+            <app-button [type]="ButtonType.Danger" (clicked)="modalOpen = false">Cancelar</app-button>
         </div>
     </form>
+</app-modal>
+
+<app-modal [(open)]="confirmOpen" [transparent]="true" [closeOnClickOutside]="false" (onClose)="onConfirmClose()">
+    <p class="confirm-text">{{confirmText}}</p>
+    <div class="confirm-buttons">
+        <button class="button success" (click)="confirm(true)">Confirmar</button>
+        <button class="button neutral" (click)="confirm(false)">Cancelar</button>
+    </div>
 </app-modal>

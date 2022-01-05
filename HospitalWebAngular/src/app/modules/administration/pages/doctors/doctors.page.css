@@ -3,3 +3,13 @@
     top: 3rem;
     right: 2rem;
 }
+
+.confirm-text {
+    font-size: 1.6rem;
+    font-weight: 500;
+    margin-bottom: 2rem;
+}
+
+.confirm-buttons {
+    text-align: right;
+}

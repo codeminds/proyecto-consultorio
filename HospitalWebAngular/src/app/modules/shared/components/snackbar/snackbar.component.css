@@ -9,6 +9,7 @@ div {
     border: 0.1rem solid;
     padding: 0.8rem 0.8rem 0.8rem 1.2rem;
     animation: slide-in 0.7s ease-out forwards;
+    z-index: 100;
 }
 
 .close {

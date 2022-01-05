@@ -14,8 +14,8 @@ export class HttpService{
     private appService: AppService
   ) { }
 
-  public get(url: string, params: QueryParams = null, api: string = null): Observable<APIResponse> {
-    return this.httpClient.get<APIResponse>(`${api || environment.apiURL}/${url}${this.getQuery(params)}` , {
+  public get(url: string, params: QueryParams = null, apiOverride: string = null): Observable<APIResponse> {
+    return this.httpClient.get<APIResponse>(`${apiOverride || environment.apiURL}/${url}${this.getQuery(params)}` , {
       headers: {
         'Content-Type': 'application/json'
       }
@@ -25,8 +25,8 @@ export class HttpService{
     );
   }
 
-  public post(url: string, data: any = null, params: QueryParams = null, api: string = null): Observable<APIResponse> {
-    return this.httpClient.post<APIResponse>(`${api || environment.apiURL}/${url}${this.getQuery(params)}`, data, {
+  public post(url: string, data: any = null, params: QueryParams = null, apiOverride: string = null): Observable<APIResponse> {
+    return this.httpClient.post<APIResponse>(`${apiOverride || environment.apiURL}/${url}${this.getQuery(params)}`, data, {
       headers: {
         'Content-Type': 'application/json'
       }
@@ -36,8 +36,8 @@ export class HttpService{
     );
   }
 
-  public put(url: string, data: any = null, params: QueryParams = null, api: string = null): Observable<APIResponse> {
-    return this.httpClient.put<APIResponse>(`${api || environment.apiURL}/${url}${this.getQuery(params)}`, data, {
+  public put(url: string, data: any = null, params: QueryParams = null, apiOverride: string = null): Observable<APIResponse> {
+    return this.httpClient.put<APIResponse>(`${apiOverride || environment.apiURL}/${url}${this.getQuery(params)}`, data, {
       headers: {
         'Content-Type': 'application/json'
       }
@@ -47,8 +47,8 @@ export class HttpService{
     );
   }
 
-  public delete(url: string, params: QueryParams = null, api: string = null): Observable<APIResponse> {
-    return this.httpClient.delete<APIResponse>(`${api || environment.apiURL}/${url}${this.getQuery(params)}`, {
+  public delete(url: string, params: QueryParams = null, apiOverride: string = null): Observable<APIResponse> {
+    return this.httpClient.delete<APIResponse>(`${apiOverride || environment.apiURL}/${url}${this.getQuery(params)}`, {
       headers: {
         'Content-Type': 'application/json'
       }

@@ -38,4 +38,8 @@ export class DoctorService{
   public put(id: number, data: Doctor): Observable<APIResponse> {
     return this.httpService.put(`${this._api}/${id}`, new CreateUpdaterDoctorDTO(data));
   }
+
+  public delete(id: number): Observable<APIResponse> {
+    return this.httpService.delete(`${this._api}/${id}`);
+  }
 }

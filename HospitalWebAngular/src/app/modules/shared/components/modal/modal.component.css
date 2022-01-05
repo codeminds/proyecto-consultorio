@@ -43,7 +43,7 @@
 }
 
 .content {
-    width: 90%;
+    max-width: 95%;
     background: var(--color-modal-content-background);
     padding: 1rem;
     border-radius: 0.2rem;
