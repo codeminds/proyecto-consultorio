@@ -28,7 +28,7 @@ namespace API.Controllers
 
             if (patient == null)
             {
-                return HttpErrors.NotFound("Patient not found");
+                return HttpErrors.NotFound("Paciente no encontrado");
             }
 
             response.Data = patient;
@@ -53,7 +53,7 @@ namespace API.Controllers
             if (response.Success)
             {
                 response.Data = await this._patientService.Insert(data);
-                response.Messages.Add("Patient inserted successfully");
+                response.Messages.Add("Paciente insertado correctamente");
             }
 
             return response;
@@ -71,11 +71,11 @@ namespace API.Controllers
 
                 if (patient == null)
                 {
-                    return HttpErrors.NotFound("Patient not found");
+                    return HttpErrors.NotFound("Paciente no encontrado");
                 }
 
                 response.Data = patient;
-                response.Messages.Add("Patient updated successfully");
+                response.Messages.Add("Paciente actualizado correctamente");
             }
 
             return response;
@@ -93,11 +93,11 @@ namespace API.Controllers
 
                 if (patient == null)
                 {
-                    return HttpErrors.NotFound("Patient not found");
+                    return HttpErrors.NotFound("Paciente no encontrado");
                 }
 
                 response.Data = patient;
-                response.Messages.Add("Patient deleted successfully");
+                response.Messages.Add("Paciente borrado correctamente");
             }
 
             return response;

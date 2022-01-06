@@ -22,45 +22,45 @@ namespace API.Validators
             //DocumentId
             if (string.IsNullOrWhiteSpace(data.DocumentId))
             {
-                innerMessages.Add("DocumentId is required");
+                innerMessages.Add("Cédula es requerida");
             }
             else if (data.DocumentId.Trim().Length != 9)
             {
-                innerMessages.Add("DocumentId must have 9 digits");
+                innerMessages.Add("Cédula debe contener 9 digitos");
             }
             else if (!int.TryParse(data.DocumentId, out int num) || num < 0)
             {
-                innerMessages.Add("DocumentId can only contain numbers");
+                innerMessages.Add("Cédula sólo puede contener números");
             }
             else if (this._database.Patients.Any(d => d.DocumentId == data.DocumentId))
             {
-                innerMessages.Add("DocumentId number already exists in the system");
+                innerMessages.Add("Cédula ya está registrada en el sistema");
             }
 
             //First Name
             if (string.IsNullOrWhiteSpace(data.FirstName))
             {
-                innerMessages.Add("First Name is required");
+                innerMessages.Add("Nombre es requerido");
             }
             else if (data.FirstName.Length > 50)
             {
-                innerMessages.Add("First Name can only contain 50 characters");
+                innerMessages.Add("Nombre no puede contener más de 50 caracteres");
             }
 
             //Last Name
             if (string.IsNullOrWhiteSpace(data.LastName))
             {
-                innerMessages.Add("Last Name is required");
+                innerMessages.Add("Apellido es requerido");
             }
             else if (data.LastName.Length > 50)
             {
-                innerMessages.Add("Last Name can only contain 50 characters");
+                innerMessages.Add("Apellido no puede contener más de 50 caracteres");
             }
 
             //BirthDate
             if (data.BirthDate > DateTime.Now)
             {
-                innerMessages.Add("Birth Date cannot be greated than current date");
+                innerMessages.Add("Fecha de nacimiento no puede ser mayor a la fecha actual");
             }
 
             messages.AddRange(innerMessages);
@@ -75,45 +75,45 @@ namespace API.Validators
             //DocumentId
             if (string.IsNullOrWhiteSpace(data.DocumentId))
             {
-                innerMessages.Add("DocumentId is required");
+                innerMessages.Add("Cédula es requerida");
             }
             else if (data.DocumentId.Trim().Length != 9)
             {
-                innerMessages.Add("DocumentId must have 9 digits");
+                innerMessages.Add("Cédula debe contener 9 digitos");
             }
             else if (!int.TryParse(data.DocumentId, out int num) || num < 0)
             {
-                innerMessages.Add("DocumentId can only contain numbers");
+                innerMessages.Add("Cédula sólo puede contener números");
             }
             else if (this._database.Patients.Any(d => d.DocumentId == data.DocumentId && d.Id != id))
             {
-                innerMessages.Add("DocumentId number already exists in the system");
+                innerMessages.Add("Cédula ya está registrada en el sistema");
             }
 
             //First Name
             if (string.IsNullOrWhiteSpace(data.FirstName))
             {
-                innerMessages.Add("First Name is required");
+                innerMessages.Add("Nombre es requerido");
             }
             else if (data.FirstName.Length > 50)
             {
-                innerMessages.Add("First Name can only contain 50 characters");
+                innerMessages.Add("Nombre no puede contener más de 50 caracteres");
             }
 
             //Last Name
             if (string.IsNullOrWhiteSpace(data.LastName))
             {
-                innerMessages.Add("Last Name is required");
+                innerMessages.Add("Apellido es requerido");
             }
             else if (data.LastName.Length > 50)
             {
-                innerMessages.Add("Last Name can only contain 50 characters");
+                innerMessages.Add("Apellido no puede contener más de 50 caracteres");
             }
 
             //BirthDate
             if (data.BirthDate > DateTime.Now)
             {
-                innerMessages.Add("Birth Date cannot be greated than current date");
+                innerMessages.Add("Fecha de nacimiento no puede ser mayor a la fecha actual");
             }
 
             messages.AddRange(innerMessages);
@@ -127,7 +127,7 @@ namespace API.Validators
 
             if (this._database.Appointments.Any(a => a.PatientId == id))
             {
-                innerMessages.Add("Can't delete this record. Patient has appointments associated to it");
+                innerMessages.Add("No se puede borrar el record. El paciente tiene citas asociadas en el sistema");
             }
 
             messages.AddRange(innerMessages);

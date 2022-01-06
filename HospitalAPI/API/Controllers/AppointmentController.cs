@@ -32,7 +32,7 @@ namespace API.Controllers
 
             if (appointment == null)
             {
-                return HttpErrors.NotFound("Appointment not found");
+                return HttpErrors.NotFound("Cita no encontrada");
             }
 
             response.Data = appointment;
@@ -57,7 +57,7 @@ namespace API.Controllers
             if (response.Success)
             {
                 response.Data = await this._appointmentService.Insert(data);
-                response.Messages.Add("Appointment inserted successfully");
+                response.Messages.Add("Cita insertada correctamente");
             }
 
             return response;
@@ -75,11 +75,11 @@ namespace API.Controllers
 
                 if (appointment == null)
                 {
-                    return HttpErrors.NotFound("Appointment not found");
+                    return HttpErrors.NotFound("Cite no encontrada");
                 }
 
                 response.Data = appointment;
-                response.Messages.Add("Appointment updated successfully");
+                response.Messages.Add("Cita actualizada correctamente");
             }
 
             return response;
@@ -97,11 +97,11 @@ namespace API.Controllers
 
                 if (appointment == null)
                 {
-                    return HttpErrors.NotFound("Appointment not found");
+                    return HttpErrors.NotFound("Cita no encontrada");
                 }
 
                 response.Data = appointment;
-                response.Messages.Add("Appointment deleted successfully");
+                response.Messages.Add("Cita borrada correctamente");
             }
 
             return response;

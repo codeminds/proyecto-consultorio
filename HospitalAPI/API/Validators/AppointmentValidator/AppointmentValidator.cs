@@ -21,7 +21,7 @@ namespace API.Validators
 
             if (data.Date <= DateTime.Now)
             {
-                innerMessages.Add("Appointment cannot have a previous date to the current date");
+                innerMessages.Add("Cita no puede tener una fecha anterior a la fecha actual");
             }
 
             if (this._database.Appointments.Any(a => 
@@ -29,7 +29,7 @@ namespace API.Validators
                         && ((data.Date.AddHours(1) > a.Date && data.Date.AddHours(1) < a.Date.AddHours(1))
                             || (data.Date > a.Date && data.Date < a.Date.AddHours(1)))))
             {
-                innerMessages.Add("Doctor already has an appointment in that date and time");
+                innerMessages.Add("El doctor ya tiene una cita agendada durante la fecha y hora seleccionada");
             }
 
             if (this._database.Appointments.Any(a =>
@@ -37,7 +37,7 @@ namespace API.Validators
                         && ((data.Date.AddHours(1) > a.Date && data.Date.AddHours(1) < a.Date.AddHours(1))
                             || (data.Date > a.Date && data.Date < a.Date.AddHours(1)))))
             {
-                innerMessages.Add("Patient already has an appointment in that date and time");
+                innerMessages.Add("El paciente ya tiene una cita agendada durante la fecha y hora seleccionada");
             }
 
             messages.AddRange(innerMessages);
@@ -51,7 +51,7 @@ namespace API.Validators
 
             if (data.Date <= DateTime.Now)
             {
-                innerMessages.Add("Appointment cannot have a previous date to the current date");
+                innerMessages.Add("Cita no puede tener una fecha anterior a la fecha actual");
             }
 
             if (this._database.Appointments.Any(a =>
@@ -60,7 +60,7 @@ namespace API.Validators
                         && ((data.Date.AddHours(1) > a.Date && data.Date.AddHours(1) < a.Date.AddHours(1))
                             || (data.Date >= a.Date && data.Date <= a.Date.AddHours(1)))))
             {
-                innerMessages.Add("Doctor already has an appointment in that date and time");
+                innerMessages.Add("El doctor ya tiene una cita agendada durante la fecha y hora seleccionada");
             }
 
             if (this._database.Appointments.Any(a =>
@@ -69,7 +69,7 @@ namespace API.Validators
                         && ((data.Date.AddHours(1) > a.Date && data.Date.AddHours(1) < a.Date.AddHours(1))
                             || (data.Date >= a.Date && data.Date <= a.Date.AddHours(1)))))
             {
-                innerMessages.Add("Patient already has an appointment in that date and time");
+                innerMessages.Add("El paciente ya tiene una cita agendada durante la fecha y hora seleccionada");
             }
 
             messages.AddRange(innerMessages);

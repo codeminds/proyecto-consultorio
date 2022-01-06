@@ -28,10 +28,10 @@ namespace API.Controllers
             switch (response.StatusCode)
             {
                 case HttpStatusCode.NotFound:
-                    response.Messages.Add("Resource not found");
+                    response.Messages.Add("Recurso no encontrado");
                     break;
                 case HttpStatusCode.InternalServerError:
-                    response.Messages.Add("Internal server error");
+                    response.Messages.Add("Error interno del servidor");
                     if (this._env.IsDevelopment())
                     {
                         var ex = HttpContext.Features.Get<IExceptionHandlerPathFeature>()?.Error;
@@ -50,7 +50,7 @@ namespace API.Controllers
                     }
                     break;
                 default:
-                    response.Messages.Add("There was a problem with your request");
+                    response.Messages.Add("Hubo un problema procesando su petición");
                     break;
             }
 
