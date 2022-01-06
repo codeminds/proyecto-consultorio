@@ -13,3 +13,12 @@
 .confirm-buttons {
     text-align: right;
 }
+
+.messages li {
+    margin-bottom: 0.2rem;
+    padding: 0.5rem;
+    background: var(--color-danger-primary);
+    border: var(--color-danger-secondary) 0.1rem solid;
+    border-radius: 0.2rem;
+    color: #fff;
+}

@@ -25,6 +25,9 @@ export class ModalComponent implements OnInit{
   @Output()
   public openChange: EventEmitter<boolean>;
 
+  @Output()
+  public onClose: EventEmitter<void>;
+
   constructor() {
     this.open = false;
     this.modalTitle = null;
@@ -32,6 +35,7 @@ export class ModalComponent implements OnInit{
     this.transparent = false;
     this.closeOnClickOutside = true;
     this.openChange = new EventEmitter();
+    this.onClose = new EventEmitter();
   }
 
   public ngOnInit(): void {
@@ -41,6 +45,13 @@ export class ModalComponent implements OnInit{
   }
 
   public onOpenChange(value: boolean) {
+    if(!value) {
+      //Esperar a la animación de desaparición
+      setTimeout(() => {
+        this.onClose.emit();
+      }, 300);
+    }
+
     this.open = value;
     this.openChange.emit(value);
   }

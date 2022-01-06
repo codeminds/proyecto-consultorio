@@ -1,7 +1,7 @@
 <div class="form-field">
     <label *ngIf="label" [for]="id">{{label}}</label>
-    <select [id]="id" [name]="name" [(ngModel)]="model" (ngModelChange)="onModelChange($event)">
-        <option *ngIf="hasAll" [ngValue]="null">Todos</option>
-        <option *ngFor="let option of options" [ngValue]="option.value">{{option.label}}</option>
+    <select [id]="id" [name]="name" [(ngModel)]="selectedIndex" (ngModelChange)="onModelChange($event)">
+        <option *ngIf="nullOption != null" [ngValue]="null">{{nullOption}}</option>
+        <option *ngFor="let item of options; let i = index" [ngValue]="i">{{option?.label ? item[option.label] : item}}</option>
     </select>
 </div>

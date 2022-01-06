@@ -1,10 +1,13 @@
 
+<!-- Controles de página -->
 <div class="controls">
     <button title="Agregar" class="button success" (click)="createUpdate()">
         <i class="material-icons">person_add</i>
         <span>Agregar</span>
     </button>
 </div>
+
+<!-- Filtro de búsqueda -->
 <app-panel class="unboxed slim" panelTitle="Búsqueda" [expandable]="true">
     <form class="row">
         <app-select
@@ -12,9 +15,10 @@
             form="filter"
             label="Especialidad"
             class="col-4"
+            nullOption="Todos"
             [(model)]="filter.fieldId"
             [options]="$fields | async"
-            [hasAll]="true"
+            [option]="{label: 'name', value: 'id'}"
         ></app-select>
         <app-input 
             name="documentId" 
@@ -49,6 +53,8 @@
         </app-button>
     </form>
 </app-panel>
+
+<!--- Tabla de resultados -->
 <app-panel class="slim">
     <app-table 
         [headers]="[{ label: 'Especialidad' },
@@ -98,23 +104,53 @@
         </ng-template>
     </app-table>
 </app-panel>
-<app-modal [(open)]="modalOpen" modalTitle="Modal" [size]="ModalSize.Medium" (onClose)="doctor = null">
+
+<!-- Modal de creación/edición -->
+<app-modal [(open)]="modalOpen" modalTitle="Modal" [size]="ModalSize.Medium" (onClose)="onModalClose()">
     <form *ngIf="doctor">
+        <ul class="messages">
+            <li *ngFor="let message of messages">{{message}}</li>
+        </ul>
+        <app-select
+            name="field"
+            form="createUpdate"
+            label="Especialidad"
+            [(model)]="doctor.field"
+            [options]="$fields | async"
+            [option]="{label: 'name'}"
+        ></app-select>
         <app-input 
             name="documentId" 
             form="createUpdate" 
             label="Cédula"
             [type]="InputType.Text" 
             [(model)]="doctor.documentId"
-            [attributes]="{ 'placeholder': '123456789' }"
+            [attributes]="{'placeholder': '123456789'}"
+        ></app-input>
+        <app-input 
+            name="firstName" 
+            form="createUpdate" 
+            label="Nombre"
+            [type]="InputType.Text" 
+            [(model)]="doctor.firstName"
+            [attributes]="{'placeholder': 'John'}"
+        ></app-input>
+        <app-input 
+            name="lastName" 
+            form="createUpdate" 
+            label="Apellido"
+            [type]="InputType.Text" 
+            [(model)]="doctor.lastName"
+            [attributes]="{'placeholder': 'Smith'}"
         ></app-input>
         <div class="row">
-            <app-button [type]="ButtonType.Success" (clicked)="modalOpen = false">Guardar</app-button>
+            <app-button [type]="ButtonType.Success" (clicked)="save()">Guardar</app-button>
             <app-button [type]="ButtonType.Danger" (clicked)="modalOpen = false">Cancelar</app-button>
         </div>
     </form>
 </app-modal>
 
+<!-- Modal de confirmación -->
 <app-modal [(open)]="confirmOpen" [transparent]="true" [closeOnClickOutside]="false" (onClose)="onConfirmClose()">
     <p class="confirm-text">{{confirmText}}</p>
     <div class="confirm-buttons">

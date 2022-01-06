@@ -42,24 +42,44 @@
     opacity: 1;
 }
 
-.content {
+.safewall {
     max-width: 95%;
+    box-sizing: border-box;
+}
+
+.safe {
+    padding: 7rem;
+}
+
+.content {
     background: var(--color-modal-content-background);
-    padding: 1rem;
+    padding: 2rem;
     border-radius: 0.2rem;
     border: 0.1rem solid var(--color-modal-content-border);
     box-shadow: 0.2rem 0.2rem 0.6rem -0.3rem var(--color-shadow-light);
     overflow: hidden;
 }
 
-.small .content {
+.small .safewall {
     width: min(40rem, 95%);
 }
 
-.medium .content {
+.medium .safewall {
     width: min(70rem, 95%);
 }
 
-.large .content {
+.large .safewall {
     width: min(100rem, 95%);
+}
+
+@media screen and (max-width: 1024px) {
+    .safe {
+        padding: 4rem;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .safe {
+        padding: 0;
+    }
 }

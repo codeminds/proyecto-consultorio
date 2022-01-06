@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Option } from '../form-field.types';
 
 @Component({
@@ -6,29 +6,32 @@ import { Option } from '../form-field.types';
   templateUrl: './select.component.html',
   styleUrls: ['../form-field.styles.css']
 })
-export class SelectComponent implements OnInit {
+export class SelectComponent implements OnInit, OnChanges {
   @Input('name')
   public fieldName: string;
 
   @Input()
   public form: string;
-
   
   @Input()
-  public options: Option[];
+  public options: any[];
+
+  @Input()
+  public option?: Option;
 
   @Input()
   public label?: string;
 
   @Input()
-  public model?: boolean | string | number;
+  public model?: any;
 
   @Input()
-  public hasAll?: boolean;
-
+  public nullOption?: string;
 
   @Output()
   public modelChange: EventEmitter<any>;
+
+  public selectedIndex: number;
 
   public get name(){
     return `${this.form}${this.fieldName}`;
@@ -42,9 +45,10 @@ export class SelectComponent implements OnInit {
     this.fieldName = null;
     this.form = null;
     this.options = [];
+    this.option = null;
     this.label = null;
     this.model = null;
-    this.hasAll = false;
+    this.nullOption = null;
     this.modelChange = new EventEmitter();
   }
 
@@ -62,7 +66,51 @@ export class SelectComponent implements OnInit {
     }
   }
 
-  public onModelChange(value: boolean | string | number) {
-    this.modelChange.emit(value);
+  //El modelo del select es un número que es el índice de selección
+  //del mismo, para poder mandar todo tipo de objetos como la lista
+  //para llenar los valores. De esta manera podemos emitir los objetos enteros
+  //o valor de tipo básico libremente sin tener que crear lógica externa para obtenerlo
+  //de listas o mappear entre tipos. Esto significa que también hay que crear lógica
+  //especial para que al recibir un valor externo de los input properties este sea
+  //mappeado automáticamente al index de la opción apropiada.
+  public ngOnChanges(changes: SimpleChanges): void {
+      if(changes.hasOwnProperty('model')) {
+        //En caso de tener una opción nula hay que forzar el valor del index
+        //ya que el ngModel del select no está ligado con nuestro modelo como
+        //en otros componentes
+        if(changes.model.currentValue == null && this.nullOption != null) {
+          this.selectedIndex = null;
+        }else {
+          let index = this.options.findIndex((item: any) => 
+            this.option?.value ? 
+              item[this.option.value] == this.model : item == this.model);
+          
+          //Para una buena experiencia de usuario, si el index no es encontrado
+          //es porque el valor no existe en la lista o el modelo que recibimos es nulo.
+          //Al ejecutarse esta opción y no tener una opción nula o no existente
+          //el component se encarga de autocambiar el modelo vínculado a la primera
+          //opción válida del select, emitiendo el valor que se encuentra en el primer
+          //item de la lista
+          if(index < 0) {
+            //Emitir el modelo asícronamente del lifecycle para evitar error de
+            //angular. A pesar de tener un tiempo de 0 milisegundos, el event loop
+            //de JavaScript ejecutará esto hasta el puro final ya que es una operación
+            //naturalmente asíncrona
+            setTimeout(() => {
+              this.onModelChange(0);
+            }, 0);
+          } else {
+            this.selectedIndex = index;
+          }
+        }
+      }
+  }
+
+  public onModelChange(index: number) {
+    if(index != null) {
+      this.modelChange.emit(this.option?.value ? this.options[index][this.option.value] : this.options[index]);
+    }else {
+      this.modelChange.emit(null);
+    } 
   }
 }

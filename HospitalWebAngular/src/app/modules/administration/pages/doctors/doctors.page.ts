@@ -2,11 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { AppService } from '@services/app/app.service';
 import { Doctor } from '@services/doctor/doctor.model';
 import { DoctorService } from '@services/doctor/doctor.service';
+import { Field } from '@services/field/field.model';
 import { FieldService } from '@services/field/field.service';
 import { MessageType } from '@services/http/http.types';
 import { ButtonType, InputType, Option } from '@shared/components/form-field/form-field.types';
 import { ModalSize } from '@shared/components/modal/modal.types';
 import { firstValueFrom, map, Observable, of, startWith, tap } from 'rxjs';
+import { runInThisContext } from 'vm';
 
 @Component({
   selector: 'app-doctors',
@@ -15,7 +17,7 @@ import { firstValueFrom, map, Observable, of, startWith, tap } from 'rxjs';
 })
 export class DoctorsPage implements OnInit{
   public $doctors: Observable<Doctor[]>;
-  public $fields: Observable<Option[]>;
+  public $fields: Observable<Field[]>;
 
   public modalOpen: boolean;
   public doctor: Doctor;
@@ -23,12 +25,14 @@ export class DoctorsPage implements OnInit{
   public filter: any;
   public confirmText: string;
   public confirmOpen: boolean;
+  public messages: string[];
 
   public InputType = InputType;
   public ModalSize = ModalSize;
   public ButtonType = ButtonType;
 
   private confirmFunction: () => void;
+  private firstField: Field;
   
   constructor(
     private doctorService: DoctorService,
@@ -42,6 +46,8 @@ export class DoctorsPage implements OnInit{
     this.loading = false;
     this.confirmText = null;
     this.confirmOpen = false;
+    this.messages = [];
+    this.firstField = null;
     this.confirmFunction = null;
     this.filter = {
       documentId: null,
@@ -55,8 +61,7 @@ export class DoctorsPage implements OnInit{
       this.list();
       this.$fields = this.fieldService.list()
         .pipe(
-          startWith([]),
-          map((fields) => fields?.map((item) => ({ label: item.name, value: item.id })))
+          startWith([])
         );
   }
 
@@ -70,7 +75,7 @@ export class DoctorsPage implements OnInit{
       );
   }
 
-  public createUpdate(data: Doctor = null) {
+  public createUpdate(data: any = null) {
     this.doctor = new Doctor(data);
     this.modalOpen = true;
   }
@@ -83,6 +88,7 @@ export class DoctorsPage implements OnInit{
       const response = await firstValueFrom(this.doctorService.delete(id));
       if(response != null) {
         if(response.success) {
+          this.appService.siteMessage = { type: MessageType.Success, text: 'Se eliminó el récord correctamente' };
           this.list();
         }else {
           this.appService.siteMessage = { type: MessageType.Warning, text: response.messages[0] };
@@ -90,6 +96,31 @@ export class DoctorsPage implements OnInit{
       }
       this.loading = false;
     }
+  }
+
+  public async save() {
+    const isNew = this.doctor.id == null
+    const response = await firstValueFrom(isNew ? this.doctorService.post(this.doctor) : this.doctorService.put(this.doctor.id, this.doctor));
+    this.messages = [];
+    if(response != null) {
+      if(response.success) {
+        if(isNew) {
+          this.filter = {
+            documentId: response.data.documentId,
+            firstName: null,
+            lastName: null,
+            fieldId: null 
+          }
+        }
+
+        this.modalOpen = false;
+        this.appService.siteMessage = { type: MessageType.Success, text: 'Se guardó el récord correctamente' };
+        this.list();
+      }else {
+        this.messages = response.messages;
+      }
+    }
+    this.loading = false;
   }
 
   public confirm(confirmed: boolean) {
@@ -104,5 +135,10 @@ export class DoctorsPage implements OnInit{
   public onConfirmClose() {
     this.confirmText = null;
     this.confirmFunction = null;
+  }
+
+  public onModalClose() {
+    this.doctor = null;
+    this.messages = [];
   }
 }

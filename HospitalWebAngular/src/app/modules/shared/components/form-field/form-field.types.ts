@@ -24,6 +24,6 @@ export interface Attributes {
 }
 
 export interface Option {
-    label: string,
-    value: boolean | string | number;
+    label?: string,
+    value?: string;
 }

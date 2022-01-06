@@ -101,9 +101,20 @@ export class PanelComponent implements AfterViewChecked, OnChanges {
       //ejecutándose en la aplicación, creamos un nuevo cambio de altura para la animación sólo si
       //el nuevo alto del elemento ha cambiado en comparación con su altura anterior
       if(!this.contentHeightTimeout && this.contentHeight != this.contentHeightNext) {
+        //Ejecutar el cambio asícronamente del lifecycle para evitar error de
+        //angular. A pesar de tener un tiempo de 0 milisegundos, el event loop
+        //de JavaScript ejecutará esto hasta el puro final ya que es una operación
+        //naturalmente asíncrona. Guardando el timeout en una variable y
+        //validando que este no sea nulo para ejecutarlo nos ayuda a
+        //evitar que se ejecuten varios timeouts al mismo tiempo mientras
+        //angular resuelve sus cálculos
         this.contentHeightTimeout = setTimeout(() => {
           this.contentHeight = this.contentHeightNext;
           this.contentHeightAnimated = false;
+
+          //Asegurarse de hacer que la variable sea nula
+          //luego de ejecutar el timeout o si no el chequeo
+          //anterior en el if no permitirá futuros recálculos
           this.contentHeightTimeout = null; 
         }, 0);
       }
