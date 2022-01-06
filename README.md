@@ -6,4 +6,4 @@ Proyecto del curso inicial de Code Minds para aprender a desarrollar una aplicac
 * **HospitalAPI**: Proyecto de API con .NET Core con controladores, servicios, DTOs, mappers, validadores y Entity
 * **HospitalWeb**: Proyecto de prueba de UI web sin conexión al API
 * **HospitalWebDataBinding**: Proyecto de UI con librería básica de Data Binding conectado al proyecto de API
-* **HospitalWebAngular**: Proyecto de prueba de UI (Sólo Doctores) con Angular conectado al proyecto de API 
+* **HospitalWebAngular**: Proyecto de prueba de UI (Solo Doctores) con Angular conectado al proyecto de API 
