@@ -1,5 +1,5 @@
 <div class="form-field">
-    <button class="button {{type}}" type="button" (click)="onClick($event)">
+    <button class="button {{type}}" [disabled]="disabled" [ngClass]="buttonClass" type="button" (click)="onClick($event)">
         <ng-content></ng-content>
     </button>
 </div>

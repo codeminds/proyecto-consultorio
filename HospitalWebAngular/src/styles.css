@@ -63,3 +63,21 @@ p {
 .table-buttons {
     text-align: right;
 }
+
+.rotate {
+    animation: rotate 1s ease-out infinite;
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotateZ(10deg);
+    }
+
+    80% {
+        transform: rotateZ(340deg);
+    }
+
+    100% {
+        transform: rotateZ(360deg);
+    }
+}

@@ -9,7 +9,7 @@
 
 <!-- Filtro de búsqueda -->
 <app-panel class="unboxed slim" panelTitle="Búsqueda" [expandable]="true">
-    <form class="row">
+    <form class="row" (keyup.enter)="list()">
         <app-select
             name="field"
             form="filter"
@@ -107,7 +107,7 @@
 
 <!-- Modal de creación/edición -->
 <app-modal [(open)]="modalOpen" modalTitle="Modal" [size]="ModalSize.Medium" (onClose)="onModalClose()">
-    <form *ngIf="doctor">
+    <form *ngIf="doctor" (keyup.enter)="save()">
         <ul class="messages">
             <li *ngFor="let message of messages">{{message}}</li>
         </ul>
@@ -144,7 +144,7 @@
             [attributes]="{'placeholder': 'Smith'}"
         ></app-input>
         <div class="row">
-            <app-button [type]="ButtonType.Success" (clicked)="save()">Guardar</app-button>
+            <app-button [type]="ButtonType.Success" (clicked)="save()" [disabled]="saving || !modalOpen" [buttonClass]="{'loading': saving}">Guardar <i *ngIf="saving" class="material-icons rotate">data_saver_off</i></app-button>
             <app-button [type]="ButtonType.Danger" (clicked)="modalOpen = false">Cancelar</app-button>
         </div>
     </form>
@@ -154,7 +154,7 @@
 <app-modal [(open)]="confirmOpen" [transparent]="true" [position]="ModalPosition.Top" [closeOnClickOutside]="false" (onClose)="onConfirmClose()">
     <p class="confirm-text">{{confirmText}}</p>
     <div class="confirm-buttons">
-        <button class="button success" (click)="confirm(true)">Confirmar</button>
+        <button class="button success" (click)="confirm(true)" [disabled]="saving || !confirmOpen" [ngClass]="{'loading': saving}">Confirmar <i *ngIf="saving" class="material-icons rotate">data_saver_off</i></button>
         <button class="button neutral" (click)="confirm(false)">Cancelar</button>
     </div>
 </app-modal>

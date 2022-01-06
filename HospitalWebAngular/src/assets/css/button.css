@@ -13,6 +13,15 @@
     margin-right: 0.7rem;
 }
 
+.button:disabled {
+    filter: grayscale(40%);
+    cursor: not-allowed;
+}
+
+.button:disabled.loading {
+    cursor: wait;
+}
+
 .button:last-child {
     margin-right: 0;
 }

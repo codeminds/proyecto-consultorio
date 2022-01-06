@@ -74,11 +74,11 @@ export class SelectComponent implements OnInit, OnChanges {
   //especial para que al recibir un valor externo de los input properties este sea
   //mappeado automáticamente al index de la opción apropiada.
   public ngOnChanges(changes: SimpleChanges): void {
-      if(changes.hasOwnProperty('model')) {
+      if(changes.hasOwnProperty('model') || changes.hasOwnProperty('options')) {
         //En caso de tener una opción nula hay que forzar el valor del index
         //ya que el ngModel del select no está ligado con nuestro modelo como
         //en otros componentes
-        if(changes.model.currentValue == null && this.nullOption != null) {
+        if(this.model == null && this.nullOption != null) {
           this.selectedIndex = null;
         }else {
           let index = this.options.findIndex((item: any) => 

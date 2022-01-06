@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { ModalPosition, ModalSize } from './modal.types';
 
 @Component({
@@ -6,7 +6,7 @@ import { ModalPosition, ModalSize } from './modal.types';
   templateUrl: './modal.component.html',
   styleUrls: ['./modal.component.css']
 })
-export class ModalComponent implements OnInit{
+export class ModalComponent implements OnInit, OnChanges{
   @Input()
   public open: boolean;
 
@@ -48,21 +48,22 @@ export class ModalComponent implements OnInit{
     }
   }
 
-  public onOpenChange(value: boolean) {
-    if(!value) {
-      //Esperar a la animación de desaparición
-      setTimeout(() => {
-        this.onClose.emit();
-      }, 300);
-    }
+  public ngOnChanges(changes: SimpleChanges): void {
+      if(changes.hasOwnProperty('open') && !this.open) {
+        this.emitClose();
+      }
+  }
 
-    this.open = value;
-    this.openChange.emit(value);
+  public emitClose(): void {
+    //Esperar a la animación de desaparición
+    setTimeout(() => {
+      this.onClose.emit();
+    }, 300);
   }
 
   public onClickOutside() {
-    if(this.closeOnClickOutside) {
-      this.onOpenChange(false);
-    }
+    this.emitClose();
+    this.open = false;
+    this.openChange.emit(false);
   }
 }
