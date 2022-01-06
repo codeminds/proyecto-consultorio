@@ -19,6 +19,16 @@
     transition: opacity 0.3s ease-out, z-index 0.3s ease-out;
 }
 
+.top {
+    align-items: flex-start;
+    padding-top: 10vh;
+}
+
+.bottom {
+    align-items: flex-end;
+    padding-bottom: 10vh;
+}
+
 .transparent {
     background: none;
 }

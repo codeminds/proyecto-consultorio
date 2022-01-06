@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ModalSize } from './modal.types';
+import { ModalPosition, ModalSize } from './modal.types';
 
 @Component({
   selector: 'app-modal',
@@ -17,6 +17,9 @@ export class ModalComponent implements OnInit{
   public size?: ModalSize
 
   @Input()
+  public position?: ModalPosition;
+
+  @Input()
   public transparent?: boolean
 
   @Input()
@@ -32,6 +35,7 @@ export class ModalComponent implements OnInit{
     this.open = false;
     this.modalTitle = null;
     this.size = null;
+    this.position = ModalPosition.Mid;
     this.transparent = false;
     this.closeOnClickOutside = true;
     this.openChange = new EventEmitter();

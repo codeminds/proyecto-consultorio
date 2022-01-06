@@ -151,7 +151,7 @@
 </app-modal>
 
 <!-- Modal de confirmación -->
-<app-modal [(open)]="confirmOpen" [transparent]="true" [closeOnClickOutside]="false" (onClose)="onConfirmClose()">
+<app-modal [(open)]="confirmOpen" [transparent]="true" [position]="ModalPosition.Top" [closeOnClickOutside]="false" (onClose)="onConfirmClose()">
     <p class="confirm-text">{{confirmText}}</p>
     <div class="confirm-buttons">
         <button class="button success" (click)="confirm(true)">Confirmar</button>

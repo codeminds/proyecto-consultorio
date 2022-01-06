@@ -6,7 +6,7 @@ import { Field } from '@services/field/field.model';
 import { FieldService } from '@services/field/field.service';
 import { MessageType } from '@services/http/http.types';
 import { ButtonType, InputType, Option } from '@shared/components/form-field/form-field.types';
-import { ModalSize } from '@shared/components/modal/modal.types';
+import { ModalPosition, ModalSize } from '@shared/components/modal/modal.types';
 import { firstValueFrom, map, Observable, of, startWith, tap } from 'rxjs';
 import { runInThisContext } from 'vm';
 
@@ -29,6 +29,7 @@ export class DoctorsPage implements OnInit{
 
   public InputType = InputType;
   public ModalSize = ModalSize;
+  public ModalPosition = ModalPosition;
   public ButtonType = ButtonType;
 
   private confirmFunction: () => void;
