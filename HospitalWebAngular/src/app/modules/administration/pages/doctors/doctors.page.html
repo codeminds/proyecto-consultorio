@@ -1,7 +1,7 @@
 
 <!-- Controles de página -->
 <div class="controls">
-    <button title="Agregar" class="button success" (click)="createUpdate()">
+    <button class="button success" (click)="createUpdate()">
         <i class="material-icons">person_add</i>
         <span>Agregar</span>
     </button>
@@ -17,7 +17,7 @@
             class="col-4"
             nullOption="Todos"
             [(model)]="filter.fieldId"
-            [options]="$fields | async"
+            [options]="fields"
             [option]="{label: 'name', value: 'id'}"
         ></app-select>
         <app-input 
@@ -47,7 +47,7 @@
             [(model)]="filter.lastName"
             [attributes]="{'placeholder': 'Smith'}"
         ></app-input>
-        <app-button [type]="ButtonType.Success" (clicked)="list()">
+        <app-button [type]="ButtonType.Success" [disabled]="loading" [buttonClass]="{ 'loading': loading }" (clicked)="list()">
             <i class="material-icons">search</i>
             <span>Buscar</span>
         </app-button>
@@ -63,7 +63,7 @@
                     { size: 2.5 }]" 
         [template]="doctorRow" 
         [template-mobile]="doctorRowMobile" 
-        [source]="$doctors | async"
+        [source]="doctors"
         [loading]="loading"
         no-results-text="No se han encontrado resultados">
         <ng-template #doctorRow let-doctor>
@@ -116,7 +116,7 @@
             form="createUpdate"
             label="Especialidad"
             [(model)]="doctor.field"
-            [options]="$fields | async"
+            [options]="fields"
             [option]="{label: 'name'}"
         ></app-select>
         <app-input 

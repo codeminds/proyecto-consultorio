@@ -14,7 +14,7 @@
 }
 
 .button:disabled {
-    filter: grayscale(40%);
+    filter: grayscale(45%);
     cursor: not-allowed;
 }
 
@@ -32,7 +32,7 @@
     color: #fff;
 }
 
-.button.success:hover {
+.button.success:hover:not(:disabled) {
     background: var(--color-success-tertiary);
 }
 
@@ -42,7 +42,7 @@
     color: #fff;
 }
 
-.button.danger:hover {
+.button.danger:hover:not(:disabled) {
     background: var(--color-danger-tertiary);
 }
 
@@ -52,7 +52,7 @@
     color: #fff;
 }
 
-.button.neutral:hover {
+.button.neutral:hover:not(:disabled) {
     background: var(--color-neutral-tertiary);
 }
 

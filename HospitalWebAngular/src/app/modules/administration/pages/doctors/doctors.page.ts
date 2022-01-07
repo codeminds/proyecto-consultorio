@@ -7,7 +7,7 @@ import { FieldService } from '@services/field/field.service';
 import { MessageType } from '@services/http/http.types';
 import { ButtonType, InputType } from '@shared/components/form-field/form-field.types';
 import { ModalPosition, ModalSize } from '@shared/components/modal/modal.types';
-import { firstValueFrom, last, Observable, of, startWith, tap } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-doctors',
@@ -15,9 +15,8 @@ import { firstValueFrom, last, Observable, of, startWith, tap } from 'rxjs';
   styleUrls: ['./doctors.page.css']
 })
 export class DoctorsPage implements OnInit{
-  public $doctors: Observable<Doctor[]>;
-  public $fields: Observable<Field[]>;
-
+  public doctors: Doctor[];
+  public fields: Field[];
   public modalOpen: boolean;
   public doctor: Doctor;
   public loading: boolean;
@@ -39,8 +38,8 @@ export class DoctorsPage implements OnInit{
     private fieldService: FieldService,
     private appService: AppService
   ) { 
-    this.$doctors = of([]);
-    this.$fields = of([]);
+    this.doctors = [];
+    this.fields = [];
     this.modalOpen = false;
     this.doctor = null;
     this.loading = false;
@@ -58,22 +57,19 @@ export class DoctorsPage implements OnInit{
   }
 
   public ngOnInit(): void {
-      this.list();
-      this.$fields = this.fieldService.list()
-        .pipe(
-          startWith([])
-        );
+    this.loadFields();
+    this.list();
   }
 
-  public list(): void {
+  public async loadFields(): Promise<void> {
+    this.fields = await firstValueFrom(this.fieldService.list()) || [];
+  }
+
+  public async list(): Promise<void> {
     if(!this.loading) {
       this.loading = true;
-      this.$doctors = this.doctorService.list(this.filter)
-        .pipe(
-          tap(() => {
-            this.loading = false;
-          })
-        );
+      this.doctors = await firstValueFrom(this.doctorService.list(this.filter)) || [];
+      this.loading = false;
     }
   }
 
