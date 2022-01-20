@@ -1,0 +1,184 @@
+@import 'theme.css';
+@import 'reset.css';
+@import 'grid.css';
+@import 'panel.css';
+@import 'form.css';
+@import 'modal.css';
+@import 'table.css';
+
+/* STRUCTURE */
+html {
+    font-size: 10px;
+    height: 100%;
+}
+
+body {
+    font-size: 1.4rem;
+    height: 100%;
+    overflow: hidden;
+    background: var(--color-background);
+    font-family: var(--font-main);
+    color: var(--color-text);
+}
+
+h1 {
+    font-size: 4rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+h2 {
+    font-size: 3.3rem;
+    font-weight: 700;
+    margin-bottom: 0.8rem;
+}
+
+h3 {
+    font-size: 2rem;
+    font-weight: 400;
+    margin-bottom: 0.5rem;
+}
+
+/* LAYOUT */
+.navbar {
+    background: var(--color-navbar);
+    padding: 5px;
+    box-shadow: 0px 0px 8px -4px var(--color-shadow-dark);
+}
+
+.navbar .menu {
+    display: none;
+    font-size: 2rem;
+    font-weight: 100;
+    margin: 0 15px;
+    padding: 10px 15px;
+    border-radius: 50px;
+    border: none;
+    background: none;
+    transition: background-color 0.2s linear;
+}
+
+.navbar .menu:hover{
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.navbar figure {
+    width: 70px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.wrapper {
+    height: calc(100% - 71px);
+}
+
+.wrapper::after {
+    content: '';
+    clear: both;
+    display: block;
+}
+
+.sidenav {
+    float: left;
+    width: 250px;
+    height: 100%;
+    background: var(--color-sidenav);
+    color: var(--color-sidenav-text);
+    overflow: auto;
+    box-shadow: 1px 1px 3px 0px var(--color-shadow-dark);
+    scrollbar-color: var(--color-scrollbar-dark) var(--color-scrollbar-dark);
+    scrollbar-width: thin;
+}
+
+.sidenav::-webkit-scrollbar-thumb {
+    background: var(--color-scrollbar-dark);
+}
+
+.sidenav::-webkit-scrollbar {
+    width: 0.7rem;
+    background: var(--color-scrollbar-dark);
+}
+
+.sidenav .category {
+    font-size: 2.2rem;
+    padding: 15px 10px;
+    margin: 0;
+    font-size: 300;
+    background: var(--color-sidenav-category);
+}
+
+.sidenav .menu li {
+    font-size: 1.6rem;
+    font-weight: 300;
+    transition: background-color 0.1s linear;
+}
+
+.sidenav .menu li:hover, .sidenav .menu li.active {
+    border-right: 4px solid var(--color-main);
+    background: var(--color-sidenav-active);
+}
+
+.sidenav .menu a {
+    text-decoration: none;
+    display: block;
+    padding: 12px;
+}
+
+.sidenav .menu a::before {
+    content: '\25C6';
+    font-size: 1rem;
+    vertical-align: middle;
+    margin-right: 5px;
+}
+
+.sidenav .menu a span {
+    vertical-align: middle;
+}
+
+main {
+    float: left;
+    width: calc(100% - 250px);
+    height: 100%;
+    padding: 20px;
+    overflow: auto;
+    scrollbar-color: var(--color-scrollbar-light) var(--color-scrollbar-light);
+    scrollbar-width: thin;
+}
+
+main::-webkit-scrollbar-thumb {
+    background: var(--color-scrollbar-light);
+}
+
+main::-webkit-scrollbar {
+    width: 0.7rem;
+    background: var(--color-scrollbar-light);
+}
+
+
+@media screen and (max-width: 1024px) {
+    .wrapper {
+        position: relative;
+    }
+    .navbar .menu {
+        display: inline-block;
+    }
+
+    .sidenav {
+        position: absolute;
+        z-index: 90;
+        top: 0;
+        width: 80%;
+        max-width: 250px;
+        left: -80%;
+        transition: left 0.6s ease-in;
+    }
+
+    .sidenav.open {
+        left: 0;
+        transition: left 0.6s ease-out;
+    }
+
+    main {
+        width: 100%;
+    }
+}
