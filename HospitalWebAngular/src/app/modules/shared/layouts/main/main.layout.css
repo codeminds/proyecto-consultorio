@@ -110,7 +110,6 @@ main {
     overflow: auto;
     scrollbar-color: var(--color-scrollbar-light) var(--color-scrollbar-light);
     scrollbar-width: thin;
-    position: relative;
 }
 
 main::-webkit-scrollbar-thumb {
