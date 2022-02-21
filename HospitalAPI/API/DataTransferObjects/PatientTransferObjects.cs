@@ -9,6 +9,7 @@ namespace API.DataTransferObjects
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public DateTime BirthDate { get; set; }
+        public bool Gender { get; set; }
     }
 
     public class CreateUpdatePatientDTO
@@ -17,6 +18,7 @@ namespace API.DataTransferObjects
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public DateTime BirthDate { get; set; }
+        public bool Gender { get; set; }
     }
 
     public class FilterPatientDTO
@@ -26,5 +28,6 @@ namespace API.DataTransferObjects
         public string LastName { get; set; }
         public DateTime? BirthDateFrom { get; set; }
         public DateTime? BirthDateTo { get; set; }
+        public bool? Gender { get; set; }
     }
 }

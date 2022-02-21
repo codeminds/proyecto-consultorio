@@ -39,7 +39,8 @@ namespace API.Services
                                                        && (string.IsNullOrWhiteSpace(filter.FirstName) || p.FirstName.Contains(filter.FirstName))
                                                        && (string.IsNullOrWhiteSpace(filter.LastName) || p.LastName.Contains(filter.LastName))
                                                        && (!filter.BirthDateFrom.HasValue || p.BirthDate >= filter.BirthDateFrom)
-                                                       && (!filter.BirthDateTo.HasValue || p.BirthDate <= filter.BirthDateTo))
+                                                       && (!filter.BirthDateTo.HasValue || p.BirthDate <= filter.BirthDateTo)
+                                                       && (!filter.Gender.HasValue || p.Gender == filter.Gender))
                                            .Select(p => this._mapper.Map<Patient, GetPatientDTO>(p))
                                            .ToListAsync();
         }
