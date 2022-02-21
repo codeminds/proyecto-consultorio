@@ -13,6 +13,7 @@ import { ModalComponent } from './components/modal/modal.component';
 import { ButtonComponent } from './components/form-field/button/button.component';
 import { TableComponent } from './components/table/table.component';
 import { SnackbarComponent } from './components/snackbar/snackbar.component';
+import { DateComponent } from './components/form-field/date/date.component';
 
 
 
@@ -28,7 +29,8 @@ import { SnackbarComponent } from './components/snackbar/snackbar.component';
     ModalComponent,
     ButtonComponent,
     TableComponent,
-    SnackbarComponent
+    SnackbarComponent,
+    DateComponent
   ],
   imports: [
     CommonModule,
@@ -38,6 +40,7 @@ import { SnackbarComponent } from './components/snackbar/snackbar.component';
   exports: [
     PanelComponent,
     InputComponent,
+    DateComponent,
     SelectComponent,
     TextareaComponent,
     CheckComponent,

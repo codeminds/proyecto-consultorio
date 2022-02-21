@@ -2,14 +2,17 @@ export enum InputType {
     Text = 'text',
     Number = 'number',
     Email = 'email',
-    Date = 'date',
     Month = 'month',
     Week = 'week',
     Time = 'time',
-    DateTime = 'datetime-local',
     Search = 'search',
     Tel = 'tel',
     Url = 'url'
+}
+
+export enum DateType {
+    Date = 'date',
+    DateTime = 'datetime-local'
 }
 
 export enum ButtonType {

@@ -1,16 +1,16 @@
 <div class="form-field">
     <label *ngIf="label">{{label}}</label>
     <div>
-        <div *ngIf="hasAll" class="check-container" [ngClass]="{'inline': inline}">
+        <div *ngIf="nullOption != null" class="check-container" [ngClass]="{'inline': inline}">
             <label class="check" >                          
-                <input type="radio" [name]="name" value="" [(ngModel)]="model" (ngModelChange)="onModelChange($event)" />
+                <input type="radio" [name]="name" [value]="null" [(ngModel)]="selectedIndex" (ngModelChange)="onModelChange($event)" />
                 <i></i>
                 <span>Todos</span>
             </label>
         </div>
-        <div *ngFor="let option of options" class="check-container" [ngClass]="{'inline': inline}">          
+        <div *ngFor="let option of options; let i = index" class="check-container" [ngClass]="{'inline': inline}">          
             <label  class="check">                          
-                <input type="radio" [name]="name" [value]="option.value" [(ngModel)]="model" (ngModelChange)="onModelChange($event)" />
+                <input type="radio" [name]="name" [value]="i" [(ngModel)]="selectedIndex" (ngModelChange)="onModelChange($event)" />
                 <i></i>
                 <span>{{option.label}}</span>
             </label>

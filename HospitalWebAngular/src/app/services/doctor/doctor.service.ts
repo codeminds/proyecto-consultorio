@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { APIResponse, QueryParams } from '@services/http/http.types';
 import { HttpService } from '@services/http/http.service';
 import { map, Observable } from 'rxjs';
-import { CreateUpdaterDoctorDTO } from './doctor.dto';
+import { CreateUpdateDoctorDTO } from './doctor.dto';
 import { Doctor } from './doctor.model';
 
 @Injectable({
@@ -32,11 +32,11 @@ export class DoctorService{
   }
 
   public post(data: Doctor): Observable<APIResponse> {
-    return this.httpService.post(this._api, new CreateUpdaterDoctorDTO(data));
+    return this.httpService.post(this._api, new CreateUpdateDoctorDTO(data));
   }
 
   public put(id: number, data: Doctor): Observable<APIResponse> {
-    return this.httpService.put(`${this._api}/${id}`, new CreateUpdaterDoctorDTO(data));
+    return this.httpService.put(`${this._api}/${id}`, new CreateUpdateDoctorDTO(data));
   }
 
   public delete(id: number): Observable<APIResponse> {

@@ -1,0 +1,4 @@
+<div class="form-field">
+    <label *ngIf="label" [for]="id">{{label}}</label>
+    <input #input [type]="type" [id]="id" [name]="name" [(ngModel)]="dateStringModel" (ngModelChange)="onModelChange($event)" />
+</div>
