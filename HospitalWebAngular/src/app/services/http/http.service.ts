@@ -1,59 +1,91 @@
 import { HttpClient, HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AppService } from '@services/app/app.service';
-import { catchError, Observable, ObservableInput, of, retry } from 'rxjs';
+import { catchError, Observable, ObservableInput, of, retryWhen, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { APIResponse, HttpMethod, Message, MessageType, QueryParams } from './http.types';
 
 @Injectable({
   providedIn: 'root'
 })
-export class HttpService{ 
+export class HttpService{
+  private readonly retryLimit: number;
+  
   constructor(
     private httpClient: HttpClient,
     private appService: AppService
-  ) { }
+  ) {
+    this.retryLimit = 3;
+  }
 
   public get(url: string, params: QueryParams = null, apiOverride: string = null): Observable<APIResponse> {
+    let retries = 0;
     return this.httpClient.get<APIResponse>(`${apiOverride || environment.apiURL}/${url}${this.getQuery(params)}` , {
       headers: {
         'Content-Type': 'application/json'
       }
     }).pipe(
-      retry(3),
+      retryWhen(errors => errors.pipe(
+        tap(error => {
+          if(error.status != 0 || ++retries > this.retryLimit) {
+            throw error;
+          }
+        })
+      )),
       catchError((response) => this.handleError(response, HttpMethod.GET))
     );
   }
 
   public post(url: string, data: any = null, params: QueryParams = null, apiOverride: string = null): Observable<APIResponse> {
+    let retries = 0;
     return this.httpClient.post<APIResponse>(`${apiOverride || environment.apiURL}/${url}${this.getQuery(params)}`, data, {
       headers: {
         'Content-Type': 'application/json'
       }
     }).pipe(
-      retry(3),
+      retryWhen(errors => errors.pipe(
+        tap(error => {
+          if(error.status != 0 || ++retries > this.retryLimit) {
+            throw error;
+          }
+        })
+      )),
       catchError((response) => this.handleError(response, HttpMethod.POST))
     );
   }
 
   public put(url: string, data: any = null, params: QueryParams = null, apiOverride: string = null): Observable<APIResponse> {
+    let retries = 0;
     return this.httpClient.put<APIResponse>(`${apiOverride || environment.apiURL}/${url}${this.getQuery(params)}`, data, {
       headers: {
         'Content-Type': 'application/json'
       }
     }).pipe(
-      retry(3),
+      retryWhen(errors => errors.pipe(
+        tap(error => {
+          if(error.status != 0 || ++retries > this.retryLimit) {
+            throw error;
+          }
+        })
+      )),
       catchError((response) => this.handleError(response, HttpMethod.PUT))
     );
   }
 
   public delete(url: string, params: QueryParams = null, apiOverride: string = null): Observable<APIResponse> {
+    let retries = 0;
     return this.httpClient.delete<APIResponse>(`${apiOverride || environment.apiURL}/${url}${this.getQuery(params)}`, {
       headers: {
         'Content-Type': 'application/json'
       }
     }).pipe(
-      retry(3),
+      retryWhen(errors => errors.pipe(
+        tap(error => {
+          if(error.status != 0 || ++retries > this.retryLimit) {
+            throw error;
+          }
+        })
+      )),
       catchError((response) => this.handleError(response, HttpMethod.DELETE))
     );
   }
