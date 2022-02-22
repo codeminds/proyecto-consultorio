@@ -14,6 +14,7 @@ import { ButtonComponent } from './components/form-field/button/button.component
 import { TableComponent } from './components/table/table.component';
 import { SnackbarComponent } from './components/snackbar/snackbar.component';
 import { DateComponent } from './components/form-field/date/date.component';
+import { AutocompleteComponent } from './components/form-field/autocomplete/autocomplete.component';
 
 
 
@@ -30,7 +31,8 @@ import { DateComponent } from './components/form-field/date/date.component';
     ButtonComponent,
     TableComponent,
     SnackbarComponent,
-    DateComponent
+    DateComponent,
+    AutocompleteComponent
   ],
   imports: [
     CommonModule,
@@ -42,6 +44,7 @@ import { DateComponent } from './components/form-field/date/date.component';
     InputComponent,
     DateComponent,
     SelectComponent,
+    AutocompleteComponent,
     TextareaComponent,
     CheckComponent,
     RadioComponent,

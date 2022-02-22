@@ -28,5 +28,11 @@ export interface Attributes {
 
 export interface Option {
     label?: string,
-    value?: string;
+    value?: string
+}
+
+export interface AutocompleteOption {
+    label?: string,
+    value?: string,
+    
 }
