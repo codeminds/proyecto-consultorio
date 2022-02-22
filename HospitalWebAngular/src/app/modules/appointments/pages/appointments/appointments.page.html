@@ -1,0 +1,217 @@
+<!-- Controles de página -->
+<div class="controls">
+    <button class="button success" (click)="createUpdate()">
+        <i class="material-icons">person_add</i>
+        <span>Agregar</span>
+    </button>
+</div>
+
+<!-- Filtro de búsqueda -->
+<app-panel class="unboxed slim" panel-title="Búsqueda" contentClass="row" [expandable]="true">
+    <app-panel class="col-2 space-x space-y unboxed slim" panel-title="Pacientes">
+        <form class="row" (keyup.enter)="list()">
+            <app-input 
+                name="documentId" 
+                form="patientFilter" 
+                label="Cédula"
+                class="col-3"
+                [type]="InputType.Text" 
+                [(model)]="filter.patientDocumentId"
+                [attributes]="{'placeholder': '123456789'}"
+            ></app-input>
+            <app-input 
+                name="firstName" 
+                form="patientFilter" 
+                label="Nombre"
+                class="col-3"
+                [type]="InputType.Text" 
+                [(model)]="filter.patientFirstName"
+                [attributes]="{'placeholder': 'John'}"
+            ></app-input>
+            <app-input 
+                name="lastName" 
+                form="patientFilter" 
+                label="Apellido"
+                class="col-3"
+                [type]="InputType.Text" 
+                [(model)]="filter.patientLastName"
+                [attributes]="{'placeholder': 'Smith'}"
+            ></app-input>
+            <app-date 
+                name="birthDateFrom" 
+                form="patientFilter" 
+                label="Desde"
+                class="col-3"
+                [type]="DateType.DateTime"
+                [(model)]="filter.patientBirthDateFrom"
+            ></app-date>
+            <app-date 
+                name="birthDateTo" 
+                form="patientFilter" 
+                label="Hasta"
+                class="col-3"
+                [type]="DateType.DateTime"
+                [(model)]="filter.patientBirthDateTo"
+            ></app-date>
+            <app-select
+                name="gender"
+                form="patientFilter"
+                label="Género"
+                class="col-3"
+                null-option="Todos"
+                [(model)]="filter.patientGender"
+                [options]="genderOptions"
+            ></app-select>
+        </form>
+    </app-panel>
+    <app-panel class="col-2 space-x space-y unboxed slim" panel-title="Doctores">
+        <form class="row" (keyup.enter)="list()">
+            <app-select
+                name="field"
+                form="doctorFilter"
+                label="Especialidad"
+                class="col-2"
+                null-option="Todos"
+                [(model)]="filter.doctorFieldId"
+                [options]="fields"
+                [option]="{label: 'name', value: 'id'}"
+            ></app-select>
+            <app-input 
+                name="documentId" 
+                form="doctorFilter" 
+                label="Cédula"
+                class="col-2"
+                [type]="InputType.Text" 
+                [(model)]="filter.doctorDocumentId"
+                [attributes]="{'placeholder': '123456789'}"
+            ></app-input>
+            <app-input 
+                name="firstName" 
+                form="doctorFilter" 
+                label="Nombre"
+                class="col-2"
+                [type]="InputType.Text" 
+                [(model)]="filter.doctorFirstName"
+                [attributes]="{'placeholder': 'John'}"
+            ></app-input>
+            <app-input 
+                name="lastName" 
+                form="doctorFilter" 
+                label="Apellido"
+                class="col-2"
+                [type]="InputType.Text" 
+                [(model)]="filter.doctorLastName"
+                [attributes]="{'placeholder': 'Smith'}"
+            ></app-input>
+        </form>
+    </app-panel>
+    <app-panel class="col-1 space-y unboxed slim" panel-title="Fecha">
+        <form class="row" (keyup.enter)="list()">
+            <app-date 
+                name="dateFrom" 
+                form="appointmentFilter" 
+                label="Desde"
+                class="col-2"
+                [type]="DateType.DateTime"
+                [(model)]="filter.dateFrom"
+            ></app-date>
+            <app-date 
+                name="dateTo" 
+                form="appointmentFilter" 
+                label="Hasta"
+                class="col-2"
+                [type]="DateType.DateTime"
+                [(model)]="filter.dateTo"
+            ></app-date>
+            <app-button [type]="ButtonType.Success" [disabled]="loading" [button-class]="{ 'loading': loading }" (clicked)="list()">
+                <i class="material-icons">search</i>
+                <span>Buscar</span>
+            </app-button>
+        </form>
+    </app-panel>
+</app-panel>
+
+<!--- Tabla de resultados -->
+<app-panel class="slim">
+    <app-table 
+        [headers]="[{ label: 'Fecha', size: 2 },
+                    { label: 'Paciente', size: 1.5 },
+                    { label: 'Doctor',size: 1.5 },
+                    { label: 'Especialidad' },
+                    { size: 2 }]" 
+        [template]="appointmentRow" 
+        [template-mobile]="appointmentRowMobile" 
+        [source]="appointments"
+        [loading]="loading"
+        no-results-text="No se han encontrado resultados">
+        <ng-template #appointmentRow let-appointment>
+            <td>{{appointment.date.toLocaleString('es-ES', { hour12: true })}}</td>
+            <td>{{appointment.patient.firstName}} {{appointment.patient.lastName}}</td>
+            <td>{{appointment.doctor.firstName}} {{appointment.doctor.lastName}}</td>
+            <td>{{appointment.doctor.field.name}}</td>    
+            <td class="table-buttons">
+                <button class="button success" title="Editar" (click)="createUpdate(appointment)">
+                    <i class="material-icons">edit</i>
+                    <span>Editar</span>
+                </button>
+                <button class="button danger" title="Borrar" (click)="deleteAppointment(appointment.id)">
+                    <i class="material-icons">delete</i>
+                    <span>Borrar</span>
+                </button>
+            </td>
+        </ng-template>
+        <ng-template #appointmentRowMobile let-appointment>
+            <div class="mobile-row">
+                <h3>{{appointment.date.toLocaleString('es-ES', { hour12: true })}}</h3>
+                <p>
+                    <span class="label">Paciente:</span> {{appointment.patient.firstName}} {{appointment.patient.lastName}}
+                </p>
+                <p>
+                    <span class="label">Doctor:</span> {{appointment.doctor.firstName}} {{appointment.doctor.lastName}}
+                </p>
+                <p>
+                    <span class="label">Especialidad:</span> {{appointment.doctor.field.name}}
+                </p>
+                <div>
+                    <button class="button success" title="Editar" (click)="createUpdate(appointment)">
+                        <i class="material-icons">edit</i>
+                        <span>Editar</span>
+                    </button>
+                    <button class="button danger" title="Borrar" (click)="deleteAppointment(appointment.id)">
+                        <i class="material-icons">delete</i>
+                        <span>Borrar</span>
+                    </button>
+                </div>
+            </div>
+        </ng-template>
+    </app-table>
+</app-panel>    
+
+<!-- Modal de creación/edición -->
+<app-modal [(open)]="modalOpen" modalTitle="Modal" [size]="ModalSize.Medium" (onClose)="onModalClose()">
+    <form *ngIf="appointment" (keyup.enter)="save()">
+        <ul class="messages">
+            <li *ngFor="let message of messages">{{message}}</li>
+        </ul>
+        <app-date 
+            name="date" 
+            form="createUpdate" 
+            label="Fecha"
+            [type]="DateType.DateTime"
+            [(model)]="appointment.date"
+        ></app-date>
+        <div class="row">
+            <app-button [type]="ButtonType.Success" (clicked)="save()" [disabled]="saving || !modalOpen" [button-class]="{'loading': saving}">Guardar <i *ngIf="saving" class="material-icons rotate">data_saver_off</i></app-button>
+            <app-button [type]="ButtonType.Danger" (clicked)="modalOpen = false">Cancelar</app-button>
+        </div>
+    </form>
+</app-modal>
+
+<!-- Modal de confirmación -->
+<app-modal [(open)]="confirmOpen" [transparent]="true" [position]="ModalPosition.Top" [close-on-click-outside]="false" (onClose)="onConfirmClose()">
+    <p class="confirm-text">{{confirmText}}</p>
+    <div class="confirm-buttons">
+        <button class="button success" (click)="confirm(true)" [disabled]="saving || !confirmOpen" [ngClass]="{'loading': saving}">Confirmar <i *ngIf="saving" class="material-icons rotate">data_saver_off</i></button>
+        <button class="button neutral" (click)="confirm(false)">Cancelar</button>
+    </div>
+</app-modal>

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { AppointmentsRoutingModule } from './appointments-routing.module';
 import { AppointmentsPage } from './pages/appointments/appointments.page';
+import { SharedModule } from '@shared/shared.module';
 
 
 @NgModule({
@@ -10,6 +11,7 @@ import { AppointmentsPage } from './pages/appointments/appointments.page';
     AppointmentsPage
   ],
   imports: [
+    SharedModule,
     CommonModule,
     AppointmentsRoutingModule
   ]
