@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { getProperty } from '../form-field.helpers';
 import { Option } from '../form-field.types';
 
 @Component({
@@ -17,7 +18,7 @@ export class RadioComponent implements OnInit, OnChanges {
   public options: any[];
 
   @Input()
-  public option?: Option;
+  public option: Option;
 
   @Input()
   public label?: string;
@@ -39,6 +40,8 @@ export class RadioComponent implements OnInit, OnChanges {
   public get name(){
     return `${this.form}${this.fieldName}`;
   }
+
+  public getProperty = getProperty;
 
   constructor() { 
     this.fieldName = null;
@@ -81,9 +84,7 @@ export class RadioComponent implements OnInit, OnChanges {
       if(this.model == null && this.nullOption != null) {
         this.selectedIndex = null;
       }else {
-        let index = this.options.findIndex((item: any) => 
-          this.option?.value ? 
-            item[this.option.value] == this.model : item == this.model);
+        let index = this.options.findIndex((item: any) => getProperty(item, this.option.value) == this.model);
         
         //Para una buena experiencia de usuario, si el index no es encontrado
         //es porque el valor no existe en la lista o el modelo que recibimos es nulo.
@@ -108,7 +109,7 @@ export class RadioComponent implements OnInit, OnChanges {
 
   public onModelChange(index?: number) {
     if(index != null) {
-      this.modelChange.emit(this.option?.value ? this.options[index][this.option.value] : this.options[index]);
+      this.modelChange.emit(getProperty(this.options[index], this.option.value));
     }else {
       this.modelChange.emit(null);
     } 

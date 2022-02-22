@@ -11,8 +11,7 @@ import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-patients',
-  templateUrl: './patients.page.html',
-  styleUrls: ['./patients.page.css']
+  templateUrl: './patients.page.html'
 })
 export class PatientsPage implements OnInit{
   public patients: Patient[];
@@ -25,6 +24,7 @@ export class PatientsPage implements OnInit{
   public confirmText: string;
   public confirmOpen: boolean;
   public messages: string[];
+  public genderOptions: any[];
 
   public InputType = InputType;
   public DateType = DateType;
@@ -48,6 +48,7 @@ export class PatientsPage implements OnInit{
     this.confirmText = null;
     this.confirmOpen = false;
     this.messages = [];
+    this.genderOptions = [{label: 'Femenino', value: false}, {label: 'Masculino', value: true}];
     this.confirmFunction = null;
     this.filter = {
       documentId: null,
@@ -113,13 +114,7 @@ export class PatientsPage implements OnInit{
         if(response.success) {
           if(isNew) {
             this.filter = {
-              documentId: response.data.documentId,
-              firstName: null,
-              lastName: null,
-              fieldId: null,
-              birthDateFrom: undefined,
-              birtDateTo: undefined,
-              gender: null 
+              documentId: response.data.documentId
             }
           }
 

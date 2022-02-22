@@ -11,8 +11,7 @@ import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-doctors',
-  templateUrl: './doctors.page.html',
-  styleUrls: ['./doctors.page.css']
+  templateUrl: './doctors.page.html'
 })
 export class DoctorsPage implements OnInit{
   public doctors: Doctor[];
@@ -110,10 +109,7 @@ export class DoctorsPage implements OnInit{
         if(response.success) {
           if(isNew) {
             this.filter = {
-              documentId: response.data.documentId,
-              firstName: null,
-              lastName: null,
-              fieldId: null 
+              documentId: response.data.documentId
             }
           }
 

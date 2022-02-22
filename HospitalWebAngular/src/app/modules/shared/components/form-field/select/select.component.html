@@ -2,6 +2,6 @@
     <label *ngIf="label" [for]="id">{{label}}</label>
     <select [id]="id" [name]="name" [(ngModel)]="selectedIndex" (ngModelChange)="onModelChange($event)">
         <option *ngIf="nullOption != null" [ngValue]="null">{{nullOption}}</option>
-        <option *ngFor="let item of options; let i = index" [ngValue]="i">{{option?.label ? item[option.label] : item}}</option>
+        <option *ngFor="let item of options; let i = index" [ngValue]="i">{{getProperty(item, option.label)}}</option>
     </select>
 </div>

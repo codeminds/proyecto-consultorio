@@ -90,7 +90,7 @@ export class HttpService{
     let query = params ? '?' : '';
 
     for(const prop in params) {
-      query += `${prop}=${params[prop] || ''}&`;
+      query += `${prop}=${params[prop] != null ? params[prop] : ''}&`;
     }
 
     return query;
