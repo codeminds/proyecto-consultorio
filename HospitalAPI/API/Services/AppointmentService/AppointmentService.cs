@@ -53,6 +53,7 @@ namespace API.Services
             patientFilter.LastName = filter.PatientLastName;
             patientFilter.BirthDateFrom = filter.PatientBirthDateFrom;
             patientFilter.BirthDateTo = filter.PatientBirthDateTo;
+            patientFilter.Gender = filter.Gender;
 
             List<int> patientIds = (await this._patientService.List(patientFilter)).Select(p => p.Id).ToList();
 

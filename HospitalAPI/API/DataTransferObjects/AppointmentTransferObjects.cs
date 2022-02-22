@@ -31,6 +31,7 @@ namespace API.DataTransferObjects
         public string PatientLastName { get; set; }
         public DateTime? PatientBirthDateFrom { get; set; }
         public DateTime? PatientBirthDateTo { get; set; }
+        public bool? Gender { get; set; }
 
         //Doctor Filter
         public string DoctorDocumentId { get; set; }
