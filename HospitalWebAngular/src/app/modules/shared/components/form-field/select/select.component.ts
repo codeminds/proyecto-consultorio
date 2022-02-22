@@ -25,7 +25,7 @@ export class SelectComponent implements OnInit, OnChanges {
   @Input()
   public model?: any;
 
-  @Input()
+  @Input('null-option')
   public nullOption?: string;
 
   @Output()

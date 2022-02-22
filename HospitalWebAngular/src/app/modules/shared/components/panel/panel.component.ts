@@ -13,7 +13,7 @@ export class PanelComponent implements AfterViewChecked, OnChanges {
     this.refreshContentHeight();
   }
   
-  @Input()
+  @Input('panel-title')
   public panelTitle?: string;
 
   @Input()

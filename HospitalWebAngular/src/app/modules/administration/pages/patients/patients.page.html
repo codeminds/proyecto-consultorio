@@ -7,7 +7,7 @@
 </div>
 
 <!-- Filtro de búsqueda -->
-<app-panel class="unboxed slim" panelTitle="Búsqueda" [expandable]="true">
+<app-panel class="unboxed slim" panel-title="Búsqueda" [expandable]="true">
     <form class="row" (keyup.enter)="list()">
         <app-input 
             name="documentId" 
@@ -52,17 +52,16 @@
             [type]="DateType.DateTime"
             [(model)]="filter.birthDateTo"
         ></app-date>
-        <app-radio
+        <app-select
             name="gender"
             form="filter"
             label="Género"
             class="col-3"
-            [nullOption]="'Todos'"
-            [inline]="true"
-            [options]="[{label: 'Femenino', value: false}, {label: 'Masculino', value: true}]"
+            null-option="Todos"
             [(model)]="filter.gender"
-        ></app-radio>
-        <app-button [type]="ButtonType.Success" [disabled]="loading" [buttonClass]="{ 'loading': loading }" (clicked)="list()">
+            [options]="genderOptions"
+        ></app-select>
+        <app-button [type]="ButtonType.Success" [disabled]="loading" [button-class]="{ 'loading': loading }" (clicked)="list()">
             <i class="material-icons">search</i>
             <span>Buscar</span>
         </app-button>
@@ -76,7 +75,7 @@
                     { label: 'Nombre', size: 2 },
                     { label: 'Nacimiento', size: 2 },
                     { label: 'Género', size: 0.75 },
-                    { size: 2.5 }]" 
+                    { size: 2 }]" 
         [template]="patientRow" 
         [template-mobile]="patientRowMobile" 
         [source]="patients"
@@ -162,23 +161,22 @@
             [type]="DateType.DateTime"
             [(model)]="patient.birthDate"
         ></app-date>
-        <app-radio
+        <app-select
             name="gender"
             form="createUpdate"
             label="Género"
-            [inline]="true"
-            [options]="[{label: 'Femenino', value: false}, {label: 'Masculino', value: true}]"
             [(model)]="patient.gender"
-        ></app-radio>
+            [options]="genderOptions"
+        ></app-select>
         <div class="row">
-            <app-button [type]="ButtonType.Success" (clicked)="save()" [disabled]="saving || !modalOpen" [buttonClass]="{'loading': saving}">Guardar <i *ngIf="saving" class="material-icons rotate">data_saver_off</i></app-button>
+            <app-button [type]="ButtonType.Success" (clicked)="save()" [disabled]="saving || !modalOpen" [button-class]="{'loading': saving}">Guardar <i *ngIf="saving" class="material-icons rotate">data_saver_off</i></app-button>
             <app-button [type]="ButtonType.Danger" (clicked)="modalOpen = false">Cancelar</app-button>
         </div>
     </form>
 </app-modal>
 
 <!-- Modal de confirmación -->
-<app-modal [(open)]="confirmOpen" [transparent]="true" [position]="ModalPosition.Top" [closeOnClickOutside]="false" (onClose)="onConfirmClose()">
+<app-modal [(open)]="confirmOpen" [transparent]="true" [position]="ModalPosition.Top" [close-on-click-outside]="false" (onClose)="onConfirmClose()">
     <p class="confirm-text">{{confirmText}}</p>
     <div class="confirm-buttons">
         <button class="button success" (click)="confirm(true)" [disabled]="saving || !confirmOpen" [ngClass]="{'loading': saving}">Confirmar <i *ngIf="saving" class="material-icons rotate">data_saver_off</i></button>

@@ -14,7 +14,7 @@ export class ButtonComponent {
   @Input()
   public disabled: boolean;
 
-  @Input()
+  @Input('button-class')
   public buttonClass: ButtonClass
 
   @Output()
