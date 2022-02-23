@@ -13,7 +13,7 @@ export class PanelComponent implements AfterViewChecked, OnChanges {
     this.refreshContentHeight();
   }
   
-  @Input('panel-title')
+  @Input()
   public panelTitle?: string;
 
   @Input()
@@ -22,7 +22,7 @@ export class PanelComponent implements AfterViewChecked, OnChanges {
   @Input()
   public open?: boolean;
 
-  @Input('content-class')
+  @Input()
   public contentClass?: string;
 
   @Output()

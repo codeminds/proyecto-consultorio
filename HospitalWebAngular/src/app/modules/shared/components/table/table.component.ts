@@ -1,5 +1,4 @@
-import { Component, ElementRef, Input, OnInit, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Component, ElementRef, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { TableHeader } from './table.types';
 
 @Component({
@@ -14,16 +13,16 @@ export class TableComponent implements OnInit {
   @Input()
   public headers: TableHeader[];
 
-  @Input('template')
+  @Input()
   public template: TemplateRef<any>;
 
-  @Input('template-mobile')
+  @Input()
   public templateMobile: TemplateRef<any>;
 
   @Input()
   public source: any[];
 
-  @Input('no-results-text')
+  @Input()
   public noResultsText?: string;
 
   @Input()

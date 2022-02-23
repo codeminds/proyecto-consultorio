@@ -7,8 +7,8 @@
 </div>
 
 <!-- Filtro de búsqueda -->
-<app-panel class="unboxed slim" panel-title="Búsqueda" contentClass="row" [expandable]="true">
-    <app-panel class="col-2 space-x space-y unboxed slim" panel-title="Pacientes">
+<app-panel class="unboxed slim" panelTitle="Búsqueda" contentClass="row" [expandable]="true">
+    <app-panel class="col-2 space-x space-y unboxed slim" panelTitle="Pacientes">
         <form class="row" (keyup.enter)="list()">
             <app-input 
                 name="documentId" 
@@ -58,20 +58,20 @@
                 form="patientFilter"
                 label="Género"
                 class="col-3"
-                null-option="Todos"
+                nullOption="Todos"
                 [(model)]="filter.patientGender"
                 [options]="genderOptions"
             ></app-select>
         </form>
     </app-panel>
-    <app-panel class="col-2 space-x space-y unboxed slim" panel-title="Doctores">
+    <app-panel class="col-2 space-x space-y unboxed slim" panelTitle="Doctores">
         <form class="row" (keyup.enter)="list()">
             <app-select
                 name="field"
                 form="doctorFilter"
                 label="Especialidad"
                 class="col-2"
-                null-option="Todos"
+                nullOption="Todos"
                 [(model)]="filter.doctorFieldId"
                 [options]="fields"
                 [option]="{label: 'name', value: 'id'}"
@@ -105,7 +105,7 @@
             ></app-input>
         </form>
     </app-panel>
-    <app-panel class="col-1 space-y unboxed slim" panel-title="Fecha">
+    <app-panel class="col-1 space-y unboxed slim" panelTitle="Fecha">
         <form class="row" (keyup.enter)="list()">
             <app-date 
                 name="dateFrom" 
@@ -123,7 +123,7 @@
                 [type]="DateType.DateTime"
                 [(model)]="filter.dateTo"
             ></app-date>
-            <app-button [type]="ButtonType.Success" [disabled]="loading" [button-class]="{ 'loading': loading }" (clicked)="list()">
+            <app-button [type]="ButtonType.Success" [disabled]="loading" [buttonClass]="{ 'loading': loading }" (clicked)="list()">
                 <i class="material-icons">search</i>
                 <span>Buscar</span>
             </app-button>
@@ -140,10 +140,10 @@
                     { label: 'Especialidad' },
                     { size: 2 }]" 
         [template]="appointmentRow" 
-        [template-mobile]="appointmentRowMobile" 
+        [templateMobile]="appointmentRowMobile" 
         [source]="appointments"
         [loading]="loading"
-        no-results-text="No se han encontrado resultados">
+        noResultsText="No se han encontrado resultados">
         <ng-template #appointmentRow let-appointment>
             <td>{{appointment.date.toLocaleString('es-ES', { hour12: true })}}</td>
             <td>{{appointment.patient.firstName}} {{appointment.patient.lastName}}</td>
@@ -201,14 +201,14 @@
             [(model)]="appointment.date"
         ></app-date>
         <div class="row">
-            <app-button [type]="ButtonType.Success" (clicked)="save()" [disabled]="saving || !modalOpen" [button-class]="{'loading': saving}">Guardar <i *ngIf="saving" class="material-icons rotate">data_saver_off</i></app-button>
+            <app-button [type]="ButtonType.Success" (clicked)="save()" [disabled]="saving || !modalOpen" [buttonClass]="{'loading': saving}">Guardar <i *ngIf="saving" class="material-icons rotate">data_saver_off</i></app-button>
             <app-button [type]="ButtonType.Danger" (clicked)="modalOpen = false">Cancelar</app-button>
         </div>
     </form>
 </app-modal>
 
 <!-- Modal de confirmación -->
-<app-modal [(open)]="confirmOpen" [transparent]="true" [position]="ModalPosition.Top" [close-on-click-outside]="false" (onClose)="onConfirmClose()">
+<app-modal [(open)]="confirmOpen" [transparent]="true" [position]="ModalPosition.Top" [closeOnClickOutside]="false" (onClose)="onConfirmClose()">
     <p class="confirm-text">{{confirmText}}</p>
     <div class="confirm-buttons">
         <button class="button success" (click)="confirm(true)" [disabled]="saving || !confirmOpen" [ngClass]="{'loading': saving}">Confirmar <i *ngIf="saving" class="material-icons rotate">data_saver_off</i></button>

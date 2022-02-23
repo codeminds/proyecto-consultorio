@@ -29,7 +29,7 @@ export class RadioComponent implements OnInit, OnChanges {
   @Input()
   public inline?: boolean;
 
-  @Input('null-option')
+  @Input()
   public nullOption?: string;
 
   @Output()

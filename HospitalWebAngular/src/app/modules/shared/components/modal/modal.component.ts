@@ -10,7 +10,7 @@ export class ModalComponent implements OnInit, OnChanges{
   @Input()
   public open: boolean;
 
-  @Input('modal-title')
+  @Input()
   public modalTitle?: string;
 
   @Input()
@@ -22,7 +22,7 @@ export class ModalComponent implements OnInit, OnChanges{
   @Input()
   public transparent?: boolean
 
-  @Input('close-on-click-outside')
+  @Input()
   public closeOnClickOutside?: boolean
 
   @Output()
