@@ -37,6 +37,16 @@ namespace API.Controllers
         }
 
         [HttpGet]
+        [Route("search")]
+        public async Task<ActionResult<APIResponse>> List([FromQuery] string[] s)
+        {
+            APIResponse response = new APIResponse();
+            response.Data = await this._patientService.Search(s);
+            response.Success = true;
+            return response;
+        }
+
+        [HttpGet]
         public async Task<ActionResult<APIResponse>> List([FromQuery] FilterPatientDTO filter)
         {
             APIResponse response = new APIResponse();

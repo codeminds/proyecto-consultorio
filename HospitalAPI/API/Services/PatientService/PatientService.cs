@@ -45,6 +45,16 @@ namespace API.Services
                                            .ToListAsync();
         }
 
+        public async Task<List<GetPatientDTO>> Search(string[] values)
+        {
+            return await this._database.Patients
+                                           .Where(d => values.Any(v => d.DocumentId.Contains(v))
+                                                       || values.Any(v => d.FirstName.Contains(v))
+                                                       || values.Any(v => d.LastName.Contains(v)))
+                                           .Select(d => this._mapper.Map<Patient, GetPatientDTO>(d))
+                                           .ToListAsync();
+        }
+
         public async Task<GetPatientDTO> Insert(CreateUpdatePatientDTO data)
         {
             Patient entity = this._mapper.Map<CreateUpdatePatientDTO, Patient>(data);

@@ -8,6 +8,7 @@ namespace API.Services
     {
         Task<GetDoctorDTO> Get(int id);
         Task<List<GetDoctorDTO>> List(FilterDoctorDTO filter);
+        Task<List<GetDoctorDTO>> Search(string[] values);
         Task<GetDoctorDTO> Insert(CreateUpdateDoctorDTO data);
         Task<GetDoctorDTO> Update(int id, CreateUpdateDoctorDTO data);
         Task<GetDoctorDTO> Delete(int id);

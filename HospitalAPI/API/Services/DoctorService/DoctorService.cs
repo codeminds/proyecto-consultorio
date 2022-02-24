@@ -29,7 +29,7 @@ namespace API.Services
 
             if (entity == null) return null;
 
-            return this._mapper.Map<Doctor, GetDoctorDTO>(entity);            
+            return this._mapper.Map<Doctor, GetDoctorDTO>(entity);
         }
 
         public async Task<List<GetDoctorDTO>> List(FilterDoctorDTO filter)
@@ -40,6 +40,18 @@ namespace API.Services
                                                        && (string.IsNullOrWhiteSpace(filter.FirstName) || d.FirstName.Contains(filter.FirstName))
                                                        && (string.IsNullOrWhiteSpace(filter.LastName) || d.LastName.Contains(filter.LastName))
                                                        && (!filter.FieldId.HasValue || d.FieldId == filter.FieldId))
+                                           .Select(d => this._mapper.Map<Doctor, GetDoctorDTO>(d))
+                                           .ToListAsync();
+        }
+
+        public async Task<List<GetDoctorDTO>> Search(string[] values)
+        {
+            return await this._database.Doctors
+                                           .Include(d => d.Field)
+                                           .Where(d => values.Any(v => d.DocumentId.Contains(v))
+                                                       || values.Any(v => d.FirstName.Contains(v))
+                                                       || values.Any(v => d.LastName.Contains(v))
+                                                       || values.Any(v => d.Field.Name.Contains(v)))
                                            .Select(d => this._mapper.Map<Doctor, GetDoctorDTO>(d))
                                            .ToListAsync();
         }
