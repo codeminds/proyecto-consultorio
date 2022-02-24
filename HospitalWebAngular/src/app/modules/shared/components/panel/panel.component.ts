@@ -1,11 +1,13 @@
-import { AfterViewChecked, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewChecked, Component, DoCheck, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Console } from 'console';
+import { BehaviorSubject, delay, Observable, of, ReplaySubject, take } from 'rxjs';
 
 @Component({
   selector: 'app-panel',
   templateUrl: './panel.component.html',
   styleUrls: ['./panel.component.css']
 })
-export class PanelComponent implements AfterViewChecked, OnChanges {
+export class PanelComponent implements AfterViewChecked, OnChanges, OnInit {
   @HostListener('window: resize')
   public onWindowResize() {
     //Refrescar el alto por cambios en el tamaño
@@ -32,10 +34,12 @@ export class PanelComponent implements AfterViewChecked, OnChanges {
   private content: ElementRef;
 
   public contentHeight: number;
+  public afterAnimateOpen: boolean;
   
   private contentHeightNext: number;
   private contentHeightAnimated: boolean;
   private contentHeightTimeout: NodeJS.Timeout;
+  private animatedOpenTimeout: NodeJS.Timeout;
 
   //Esta propiedad determina ciertos estilos en línea que
   //utilizamos para la animación del panel
@@ -51,7 +55,7 @@ export class PanelComponent implements AfterViewChecked, OnChanges {
       }
 
       if(this.contentHeightAnimated) {
-        style += `${this.contentHeightAnimated ? 'transition: height 0.4s ease-in-out 0.1s;' : ''}`;
+        style += 'transition: height 0.4s ease-in-out 0.1s;';
       } 
     }
 
@@ -64,17 +68,27 @@ export class PanelComponent implements AfterViewChecked, OnChanges {
     this.open = false;
     this.contentClass = null;
     this.contentHeight = null;
+    this.afterAnimateOpen = false;
     this.contentHeightNext = 0;
+    this.contentHeightAnimated = false;
     this.contentHeightTimeout = null;
+    this.animatedOpenTimeout = null;
     this.openChange = new EventEmitter();
+  }
+
+  public ngOnInit(): void {
+      if(!this.expandable) {
+        this.open = true;
+        this.resolveOpen(this.open);
+      }
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
       //Sólo queremos que la animación suceda
       //al abrir o cerrar el panel y no por recálculos
       //por cambios de elementos o tamaños de pantalla
-      if(changes.open != null) {
-        this.contentHeightAnimated = true;
+      if(changes.hasOwnProperty('open')) {
+        this.resolveOpen(this.open);
       }
   }
 
@@ -85,9 +99,25 @@ export class PanelComponent implements AfterViewChecked, OnChanges {
   }
 
   public toggleOpen() {
-    this.contentHeightAnimated = true;
+    //Sólo queremos que la animación suceda
+    //al abrir o cerrar el panel y no por recálculos
+    //por cambios de elementos o tamaños de pantalla
     this.open = !this.open;
+    this.resolveOpen(this.open);
     this.openChange.emit(this.open);
+  }
+
+  private resolveOpen(open: boolean) {
+    this.contentHeightAnimated = true;
+    if(open) {
+      this.afterAnimateOpen = true;
+      clearTimeout(this.animatedOpenTimeout);
+    }else {
+      this.animatedOpenTimeout = setTimeout(() => {
+        this.afterAnimateOpen = false;
+        this.animatedOpenTimeout = null;
+      }, 500);
+    }
   }
 
   //Cuando los paneles son expandibles utilizamos JS para calcular el alto del contenido para tener un tamaño 
@@ -110,8 +140,12 @@ export class PanelComponent implements AfterViewChecked, OnChanges {
         //angular resuelve sus cálculos
         this.contentHeightTimeout = setTimeout(() => {
           this.contentHeight = this.contentHeightNext;
-          this.contentHeightAnimated = false;
-
+          if(this.contentHeightAnimated) {
+            setTimeout(() => {
+              this.contentHeightAnimated = false;
+            }, 500);
+          }
+          
           //Asegurarse de hacer que la variable sea nula
           //luego de ejecutar el timeout o si no el chequeo
           //anterior en el if no permitirá futuros recálculos
