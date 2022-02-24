@@ -51,7 +51,7 @@ export class DoctorsPage implements OnInit{
       documentId: null,
       firstName: null,
       lastName: null,
-      fieldId: null 
+      fieldId: null
     };
   }
 

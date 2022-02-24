@@ -18,7 +18,7 @@ export class SelectComponent implements OnInit, OnChanges {
   public options: any[];
 
   @Input()
-  public option: Option;
+  public option?: Option;
 
   @Input()
   public label?: string;
@@ -48,10 +48,11 @@ export class SelectComponent implements OnInit, OnChanges {
     this.fieldName = null;
     this.form = null;
     this.options = [];
-    this.option = { label: 'label', value: 'value' };
+    this.option = Option.default;
     this.label = null;
     this.model = null;
     this.nullOption = null;
+    this.selectedIndex = null;
     this.modelChange = new EventEmitter();
   }
 

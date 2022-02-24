@@ -9,13 +9,13 @@
         <tbody #items>
             <tr *ngFor="let row of source">
                 <ng-container *ngTemplateOutlet="template; context: {$implicit: row}"></ng-container>
-                <td class="mobile">
+                <td *ngIf="templateMobile" class="mobile">
                     <ng-container *ngTemplateOutlet="templateMobile; context: {$implicit: row}"></ng-container>
                 </td>
             </tr>
             <tr *ngIf="!loading && (!source || source.length == 0)" class="no-results">
                 <td [attr.colspan]="headers.length">{{noResultsText}}</td>
-                <td class="mobile">{{noResultsText}}</td>
+                <td *ngIf="templateMobile" class="mobile">{{noResultsText}}</td>
             </tr>
             <tr *ngIf="loading" class="loading">
                 <td class="mobile">

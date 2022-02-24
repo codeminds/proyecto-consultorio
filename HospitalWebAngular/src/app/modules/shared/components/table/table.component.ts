@@ -7,12 +7,6 @@ import { TableHeader } from './table.types';
   styleUrls: ['./table.component.css']
 })
 export class TableComponent implements OnInit {
-  @ViewChild('items')
-  public items: ElementRef;
-
-  @Input()
-  public headers: TableHeader[];
-
   @Input()
   public template: TemplateRef<any>;
 
@@ -23,16 +17,22 @@ export class TableComponent implements OnInit {
   public source: any[];
 
   @Input()
+  public headers?: TableHeader[];
+
+  @Input()
   public noResultsText?: string;
 
   @Input()
   public loading: boolean;
 
+  @ViewChild('items')
+  public items: ElementRef;
+
   constructor() {
-    this.headers = [];
     this.template = null;
     this.templateMobile = null;
     this.source = null;
+    this.headers = [];
     this.noResultsText = null;
     this.loading = false;
   }

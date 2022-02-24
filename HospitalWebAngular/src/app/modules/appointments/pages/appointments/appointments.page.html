@@ -200,6 +200,20 @@
             [type]="DateType.DateTime"
             [(model)]="appointment.date"
         ></app-date>
+        <app-autocomplete
+            name="doctor" 
+            form="createUpdate"
+            label="Doctor"
+            [(model)]="appointment.doctor"
+            [option]="{label: 'field.name'}"
+            [lookupFunction]="getLookupDoctorsFunction()"
+            [infoTemplate]="lookupDoctorInfo"
+        >
+            <ng-template #lookupDoctorInfo let-doctor>
+                <p><b>{{doctor.firstName}} {{doctor.lastName}}</b></p>
+                <p>{{doctor.documentId}}</p>
+            </ng-template>
+        </app-autocomplete>
         <div class="row">
             <app-button [type]="ButtonType.Success" (clicked)="save()" [disabled]="saving || !modalOpen" [buttonClass]="{'loading': saving}">Guardar <i *ngIf="saving" class="material-icons rotate">data_saver_off</i></app-button>
             <app-button [type]="ButtonType.Danger" (clicked)="modalOpen = false">Cancelar</app-button>

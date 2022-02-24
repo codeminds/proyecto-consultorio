@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { AppService } from '@services/app/app.service';
 import { Appointment } from '@services/appointment/appointment.model';
 import { AppointmentService } from '@services/appointment/appointment.service';
+import { Doctor } from '@services/doctor/doctor.model';
+import { DoctorService } from '@services/doctor/doctor.service';
 import { Field } from '@services/field/field.model';
 import { FieldService } from '@services/field/field.service';
 import { MessageType } from '@services/http/http.types';
@@ -36,6 +38,7 @@ export class AppointmentsPage implements OnInit {
   
   constructor(
     private appointmentService: AppointmentService,
+    private doctorService: DoctorService,
     private fieldService: FieldService,
     private appService: AppService
   ) { 
@@ -151,5 +154,9 @@ export class AppointmentsPage implements OnInit {
   public onModalClose() {
     this.appointment = null;
     this.messages = [];
+  }
+
+  public getLookupDoctorsFunction(): (search: string) => Promise<Doctor[]> {
+    return ((search: string) => firstValueFrom(this.doctorService.search(search.trim().split(' ')))).bind(this);
   }
 }

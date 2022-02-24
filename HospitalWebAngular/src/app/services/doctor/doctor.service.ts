@@ -24,6 +24,13 @@ export class DoctorService{
       );
   }
 
+  public search(values: string[]): Observable<Doctor[]> {
+    return this.httpService.get(this._api, { s: values })
+      .pipe<Doctor[]>(
+        map((response: APIResponse) => response?.data.map((item: any) => new Doctor(item)))
+      );
+  }
+
   public get(id: number): Observable<Doctor> {
     return this.httpService.get(`${this._api}/${id}`)
       .pipe<Doctor>(

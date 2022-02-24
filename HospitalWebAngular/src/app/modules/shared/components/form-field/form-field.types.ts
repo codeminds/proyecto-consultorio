@@ -31,8 +31,13 @@ export interface Option {
     value?: string
 }
 
-export interface AutocompleteOption {
-    label?: string,
-    value?: string,
-    
+export const Option = {
+    default: {
+        label: 'label',
+        value: 'value'
+    },
+    basic: {
+        label: null as string,
+        value: null as string,
+    }
 }

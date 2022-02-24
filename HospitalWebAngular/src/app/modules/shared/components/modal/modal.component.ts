@@ -49,9 +49,9 @@ export class ModalComponent implements OnInit, OnChanges{
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
-      if(changes.hasOwnProperty('open') && !this.open) {
-        this.emitClose();
-      }
+    if(changes.hasOwnProperty('open') && !this.open) {
+      this.emitClose();
+    }
   }
 
   public emitClose(): void {

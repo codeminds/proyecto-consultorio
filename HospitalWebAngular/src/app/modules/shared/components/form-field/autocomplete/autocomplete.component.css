@@ -1,0 +1,29 @@
+li {
+    font-size: 0.8rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    background: rgba(255, 255, 255, 0.2);
+    color: inherit;
+}
+
+li.selected {
+    background: rgba(255, 255, 255, 0.4);
+}
+
+li h5 {
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.form-field {
+    position: relative;
+}
+
+ul {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: var(--color-background);
+}

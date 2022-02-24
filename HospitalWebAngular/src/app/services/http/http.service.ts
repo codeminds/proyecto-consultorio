@@ -122,7 +122,15 @@ export class HttpService{
     let query = params ? '?' : '';
 
     for(const prop in params) {
-      query += `${prop}=${params[prop] != null ? params[prop] : ''}&`;
+      const param = params[prop];
+
+      if(Array.isArray(param)) {
+        for(const value of param) {
+          query += `${prop}=${param != null ? param : ''}&`;
+        }
+      }else {
+        query += `${prop}=${param != null ? param : ''}&`;
+      }
     }
 
     return query;

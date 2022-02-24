@@ -15,6 +15,7 @@ label {
     font-size: 1.4rem;
 }
 
+/* TODO: Remover select cuando se haga el custom dropdown */
 input:not([type="radio"]):not([type="checkbox"]), textarea, select {
     display: inline-block;
     width: 100%;
@@ -28,10 +29,12 @@ input:not([type="radio"]):not([type="checkbox"]), textarea, select {
     outline: 0;
 }
 
+/* TODO: Remover cuando se haga el custom dropdown */
 select option {
     background: var(--color-form-field-select);
 }
 
+/* TODO: Remover select cuando se haga el custom dropdown */
 input:not([type="radio"]):not([type="checkbox"]):focus, textarea:focus, select:focus {
     border-color: var(--color-form-field-focus);
 }

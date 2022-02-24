@@ -20,7 +20,7 @@ export interface APIResponse {
 }
 
 export interface QueryParams {
-    [name: string]: string | number | boolean;
+    [name: string]: string | number | boolean | string[] | number[] | boolean[];
 }
 
 export interface Message {
