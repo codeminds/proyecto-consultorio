@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { getProperty } from '../form-field.helpers';
 import { Option } from '../form-field.types';
 
@@ -8,6 +8,16 @@ import { Option } from '../form-field.types';
   styleUrls: ['../form-field.styles.css', './autocomplete.component.css']
 })
 export class AutocompleteComponent implements OnInit {
+  @HostListener('body: click', ['$event'])
+  public onDocumentClick(event: any) {
+    console.log('clicked', event.target);
+    if(![this.input.nativeElement, this.selection?.nativeElement].includes(event.target))
+    {
+      console.log('blur');
+      this.blur();
+    }
+  }
+
   @Input()
   public selectionTemplate: TemplateRef<any>;
   
@@ -22,6 +32,9 @@ export class AutocompleteComponent implements OnInit {
 
   @Input()
   public label?: string;
+
+  @Input('placeholder')
+  public placeholderText?: string;
 
   @Input()
   public model?: any;
@@ -41,15 +54,19 @@ export class AutocompleteComponent implements OnInit {
   @ViewChild('input')
   private input: ElementRef;
 
+  @ViewChild('selection')
+  private selection: ElementRef;
+
   public search: string;
   public loading: boolean;
   public selectedIndex: number;
   public results: any[];
+  public focused: boolean;
 
   public getProperty = getProperty;
 
-  private lookupTimeout: any;
-  private focused: boolean;
+  private lookupTimeout: NodeJS.Timeout;
+  private selectionFocused: boolean;
 
   public get id(): string{
     return `${this.form}-${this.fieldName}`;
@@ -59,12 +76,17 @@ export class AutocompleteComponent implements OnInit {
     return `${this.form}${this.fieldName}`;
   }
 
+  public get placeholder(): string {
+    return this.model == null ? this.placeholderText : '';
+  }
+
   constructor() {
     this.selectionTemplate = null; 
     this.fieldName = null;
     this.form = null;
     this.infoTemplate = null;
     this.label = null;
+    this.placeholderText = null;
     this.model = null;
     this.option = null;
     this.option = Option.default;
@@ -73,15 +95,17 @@ export class AutocompleteComponent implements OnInit {
     this.search = null;
     this.loading = false;
     this.selectedIndex = null;
-    this.lookupTimeout = null;
+    this.results = null;
     this.focused = false;
+    this.lookupTimeout = null;
+    this.selectionFocused = false;
     this.modelChange = new EventEmitter();
   }
 
   public ngOnInit(): void {
-    /*if(this.selectionTemplate == null) {
+    if(this.selectionTemplate == null) {
       throw new Error('Property selectionTemplate is required');
-    }*/
+    }
 
     if(!this.name) {
       throw new Error('Property name is required');
@@ -98,17 +122,17 @@ export class AutocompleteComponent implements OnInit {
 
   public lookup(): void {
     if(!this.loading) {
-      if(this.lookupTimeout != null) {
-        clearTimeout(this.lookupTimeout);
-        this.lookupTimeout = null;
-      }
-
+      clearTimeout(this.lookupTimeout);
       this.lookupTimeout = setTimeout(async () => {
-        this.loading = true;
-        this.selectedIndex = null;
-        this.results = await this.lookupFunction(this.search, this.maxItems);
-        this.lookupTimeout = null;
-        this.loading = false;
+        this.model = null;
+        this.onModelChange();
+        if(this.search) {
+          this.loading = true;
+          this.selectedIndex = null;
+          this.results = await this.lookupFunction(this.search, this.maxItems);
+          this.lookupTimeout = null;
+          this.loading = false;
+        }
       }, 500);
     }
   }
@@ -136,42 +160,40 @@ export class AutocompleteComponent implements OnInit {
   }
 
   public selectKeyPress(e: any) {
-    e.preventDefault();
+    e.stopPropagation();
     this.selectOption();
+    this.blur();
+    this.input.nativeElement.blur();
   }
 
   public selectIndex(index: number): void {
-    console.log('select index');
     this.selectedIndex = index;
     this.selectOption();
-    this.clearResults();
   }
 
   public selectOption() {
     if(this.selectedIndex != null) {
-      console.log('select option');
       this.model = this.results[this.selectedIndex];
       this.onModelChange();
-      this.focused = false;
-    }
-
-    this.input.nativeElement.blur();
-  }
-
-  public resetOption() {
-    this.model = null;
-    this.onModelChange();
-  }
-
-  public clearResults() {
-    if(!this.focused) {
-      console.log('clear results');
-      this.results = [];
     }
   }
 
   public focus() {
     this.focused = true;
+    if(this.model != null) {
+      this.search = this.selection.nativeElement.textContent.trim();
+    }
+  }
+
+  public blur(){
+    this.focused = false;
+    this.search = null;
+    this.results = null;
+    this.selectedIndex = null;
+  }
+
+  public clickSelection() {
+    this.input.nativeElement.focus();
   }
 
   public onModelChange() {

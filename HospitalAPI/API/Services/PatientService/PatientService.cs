@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 
@@ -50,14 +51,16 @@ namespace API.Services
         public async Task<List<GetPatientDTO>> Search(string[] values)
         {
             StringBuilder queryString = new StringBuilder();
-            queryString.Append("SELECT * FROM Patient WHERE ");
+            queryString.Append("SELECT d.* FROM Patient WHERE ");
             List<SqlParameter> parameters = new List<SqlParameter>();
+            Regex regex = new Regex("@[^\\d\\w ]", RegexOptions.IgnoreCase);
 
             for (int i = 0; i < values.Length; i++)
             {
                 string paramName = $"search{i}";
-                parameters.Add(new SqlParameter(paramName, values[i]));
-                queryString.Append($"DocumentId LIKE '%{values[i]}%' OR LastName LIKE '%{values[i]}%' OR FirstName LIKE '%{values[i]}%' ");
+                string value = regex.Replace(values[i], "");
+                parameters.Add(new SqlParameter(paramName, value));
+                queryString.Append($"d.DocumentId LIKE '%{value}%' OR d.LastName LIKE '%{value}%' OR d.FirstName LIKE '%{value}%' ");
 
                 if (i < values.Length - 1)
                 {

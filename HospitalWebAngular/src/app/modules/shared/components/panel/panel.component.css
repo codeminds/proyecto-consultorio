@@ -61,5 +61,10 @@ sólo el contenedor :host invisible.
 
 .toggle-section {
     height: 0;
+    display: none;
     overflow: hidden;
+}
+
+.toggle-section.open {
+    display: block;
 }

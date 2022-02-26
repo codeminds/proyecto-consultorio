@@ -1,19 +1,25 @@
 <div class="form-field">
     <label *ngIf="label" [for]="id">{{label}}</label>
-    <input 
+    <div class="selection">
+        <input 
         #input 
         type="text"
         autocomplete="off" 
         [id]="id" 
-        [name]="name" 
+        [name]="name"
+        [placeholder]="placeholder" 
         [(ngModel)]="search"
         (input)="lookup()" 
         (keydown.arrowdown)="increaseIndex($event)" 
         (keydown.arrowup)="decreaseIndex($event)"
         (keydown.enter)="selectKeyPress($event)"
         (keydown.tab)="selectKeyPress($event)"
-        (blur)="clearResults()"
+        (keydown.escape)="blur()"
         (focus)="focus()" />
+        <div #selection *ngIf="model != null" [ngClass]="{'hidden': focused}" (click)="clickSelection()">
+            <ng-container *ngTemplateOutlet="selectionTemplate; context: {$implicit: model}"></ng-container>
+        </div>
+    </div>
     <ul *ngIf="results">
         <li *ngFor="let item of results; let i = index" [ngClass]="{'selected': i == selectedIndex}" (click)="selectIndex(i)">
             <h5>{{getProperty(item, option.label)}}</h5>

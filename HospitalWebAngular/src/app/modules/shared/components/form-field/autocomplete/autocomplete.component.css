@@ -21,8 +21,25 @@ li h5 {
     border-bottom: solid 0.1rem var(--color-form-field-input);
 }
 
-.form-field {
+.selection {
     position: relative;
+}
+
+.selection .hidden {
+    display: none;
+}
+
+.selection > div {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    background: rgb(220 220 220 / 20%);
+    cursor: pointer;
 }
 
 ul {

@@ -204,11 +204,16 @@
             name="doctor" 
             form="createUpdate"
             label="Doctor"
+            placeholder="Escriba para buscar doctores..."
             [(model)]="appointment.doctor"
             [option]="{label: 'field.name'}"
             [lookupFunction]="getLookupDoctorsFunction()"
+            [selectionTemplate]="lookupDoctorSelection"
             [infoTemplate]="lookupDoctorInfo"
         >
+            <ng-template #lookupDoctorSelection let-doctor>
+                ({{doctor.field.name}}) {{doctor.firstName}} {{doctor.lastName}}
+            </ng-template>
             <ng-template #lookupDoctorInfo let-doctor>
                 <p><b>{{doctor.firstName}} {{doctor.lastName}}</b></p>
                 <p>{{doctor.documentId}}</p>

@@ -10,7 +10,7 @@
     line-height: 1.3;
     color: inherit;
     transition: background-color 0.1s linear;
-    margin-right: 0.7rem;
+    margin: 0.1rem 0.15rem;
 }
 
 .button:disabled {
@@ -20,10 +20,6 @@
 
 .button:disabled.loading {
     cursor: wait;
-}
-
-.button:last-child {
-    margin-right: 0;
 }
 
 .button.success {

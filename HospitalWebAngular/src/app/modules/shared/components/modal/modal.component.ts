@@ -31,6 +31,8 @@ export class ModalComponent implements OnInit, OnChanges{
   @Output()
   public onClose: EventEmitter<void>;
 
+  private clickedInside: boolean;
+
   constructor() {
     this.open = false;
     this.modalTitle = null;
@@ -38,6 +40,7 @@ export class ModalComponent implements OnInit, OnChanges{
     this.position = ModalPosition.Mid;
     this.transparent = false;
     this.closeOnClickOutside = true;
+    this.clickedInside = false;
     this.openChange = new EventEmitter();
     this.onClose = new EventEmitter();
   }
@@ -61,11 +64,21 @@ export class ModalComponent implements OnInit, OnChanges{
     }, 300);
   }
 
+  //Cambia el valor temporalmente para evitar que se cierre el modal
+  //sin evitar la propagación de eventos para otros listeners globales
+  public onClickInside() {
+    this.clickedInside = true;
+  }
+
   public onClickOutside() {
-    if(this.closeOnClickOutside) {
+    //Si el click vino de adentro del modal, este ignora el cerrar el mismo
+    if(!this.clickedInside && this.closeOnClickOutside) {
       this.emitClose();
       this.open = false;
       this.openChange.emit(false);
     }
+
+    //Después del chequeo reseteamos el valor para la evaluación de un nuevo click
+    this.clickedInside = false;
   }
 }

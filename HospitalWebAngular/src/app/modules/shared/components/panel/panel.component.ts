@@ -40,6 +40,10 @@ export class PanelComponent implements AfterViewChecked, OnChanges, OnInit {
   private contentHeightAnimated: boolean;
   private contentHeightTimeout: NodeJS.Timeout;
   private animatedOpenTimeout: NodeJS.Timeout;
+  private animationTimeout: NodeJS.Timeout;
+  private animationTiming: number;
+  private animationTimingDelay: number;
+  private animationTimingMs: number;
 
   //Esta propiedad determina ciertos estilos en línea que
   //utilizamos para la animación del panel
@@ -55,7 +59,7 @@ export class PanelComponent implements AfterViewChecked, OnChanges, OnInit {
       }
 
       if(this.contentHeightAnimated) {
-        style += 'transition: height 0.4s ease-in-out 0.1s;';
+        style += `transition: height ${this.animationTiming}s ease-in-out ${this.animationTimingDelay}s;`;
       } 
     }
 
@@ -73,6 +77,10 @@ export class PanelComponent implements AfterViewChecked, OnChanges, OnInit {
     this.contentHeightAnimated = false;
     this.contentHeightTimeout = null;
     this.animatedOpenTimeout = null;
+    this.animationTimeout = null;
+    this.animationTiming = 0.4;
+    this.animationTimingDelay = 0.1;
+    this.animationTimingMs = (this.animationTiming + this.animationTimingDelay) * 1000;
     this.openChange = new EventEmitter();
   }
 
@@ -109,14 +117,20 @@ export class PanelComponent implements AfterViewChecked, OnChanges, OnInit {
 
   private resolveOpen(open: boolean) {
     this.contentHeightAnimated = true;
+    clearTimeout(this.animatedOpenTimeout);
+    this.animatedOpenTimeout = setTimeout(() => {
+      this.contentHeightAnimated = false;
+      this.animatedOpenTimeout = null;
+    }, this.animationTimingMs);
+
     if(open) {
       this.afterAnimateOpen = true;
-      clearTimeout(this.animatedOpenTimeout);
+      clearTimeout(this.animationTimeout);
     }else {
-      this.animatedOpenTimeout = setTimeout(() => {
+      this.animationTimeout = setTimeout(() => {
         this.afterAnimateOpen = false;
-        this.animatedOpenTimeout = null;
-      }, 500);
+        this.animationTimeout = null;
+      }, this.animationTimingMs);
     }
   }
 
@@ -140,12 +154,7 @@ export class PanelComponent implements AfterViewChecked, OnChanges, OnInit {
         //angular resuelve sus cálculos
         this.contentHeightTimeout = setTimeout(() => {
           this.contentHeight = this.contentHeightNext;
-          if(this.contentHeightAnimated) {
-            setTimeout(() => {
-              this.contentHeightAnimated = false;
-            }, 500);
-          }
-          
+
           //Asegurarse de hacer que la variable sea nula
           //luego de ejecutar el timeout o si no el chequeo
           //anterior en el if no permitirá futuros recálculos
