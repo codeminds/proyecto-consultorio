@@ -42,7 +42,7 @@ namespace API.Controllers
 
         [HttpGet]
         [Route("search")]
-        public async Task<ActionResult<APIResponse>> List([FromQuery] string[] s)
+        public async Task<ActionResult<APIResponse>> Search([FromQuery] string[] s)
         {
             APIResponse response = new APIResponse();
             response.Data = await this._doctorService.Search(s);

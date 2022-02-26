@@ -2,10 +2,11 @@
 using API.Data.Models;
 using API.DataTransferObjects;
 using AutoMapper;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace API.Services
@@ -46,14 +47,29 @@ namespace API.Services
 
         public async Task<List<GetDoctorDTO>> Search(string[] values)
         {
-            return await this._database.Doctors
-                                           .Include(d => d.Field)
-                                           .Where(d => values.Any(v => d.DocumentId.Contains(v))
-                                                       || values.Any(v => d.FirstName.Contains(v))
-                                                       || values.Any(v => d.LastName.Contains(v))
-                                                       || values.Any(v => d.Field.Name.Contains(v)))
-                                           .Select(d => this._mapper.Map<Doctor, GetDoctorDTO>(d))
-                                           .ToListAsync();
+            StringBuilder queryString = new StringBuilder();
+            queryString.Append("SELECT d.* FROM Doctor d INNER JOIN Field f ON f.Id = d.FieldID WHERE ");
+            List<SqlParameter> parameters = new List<SqlParameter>();
+
+            for (int i = 0; i < values.Length; i++)
+            {
+                string paramName = $"search{i}";
+                parameters.Add(new SqlParameter(paramName, values[i]));
+                queryString.Append($"d.DocumentId LIKE '%{values[i]}%' OR d.LastName LIKE '%{values[i]}%' OR d.FirstName LIKE '%{values[i]}%' OR f.Name LIKE '%{values[i]}%' ");
+
+                if (i < values.Length - 1)
+                {
+                    queryString.Append("OR ");
+                }
+            }
+
+            List<Doctor> results = await this._database.Doctors
+                                .FromSqlRaw(queryString.ToString(), parameters.ToArray())
+                                .Include(d => d.Field)
+                                .ToListAsync();
+
+
+            return results.Select(d => this._mapper.Map<Doctor, GetDoctorDTO>(d)).ToList();
         }
 
         public async Task<GetDoctorDTO> Insert(CreateUpdateDoctorDTO data)

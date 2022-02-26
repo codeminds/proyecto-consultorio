@@ -2,10 +2,12 @@
 using API.Data.Models;
 using API.DataTransferObjects;
 using AutoMapper;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 
@@ -47,12 +49,28 @@ namespace API.Services
 
         public async Task<List<GetPatientDTO>> Search(string[] values)
         {
-            return await this._database.Patients
-                                           .Where(d => values.Any(v => d.DocumentId.Contains(v))
-                                                       || values.Any(v => d.FirstName.Contains(v))
-                                                       || values.Any(v => d.LastName.Contains(v)))
-                                           .Select(d => this._mapper.Map<Patient, GetPatientDTO>(d))
-                                           .ToListAsync();
+            StringBuilder queryString = new StringBuilder();
+            queryString.Append("SELECT * FROM Patient WHERE ");
+            List<SqlParameter> parameters = new List<SqlParameter>();
+
+            for (int i = 0; i < values.Length; i++)
+            {
+                string paramName = $"search{i}";
+                parameters.Add(new SqlParameter(paramName, values[i]));
+                queryString.Append($"DocumentId LIKE '%{values[i]}%' OR LastName LIKE '%{values[i]}%' OR FirstName LIKE '%{values[i]}%' ");
+
+                if (i < values.Length - 1)
+                {
+                    queryString.Append("OR ");
+                }
+            }
+
+            List<Patient> results = await this._database.Patients
+                                .FromSqlRaw(queryString.ToString(), parameters.ToArray())
+                                .ToListAsync();
+
+
+            return results.Select(d => this._mapper.Map<Patient, GetPatientDTO>(d)).ToList();
         }
 
         public async Task<GetPatientDTO> Insert(CreateUpdatePatientDTO data)
