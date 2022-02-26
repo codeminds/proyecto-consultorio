@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { getProperty } from '../form-field.helpers';
 import { Option } from '../form-field.types';
 
@@ -7,7 +7,7 @@ import { Option } from '../form-field.types';
   templateUrl: './autocomplete.component.html',
   styleUrls: ['../form-field.styles.css', './autocomplete.component.css']
 })
-export class AutocompleteComponent implements OnInit {
+export class AutocompleteComponent implements OnInit, AfterViewInit {
   @HostListener('body: click', ['$event'])
   public onDocumentClick(event: any) {
     console.log('clicked', event.target);
@@ -67,6 +67,7 @@ export class AutocompleteComponent implements OnInit {
 
   private lookupTimeout: NodeJS.Timeout;
   private selectionFocused: boolean;
+  private maxResultsHeight: number;
 
   public get id(): string{
     return `${this.form}-${this.fieldName}`;
@@ -78,6 +79,10 @@ export class AutocompleteComponent implements OnInit {
 
   public get placeholder(): string {
     return this.model == null ? this.placeholderText : '';
+  }
+
+  public get style(): string {
+    return `max-height: min(30rem, ${this.maxResultsHeight / 10}rem)`;
   }
 
   constructor() {
@@ -99,6 +104,7 @@ export class AutocompleteComponent implements OnInit {
     this.focused = false;
     this.lookupTimeout = null;
     this.selectionFocused = false;
+    this.maxResultsHeight = 0;
     this.modelChange = new EventEmitter();
   }
 
@@ -118,6 +124,12 @@ export class AutocompleteComponent implements OnInit {
     if(!this.lookupFunction) {
       throw new Error('Property lookupFunction is required');
     }
+  }
+
+  public ngAfterViewInit(): void {
+      //TODO: Crear función para encapsular y recalcular on window resize
+      const binding = this.input.nativeElement.getBoundingClientRect();
+      this.maxResultsHeight = binding.bottom - binding.height;
   }
 
   public lookup(): void {
@@ -187,9 +199,9 @@ export class AutocompleteComponent implements OnInit {
 
   public blur(){
     this.focused = false;
+    this.selectedIndex = null;
     this.search = null;
     this.results = null;
-    this.selectedIndex = null;
   }
 
   public clickSelection() {

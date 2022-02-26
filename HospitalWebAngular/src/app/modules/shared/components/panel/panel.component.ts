@@ -1,6 +1,4 @@
-import { AfterViewChecked, Component, DoCheck, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { Console } from 'console';
-import { BehaviorSubject, delay, Observable, of, ReplaySubject, take } from 'rxjs';
+import { AfterViewChecked, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-panel',
@@ -87,7 +85,7 @@ export class PanelComponent implements AfterViewChecked, OnChanges, OnInit {
   public ngOnInit(): void {
       if(!this.expandable) {
         this.open = true;
-        this.resolveOpen(this.open);
+        this.animateOpen(this.open);
       }
   }
 
@@ -96,7 +94,7 @@ export class PanelComponent implements AfterViewChecked, OnChanges, OnInit {
       //al abrir o cerrar el panel y no por recálculos
       //por cambios de elementos o tamaños de pantalla
       if(changes.hasOwnProperty('open')) {
-        this.resolveOpen(this.open);
+        this.animateOpen(this.open);
       }
   }
 
@@ -111,11 +109,11 @@ export class PanelComponent implements AfterViewChecked, OnChanges, OnInit {
     //al abrir o cerrar el panel y no por recálculos
     //por cambios de elementos o tamaños de pantalla
     this.open = !this.open;
-    this.resolveOpen(this.open);
+    this.animateOpen(this.open);
     this.openChange.emit(this.open);
   }
 
-  private resolveOpen(open: boolean) {
+  private animateOpen(open: boolean) {
     this.contentHeightAnimated = true;
     clearTimeout(this.animatedOpenTimeout);
     this.animatedOpenTimeout = setTimeout(() => {

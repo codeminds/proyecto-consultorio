@@ -20,10 +20,12 @@
             <ng-container *ngTemplateOutlet="selectionTemplate; context: {$implicit: model}"></ng-container>
         </div>
     </div>
-    <ul *ngIf="results">
-        <li *ngFor="let item of results; let i = index" [ngClass]="{'selected': i == selectedIndex}" (click)="selectIndex(i)">
-            <h5>{{getProperty(item, option.label)}}</h5>
-            <ng-container *ngTemplateOutlet="infoTemplate; context: {$implicit: item}"></ng-container>
-        </li>
-    </ul>
+    <div class="results">
+        <ul *ngIf="results" [attr.style]="style">
+            <li *ngFor="let item of results; let i = index" [ngClass]="{'selected': i == selectedIndex}" (click)="selectIndex(i)">
+                <h5>{{getProperty(item, option.label)}}</h5>
+                <ng-container *ngTemplateOutlet="infoTemplate; context: {$implicit: item}"></ng-container>
+            </li>
+        </ul>
+    </div>
 </div>

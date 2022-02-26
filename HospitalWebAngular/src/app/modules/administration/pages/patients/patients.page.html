@@ -125,7 +125,7 @@
 </app-panel>
 
 <!-- Modal de creación/edición -->
-<app-modal [(open)]="modalOpen" modalTitle="Modal" [size]="ModalSize.Medium" (onClose)="onModalClose()">
+<app-modal [(open)]="modalOpen" modalTitle="Modal" [position]="ModalPosition.Top" [size]="ModalSize.Medium" (onClose)="onModalClose()">
     <form *ngIf="patient" (keyup.enter)="save()">
         <ul class="messages">
             <li *ngFor="let message of messages">{{message}}</li>

@@ -21,8 +21,26 @@ li h5 {
     border-bottom: solid 0.1rem var(--color-form-field-input);
 }
 
-.selection {
+.selection, .results {
     position: relative;
+}
+
+.results ul {
+    position: absolute;
+    margin-top: 0.1rem;
+    background: var(--color-background);
+    overflow: auto;
+    scrollbar-color: var(--color-scrollbar-light) var(--color-scrollbar-light);
+    scrollbar-width: thin;
+}
+
+.results ul::-webkit-scrollbar-thumb {
+    background: var(--color-scrollbar-light);
+}
+
+.results ul::-webkit-scrollbar {
+    width: 0.7rem;
+    background: var(--color-scrollbar-light);
 }
 
 .selection .hidden {
@@ -40,10 +58,4 @@ li h5 {
     align-items: center;
     background: rgb(220 220 220 / 20%);
     cursor: pointer;
-}
-
-ul {
-    position: fixed;
-    margin-top: 0.5rem;
-    background: var(--color-background);
 }

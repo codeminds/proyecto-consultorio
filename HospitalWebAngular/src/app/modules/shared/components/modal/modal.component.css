@@ -67,7 +67,6 @@
     border-radius: 0.2rem;
     border: 0.1rem solid var(--color-modal-content-border);
     box-shadow: 0.2rem 0.2rem 0.6rem -0.3rem var(--color-shadow-light);
-    overflow: hidden;
 }
 
 .small .safewall {
