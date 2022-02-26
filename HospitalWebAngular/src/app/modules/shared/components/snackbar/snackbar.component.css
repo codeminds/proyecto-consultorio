@@ -103,8 +103,7 @@ i:hover{
 
 @keyframes slide-out {
     0% {
-        transform: scale(1);
-         
+        transform: scale(1); 
     }
 
     10% {

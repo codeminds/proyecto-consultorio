@@ -113,9 +113,10 @@ export class AutocompleteComponent implements OnInit {
     }
   }
 
-  public increaseIndex(): void {
+  public increaseIndex(e: any): void {
+    e.preventDefault();
     if(this.results?.length > 0) {
-      if(this.selectedIndex < this.results.length - 1){
+      if(this.selectedIndex != null && this.selectedIndex < this.results.length - 1){
         this.selectedIndex++;
       } else {
         this.selectedIndex = 0;
@@ -123,7 +124,8 @@ export class AutocompleteComponent implements OnInit {
     }
   }
 
-  public decreaseIndex(): void {
+  public decreaseIndex(e: any): void {
+    e.preventDefault();
     if(this.results?.length > 0) {
       if(this.selectedIndex > 0){
         this.selectedIndex--; 
@@ -133,10 +135,16 @@ export class AutocompleteComponent implements OnInit {
     }
   }
 
+  public selectKeyPress(e: any) {
+    e.preventDefault();
+    this.selectOption();
+  }
+
   public selectIndex(index: number): void {
     console.log('select index');
     this.selectedIndex = index;
     this.selectOption();
+    this.clearResults();
   }
 
   public selectOption() {

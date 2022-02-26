@@ -126,7 +126,7 @@ export class HttpService{
 
       if(Array.isArray(param)) {
         for(const value of param) {
-          query += `${prop}=${param != null ? param : ''}&`;
+          query += `${prop}=${value != null ? value : ''}&`;
         }
       }else {
         query += `${prop}=${param != null ? param : ''}&`;

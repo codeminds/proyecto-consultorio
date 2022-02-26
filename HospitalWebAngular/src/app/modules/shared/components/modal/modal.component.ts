@@ -62,8 +62,10 @@ export class ModalComponent implements OnInit, OnChanges{
   }
 
   public onClickOutside() {
-    this.emitClose();
-    this.open = false;
-    this.openChange.emit(false);
+    if(this.closeOnClickOutside) {
+      this.emitClose();
+      this.open = false;
+      this.openChange.emit(false);
+    }
   }
 }

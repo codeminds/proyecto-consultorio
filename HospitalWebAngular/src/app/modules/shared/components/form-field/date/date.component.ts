@@ -81,7 +81,6 @@ export class DateComponent implements OnInit, OnChanges {
   }
 
   public onModelChange(value: string) {
-    console.log('On Model Change', value);
     this.modelChange.emit(value ? new Date(value) : null);
   }
 

@@ -2,18 +2,19 @@
     <label *ngIf="label" [for]="id">{{label}}</label>
     <input 
         #input 
-        type="text" 
+        type="text"
+        autocomplete="off" 
         [id]="id" 
         [name]="name" 
         [(ngModel)]="search"
         (input)="lookup()" 
-        (keyup.arrowdown)="increaseIndex()" 
-        (keyup.arrowup)="decreaseIndex()"
-        (keyup.enter)="selectOption()"
-        (keyup.tab)="selectOption()"
+        (keydown.arrowdown)="increaseIndex($event)" 
+        (keydown.arrowup)="decreaseIndex($event)"
+        (keydown.enter)="selectKeyPress($event)"
+        (keydown.tab)="selectKeyPress($event)"
         (blur)="clearResults()"
         (focus)="focus()" />
-    <ul>
+    <ul *ngIf="results">
         <li *ngFor="let item of results; let i = index" [ngClass]="{'selected': i == selectedIndex}" (click)="selectIndex(i)">
             <h5>{{getProperty(item, option.label)}}</h5>
             <ng-container *ngTemplateOutlet="infoTemplate; context: {$implicit: item}"></ng-container>

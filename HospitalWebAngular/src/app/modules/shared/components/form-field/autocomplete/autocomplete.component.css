@@ -1,19 +1,24 @@
 li {
-    font-size: 0.8rem;
+    font-size: 1.1rem;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     background: rgba(255, 255, 255, 0.2);
     color: inherit;
+    min-width: 17rem;
+    padding: 1rem 1.5rem;
+    cursor: pointer;
 }
 
-li.selected {
-    background: rgba(255, 255, 255, 0.4);
+li.selected, li:hover {
+    background: rgba(255, 255, 255, 0.7);
 }
 
 li h5 {
-    font-size: 0.9rem;
-    font-weight: 500;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 0.6rem;
+    border-bottom: solid 0.1rem var(--color-form-field-input);
 }
 
 .form-field {
@@ -21,9 +26,7 @@ li h5 {
 }
 
 ul {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
+    position: fixed;
+    margin-top: 0.5rem;
     background: var(--color-background);
 }
