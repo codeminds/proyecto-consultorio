@@ -57,13 +57,6 @@ export class ModalComponent implements OnInit, OnChanges{
     }
   }
 
-  public emitClose(): void {
-    //Esperar a la animación de desaparición
-    setTimeout(() => {
-      this.onClose.emit();
-    }, 300);
-  }
-
   //Cambia el valor temporalmente para evitar que se cierre el modal
   //sin evitar la propagación de eventos para otros listeners globales
   public onClickInside() {
@@ -80,5 +73,12 @@ export class ModalComponent implements OnInit, OnChanges{
 
     //Después del chequeo reseteamos el valor para la evaluación de un nuevo click
     this.clickedInside = false;
+  }
+
+  private emitClose(): void {
+    //Esperar a la animación de desaparición
+    setTimeout(() => {
+      this.onClose.emit();
+    }, 300);
   }
 }

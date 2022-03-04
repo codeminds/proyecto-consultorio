@@ -1,18 +1,13 @@
-import { AfterViewChecked, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewChecked, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { EventsService } from '@shared/services/events/events.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-panel',
   templateUrl: './panel.component.html',
   styleUrls: ['./panel.component.css']
 })
-export class PanelComponent implements AfterViewChecked, OnChanges, OnInit {
-  @HostListener('window: resize')
-  public onWindowResize() {
-    //Refrescar el alto por cambios en el tamaño
-    //de la ventana por el usuario
-    this.refreshContentHeight();
-  }
-  
+export class PanelComponent implements AfterViewChecked, OnChanges, OnInit, OnDestroy {
   @Input()
   public panelTitle?: string;
 
@@ -42,6 +37,7 @@ export class PanelComponent implements AfterViewChecked, OnChanges, OnInit {
   private animationTiming: number;
   private animationTimingDelay: number;
   private animationTimingMs: number;
+  private unsubscribe: Subject<void>;
 
   //Esta propiedad determina ciertos estilos en línea que
   //utilizamos para la animación del panel
@@ -64,7 +60,9 @@ export class PanelComponent implements AfterViewChecked, OnChanges, OnInit {
     return style;
   }
 
-  constructor() { 
+  constructor(
+    private eventsService: EventsService
+  ) { 
     this.panelTitle = null;
     this.expandable = false;
     this.open = false;
@@ -80,6 +78,7 @@ export class PanelComponent implements AfterViewChecked, OnChanges, OnInit {
     this.animationTimingDelay = 0.1;
     this.animationTimingMs = (this.animationTiming + this.animationTimingDelay) * 1000;
     this.openChange = new EventEmitter();
+    this.unsubscribe = new Subject();
   }
 
   public ngOnInit(): void {
@@ -96,12 +95,42 @@ export class PanelComponent implements AfterViewChecked, OnChanges, OnInit {
       if(changes.hasOwnProperty('open')) {
         this.animateOpen(this.open);
       }
+
+      if(changes.hasOwnProperty('expandable')) {
+        //Refrescar el alto por cambios en el tamaño
+        //de la ventana por el usuario. Solo paneles expandibles
+        //Utilizamos el servicio de eventos globales en vez de saturar el DOM
+        //con eventos propios
+        if(this.expandable) {
+          this.eventsService.windowResize
+          .pipe(takeUntil(this.unsubscribe))
+          .subscribe((e) => {
+            this.refreshContentHeight();
+          });
+        } else {
+          //El panel puede cambiar a ser expandible o no por medio de la
+          //propiedad de input "expandable", por lo que que suscribimos o desuscribimos
+          //al componente del evento global conforme sea necesario
+          this.unsubscribe.next();
+        }
+      }
+  }
+
+  //Técnica de unsubscribe de observables en componentes para evitar
+  //filtrado de memoria. Al destruir el componente enviamos un notificación
+  //al Subject unsubscribe y todos los observables con un pipe "takeUntil(this.unsubscribe)"
+  //en el componente se desuscriben y liberan esa memoria
+  public ngOnDestroy(): void {
+      this.unsubscribe.next();
+      this.unsubscribe.complete();
   }
 
   public ngAfterViewChecked(): void {
     //Refrescar el alto por cambios de elementos
-    //internos al panel en angular
-    this.refreshContentHeight();
+    //internos al panel en angular. Solo paneles expandibles
+    if(this.expandable) {
+      this.refreshContentHeight();
+    }
   }
 
   public toggleOpen() {
@@ -136,29 +165,27 @@ export class PanelComponent implements AfterViewChecked, OnChanges, OnInit {
   //preciso para la animación, sin embargo esto puede cambiar por muchas razones 
   //(e.g.: angular reevaluando nuevos elementos o el usuario modificando el tamaño de la ventana del explorador)
   private refreshContentHeight(): void {
-    if(this.expandable) { 
-      this.contentHeightNext = this.content?.nativeElement.offsetHeight;
+    this.contentHeightNext = this.content?.nativeElement.offsetHeight;
 
-      //para evitar cálculos constantes ya que angular liga muchos eventos que están constantemente
-      //ejecutándose en la aplicación, creamos un nuevo cambio de altura para la animación sólo si
-      //el nuevo alto del elemento ha cambiado en comparación con su altura anterior
-      if(!this.contentHeightTimeout && this.contentHeight != this.contentHeightNext) {
-        //Ejecutar el cambio asícronamente del lifecycle para evitar error de
-        //angular. A pesar de tener un tiempo de 0 milisegundos, el event loop
-        //de JavaScript ejecutará esto hasta el puro final ya que es una operación
-        //naturalmente asíncrona. Guardando el timeout en una variable y
-        //validando que este no sea nulo para ejecutarlo nos ayuda a
-        //evitar que se ejecuten varios timeouts al mismo tiempo mientras
-        //angular resuelve sus cálculos
-        this.contentHeightTimeout = setTimeout(() => {
-          this.contentHeight = this.contentHeightNext;
+    //para evitar cálculos constantes ya que angular liga muchos eventos que están constantemente
+    //ejecutándose en la aplicación, creamos un nuevo cambio de altura para la animación sólo si
+    //el nuevo alto del elemento ha cambiado en comparación con su altura anterior
+    if(!this.contentHeightTimeout && this.contentHeight != this.contentHeightNext) {
+      //Ejecutar el cambio asícronamente del lifecycle para evitar error de
+      //angular. A pesar de tener un tiempo de 0 milisegundos, el event loop
+      //de JavaScript ejecutará esto hasta el puro final ya que es una operación
+      //naturalmente asíncrona. Guardando el timeout en una variable y
+      //validando que este no sea nulo para ejecutarlo nos ayuda a
+      //evitar que se ejecuten varios timeouts al mismo tiempo mientras
+      //angular resuelve sus cálculos
+      this.contentHeightTimeout = setTimeout(() => {
+        this.contentHeight = this.contentHeightNext;
 
-          //Asegurarse de hacer que la variable sea nula
-          //luego de ejecutar el timeout o si no el chequeo
-          //anterior en el if no permitirá futuros recálculos
-          this.contentHeightTimeout = null; 
-        }, 0);
-      }
+        //Asegurarse de hacer que la variable sea nula
+        //luego de ejecutar el timeout o si no el chequeo
+        //anterior en el if no permitirá futuros recálculos
+        this.contentHeightTimeout = null; 
+      }, 0);
     }
   }
 }

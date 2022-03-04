@@ -1,4 +1,6 @@
-import { AfterViewChecked, AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { EventsService } from '@shared/services/events/events.service';
+import { Subject, takeUntil } from 'rxjs';
 import { SnackbarType } from './snackbar.types';
 
 @Component({
@@ -6,12 +8,7 @@ import { SnackbarType } from './snackbar.types';
   templateUrl: './snackbar.component.html',
   styleUrls: ['./snackbar.component.css']
 })
-export class SnackbarComponent implements OnInit, AfterViewInit {
-  @HostListener('window: resize')
-  public onWindowResize() {
-    this.refreshSnackbarWidth();
-  }
-
+export class SnackbarComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input()
   public text: string;
 
@@ -33,6 +30,7 @@ export class SnackbarComponent implements OnInit, AfterViewInit {
   private snackbarWidthNext: number;
   private snackbarWidthTimeout: NodeJS.Timeout;
   private snackbarTimeout: NodeJS.Timeout;
+  private unsubscribe: Subject<void>;
 
   //Basado en el ancho del contenido
   //calculamos el centro exacto en la pantalla
@@ -41,7 +39,9 @@ export class SnackbarComponent implements OnInit, AfterViewInit {
     return this.snackbarWidth ? `left: calc(50% - ${this.snackbarWidth / 2}px)` : null;
   }
 
-  constructor() { 
+  constructor(
+    private eventsService: EventsService
+  ) { 
     this.text = null;
     this.type = null;
     this.timeout = null;
@@ -50,6 +50,7 @@ export class SnackbarComponent implements OnInit, AfterViewInit {
     this.snackbarWidthNext = null;
     this.snackbarWidthTimeout = null;
     this.onClose = new EventEmitter();
+    this.unsubscribe = new Subject();
   }
 
   public ngOnInit(): void {
@@ -66,6 +67,25 @@ export class SnackbarComponent implements OnInit, AfterViewInit {
         this.close();
       }, this.timeout);
     }
+
+    //Refrescar el ancho por cambios en el tamaño
+    //de la ventana por el usuario definiendo el tamaño del elemento
+    //Utilizamos el servicio de eventos globales en vez de saturar el DOM
+    //con eventos propios
+    this.eventsService.windowResize
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe((e) => {
+        this.refreshSnackbarWidth();
+      });
+  }
+
+  //Técnica de unsubscribe de observables en componentes para evitar
+  //filtrado de memoria. Al destruir el componente enviamos un notificación
+  //al Subject unsubscribe y todos los observables con un pipe "takeUntil(this.unsubscribe)"
+  //en el componente se desuscriben y liberan esa memoria
+  public ngOnDestroy(): void {
+      this.unsubscribe.next();
+      this.unsubscribe.complete();
   }
 
   public ngAfterViewInit(): void {

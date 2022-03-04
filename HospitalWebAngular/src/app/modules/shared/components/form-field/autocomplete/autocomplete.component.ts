@@ -1,4 +1,6 @@
-import { AfterViewChecked, AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
+import { EventsService } from '@shared/services/events/events.service';
+import { Subject, takeUntil } from 'rxjs';
 import { getProperty } from '../form-field.helpers';
 import { Option } from '../form-field.types';
 
@@ -7,17 +9,7 @@ import { Option } from '../form-field.types';
   templateUrl: './autocomplete.component.html',
   styleUrls: ['../form-field.styles.css', './autocomplete.component.css']
 })
-export class AutocompleteComponent implements OnInit, AfterViewInit {
-  @HostListener('body: click', ['$event'])
-  public onDocumentClick(event: any) {
-    console.log('clicked', event.target);
-    if(![this.input.nativeElement, this.selection?.nativeElement].includes(event.target))
-    {
-      console.log('blur');
-      this.blur();
-    }
-  }
-
+export class AutocompleteComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input()
   public selectionTemplate: TemplateRef<any>;
   
@@ -66,8 +58,8 @@ export class AutocompleteComponent implements OnInit, AfterViewInit {
   public getProperty = getProperty;
 
   private lookupTimeout: NodeJS.Timeout;
-  private selectionFocused: boolean;
   private maxResultsHeight: number;
+  private unsubscribe: Subject<void>;
 
   public get id(): string{
     return `${this.form}-${this.fieldName}`;
@@ -77,15 +69,19 @@ export class AutocompleteComponent implements OnInit, AfterViewInit {
     return `${this.form}${this.fieldName}`;
   }
 
+  //Propiedad para el placeholder sólo muestra el texto si no hemos seleccionado una opción
   public get placeholder(): string {
     return this.model == null ? this.placeholderText : '';
   }
 
+  //Esta propiedad determina el alto máximo de la lista de resultados
   public get style(): string {
     return `max-height: min(30rem, ${this.maxResultsHeight / 10}rem)`;
   }
 
-  constructor() {
+  constructor(
+    private eventsService: EventsService
+  ) {
     this.selectionTemplate = null; 
     this.fieldName = null;
     this.form = null;
@@ -103,9 +99,9 @@ export class AutocompleteComponent implements OnInit, AfterViewInit {
     this.results = null;
     this.focused = false;
     this.lookupTimeout = null;
-    this.selectionFocused = false;
     this.maxResultsHeight = 0;
     this.modelChange = new EventEmitter();
+    this.unsubscribe = new Subject();
   }
 
   public ngOnInit(): void {
@@ -124,18 +120,50 @@ export class AutocompleteComponent implements OnInit, AfterViewInit {
     if(!this.lookupFunction) {
       throw new Error('Property lookupFunction is required');
     }
+
+    //Utilizamos el servicio de eventos globales en vez de saturar el DOM
+    //con eventos propios
+    this.eventsService.bodyClick
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe((e) =>  {
+        if(![this.input.nativeElement, this.selection?.nativeElement].includes(e.target))
+        {
+          this.blur();
+        }
+      });
+
+    //Utilizamos el servicio de eventos globales en vez de saturar el DOM
+    //con eventos propios
+    this.eventsService.windowResize
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe((e => {
+        this.recalculateResultsMaxHeight();
+      }))
+  }
+
+  //Técnica de unsubscribe de observables en componentes para evitar
+  //filtrado de memoria. Al destruir el componente enviamos un notificación
+  //al Subject unsubscribe y todos los observables con un pipe "takeUntil(this.unsubscribe)"
+  //en el componente se desuscriben y liberan esa memoria
+  public ngOnDestroy(): void {
+      this.unsubscribe.next();
+      this.unsubscribe.complete();
   }
 
   public ngAfterViewInit(): void {
-      //TODO: Crear función para encapsular y recalcular on window resize
-      const binding = this.input.nativeElement.getBoundingClientRect();
-      this.maxResultsHeight = binding.bottom - binding.height;
+    this.recalculateResultsMaxHeight();
   }
 
   public lookup(): void {
+    //Por medio de un indicador "loading" y un timeout de medio segundo
+    //podemos filtrar que hayan varios eventos de búsqueda mientras el usuario
+    //proporciona el valor de búsqueda que guste, así evitando una saturación del API
     if(!this.loading) {
       clearTimeout(this.lookupTimeout);
       this.lookupTimeout = setTimeout(async () => {
+        //A la hora de intentar buscar por cualquier valor
+        //el usuario ha cambiado de selección y se elimina cualquier
+        //valor previo escogido
         this.model = null;
         this.onModelChange();
         if(this.search) {
@@ -149,6 +177,7 @@ export class AutocompleteComponent implements OnInit, AfterViewInit {
     }
   }
 
+  //Navegación con teclado de las opciones
   public increaseIndex(e: any): void {
     e.preventDefault();
     if(this.results?.length > 0) {
@@ -160,6 +189,7 @@ export class AutocompleteComponent implements OnInit, AfterViewInit {
     }
   }
 
+  //Navegación con teclado de las opciones
   public decreaseIndex(e: any): void {
     e.preventDefault();
     if(this.results?.length > 0) {
@@ -171,6 +201,7 @@ export class AutocompleteComponent implements OnInit, AfterViewInit {
     }
   }
 
+  //Navegación con teclado de las opciones
   public selectKeyPress(e: any) {
     e.stopPropagation();
     this.selectOption();
@@ -178,18 +209,14 @@ export class AutocompleteComponent implements OnInit, AfterViewInit {
     this.input.nativeElement.blur();
   }
 
+  //Selección por click de la opción
   public selectIndex(index: number): void {
     this.selectedIndex = index;
     this.selectOption();
   }
 
-  public selectOption() {
-    if(this.selectedIndex != null) {
-      this.model = this.results[this.selectedIndex];
-      this.onModelChange();
-    }
-  }
-
+  //El control interactivo es una combinación de elementos visuales por
+  //lo que al recibir foco necesita ejecutar una serie de funcionalidades
   public focus() {
     this.focused = true;
     if(this.model != null) {
@@ -197,6 +224,10 @@ export class AutocompleteComponent implements OnInit, AfterViewInit {
     }
   }
 
+  //El control interactivo es una combinación de elementos visuales por
+  //lo que al perder foco necesita ejecutar una serie de funcionalidades
+  //Esta función debe también ser llamada en varios lugares para simular la pérdida
+  //de foco desde cualquier parte del componente visual.
   public blur(){
     this.focused = false;
     this.selectedIndex = null;
@@ -204,11 +235,26 @@ export class AutocompleteComponent implements OnInit, AfterViewInit {
     this.results = null;
   }
 
+  //Cuando el control pierde el foco y tenemos una opción seleccionada una máscara se pone
+  //de frente con el valor seleccionado. Al darle click le damos foco al elemento interactivo
+  //y esto desencadena una serie de acciones para hacer desaparecer la máscara
   public clickSelection() {
     this.input.nativeElement.focus();
   }
 
-  public onModelChange() {
+  private selectOption() {
+    if(this.selectedIndex != null) {
+      this.model = this.results[this.selectedIndex];
+      this.onModelChange();
+    }
+  }
+
+  public recalculateResultsMaxHeight(): void {
+    const binding = this.input.nativeElement.getBoundingClientRect();
+    this.maxResultsHeight = binding.bottom - binding.height;
+  }
+
+  private onModelChange() {
     this.modelChange.emit(getProperty(this.model, this.option.value));
   }
 }
