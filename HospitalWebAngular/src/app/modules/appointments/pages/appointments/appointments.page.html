@@ -219,6 +219,25 @@
                 <p>{{doctor.documentId}}</p>
             </ng-template>
         </app-autocomplete>
+        <app-autocomplete
+            name="patient" 
+            form="createUpdate"
+            label="Paciente"
+            placeholder="Escriba para buscar pacientes..."
+            [(model)]="appointment.patient"
+            [option]="{label: 'documentId'}"
+            [lookupFunction]="getLookupPatientsFunction()"
+            [selectionTemplate]="lookupPatientSelection"
+            [infoTemplate]="lookupPatientInfo"
+        >
+            <ng-template #lookupPatientSelection let-patient>
+                ({{patient.documentId}}) {{patient.firstName}} {{patient.lastName}}
+            </ng-template>
+            <ng-template #lookupPatientInfo let-patient>
+                <p><b>{{patient.firstName}} {{patient.lastName}}</b></p>
+                <p>{{patient.gender ? 'Masculino' : 'Femenino'}}</p>
+            </ng-template>
+        </app-autocomplete>
         <div class="row">
             <app-button [type]="ButtonType.Success" (clicked)="save()" [disabled]="saving || !modalOpen" [buttonClass]="{'loading': saving}">Guardar <i *ngIf="saving" class="material-icons rotate">data_saver_off</i></app-button>
             <app-button [type]="ButtonType.Danger" (clicked)="modalOpen = false">Cancelar</app-button>

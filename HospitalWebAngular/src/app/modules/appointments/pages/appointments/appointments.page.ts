@@ -7,6 +7,8 @@ import { DoctorService } from '@services/doctor/doctor.service';
 import { Field } from '@services/field/field.model';
 import { FieldService } from '@services/field/field.service';
 import { MessageType } from '@services/http/http.types';
+import { Patient } from '@services/patient/patient.model';
+import { PatientService } from '@services/patient/patient.service';
 import { InputType, ButtonType, DateType } from '@shared/components/form-field/form-field.types';
 import { ModalSize, ModalPosition } from '@shared/components/modal/modal.types';
 import { firstValueFrom } from 'rxjs';
@@ -39,6 +41,7 @@ export class AppointmentsPage implements OnInit {
   constructor(
     private appointmentService: AppointmentService,
     private doctorService: DoctorService,
+    private patientService: PatientService,
     private fieldService: FieldService,
     private appService: AppService
   ) { 
@@ -158,5 +161,9 @@ export class AppointmentsPage implements OnInit {
 
   public getLookupDoctorsFunction(): (search: string) => Promise<Doctor[]> {
     return ((search: string) => firstValueFrom(this.doctorService.search(search.trim().split(' ')))).bind(this);
+  }
+
+  public getLookupPatientsFunction(): (search: string) => Promise<Patient[]> {
+    return ((search: string) => firstValueFrom(this.patientService.search(search.trim().split(' ')))).bind(this);
   }
 }
