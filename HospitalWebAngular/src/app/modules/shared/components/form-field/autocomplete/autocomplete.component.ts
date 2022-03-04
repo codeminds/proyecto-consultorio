@@ -37,6 +37,9 @@ export class AutocompleteComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input()
   public maxItems?: number;
 
+  @Input() 
+  public showSelection?: boolean;
+
   @Input()
   public lookupFunction: (search: string, maxItems?: number) => Promise<any[]>;
 
@@ -71,7 +74,7 @@ export class AutocompleteComponent implements OnInit, AfterViewInit, OnDestroy {
 
   //Propiedad para el placeholder sólo muestra el texto si no hemos seleccionado una opción
   public get placeholder(): string {
-    return this.model == null ? this.placeholderText : '';
+    return this.model == null || !this.showSelection ? this.placeholderText : '';
   }
 
   //Esta propiedad determina el alto máximo de la lista de resultados
@@ -92,6 +95,7 @@ export class AutocompleteComponent implements OnInit, AfterViewInit, OnDestroy {
     this.option = null;
     this.option = Option.default;
     this.maxItems = null;
+    this.showSelection = true;
     this.lookupFunction = null;
     this.search = null;
     this.loading = false;

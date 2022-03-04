@@ -159,6 +159,14 @@ export class AppointmentsPage implements OnInit {
     this.messages = [];
   }
 
+  public selectDoctor(data: any) {
+    this.appointment.doctor = new Doctor(data);
+  }
+
+  public selectPatient(data: any) {
+    this.appointment.patient = new Patient(data);
+  }
+
   public getLookupDoctorsFunction(): (search: string) => Promise<Doctor[]> {
     return ((search: string) => firstValueFrom(this.doctorService.search(search.trim().split(' ')))).bind(this);
   }
