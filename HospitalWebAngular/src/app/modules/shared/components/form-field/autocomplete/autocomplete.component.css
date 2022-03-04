@@ -60,3 +60,26 @@ li h5 {
     background: rgb(220 220 220 / 20%);
     cursor: pointer;
 }
+
+i {
+    font-size: 2.1rem;
+    position: absolute;
+    top: 0.33rem;
+    right: 0.33rem;
+    animation: rotate 1s ease-out infinite;
+    pointer-events: none;
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotateZ(10deg);
+    }
+
+    80% {
+        transform: rotateZ(340deg);
+    }
+
+    100% {
+        transform: rotateZ(360deg);
+    }
+}
