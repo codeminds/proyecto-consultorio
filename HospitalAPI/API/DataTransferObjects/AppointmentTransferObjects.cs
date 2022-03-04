@@ -15,9 +15,9 @@ namespace API.DataTransferObjects
 
     public class CreateUpdateAppointmentDTO
     {
-        public DateTime Date { get; set; }
-        public int PatientId { get; set; }
-        public int DoctorId { get; set; }
+        public DateTime? Date { get; set; }
+        public int? PatientId { get; set; }
+        public int? DoctorId { get; set; }
     }
 
     public class FilterAppointmentDTO

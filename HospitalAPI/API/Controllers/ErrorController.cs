@@ -41,7 +41,7 @@ namespace API.Controllers
                             {
                                 Message = ex.Message,
                                 StackTrace = ex.StackTrace,
-                                InnerException = ex.InnerException,
+                                InnerException = ex.InnerException.Message,
                                 Source = ex.Source,
                                 HResult = ex.HResult
                             };

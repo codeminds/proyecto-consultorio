@@ -58,9 +58,19 @@ namespace API.Validators
             }
 
             //BirthDate
-            if (data.BirthDate > DateTime.Now)
+            if (!data.BirthDate.HasValue)
+            {
+                innerMessages.Add("Fecha de nacimiento es requerida");
+            }
+            else if (data.BirthDate > DateTime.Now)
             {
                 innerMessages.Add("Fecha de nacimiento no puede ser mayor a la fecha actual");
+            }
+
+            //Gender
+            if (!data.Gender.HasValue)
+            {
+                innerMessages.Add("Género es requerido");
             }
 
             messages.AddRange(innerMessages);
@@ -111,9 +121,19 @@ namespace API.Validators
             }
 
             //BirthDate
-            if (data.BirthDate > DateTime.Now)
+            if (!data.BirthDate.HasValue)
+            {
+                innerMessages.Add("Fecha de nacimiento es requerida");
+            }
+            else if (data.BirthDate > DateTime.Now)
             {
                 innerMessages.Add("Fecha de nacimiento no puede ser mayor a la fecha actual");
+            }
+
+            //Gender
+            if (!data.Gender.HasValue)
+            {
+                innerMessages.Add("Género es requerido");
             }
 
             messages.AddRange(innerMessages);

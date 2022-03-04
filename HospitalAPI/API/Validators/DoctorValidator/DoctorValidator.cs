@@ -59,9 +59,13 @@ namespace API.Validators
             }
 
             //Field
-            if (!this._database.Fields.Any(f => f.Id == data.FieldId))
+            if (!data.FieldId.HasValue)
             {
-                innerMessages.Add("Especialidad no existe en el sistema");
+                innerMessages.Add("Especialidad es requerida");
+            }
+            else if (!this._database.Fields.Any(f => f.Id == data.FieldId))
+            {
+                innerMessages.Add("Debe seleccionar una especialidad que exista en el sistema");
             }
 
             messages.AddRange(innerMessages);
@@ -112,9 +116,13 @@ namespace API.Validators
             }
 
             //Field
+            if (!data.FieldId.HasValue)
+            {
+                innerMessages.Add("Especialidad es requerida");
+            }
             if (!this._database.Fields.Any(f => f.Id == data.FieldId))
             {
-                innerMessages.Add("Especialidad no existe en el sistema");
+                innerMessages.Add("Debe seleccionar una especialidad que exista en el sistema");
             }
 
             messages.AddRange(innerMessages);

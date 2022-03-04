@@ -19,25 +19,52 @@ namespace API.Validators
         {
             List<string> innerMessages = new List<string>();
 
-            if (data.Date <= DateTime.Now)
+            //Date
+            if (!data.Date.HasValue)
+            {
+                innerMessages.Add("Fecha es requerida");
+            }
+            else if (data.Date <= DateTime.Now)
             {
                 innerMessages.Add("Cita no puede tener una fecha anterior a la fecha actual");
             }
-
-            if (this._database.Appointments.Any(a => 
-                        a.DoctorId == data.DoctorId 
-                        && ((data.Date.AddHours(1) > a.Date && data.Date.AddHours(1) < a.Date.AddHours(1))
-                            || (data.Date > a.Date && data.Date < a.Date.AddHours(1)))))
+            else
             {
-                innerMessages.Add("El doctor ya tiene una cita agendada durante la fecha y hora seleccionada");
+                if (this._database.Appointments.Any(a =>
+                a.DoctorId == data.DoctorId
+                && ((data.Date.Value.AddHours(1) > a.Date && data.Date.Value.AddHours(1) < a.Date.AddHours(1))
+                || (data.Date > a.Date && data.Date < a.Date.AddHours(1)))))
+                {
+                    innerMessages.Add("El doctor ya tiene una cita agendada durante la fecha y hora seleccionada");
+                }
+
+                if (this._database.Appointments.Any(a =>
+                            a.PatientId == data.PatientId
+                            && ((data.Date.Value.AddHours(1) > a.Date && data.Date.Value.AddHours(1) < a.Date.AddHours(1))
+                                || (data.Date > a.Date && data.Date < a.Date.AddHours(1)))))
+                {
+                    innerMessages.Add("El paciente ya tiene una cita agendada durante la fecha y hora seleccionada");
+                }
             }
 
-            if (this._database.Appointments.Any(a =>
-                        a.PatientId == data.PatientId
-                        && ((data.Date.AddHours(1) > a.Date && data.Date.AddHours(1) < a.Date.AddHours(1))
-                            || (data.Date > a.Date && data.Date < a.Date.AddHours(1)))))
+            //Doctor
+            if (!data.DoctorId.HasValue)
             {
-                innerMessages.Add("El paciente ya tiene una cita agendada durante la fecha y hora seleccionada");
+                innerMessages.Add("Doctor es requerido");
+            }
+            else if (!this._database.Doctors.Any(d => d.Id == data.DoctorId))
+            {
+                innerMessages.Add("Debe seleccionar un doctor que esté registrado en el sistema");
+            }
+
+            //Patient
+            if (!data.PatientId.HasValue)
+            {
+                innerMessages.Add("Paciente es requerido");
+            }
+            else if (!this._database.Patients.Any(p => p.Id == data.PatientId))
+            {
+                innerMessages.Add("Debe seleccionar un paciente que esté registrado en el sistema");
             }
 
             messages.AddRange(innerMessages);
@@ -49,27 +76,48 @@ namespace API.Validators
         {
             List<string> innerMessages = new List<string>();
 
-            if (data.Date <= DateTime.Now)
+            //Date
+            if (!data.Date.HasValue)
             {
-                innerMessages.Add("Cita no puede tener una fecha anterior a la fecha actual");
+                innerMessages.Add("Fecha es requerida");
+            }
+            else
+            {
+                if (this._database.Appointments.Any(a =>
+                a.DoctorId == data.DoctorId
+                && ((data.Date.Value.AddHours(1) > a.Date && data.Date.Value.AddHours(1) < a.Date.AddHours(1))
+                || (data.Date > a.Date && data.Date < a.Date.AddHours(1)))))
+                {
+                    innerMessages.Add("El doctor ya tiene una cita agendada durante la fecha y hora seleccionada");
+                }
+
+                if (this._database.Appointments.Any(a =>
+                            a.PatientId == data.PatientId
+                            && ((data.Date.Value.AddHours(1) > a.Date && data.Date.Value.AddHours(1) < a.Date.AddHours(1))
+                                || (data.Date > a.Date && data.Date < a.Date.AddHours(1)))))
+                {
+                    innerMessages.Add("El paciente ya tiene una cita agendada durante la fecha y hora seleccionada");
+                }
             }
 
-            if (this._database.Appointments.Any(a =>
-                        a.Id != id
-                        && a.DoctorId == data.DoctorId
-                        && ((data.Date.AddHours(1) > a.Date && data.Date.AddHours(1) < a.Date.AddHours(1))
-                            || (data.Date >= a.Date && data.Date <= a.Date.AddHours(1)))))
+            //Doctor
+            if (!data.DoctorId.HasValue)
             {
-                innerMessages.Add("El doctor ya tiene una cita agendada durante la fecha y hora seleccionada");
+                innerMessages.Add("Doctor es requerido");
+            }
+            else if (!this._database.Doctors.Any(d => d.Id == data.DoctorId))
+            {
+                innerMessages.Add("Debe seleccionar un doctor que esté registrado en el sistema");
             }
 
-            if (this._database.Appointments.Any(a =>
-                        a.Id != id
-                        && a.PatientId == data.PatientId
-                        && ((data.Date.AddHours(1) > a.Date && data.Date.AddHours(1) < a.Date.AddHours(1))
-                            || (data.Date >= a.Date && data.Date <= a.Date.AddHours(1)))))
+            //Patient
+            if (!data.PatientId.HasValue)
             {
-                innerMessages.Add("El paciente ya tiene una cita agendada durante la fecha y hora seleccionada");
+                innerMessages.Add("Paciente es requerido");
+            }
+            else if (!this._database.Patients.Any(p => p.Id == data.PatientId))
+            {
+                innerMessages.Add("Debe seleccionar un paciente que esté registrado en el sistema");
             }
 
             messages.AddRange(innerMessages);
