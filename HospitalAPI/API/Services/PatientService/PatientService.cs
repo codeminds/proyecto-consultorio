@@ -51,7 +51,7 @@ namespace API.Services
         public async Task<List<GetPatientDTO>> Search(string[] values)
         {
             StringBuilder queryString = new StringBuilder();
-            queryString.Append("SELECT d.* FROM Patient WHERE ");
+            queryString.Append("SELECT * FROM Patient WHERE ");
             List<SqlParameter> parameters = new List<SqlParameter>();
             Regex regex = new Regex("@[^\\d\\w ]", RegexOptions.IgnoreCase);
 
@@ -60,7 +60,7 @@ namespace API.Services
                 string paramName = $"search{i}";
                 string value = regex.Replace(values[i], "");
                 parameters.Add(new SqlParameter(paramName, value));
-                queryString.Append($"d.DocumentId LIKE '%{value}%' OR d.LastName LIKE '%{value}%' OR d.FirstName LIKE '%{value}%' ");
+                queryString.Append($"DocumentId LIKE '%{value}%' OR LastName LIKE '%{value}%' OR FirstName LIKE '%{value}%' ");
 
                 if (i < values.Length - 1)
                 {
