@@ -1,6 +1,6 @@
 ﻿using API.Data.Models;
-using AutoMapper;
 using API.DataTransferObjects;
+using AutoMapper;
 
 namespace API.Mappers
 {

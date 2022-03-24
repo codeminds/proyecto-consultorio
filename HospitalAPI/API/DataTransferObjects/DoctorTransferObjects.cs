@@ -10,18 +10,18 @@
     }
 
     public class CreateUpdateDoctorDTO
-    {
-        public string DocumentId { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
+    { 
+        public string? DocumentId { get; set; }
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
         public int? FieldId { get; set; }
     }
 
-    public class FilterDoctorDTO 
-    {
-        public string DocumentId { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
+    public class FilterDoctorDTO
+    { 
+        public string? DocumentId { get; set; }
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
         public int? FieldId { get; set; }
     }
 }

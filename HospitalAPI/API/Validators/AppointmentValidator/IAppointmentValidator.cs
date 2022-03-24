@@ -1,5 +1,4 @@
 ﻿using API.DataTransferObjects;
-using System.Collections.Generic;
 
 namespace API.Validators
 {

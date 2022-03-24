@@ -1,6 +1,4 @@
 ﻿using API.DataTransferObjects;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace API.Services
 {

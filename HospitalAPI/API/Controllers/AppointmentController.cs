@@ -3,10 +3,6 @@ using API.Services;
 using API.Validators;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace API.Controllers
 {
@@ -24,27 +20,28 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        [Route("{id}")]
-        public async Task<ActionResult<APIResponse>> Get(int id)
-        {
-            APIResponse response = new APIResponse();
-            GetAppointmentDTO appointment = await this._appointmentService.Get(id);
-
-            if (appointment == null)
-            {
-                return HttpErrors.NotFound("Cita no encontrada");
-            }
-
-            response.Data = appointment;
-            response.Success = true;
-            return response;
-        }
-
-        [HttpGet]
         public async Task<ActionResult<APIResponse>> List([FromQuery] FilterAppointmentDTO filter)
         {
             APIResponse response = new APIResponse();
             response.Data = await this._appointmentService.List(filter);
+            response.Success = true;
+
+            return response;
+        }
+
+        [HttpGet]
+        [Route("{id}")]
+        public async Task<ActionResult<APIResponse>> Get(int id)
+        {
+            APIResponse response = new APIResponse();
+            GetAppointmentDTO? appointment = await this._appointmentService.Get(id);
+
+            if (appointment == null)
+            { 
+                return HttpErrors.NotFound("Cita no encontrada");
+            }
+
+            response.Data = appointment;
             response.Success = true;
             return response;
         }
@@ -54,6 +51,7 @@ namespace API.Controllers
         {
             APIResponse response = new APIResponse();
             response.Success = this._appointmentValidator.ValidateInsert(data, response.Messages);
+
             if (response.Success)
             {
                 response.Data = await this._appointmentService.Insert(data);
@@ -69,13 +67,14 @@ namespace API.Controllers
         {
             APIResponse response = new APIResponse();
             response.Success = this._appointmentValidator.ValidateUpdate(id, data, response.Messages);
+
             if (response.Success)
             {
-                GetAppointmentDTO appointment = await this._appointmentService.Update(id, data);
+                GetAppointmentDTO? appointment = await this._appointmentService.Update(id, data);
 
                 if (appointment == null)
                 {
-                    return HttpErrors.NotFound("Cite no encontrada");
+                    return HttpErrors.NotFound("Cita no encontrada");
                 }
 
                 response.Data = appointment;
@@ -91,9 +90,10 @@ namespace API.Controllers
         {
             APIResponse response = new APIResponse();
             response.Success = this._appointmentValidator.ValidateDelete(id, response.Messages);
+
             if (response.Success)
             {
-                GetAppointmentDTO appointment = await this._appointmentService.Delete(id);
+                GetAppointmentDTO? appointment = await this._appointmentService.Delete(id);
 
                 if (appointment == null)
                 {
@@ -103,7 +103,6 @@ namespace API.Controllers
                 response.Data = appointment;
                 response.Messages.Add("Cita borrada correctamente");
             }
-
             return response;
         }
     }

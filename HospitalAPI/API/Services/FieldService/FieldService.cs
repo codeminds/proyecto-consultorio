@@ -3,10 +3,6 @@ using API.Data.Models;
 using API.DataTransferObjects;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace API.Services
 {
@@ -23,9 +19,7 @@ namespace API.Services
 
         public async Task<List<GetFieldDTO>> List()
         {
-            return await this._database.Fields
-                                           .Select(f => this._mapper.Map<Field, GetFieldDTO>(f))
-                                           .ToListAsync();
+            return await this._database.Field.Select(f => this._mapper.Map<Field, GetFieldDTO>(f)).ToListAsync();
         }
     }
 }

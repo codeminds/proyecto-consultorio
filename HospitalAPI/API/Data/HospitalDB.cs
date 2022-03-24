@@ -1,9 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using API.Data.Models;
-
-#nullable disable
 
 namespace API.Data
 {
@@ -18,10 +17,10 @@ namespace API.Data
         {
         }
 
-        public virtual DbSet<Appointment> Appointments { get; set; }
-        public virtual DbSet<Doctor> Doctors { get; set; }
-        public virtual DbSet<Field> Fields { get; set; }
-        public virtual DbSet<Patient> Patients { get; set; }
+        public virtual DbSet<Appointment> Appointment { get; set; } = null!;
+        public virtual DbSet<Doctor> Doctor { get; set; } = null!;
+        public virtual DbSet<Field> Field { get; set; } = null!;
+        public virtual DbSet<Patient> Patient { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -33,20 +32,16 @@ namespace API.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("Relational:Collation", "Modern_Spanish_CI_AS");
-
             modelBuilder.Entity<Appointment>(entity =>
             {
-                entity.ToTable("Appointment");
-
                 entity.HasOne(d => d.Doctor)
-                    .WithMany(p => p.Appointments)
+                    .WithMany(p => p.Appointment)
                     .HasForeignKey(d => d.DoctorId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FKDoctorAppointmentDoctorId");
 
                 entity.HasOne(d => d.Patient)
-                    .WithMany(p => p.Appointments)
+                    .WithMany(p => p.Appointment)
                     .HasForeignKey(d => d.PatientId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FKPatientAppointmentPatientId");
@@ -54,26 +49,19 @@ namespace API.Data
 
             modelBuilder.Entity<Doctor>(entity =>
             {
-                entity.ToTable("Doctor");
-
                 entity.HasIndex(e => e.DocumentId, "UXDoctorDocumentId")
                     .IsUnique();
 
                 entity.Property(e => e.DocumentId)
-                    .IsRequired()
                     .HasMaxLength(9)
                     .IsUnicode(false);
 
-                entity.Property(e => e.FirstName)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.FirstName).HasMaxLength(50);
 
-                entity.Property(e => e.LastName)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.LastName).HasMaxLength(50);
 
                 entity.HasOne(d => d.Field)
-                    .WithMany(p => p.Doctors)
+                    .WithMany(p => p.Doctor)
                     .HasForeignKey(d => d.FieldId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FKFieldDoctorFieldId");
@@ -81,32 +69,21 @@ namespace API.Data
 
             modelBuilder.Entity<Field>(entity =>
             {
-                entity.ToTable("Field");
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Name).HasMaxLength(50);
             });
 
             modelBuilder.Entity<Patient>(entity =>
             {
-                entity.ToTable("Patient");
-
                 entity.HasIndex(e => e.DocumentId, "UXPatientDocumentId")
                     .IsUnique();
 
                 entity.Property(e => e.DocumentId)
-                    .IsRequired()
                     .HasMaxLength(9)
                     .IsUnicode(false);
 
-                entity.Property(e => e.FirstName)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.FirstName).HasMaxLength(50);
 
-                entity.Property(e => e.LastName)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.LastName).HasMaxLength(50);
             });
 
             OnModelCreatingPartial(modelBuilder);

@@ -1,12 +1,6 @@
 ﻿using API.DataTransferObjects;
 using API.Services;
-using API.Validators;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace API.Controllers
 {
@@ -20,10 +14,9 @@ namespace API.Controllers
         {
             this._fieldService = fieldService;
         }
-      
 
         [HttpGet]
-        public async Task<ActionResult<APIResponse>> List()
+        public async Task<ActionResult<APIResponse>> Get(int id)
         {
             APIResponse response = new APIResponse();
             response.Data = await this._fieldService.List();

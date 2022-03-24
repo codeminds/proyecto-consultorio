@@ -11,5 +11,4 @@ namespace API.Mappers
             CreateMap<Field, GetFieldDTO>();
         }
     }
-
 }

@@ -1,8 +1,8 @@
 ﻿using API.DataTransferObjects;
 using API.Services;
 using API.Validators;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace API.Controllers
 {
@@ -20,19 +20,12 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        [Route("{id}")]
-        public async Task<ActionResult<APIResponse>> Get(int id)
+        public async Task<ActionResult<APIResponse>> List([FromQuery] FilterPatientDTO filter)
         {
             APIResponse response = new APIResponse();
-            GetPatientDTO patient = await this._patientService.Get(id);
-
-            if (patient == null)
-            {
-                return HttpErrors.NotFound("Paciente no encontrado");
-            }
-
-            response.Data = patient;
+            response.Data = await _patientService.List(filter);
             response.Success = true;
+
             return response;
         }
 
@@ -47,11 +40,19 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<APIResponse>> List([FromQuery] FilterPatientDTO filter)
+        [Route("{id}")]
+        public async Task<ActionResult<APIResponse>> Get(int id)
         {
             APIResponse response = new APIResponse();
+            GetPatientDTO? patient = await this._patientService.Get(id);
+
+            if (patient == null)
+            {
+                return HttpErrors.NotFound("Paciente no encontrado");
+            }
+
+            response.Data = patient;
             response.Success = true;
-            response.Data = await this._patientService.List(filter);
             return response;
         }
 
@@ -60,6 +61,7 @@ namespace API.Controllers
         {
             APIResponse response = new APIResponse();
             response.Success = this._patientValidator.ValidateInsert(data, response.Messages);
+
             if (response.Success)
             {
                 response.Data = await this._patientService.Insert(data);
@@ -75,9 +77,10 @@ namespace API.Controllers
         {
             APIResponse response = new APIResponse();
             response.Success = this._patientValidator.ValidateUpdate(id, data, response.Messages);
+
             if (response.Success)
             {
-                GetPatientDTO patient = await this._patientService.Update(id, data);
+                GetPatientDTO? patient = await this._patientService.Update(id, data);
 
                 if (patient == null)
                 {
@@ -97,9 +100,10 @@ namespace API.Controllers
         {
             APIResponse response = new APIResponse();
             response.Success = this._patientValidator.ValidateDelete(id, response.Messages);
+
             if (response.Success)
             {
-                GetPatientDTO patient = await this._patientService.Delete(id);
+                GetPatientDTO? patient = await this._patientService.Delete(id);
 
                 if (patient == null)
                 {
@@ -109,7 +113,6 @@ namespace API.Controllers
                 response.Data = patient;
                 response.Messages.Add("Paciente borrado correctamente");
             }
-
             return response;
         }
     }

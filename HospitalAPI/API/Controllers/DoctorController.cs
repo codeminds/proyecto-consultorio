@@ -3,10 +3,6 @@ using API.Services;
 using API.Validators;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace API.Controllers
 {
@@ -24,19 +20,12 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        [Route("{id}")]
-        public async Task<ActionResult<APIResponse>> Get(int id)
+        public async Task<ActionResult<APIResponse>> List([FromQuery] FilterDoctorDTO filter)
         {
             APIResponse response = new APIResponse();
-            GetDoctorDTO doctor = await this._doctorService.Get(id);
-
-            if (doctor == null) 
-            {
-                return HttpErrors.NotFound("Doctor no encontrado");
-            } 
-               
-            response.Data = doctor;
+            response.Data = await this._doctorService.List(filter);
             response.Success = true;
+
             return response;
         }
 
@@ -51,10 +40,18 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<APIResponse>> List([FromQuery] FilterDoctorDTO filter)
+        [Route("{id}")]
+        public async Task<ActionResult<APIResponse>> Get(int id)
         {
             APIResponse response = new APIResponse();
-            response.Data = await this._doctorService.List(filter);
+            GetDoctorDTO? doctor = await this._doctorService.Get(id);
+
+            if (doctor == null)
+            { 
+                return HttpErrors.NotFound("Doctor no encontrado");
+            }
+
+            response.Data = doctor;
             response.Success = true;
             return response;
         }
@@ -64,6 +61,7 @@ namespace API.Controllers
         {
             APIResponse response = new APIResponse();
             response.Success = this._doctorValidator.ValidateInsert(data, response.Messages);
+
             if (response.Success)
             {
                 response.Data = await this._doctorService.Insert(data);
@@ -79,9 +77,10 @@ namespace API.Controllers
         {
             APIResponse response = new APIResponse();
             response.Success = this._doctorValidator.ValidateUpdate(id, data, response.Messages);
+
             if (response.Success)
             {
-                GetDoctorDTO doctor = await this._doctorService.Update(id, data);
+                GetDoctorDTO? doctor = await this._doctorService.Update(id, data);
 
                 if (doctor == null)
                 {
@@ -101,19 +100,19 @@ namespace API.Controllers
         {
             APIResponse response = new APIResponse();
             response.Success = this._doctorValidator.ValidateDelete(id, response.Messages);
+
             if (response.Success)
             {
-                GetDoctorDTO doctor = await this._doctorService.Delete(id);
+                GetDoctorDTO? doctor = await this._doctorService.Delete(id);
 
                 if (doctor == null)
                 {
-                    return HttpErrors.NotFound("Doctor not found");
+                    return HttpErrors.NotFound("Doctor no encontrado");
                 }
 
                 response.Data = doctor;
                 response.Messages.Add("Doctor borrado correctamente");
             }
-
             return response;
         }
     }

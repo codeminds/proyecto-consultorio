@@ -1,8 +1,5 @@
 ﻿using API.Data;
 using API.DataTransferObjects;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace API.Validators
 {
@@ -14,6 +11,7 @@ namespace API.Validators
         {
             this._database = database;
         }
+
 
         public bool ValidateInsert(CreateUpdatePatientDTO data, List<string> messages)
         {
@@ -32,10 +30,11 @@ namespace API.Validators
             {
                 innerMessages.Add("Cédula sólo puede contener números");
             }
-            else if (this._database.Patients.Any(d => d.DocumentId == data.DocumentId))
+            else if (this._database.Patient.Any(d => d.DocumentId == data.DocumentId))
             {
                 innerMessages.Add("Cédula ya está registrada en el sistema");
             }
+
 
             //First Name
             if (string.IsNullOrWhiteSpace(data.FirstName))
@@ -57,20 +56,20 @@ namespace API.Validators
                 innerMessages.Add("Apellido no puede contener más de 50 caracteres");
             }
 
+            //Gender
+            if (!data.Gender.HasValue)
+            {
+                innerMessages.Add("Género es requerido");
+            }
+
             //BirthDate
             if (!data.BirthDate.HasValue)
             {
                 innerMessages.Add("Fecha de nacimiento es requerida");
             }
-            else if (data.BirthDate > DateTime.Now)
+            else if (data.BirthDate.Value >= DateTime.Now)
             {
-                innerMessages.Add("Fecha de nacimiento no puede ser mayor a la fecha actual");
-            }
-
-            //Gender
-            if (!data.Gender.HasValue)
-            {
-                innerMessages.Add("Género es requerido");
+                innerMessages.Add("Fecha de nacimiento no puede ser mayor a fecha actual");
             }
 
             messages.AddRange(innerMessages);
@@ -95,10 +94,11 @@ namespace API.Validators
             {
                 innerMessages.Add("Cédula sólo puede contener números");
             }
-            else if (this._database.Patients.Any(d => d.DocumentId == data.DocumentId && d.Id != id))
+            else if (this._database.Patient.Any(d => d.DocumentId == data.DocumentId && d.Id != id))
             {
                 innerMessages.Add("Cédula ya está registrada en el sistema");
             }
+
 
             //First Name
             if (string.IsNullOrWhiteSpace(data.FirstName))
@@ -120,20 +120,20 @@ namespace API.Validators
                 innerMessages.Add("Apellido no puede contener más de 50 caracteres");
             }
 
+            //Gender
+            if (!data.Gender.HasValue)
+            {
+                innerMessages.Add("Género es requerido");
+            }
+
             //BirthDate
             if (!data.BirthDate.HasValue)
             {
                 innerMessages.Add("Fecha de nacimiento es requerida");
             }
-            else if (data.BirthDate > DateTime.Now)
+            else if (data.BirthDate.Value >= DateTime.Now)
             {
-                innerMessages.Add("Fecha de nacimiento no puede ser mayor a la fecha actual");
-            }
-
-            //Gender
-            if (!data.Gender.HasValue)
-            {
-                innerMessages.Add("Género es requerido");
+                innerMessages.Add("Fecha de nacimiento no puede ser mayor a fecha actual");
             }
 
             messages.AddRange(innerMessages);
@@ -145,7 +145,7 @@ namespace API.Validators
         {
             List<string> innerMessages = new List<string>();
 
-            if (this._database.Appointments.Any(a => a.PatientId == id))
+            if (this._database.Appointment.Any(a => a.PatientId == id))
             {
                 innerMessages.Add("No se puede borrar el record. El paciente tiene citas asociadas en el sistema");
             }

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace API.DataTransferObjects
+﻿namespace API.DataTransferObjects
 {
     public class GetAppointmentDTO
     {
@@ -21,22 +16,22 @@ namespace API.DataTransferObjects
     }
 
     public class FilterAppointmentDTO
-    {
+    { 
         public DateTime? DateFrom { get; set; }
         public DateTime? DateTo { get; set; }
 
         //Patient Filter
-        public string PatientDocumentId { get; set; }
-        public string PatientFirstName { get; set; }
-        public string PatientLastName { get; set; }
+        public string? PatientDocumentId { get; set; }
+        public string? PatientFirstName { set; get; }
+        public string? PatientLastName { set; get; }
+        public bool? PatientGender { set; get; }
         public DateTime? PatientBirthDateFrom { get; set; }
         public DateTime? PatientBirthDateTo { get; set; }
-        public bool? Gender { get; set; }
 
         //Doctor Filter
-        public string DoctorDocumentId { get; set; }
-        public string DoctorFirstName { get; set; }
-        public string DoctorLastName { get; set; }
+        public string? DoctorDocumentId { get; set; }
+        public string? DoctorFirstName { get; set; }
+        public string? DoctorLastName { get; set; }
         public int? DoctorFieldId { get; set; }
     }
 }

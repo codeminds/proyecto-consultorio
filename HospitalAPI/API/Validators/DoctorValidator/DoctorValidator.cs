@@ -1,9 +1,5 @@
 ﻿using API.Data;
 using API.DataTransferObjects;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace API.Validators
 {
@@ -15,6 +11,7 @@ namespace API.Validators
         {
             this._database = database;
         }
+
 
         public bool ValidateInsert(CreateUpdateDoctorDTO data, List<string> messages)
         {
@@ -33,10 +30,11 @@ namespace API.Validators
             {
                 innerMessages.Add("Cédula sólo puede contener números");
             }
-            else if (this._database.Doctors.Any(d => d.DocumentId == data.DocumentId))
+            else if (this._database.Doctor.Any(d => d.DocumentId == data.DocumentId))
             {
                 innerMessages.Add("Cédula ya está registrada en el sistema");
             }
+
 
             //First Name
             if (string.IsNullOrWhiteSpace(data.FirstName))
@@ -45,7 +43,7 @@ namespace API.Validators
             }
             else if (data.FirstName.Length > 50)
             {
-                innerMessages.Add("Nombre no puede contener más de 50 caracteres");
+                innerMessages.Add("Nombre no puedeo contener más de 50 caracteres");
             }
 
             //Last Name
@@ -55,7 +53,7 @@ namespace API.Validators
             }
             else if (data.LastName.Length > 50)
             {
-                innerMessages.Add("Apellido no puede contener más de 50 caracteres");
+                innerMessages.Add("Apellido no puedeo contener más de 50 caracteres");
             }
 
             //Field
@@ -63,7 +61,7 @@ namespace API.Validators
             {
                 innerMessages.Add("Especialidad es requerida");
             }
-            else if (!this._database.Fields.Any(f => f.Id == data.FieldId))
+            else if (!this._database.Field.Any(f => f.Id == data.FieldId))
             {
                 innerMessages.Add("Debe seleccionar una especialidad que exista en el sistema");
             }
@@ -90,10 +88,11 @@ namespace API.Validators
             {
                 innerMessages.Add("Cédula sólo puede contener números");
             }
-            else if (this._database.Doctors.Any(d => d.DocumentId == data.DocumentId && d.Id != id))
+            else if (this._database.Doctor.Any(d => d.DocumentId == data.DocumentId && d.Id != id))
             {
                 innerMessages.Add("Cédula ya está registrada en el sistema");
             }
+
 
             //First Name
             if (string.IsNullOrWhiteSpace(data.FirstName))
@@ -102,7 +101,7 @@ namespace API.Validators
             }
             else if (data.FirstName.Length > 50)
             {
-                innerMessages.Add("Nombre no puede contener más de 50 caracteres");
+                innerMessages.Add("Nombre no puedeo contener más de 50 caracteres");
             }
 
             //Last Name
@@ -112,7 +111,7 @@ namespace API.Validators
             }
             else if (data.LastName.Length > 50)
             {
-                innerMessages.Add("Apellido no puede contener más de 50 caracteres");
+                innerMessages.Add("Apellido no puedeo contener más de 50 caracteres");
             }
 
             //Field
@@ -120,7 +119,7 @@ namespace API.Validators
             {
                 innerMessages.Add("Especialidad es requerida");
             }
-            if (!this._database.Fields.Any(f => f.Id == data.FieldId))
+            else if (!this._database.Field.Any(f => f.Id == data.FieldId))
             {
                 innerMessages.Add("Debe seleccionar una especialidad que exista en el sistema");
             }
@@ -134,7 +133,7 @@ namespace API.Validators
         {
             List<string> innerMessages = new List<string>();
 
-            if (this._database.Appointments.Any(a => a.DoctorId == id))
+            if (this._database.Appointment.Any(a => a.DoctorId == id))
             {
                 innerMessages.Add("No se puede borrar el record. El doctor tiene citas asociadas en el sistema");
             }

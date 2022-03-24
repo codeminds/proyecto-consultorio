@@ -1,9 +1,6 @@
-﻿using API.Services;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
+﻿using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
-using Microsoft.AspNetCore.Diagnostics;
 
 namespace API.Controllers
 {
@@ -13,18 +10,18 @@ namespace API.Controllers
     {
         private readonly IWebHostEnvironment _env;
 
-        public ErrorController(IWebHostEnvironment env) 
+        public ErrorController(IWebHostEnvironment env)
         {
             this._env = env;
         }
 
         [Route("{statusCode}")]
         public ObjectResult HandleStatus(HttpStatusCode statusCode)
-        {
+        { 
             APIResponse response = new APIResponse();
             response.StatusCode = statusCode;
             response.Success = false;
-            
+
             switch (response.StatusCode)
             {
                 case HttpStatusCode.NotFound:
@@ -35,18 +32,17 @@ namespace API.Controllers
                     if (this._env.IsDevelopment())
                     {
                         var ex = HttpContext.Features.Get<IExceptionHandlerPathFeature>()?.Error;
-                        if (ex != null)
+                        if(ex != null)
                         {
                             response.Data = new
                             {
                                 Message = ex.Message,
                                 StackTrace = ex.StackTrace,
-                                InnerException = ex.InnerException.Message,
+                                InnerException = ex.InnerException?.Message,
                                 Source = ex.Source,
                                 HResult = ex.HResult
                             };
                         }
-                        
                     }
                     break;
                 default:
@@ -54,7 +50,10 @@ namespace API.Controllers
                     break;
             }
 
-            return new ObjectResult(response) { StatusCode = (int)statusCode };
+            ObjectResult result = new ObjectResult(response);
+            result.StatusCode = (int)statusCode;
+
+            return result;
         }
     }
 }

@@ -1,20 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 
-#nullable disable
-
 namespace API.Data.Models
 {
     public partial class Field
     {
         public Field()
         {
-            Doctors = new HashSet<Doctor>();
+            Doctor = new HashSet<Doctor>();
         }
 
         public int Id { get; set; }
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
 
-        public virtual ICollection<Doctor> Doctors { get; set; }
+        public virtual ICollection<Doctor> Doctor { get; set; }
     }
 }
