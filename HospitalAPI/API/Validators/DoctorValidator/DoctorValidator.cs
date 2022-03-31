@@ -43,7 +43,7 @@ namespace API.Validators
             }
             else if (data.FirstName.Length > 50)
             {
-                innerMessages.Add("Nombre no puedeo contener más de 50 caracteres");
+                innerMessages.Add("Nombre no puede contener más de 50 caracteres");
             }
 
             //Last Name
@@ -53,7 +53,7 @@ namespace API.Validators
             }
             else if (data.LastName.Length > 50)
             {
-                innerMessages.Add("Apellido no puedeo contener más de 50 caracteres");
+                innerMessages.Add("Apellido no puede contener más de 50 caracteres");
             }
 
             //Field
@@ -101,7 +101,7 @@ namespace API.Validators
             }
             else if (data.FirstName.Length > 50)
             {
-                innerMessages.Add("Nombre no puedeo contener más de 50 caracteres");
+                innerMessages.Add("Nombre no puede contener más de 50 caracteres");
             }
 
             //Last Name
@@ -111,7 +111,7 @@ namespace API.Validators
             }
             else if (data.LastName.Length > 50)
             {
-                innerMessages.Add("Apellido no puedeo contener más de 50 caracteres");
+                innerMessages.Add("Apellido no puede contener más de 50 caracteres");
             }
 
             //Field
