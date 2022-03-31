@@ -47,10 +47,32 @@ table {
 	border-spacing: 0;
 }
 
-button, select{
+figure img {
+    max-width: 100%;
+}
+
+a {
+    color: inherit;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+button {
 	cursor: pointer;
 }
 
-*{
+input {
+	padding: 0;
+	margin: 0;
+}
+
+select, button {
+	cursor: pointer;
+}
+
+* {
     box-sizing: border-box;
 }
+

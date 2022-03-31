@@ -5,6 +5,8 @@ export class DateService{
         return s;
     }
 
+    //Función para obtener un "string date", el tipo de texto de fecha con el formato requerido para los input datetime-local,
+    //a partir de un objeto fecha
     static toInputDateString(date){
         if(date == null){
             return '';

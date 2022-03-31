@@ -1,14 +1,14 @@
-export class BaseService{
-    constructor(){}
+export class BaseService {
+    constructor() {}
 
-    static handleError(response){
+    static handleError(response) {
         let errors = '';
 
-        for(let i = 0; i < response.messages.length; i++){
+        for(let i = 0; i < response.messages.length; i++) {
             errors += response.messages[i] + '\n';
         }
 
-        if(errors){
+        if(errors != '') {
             alert(errors);
         }
     }
