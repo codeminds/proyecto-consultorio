@@ -4,7 +4,6 @@ import { AppService } from '@services/app/app.service';
 import { AppSettings } from '@services/app/app.settings';
 import { Message, MessageType } from '@services/http/http.types';
 import { SnackbarType } from '@shared/components/snackbar/snackbar.types';
-import { info } from 'console';
 import { filter, Observable } from 'rxjs';
 
 @Component({
