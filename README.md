@@ -7,4 +7,4 @@ Proyecto del curso inicial de Code Minds para aprender a desarrollar una aplicac
 * **HospitalWeb**: Proyecto de prueba de UI web sin conexión al API
 * **HospitalWebDataBindingLocal**: Proyecto de UI con librería básica de Data Binding sin conexión al API
 * **HospitalWebDataBindingFinal**: Proyecto de UI con librería básica de Data Binding conectado al proyecto de API
-* **HospitalWebAngular**: Proyecto de prueba de UI (Solo Doctores) con Angular conectado al proyecto de API 
+* **HospitalWebAngular**: Proyecto de UI con Angular conectado al proyecto de API 
