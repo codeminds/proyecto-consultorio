@@ -1,7 +1,7 @@
 <!-- Controles de página -->
 <div class="controls">
     <button class="button success" (click)="createUpdate()">
-        <i class="material-icons">person_add</i>
+        <i class="material-icons-sharp">add_circle</i>
         <span>Agregar</span>
     </button>
 </div>
@@ -62,7 +62,7 @@
             [options]="genderOptions"
         ></app-select>
         <app-button [type]="ButtonType.Success" [disabled]="loading" [buttonClass]="{ 'loading': loading }" (clicked)="list()">
-            <i class="material-icons">search</i>
+            <i class="material-icons-sharp">search</i>
             <span>Buscar</span>
         </app-button>
     </form>
@@ -88,11 +88,11 @@
             <td>{{patient.gender ? 'Masculino' : 'Femenino'}}</td>    
             <td class="table-buttons">
                 <button class="button success" title="Editar" (click)="createUpdate(patient)">
-                    <i class="material-icons">edit</i>
+                    <i class="material-icons-sharp">edit</i>
                     <span>Editar</span>
                 </button>
                 <button class="button danger" title="Borrar" (click)="deletePatient(patient.id)">
-                    <i class="material-icons">delete</i>
+                    <i class="material-icons-sharp">delete</i>
                     <span>Borrar</span>
                 </button>
             </td>
@@ -111,11 +111,11 @@
                 </p>
                 <div>
                     <button class="button success" title="Editar" (click)="createUpdate(patient)">
-                        <i class="material-icons">edit</i>
+                        <i class="material-icons-sharp">edit</i>
                         <span>Editar</span>
                     </button>
                     <button class="button danger" title="Borrar" (click)="deletePatient(patient.id)">
-                        <i class="material-icons">delete</i>
+                        <i class="material-icons-sharp">delete</i>
                         <span>Borrar</span>
                     </button>
                 </div>
@@ -169,7 +169,7 @@
             [options]="genderOptions"
         ></app-select>
         <div class="row">
-            <app-button [type]="ButtonType.Success" (clicked)="save()" [disabled]="saving || !modalOpen" [buttonClass]="{'loading': saving}">Guardar <i *ngIf="saving" class="material-icons rotate">data_saver_off</i></app-button>
+            <app-button [type]="ButtonType.Success" (clicked)="save()" [disabled]="saving || !modalOpen" [buttonClass]="{'loading': saving}">Guardar <i *ngIf="saving" class="material-icons-sharp rotate">data_saver_off</i></app-button>
             <app-button [type]="ButtonType.Danger" (clicked)="modalOpen = false">Cancelar</app-button>
         </div>
     </form>
@@ -179,7 +179,7 @@
 <app-modal [(open)]="confirmOpen" [transparent]="true" [position]="ModalPosition.Top" [closeOnClickOutside]="false" (onClose)="onConfirmClose()">
     <p class="confirm-text">{{confirmText}}</p>
     <div class="confirm-buttons">
-        <button class="button success" (click)="confirm(true)" [disabled]="saving || !confirmOpen" [ngClass]="{'loading': saving}">Confirmar <i *ngIf="saving" class="material-icons rotate">data_saver_off</i></button>
+        <button class="button success" (click)="confirm(true)" [disabled]="saving || !confirmOpen" [ngClass]="{'loading': saving}">Confirmar <i *ngIf="saving" class="material-icons-sharp rotate">data_saver_off</i></button>
         <button class="button neutral" (click)="confirm(false)">Cancelar</button>
     </div>
 </app-modal>

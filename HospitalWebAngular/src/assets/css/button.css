@@ -52,16 +52,12 @@
     background: var(--color-neutral-tertiary);
 }
 
-.material-icons {
+.material-icons-sharp {
     vertical-align: text-bottom;
-    font-size: 1.5rem;
+    font-size: 1.6rem;
     margin-right: 0.4rem;
 }
 
-.material-icons:last-child {
+.material-icons-sharp:last-child {
     margin-right: 0;
-}
-
-span {
-    vertical-align: text-top;
 }
