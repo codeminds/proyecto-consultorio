@@ -223,7 +223,7 @@ export class AutocompleteComponent implements OnInit, AfterViewInit, OnDestroy {
   //lo que al recibir foco necesita ejecutar una serie de funcionalidades
   public focus() {
     this.focused = true;
-    if(this.model != null) {
+    if(this.model != null && this.showSelection) {
       this.search = this.selection.nativeElement.textContent.trim();
     }
   }
@@ -255,7 +255,7 @@ export class AutocompleteComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public recalculateResultsMaxHeight(): void {
     const binding = this.input.nativeElement.getBoundingClientRect();
-    this.maxResultsHeight = binding.bottom - binding.height;
+    this.maxResultsHeight = window.innerHeight - binding.bottom - 10;
   }
 
   private onModelChange() {
