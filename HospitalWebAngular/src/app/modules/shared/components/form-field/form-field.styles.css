@@ -15,7 +15,6 @@ label {
     font-size: 1.4rem;
 }
 
-/* TODO: Remover select cuando se haga el custom dropdown */
 input:not([type="radio"]):not([type="checkbox"]), textarea, select {
     display: inline-block;
     width: 100%;
@@ -29,12 +28,6 @@ input:not([type="radio"]):not([type="checkbox"]), textarea, select {
     outline: 0;
 }
 
-/* TODO: Remover cuando se haga el custom dropdown */
-select option {
-    background: var(--color-form-field-select);
-}
-
-/* TODO: Remover select cuando se haga el custom dropdown */
 input:not([type="radio"]):not([type="checkbox"]):focus, textarea:focus, select:focus {
     border-color: var(--color-form-field-focus);
 }
@@ -88,6 +81,56 @@ textarea.resizable {
 
 .check input {
     display: none;
+}
+
+.options {
+    position: absolute;
+}
+
+.options ul {
+    position: absolute;
+    z-index: 10;
+    margin-top: 0.1rem;
+    background: var(--color-background);
+    overflow: auto;
+    scrollbar-color: var(--color-scrollbar-light) var(--color-scrollbar-light);
+    scrollbar-width: thin;
+    min-height: 15rem;
+}
+
+.options ul::-webkit-scrollbar-thumb {
+    background: var(--color-scrollbar-light);
+}
+
+.options ul::-webkit-scrollbar {
+    width: 0.7rem;
+    background: var(--color-scrollbar-light);
+}
+
+.options li {
+    font-size: 1.1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    background: rgba(255, 255, 255, 0.2);
+    color: inherit;
+    min-width: 17rem;
+    padding: 1rem 1.5rem;
+    cursor: pointer;
+}
+
+.options li.selected, .options li:hover {
+    background: rgba(255, 255, 255, 0.7);
+}
+
+.options h5 {
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.options h5.title {
+    margin-bottom: 0.6rem;
+    border-bottom: solid 0.1rem var(--color-form-field-input);
 }
 
 @media screen and (max-width: 1024px) {

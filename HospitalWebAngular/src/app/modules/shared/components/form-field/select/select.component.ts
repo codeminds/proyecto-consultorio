@@ -1,4 +1,6 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
+import { EventsService } from '@shared/services/events/events.service';
+import { Subject, takeUntil } from 'rxjs';
 import { getProperty } from '../form-field.helpers';
 import { Option } from '../form-field.types';
 
@@ -7,12 +9,15 @@ import { Option } from '../form-field.types';
   templateUrl: './select.component.html',
   styleUrls: ['../form-field.styles.css']
 })
-export class SelectComponent implements OnInit, OnChanges {
+export class SelectComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit {
   @Input('name')
   public fieldName: string;
 
   @Input()
   public form: string;
+
+  @Input()
+  public infoTemplate?: TemplateRef<any>;
   
   @Input()
   public options: any[];
@@ -32,7 +37,16 @@ export class SelectComponent implements OnInit, OnChanges {
   @Output()
   public modelChange: EventEmitter<any>;
 
+  @ViewChild('select')
+  private select: ElementRef;
+
   public selectedIndex: number;
+  public open: boolean;
+
+  public getProperty = getProperty;
+
+  private maxResultsHeight: number;
+  private unsubscribe: Subject<void>;
 
   public get name(){
     return `${this.form}${this.fieldName}`;
@@ -42,18 +56,27 @@ export class SelectComponent implements OnInit, OnChanges {
     return `${this.form}-${this.fieldName}`;
   }
 
-  public getProperty = getProperty;
+  //Esta propiedad determina el alto máximo de la lista de resultados
+  public get style(): string {
+    return `max-height: min(30rem, ${this.maxResultsHeight / 10}rem)`;
+  }
 
-  constructor() { 
+  constructor(
+    private eventsService: EventsService
+  ) { 
     this.fieldName = null;
     this.form = null;
+    this.infoTemplate = null;
     this.options = [];
     this.option = Option.default;
     this.label = null;
     this.model = null;
     this.nullOption = null;
     this.selectedIndex = null;
+    this.open = false;
+    this.maxResultsHeight = 0;
     this.modelChange = new EventEmitter();
+    this.unsubscribe = new Subject();
   }
 
   public ngOnInit(): void {
@@ -68,6 +91,25 @@ export class SelectComponent implements OnInit, OnChanges {
     if(!this.form) {
       throw new Error('Property form is required');
     }
+
+    //Utilizamos el servicio de eventos globales en vez de saturar el DOM
+    //con eventos propios
+    this.eventsService.bodyClick
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe((e) =>  {
+        if(![this.select.nativeElement].includes(e.target))
+        {
+          this.toggle(false);
+        }
+      });
+
+    //Utilizamos el servicio de eventos globales en vez de saturar el DOM
+    //con eventos propios
+    this.eventsService.windowResize
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe((e => {
+        this.recalculateResultsMaxHeight();
+      }));
   }
 
   //El modelo del select es un número que es el índice de selección
@@ -108,11 +150,53 @@ export class SelectComponent implements OnInit, OnChanges {
     }
   }
 
+  //Técnica de unsubscribe de observables en componentes para evitar
+  //filtrado de memoria. Al destruir el componente enviamos un notificación
+  //al Subject unsubscribe y todos los observables con un pipe "takeUntil(this.unsubscribe)"
+  //en el componente se desuscriben y liberan esa memoria
+  public ngOnDestroy(): void {
+    this.unsubscribe.next();
+    this.unsubscribe.complete();
+  }
+
+  public ngAfterViewInit(): void {
+    this.recalculateResultsMaxHeight();
+  }
+
   public onModelChange(index: number) {
+    this.selectedIndex = index;
     if(index != null) {
       this.modelChange.emit(getProperty(this.options[index], this.option.value));
     }else {
       this.modelChange.emit(null);
     } 
+  }
+
+  public toggle(open: boolean) {
+    this.open = open;
+  }
+
+  public handleClickEvent(e: any, open: boolean) {
+    e.preventDefault();
+    e.target.focus();
+    this.toggle(open);
+  }
+
+  public handleSelectEvent(e: any, open: boolean) {
+    e.preventDefault();
+    this.toggle(open);
+  }
+
+  public selectOption(e: any, index?: number) {
+    e.stopPropagation();
+    this.model = index != null ? this.options[index] : null;
+    this.open = false;
+    this.select.nativeElement.focus();
+    this.onModelChange(index);
+  }
+
+  private recalculateResultsMaxHeight(): void {
+    const binding = this.select.nativeElement.getBoundingClientRect();
+    this.maxResultsHeight = window.innerHeight - binding.bottom - 10;
   }
 }

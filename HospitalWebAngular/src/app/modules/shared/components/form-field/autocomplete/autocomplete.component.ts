@@ -253,7 +253,7 @@ export class AutocompleteComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  public recalculateResultsMaxHeight(): void {
+  private recalculateResultsMaxHeight(): void {
     const binding = this.input.nativeElement.getBoundingClientRect();
     this.maxResultsHeight = window.innerHeight - binding.bottom - 10;
   }

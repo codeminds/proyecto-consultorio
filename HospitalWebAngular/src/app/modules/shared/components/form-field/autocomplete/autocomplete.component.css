@@ -1,47 +1,5 @@
-li {
-    font-size: 1.1rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    background: rgba(255, 255, 255, 0.2);
-    color: inherit;
-    min-width: 17rem;
-    padding: 1rem 1.5rem;
-    cursor: pointer;
-}
-
-li.selected, li:hover {
-    background: rgba(255, 255, 255, 0.7);
-}
-
-li h5 {
-    font-size: 1.2rem;
-    font-weight: 600;
-    margin-bottom: 0.6rem;
-    border-bottom: solid 0.1rem var(--color-form-field-input);
-}
-
-.selection, .results {
+.selection {
     position: relative;
-}
-
-.results ul {
-    position: absolute;
-    z-index: 10;
-    margin-top: 0.1rem;
-    background: var(--color-background);
-    overflow: auto;
-    scrollbar-color: var(--color-scrollbar-light) var(--color-scrollbar-light);
-    scrollbar-width: thin;
-}
-
-.results ul::-webkit-scrollbar-thumb {
-    background: var(--color-scrollbar-light);
-}
-
-.results ul::-webkit-scrollbar {
-    width: 0.7rem;
-    background: var(--color-scrollbar-light);
 }
 
 .selection .hidden {
