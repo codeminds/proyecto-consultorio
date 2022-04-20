@@ -58,7 +58,8 @@ export class SelectComponent implements OnInit, OnChanges, OnDestroy, AfterViewI
 
   //Esta propiedad determina el alto máximo de la lista de resultados
   public get style(): string {
-    return `max-height: min(30rem, ${this.maxResultsHeight / 10}rem)`;
+    const maxHeight = this.maxResultsHeight / 10;
+    return `max-height: min(30rem, ${maxHeight > 15 ? maxHeight : 15}rem)`;
   }
 
   constructor(

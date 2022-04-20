@@ -95,7 +95,6 @@ textarea.resizable {
     overflow: auto;
     scrollbar-color: var(--color-scrollbar-light) var(--color-scrollbar-light);
     scrollbar-width: thin;
-    min-height: 15rem;
 }
 
 .options ul::-webkit-scrollbar-thumb {

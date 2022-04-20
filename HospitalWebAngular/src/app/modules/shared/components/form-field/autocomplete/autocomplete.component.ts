@@ -79,7 +79,8 @@ export class AutocompleteComponent implements OnInit, AfterViewInit, OnDestroy {
 
   //Esta propiedad determina el alto máximo de la lista de resultados
   public get style(): string {
-    return `max-height: min(30rem, ${this.maxResultsHeight / 10}rem)`;
+    const maxHeight = this.maxResultsHeight / 10;
+    return `max-height: min(30rem, ${maxHeight > 15 ? maxHeight : 15}rem)`;
   }
 
   constructor(
@@ -130,7 +131,8 @@ export class AutocompleteComponent implements OnInit, AfterViewInit, OnDestroy {
     this.eventsService.bodyClick
       .pipe(takeUntil(this.unsubscribe))
       .subscribe((e) =>  {
-        if(![this.input.nativeElement, this.selection?.nativeElement].includes(e.target))
+        if(![this.input.nativeElement, this.selection?.nativeElement].includes(e.target) 
+            && document.activeElement != this.input.nativeElement)
         {
           this.blur();
         }
