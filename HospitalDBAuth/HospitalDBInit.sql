@@ -63,6 +63,48 @@ BEGIN
 
 END
 
+-- CREATE ROLE
+IF NOT EXISTS(SELECT * FROM sys.sysobjects WHERE Name = 'Role' AND xtype = 'U')
+BEGIN
+	CREATE TABLE Role(
+		Id INT NOT NULL,
+		Name NVARCHAR(50) NOT NULL,
+		CONSTRAINT PKRole PRIMARY KEY (Id),
+	);
+
+END
+
+-- CREATE USER
+IF NOT EXISTS(SELECT * FROM sys.sysobjects WHERE Name = 'User' AND xtype = 'U')
+BEGIN
+	CREATE TABLE [User](
+		Id INT NOT NULL IDENTITY(1, 1),
+		Email VARCHAR(100) NOT NULL,
+		Password BINARY(64) NOT NULL,
+		PasswordSalt BINARY(64) NOT NULL,
+		FirstName NVARCHAR(50) NOT NULL,
+		LastName NVARCHAR(50) NOT NULL,
+		RoleId INT NOT NULL,
+		IsSuperAdmin BIT NOT NULL DEFAULT 0,
+		CONSTRAINT PKUser PRIMARY KEY (Id),
+		CONSTRAINT FKRoleUserRoleId FOREIGN KEY(RoleId) REFERENCES Role(Id)
+	);
+END
+
+-- CREATE SESSION
+IF NOT EXISTS(SELECT * FROM sys.sysobjects WHERE Name = 'Session' AND xtype = 'U')
+BEGIN
+	CREATE TABLE Session(
+		Id UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+		UserId INT NOT NULL,
+		Date DATETIME2(7) NOT NULL,
+		Expiration DATETIME2(7) NOT NULL,
+		RefreshToken BINARY(32) NOT NULL,
+		CONSTRAINT PKSession PRIMARY KEY (Id),
+		CONSTRAINT FKUserSessionUserId FOREIGN KEY(UserId) REFERENCES [User](Id)
+	);
+END
+
 -- INSERT FIELD DATA
 IF NOT EXISTS(SELECT * FROM Field WHERE Name = 'Doctor General')
 BEGIN
@@ -84,4 +126,18 @@ BEGIN
 	INSERT INTO Field (Name) VALUES ('Cirujano');
 END
 
+-- INSERT ROLE DATA
+IF NOT EXISTS(SELECT * FROM Role WHERE Name = 'Administrador')
+BEGIN
+	INSERT INTO Role (Id, Name) VALUES (1, 'Administrador');
+END
 
+IF NOT EXISTS(SELECT * FROM Role WHERE Name = 'Editor')
+BEGIN
+	INSERT INTO Role (Id, Name) VALUES (2, 'Editor');
+END
+
+IF NOT EXISTS(SELECT * FROM Role WHERE Name = 'Asistente')
+BEGIN
+	INSERT INTO Role (Id, Name) VALUES (3, 'Asistente');
+END
