@@ -23,10 +23,10 @@ namespace API.Services
 
             return await this._database.Doctor
                                         .Include(d => d.Field)
-                                        .Where(p => (string.IsNullOrWhiteSpace(filter.DocumentId) || p.DocumentId.Contains(filter.DocumentId))
-                                                    && (string.IsNullOrWhiteSpace(filter.FirstName) || p.FirstName.Contains(filter.FirstName))
-                                                    && (string.IsNullOrWhiteSpace(filter.LastName) || p.LastName.Contains(filter.LastName))
-                                                    && (!filter.FieldId.HasValue || p.FieldId == filter.FieldId))
+                                        .Where(d => (string.IsNullOrWhiteSpace(filter.DocumentId) || d.DocumentId.Contains(filter.DocumentId))
+                                                    && (string.IsNullOrWhiteSpace(filter.FirstName) || d.FirstName.Contains(filter.FirstName))
+                                                    && (string.IsNullOrWhiteSpace(filter.LastName) || d.LastName.Contains(filter.LastName))
+                                                    && (!filter.FieldId.HasValue || d.FieldId == filter.FieldId))
                                         .ToListAsync();
         }
 
