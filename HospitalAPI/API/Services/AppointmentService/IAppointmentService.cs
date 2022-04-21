@@ -1,13 +1,14 @@
-﻿using API.DataTransferObjects;
+﻿using API.Data.Models;
+using API.DataTransferObjects;
 
 namespace API.Services
 {
     public interface IAppointmentService
     {
-        Task<List<GetAppointmentDTO>> List(FilterAppointmentDTO filter);
-        Task<GetAppointmentDTO> Get(int id);
-        Task<GetAppointmentDTO> Insert(CreateUpdateAppointmentDTO data);
-        Task<GetAppointmentDTO?> Update(int id, CreateUpdateAppointmentDTO data);
-        Task<GetAppointmentDTO?> Delete(int id);
+        Task<List<Appointment>> List(FilterAppointmentDTO filter);
+        Task<Appointment?> Get(int id);
+        Task<int> Insert(Appointment entity);
+        Task Update(Appointment entity);
+        Task Delete(Appointment entity);
     }
 }

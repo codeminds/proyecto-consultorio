@@ -1,7 +1,8 @@
-﻿using API.DataTransferObjects;
+﻿using API.Data.Models;
+using API.DataTransferObjects;
 using API.Services;
 using API.Validators;
-using Microsoft.AspNetCore.Http;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -10,11 +11,13 @@ namespace API.Controllers
     [ApiController]
     public class DoctorController : ControllerBase
     {
+        private readonly IMapper _mapper;
         private readonly IDoctorService _doctorService;
         private readonly IDoctorValidator _doctorValidator;
 
-        public DoctorController(IDoctorService doctorService, IDoctorValidator doctorValidator)
+        public DoctorController(IMapper mapper, IDoctorService doctorService, IDoctorValidator doctorValidator)
         {
+            this._mapper = mapper;
             this._doctorService = doctorService;
             this._doctorValidator = doctorValidator;
         }
@@ -23,8 +26,8 @@ namespace API.Controllers
         public async Task<ActionResult<APIResponse>> List([FromQuery] FilterDoctorDTO filter)
         {
             APIResponse response = new APIResponse();
-            response.Data = await this._doctorService.List(filter);
-            response.Success = true;
+            response.Data = (await this._doctorService.List(filter))
+                                .Select(d => this._mapper.Map<Doctor, GetDoctorDTO>(d));
 
             return response;
         }
@@ -34,8 +37,9 @@ namespace API.Controllers
         public async Task<ActionResult<APIResponse>> Search([FromQuery] string[] s)
         {
             APIResponse response = new APIResponse();
-            response.Data = await this._doctorService.Search(s);
-            response.Success = true;
+            response.Data = (await this._doctorService.Search(s))
+                                .Select(d => this._mapper.Map<Doctor, GetDoctorDTO>(d));
+
             return response;
         }
 
@@ -43,16 +47,15 @@ namespace API.Controllers
         [Route("{id}")]
         public async Task<ActionResult<APIResponse>> Get(int id)
         {
-            APIResponse response = new APIResponse();
-            GetDoctorDTO? doctor = await this._doctorService.Get(id);
-
-            if (doctor == null)
-            { 
+            Doctor? entity = await this._doctorService.Get(id);
+            if (entity == null)
+            {
                 return HttpErrors.NotFound("Doctor no encontrado");
             }
 
-            response.Data = doctor;
-            response.Success = true;
+            APIResponse response = new APIResponse();
+            response.Data = this._mapper.Map<Doctor, GetDoctorDTO>(entity);
+
             return response;
         }
 
@@ -64,7 +67,8 @@ namespace API.Controllers
 
             if (response.Success)
             {
-                response.Data = await this._doctorService.Insert(data);
+                int id = await this._doctorService.Insert(this._mapper.Map<CreateUpdateDoctorDTO, Doctor>(data));
+                response.Data = this._mapper.Map<Doctor, GetDoctorDTO>(await this._doctorService.Get(id));
                 response.Messages.Add("Doctor insertado correctamente");
             }
 
@@ -75,19 +79,19 @@ namespace API.Controllers
         [Route("{id}")]
         public async Task<ActionResult<APIResponse>> Update(int id, CreateUpdateDoctorDTO data)
         {
+            Doctor? entity = await this._doctorService.Get(id);
+            if (entity == null)
+            {
+                return HttpErrors.NotFound("Doctor no encontrado");
+            }
+
             APIResponse response = new APIResponse();
             response.Success = this._doctorValidator.ValidateUpdate(id, data, response.Messages);
 
             if (response.Success)
             {
-                GetDoctorDTO? doctor = await this._doctorService.Update(id, data);
-
-                if (doctor == null)
-                {
-                    return HttpErrors.NotFound("Doctor no encontrado");
-                }
-
-                response.Data = doctor;
+                await this._doctorService.Update(this._mapper.Map(data, entity));
+                response.Data = this._mapper.Map<Doctor, GetDoctorDTO>(entity);
                 response.Messages.Add("Doctor actualizado correctamente");
             }
 
@@ -98,21 +102,22 @@ namespace API.Controllers
         [Route("{id}")]
         public async Task<ActionResult<APIResponse>> Delete(int id)
         {
+            Doctor? entity = await this._doctorService.Get(id);
+            if (entity == null)
+            {
+                return HttpErrors.NotFound("Doctor no encontrado");
+            }
+
             APIResponse response = new APIResponse();
             response.Success = this._doctorValidator.ValidateDelete(id, response.Messages);
 
             if (response.Success)
             {
-                GetDoctorDTO? doctor = await this._doctorService.Delete(id);
-
-                if (doctor == null)
-                {
-                    return HttpErrors.NotFound("Doctor no encontrado");
-                }
-
-                response.Data = doctor;
+                await this._doctorService.Delete(entity);
+                response.Data = this._mapper.Map<Doctor, GetDoctorDTO>(entity);
                 response.Messages.Add("Doctor borrado correctamente");
             }
+
             return response;
         }
     }

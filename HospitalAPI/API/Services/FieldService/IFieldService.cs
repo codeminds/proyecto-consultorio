@@ -1,9 +1,9 @@
-﻿using API.DataTransferObjects;
+﻿using API.Data.Models;
 
 namespace API.Services
 {
     public interface IFieldService
     {
-        Task<List<GetFieldDTO>> List();
+        Task<List<Field>> List();
     }
 }

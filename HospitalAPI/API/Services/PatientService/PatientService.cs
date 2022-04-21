@@ -12,16 +12,16 @@ namespace API.Services.PatientService
     public class PatientService : IPatientService
     {
         private readonly HospitalDB _database;
-        private readonly IMapper _mapper;
 
-        public PatientService(HospitalDB database, IMapper mapper)
+        public PatientService(HospitalDB database)
         {
             this._database = database;
-            this._mapper = mapper;
         }
 
-        public async Task<List<GetPatientDTO>> List(FilterPatientDTO filter)
+        public async Task<List<Patient>> List(FilterPatientDTO? filter = null)
         {
+            filter = filter ?? new FilterPatientDTO();
+
             return await this._database.Patient
                                         .Where(p => (string.IsNullOrWhiteSpace(filter.DocumentId) || p.DocumentId.Contains(filter.DocumentId))
                                                     && (string.IsNullOrWhiteSpace(filter.FirstName) || p.FirstName.Contains(filter.FirstName))
@@ -29,11 +29,10 @@ namespace API.Services.PatientService
                                                     && (!filter.BirthDateFrom.HasValue || p.BirthDate >= filter.BirthDateFrom)
                                                     && (!filter.BirthDateTo.HasValue || p.BirthDate <= filter.BirthDateTo)
                                                     && (!filter.Gender.HasValue || p.Gender == filter.Gender))
-                                        .Select(p => this._mapper.Map<Patient, GetPatientDTO>(p))
                                         .ToListAsync();
         }
 
-        public async Task<List<GetPatientDTO>> Search(string[] values)
+        public async Task<List<Patient>> Search(string[] values)
         {
             StringBuilder queryString = new StringBuilder();
             queryString.Append("SELECT * FROM Patient WHERE ");
@@ -51,67 +50,36 @@ namespace API.Services.PatientService
                 }
             }
 
-            List<Patient> results = await this._database.Patient
-                                    .FromSqlRaw(queryString.ToString())
-                                    .ToListAsync();
-
-            return results.Select(p => this._mapper.Map<Patient, GetPatientDTO>(p)).ToList();
+            return await this._database.Patient
+                                        .FromSqlRaw(queryString.ToString())
+                                        .ToListAsync();
         }
 
-        public async Task<GetPatientDTO?> Get(int id)
+        public async Task<Patient?> Get(int id)
         {
-            Patient? entity = await this._database.Patient
-                                    .FirstOrDefaultAsync(d => d.Id == id);
-
-            if (entity == null)
-            {
-                return null;
-            }
-
-            return this._mapper.Map<Patient, GetPatientDTO>(entity);
+            return await this._database.Patient
+                                .FirstOrDefaultAsync(d => d.Id == id);
         }
 
-        public async Task<GetPatientDTO> Insert(CreateUpdatePatientDTO data)
+        public async Task<int> Insert(Patient entity)
         {
-            Patient entity = this._mapper.Map<CreateUpdatePatientDTO, Patient>(data);
-
-
             this._database.Patient.Add(entity);
             await this._database.SaveChangesAsync();
 
-            return this._mapper.Map<Patient, GetPatientDTO>(entity);
+            return entity.Id;
         }
 
-        public async Task<GetPatientDTO?> Update(int id, CreateUpdatePatientDTO data)
+        public async Task Update(Patient entity)
         {
-            Patient? entity = await this._database.Patient
-                                                    .FirstOrDefaultAsync(d => d.Id == id);
-
-            if (entity == null)
-            {
-                return null;
-            }
-
-            this._mapper.Map(data, entity);
             this._database.Patient.Update(entity);
             await this._database.SaveChangesAsync();
 
-            return this._mapper.Map<Patient?, GetPatientDTO?>(entity);
         }
 
-        public async Task<GetPatientDTO?> Delete(int id)
+        public async Task Delete(Patient entity)
         {
-            Patient? entity = await this._database.Patient.FindAsync(id);
-
-            if (entity == null)
-            {
-                return null;
-            }
-
             this._database.Patient.Remove(entity);
             await this._database.SaveChangesAsync();
-
-            return this._mapper.Map<Patient?, GetPatientDTO?>(entity);
         }
     }
 }

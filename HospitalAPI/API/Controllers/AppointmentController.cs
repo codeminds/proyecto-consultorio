@@ -1,6 +1,8 @@
-﻿using API.DataTransferObjects;
+﻿using API.Data.Models;
+using API.DataTransferObjects;
 using API.Services;
 using API.Validators;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,11 +12,13 @@ namespace API.Controllers
     [ApiController]
     public class AppointmentController : ControllerBase
     {
+        private readonly IMapper _mapper;
         private readonly IAppointmentService _appointmentService;
         private readonly IAppointmentValidator _appointmentValidator;
 
-        public AppointmentController(IAppointmentService appointmentService, IAppointmentValidator appointmentValidator)
+        public AppointmentController(IMapper mapper, IAppointmentService appointmentService, IAppointmentValidator appointmentValidator)
         {
+            this._mapper = mapper;
             this._appointmentService = appointmentService;
             this._appointmentValidator = appointmentValidator;
         }
@@ -23,8 +27,9 @@ namespace API.Controllers
         public async Task<ActionResult<APIResponse>> List([FromQuery] FilterAppointmentDTO filter)
         {
             APIResponse response = new APIResponse();
-            response.Data = await this._appointmentService.List(filter);
             response.Success = true;
+            response.Data = (await this._appointmentService.List(filter))
+                                .Select(a => this._mapper.Map<Appointment, GetAppointmentDTO>(a));
 
             return response;
         }
@@ -34,15 +39,16 @@ namespace API.Controllers
         public async Task<ActionResult<APIResponse>> Get(int id)
         {
             APIResponse response = new APIResponse();
-            GetAppointmentDTO? appointment = await this._appointmentService.Get(id);
+            Appointment? appointment = await this._appointmentService.Get(id);
 
             if (appointment == null)
-            { 
+            {
                 return HttpErrors.NotFound("Cita no encontrada");
             }
 
-            response.Data = appointment;
             response.Success = true;
+            response.Data = this._mapper.Map<Appointment, GetAppointmentDTO>(appointment);
+
             return response;
         }
 
@@ -54,7 +60,8 @@ namespace API.Controllers
 
             if (response.Success)
             {
-                response.Data = await this._appointmentService.Insert(data);
+                Appointment appointment = await this._appointmentService.Insert(data);
+                response.Data = this._mapper.Map<Appointment, GetAppointmentDTO>(appointment);
                 response.Messages.Add("Cita insertada correctamente");
             }
 
@@ -70,14 +77,14 @@ namespace API.Controllers
 
             if (response.Success)
             {
-                GetAppointmentDTO? appointment = await this._appointmentService.Update(id, data);
+                Appointment? appointment = await this._appointmentService.Update(id, data);
 
                 if (appointment == null)
                 {
                     return HttpErrors.NotFound("Cita no encontrada");
                 }
 
-                response.Data = appointment;
+                response.Data = this._mapper.Map<Appointment, GetAppointmentDTO>(appointment);
                 response.Messages.Add("Cita actualizada correctamente");
             }
 
@@ -93,14 +100,14 @@ namespace API.Controllers
 
             if (response.Success)
             {
-                GetAppointmentDTO? appointment = await this._appointmentService.Delete(id);
+                Appointment? appointment = await this._appointmentService.Delete(id);
 
                 if (appointment == null)
                 {
                     return HttpErrors.NotFound("Cita no encontrada");
                 }
 
-                response.Data = appointment;
+                response.Data = this._mapper.Map<Appointment, GetAppointmentDTO>(appointment);
                 response.Messages.Add("Cita borrada correctamente");
             }
             return response;

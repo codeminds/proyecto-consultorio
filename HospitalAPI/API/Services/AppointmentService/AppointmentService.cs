@@ -21,7 +21,7 @@ namespace API.Services
             this._patientService = patientService;
         }
 
-        public async Task<List<GetAppointmentDTO>> List(FilterAppointmentDTO filter)
+        public async Task<List<Appointment>> List(FilterAppointmentDTO filter)
         {
             List<int> doctorIds = (await this._doctorService.List(this._mapper.Map<FilterAppointmentDTO, FilterDoctorDTO>(filter))).Select(d => d.Id).ToList();
             List<int> patientIds = (await this._patientService.List(this._mapper.Map<FilterAppointmentDTO, FilterPatientDTO>(filter))).Select(d => d.Id).ToList();
@@ -34,82 +34,53 @@ namespace API.Services
                                                     && (!filter.DateTo.HasValue || a.Date <= filter.DateTo)
                                                     && doctorIds.Contains(a.DoctorId)
                                                     && patientIds.Contains(a.PatientId))
-                                        .Select(d => this._mapper.Map<Appointment, GetAppointmentDTO>(d))
                                         .ToListAsync();
         }
 
-        public async Task<GetAppointmentDTO?> Get(int id)
+        public async Task<Appointment?> Get(int id)
         {
-            Appointment? entity = await this._database.Appointment
+            return await this._database.Appointment
                                     .Include(a => a.Patient)
                                     .Include(a => a.Doctor)
                                     .Include(a => a.Doctor.Field)
                                     .FirstOrDefaultAsync(d => d.Id == id);
-
-            if (entity == null)
-            {
-                return null;
-            }
-
-            return this._mapper.Map<Appointment, GetAppointmentDTO>(entity);
         }
 
-        public async Task<GetAppointmentDTO> Insert(CreateUpdateAppointmentDTO data)
+        public async Task<Appointment> Insert(CreateUpdateAppointmentDTO data)
         {
             Appointment entity = this._mapper.Map<CreateUpdateAppointmentDTO, Appointment>(data);
 
-
             this._database.Appointment.Add(entity);
             await this._database.SaveChangesAsync();
 
-            this._database.Appointment.Add(entity);
-            await this._database.SaveChangesAsync();
-
-            entity = await this._database.Appointment
-                                    .Include(a => a.Patient)
-                                    .Include(a => a.Doctor)
-                                    .Include(a => a.Doctor.Field)
-                                    .FirstOrDefaultAsync(d => d.Id == entity.Id);
-            return this._mapper.Map<Appointment, GetAppointmentDTO>(entity);
+            return await this.Get(entity.Id);
         }
 
-        public async Task<GetAppointmentDTO?> Update(int id, CreateUpdateAppointmentDTO data)
+        public async Task<Appointment?> Update(int id, CreateUpdateAppointmentDTO data)
         {
-            Appointment? entity = await this._database.Appointment
-                                                    .Include(a => a.Patient)
-                                                    .Include(a => a.Doctor)
-                                                    .Include(a => a.Doctor.Field)
-                                                    .FirstOrDefaultAsync(d => d.Id == id);
+            Appointment? entity = await this.Get(id);
 
-            if (entity == null)
+            if (entity != null)
             {
-                return null;
+                this._mapper.Map(data, entity);
+                this._database.Appointment.Update(entity);
+                await this._database.SaveChangesAsync();
             }
 
-            this._mapper.Map(data, entity);
-            this._database.Appointment.Update(entity);
-            await this._database.SaveChangesAsync();
-
-            return this._mapper.Map<Appointment?, GetAppointmentDTO?>(entity);
+            return entity;
         }
 
-        public async Task<GetAppointmentDTO?> Delete(int id)
+        public async Task<Appointment?> Delete(int id)
         {
-            Appointment? entity = await this._database.Appointment
-                                                    .Include(a => a.Patient)
-                                                    .Include(a => a.Doctor)
-                                                    .Include(a => a.Doctor.Field)
-                                                    .FirstOrDefaultAsync(d => d.Id == id);
+            Appointment? entity = await this.Get(id);
 
-            if (entity == null)
+            if (entity != null)
             {
-                return null;
+                this._database.Appointment.Remove(entity);
+                await this._database.SaveChangesAsync();
             }
 
-            this._database.Appointment.Remove(entity);
-            await this._database.SaveChangesAsync();
-
-            return this._mapper.Map<Appointment?, GetAppointmentDTO?>(entity);
+            return entity;
         }
     }
 }

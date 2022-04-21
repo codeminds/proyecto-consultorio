@@ -1,14 +1,15 @@
-﻿using API.DataTransferObjects;
+﻿using API.Data.Models;
+using API.DataTransferObjects;
 
 namespace API.Services
 {
     public interface IPatientService
     {
-        Task<List<GetPatientDTO>> List(FilterPatientDTO filter);
-        Task<List<GetPatientDTO>> Search(string[] values);
-        Task<GetPatientDTO?> Get(int id);
-        Task<GetPatientDTO> Insert(CreateUpdatePatientDTO data);
-        Task<GetPatientDTO?> Update(int id, CreateUpdatePatientDTO data);
-        Task<GetPatientDTO?> Delete(int id);
+        Task<List<Patient>> List(FilterPatientDTO? filter);
+        Task<List<Patient>> Search(string[] values);
+        Task<Patient?> Get(int id);
+        Task<int> Insert(Patient entity);
+        Task Update(Patient entity);
+        Task Delete(Patient entity);
     }
 }
