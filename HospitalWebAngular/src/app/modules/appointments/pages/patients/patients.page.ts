@@ -17,6 +17,7 @@ export class PatientsPage implements OnInit{
   public patients: Patient[];
   public fields: Field[];
   public modalOpen: boolean;
+  public panelOpen: boolean;
   public patient: Patient;
   public loading: boolean;
   public saving: boolean;
@@ -42,6 +43,7 @@ export class PatientsPage implements OnInit{
     this.patients = [];
     this.fields = [];
     this.modalOpen = false;
+    this.panelOpen = false;
     this.patient = null;
     this.loading = false;
     this.saving = false;
@@ -113,6 +115,7 @@ export class PatientsPage implements OnInit{
       if(response != null) {
         if(response.success) {
           if(isNew) {
+            this.panelOpen = true;
             this.filter = {
               documentId: response.data.documentId
             }

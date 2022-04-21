@@ -17,6 +17,7 @@ export class DoctorsPage implements OnInit{
   public doctors: Doctor[];
   public fields: Field[];
   public modalOpen: boolean;
+  public panelOpen: boolean;
   public doctor: Doctor;
   public loading: boolean;
   public saving: boolean;
@@ -40,6 +41,7 @@ export class DoctorsPage implements OnInit{
     this.doctors = [];
     this.fields = [];
     this.modalOpen = false;
+    this.panelOpen = false;
     this.doctor = null;
     this.loading = false;
     this.saving = false;
@@ -108,6 +110,7 @@ export class DoctorsPage implements OnInit{
       if(response != null) {
         if(response.success) {
           if(isNew) {
+            this.panelOpen = true;
             this.filter = {
               documentId: response.data.documentId
             }

@@ -1,5 +1,5 @@
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { InputType, Attributes, DateType } from '../form-field.types';
+import { Attributes, DateType } from '../form-field.types';
 
 @Component({
   selector: 'app-date',
@@ -67,9 +67,13 @@ export class DateComponent implements OnInit, OnChanges {
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
-      if(changes.hasOwnProperty('model') && this.model !== null) {
-        this.dateStringModel = this.toInputDateString(this.model, this.type == DateType.DateTime);
+    if(changes.hasOwnProperty('model') && this.model !== null) {
+      if(this.model != null && !Date.isDate(this.model)){
+        throw new Error('Property model is not of type Date');
       }
+
+      this.dateStringModel = this.model?.toInputDateString(this.type == DateType.DateTime);
+    }
   }
 
   public ngAfterViewInit(): void {
@@ -82,25 +86,5 @@ export class DateComponent implements OnInit, OnChanges {
 
   public onModelChange(value: string) {
     this.modelChange.emit(value ? new Date(value) : null);
-  }
-
-  private pad(num: number, size: number): string {
-      var s = num+"";
-      while (s.length < size) s = "0" + s;
-      return s;
-  }
-
-  private toInputDateString(date: Date, withTime: boolean): string{
-      if(date == null){
-          return null;
-      }
-
-      let dateString = `${date.getFullYear()}-${this.pad((date.getMonth() + 1), 2)}-${this.pad(date.getDate(), 2)}`;
-
-      if(withTime) {
-        dateString += `T${this.pad(date.getHours(), 2)}:${this.pad(date.getMinutes(), 2)}:${this.pad(date.getSeconds(), 2)}.${date.getMilliseconds()}`;
-      }
-
-      return dateString;
   }
 }

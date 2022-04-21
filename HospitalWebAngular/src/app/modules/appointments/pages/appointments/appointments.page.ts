@@ -22,6 +22,7 @@ export class AppointmentsPage implements OnInit {
   public fields: Field[];
   public genderOptions: any[];
   public modalOpen: boolean;
+  public panelOpen: boolean;
   public appointment: Appointment;
   public loading: boolean;
   public saving: boolean;
@@ -48,6 +49,7 @@ export class AppointmentsPage implements OnInit {
     this.appointments = [];
     this.fields = [];
     this.modalOpen = false;
+    this.panelOpen = false;
     this.appointment = null;
     this.loading = false;
     this.saving = false;
@@ -124,9 +126,12 @@ export class AppointmentsPage implements OnInit {
       if(response != null) {
         if(response.success) {
           if(isNew) {
+            this.panelOpen = true;
             this.filter = {
-              dateFrom: response.data.date,
-              dateTo: response.data.date
+              doctorDocumentId: response.data.doctor.documentId,
+              patientDocumentId: response.data.patient.documentId,
+              dateFrom: new Date(response.data.date),
+              dateTo: new Date(response.data.date)
             }
           }
 

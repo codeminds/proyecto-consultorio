@@ -7,7 +7,7 @@
 </div>
 
 <!-- Filtro de búsqueda -->
-<app-panel class="unboxed slim" panelTitle="Búsqueda" [expandable]="true">
+<app-panel class="unboxed slim" panelTitle="Búsqueda" [(open)]="panelOpen" [expandable]="true">
     <form class="row" (keyup.enter)="list()">
         <app-input 
             name="documentId" 

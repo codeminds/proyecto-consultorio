@@ -126,13 +126,23 @@ export class HttpService{
 
       if(Array.isArray(param)) {
         for(const value of param) {
-          query += `${prop}=${value != null ? value : ''}&`;
+          query += this.getQueryParam(prop, value);
         }
-      }else {
-        query += `${prop}=${param != null ? param : ''}&`;
+      } else {
+        query += this.getQueryParam(prop, param);
       }
     }
 
     return query;
+  }
+
+  private getQueryParam(prop: string, param: any): string {
+    if(param == null){
+      return `${prop}=&`
+    } else if(param instanceof Date) {
+      return `${prop}=${param.toInputDateString()}&`;
+    } else {
+      return `${prop}=${param}&`
+    } 
   }
 }
