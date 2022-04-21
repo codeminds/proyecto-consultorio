@@ -28,8 +28,9 @@ BEGIN
 		LastName NVARCHAR(50) NOT NULL,
 		FieldId INT NOT NULL,
 		CONSTRAINT PKDoctor PRIMARY KEY CLUSTERED (Id),
+		CONSTRAINT UXDoctorDocumentId UNIQUE NONCLUSTERED (DocumentId),
 		CONSTRAINT FKFieldDoctorFieldId FOREIGN KEY(FieldId) REFERENCES Field(Id),
-		INDEX UXDoctorDocumentId UNIQUE NONCLUSTERED (DocumentId)
+		INDEX IXDoctorLookup NONCLUSTERED (DocumentId, FirstName, LastName, FieldId)
 	);
 END
 
@@ -44,7 +45,8 @@ BEGIN
 		BirthDate DATETIME2(7) NOT NULL,
 		Gender BIT NOT NULL,
 		CONSTRAINT PkPatient PRIMARY KEY CLUSTERED (Id),
-		INDEX UXPatientDocumentId UNIQUE NONCLUSTERED (DocumentId)
+		CONSTRAINT UXPatientDocumentId UNIQUE NONCLUSTERED (DocumentId),
+		INDEX IXPatientLookup NONCLUSTERED (DocumentId, FirstName, LastName, BirthDate, Gender)
 	);
 END
 
@@ -58,9 +60,9 @@ BEGIN
 		PatientId INT NOT NULL,
 		CONSTRAINT PKAppointment PRIMARY KEY CLUSTERED (Id),
 		CONSTRAINT FKPatientAppointmentPatientId FOREIGN KEY (PatientId) REFERENCES Patient(Id),
-		CONSTRAINT FKDoctorAppointmentDoctorId FOREIGN KEY (DoctorId) REFERENCES Doctor(Id)
+		CONSTRAINT FKDoctorAppointmentDoctorId FOREIGN KEY (DoctorId) REFERENCES Doctor(Id),
+		INDEX IXAppointmentLookup NONCLUSTERED (Date, DoctorId, PatientId)
 	);
-
 END
 
 -- CREATE ROLE
@@ -71,7 +73,6 @@ BEGIN
 		Name NVARCHAR(50) NOT NULL,
 		CONSTRAINT PKRole PRIMARY KEY CLUSTERED (Id),
 	);
-
 END
 
 -- CREATE USER
@@ -87,8 +88,9 @@ BEGIN
 		RoleId INT NOT NULL,
 		IsSuperAdmin BIT NOT NULL CONSTRAINT DFUserIsSuperAdmin DEFAULT 0,
 		CONSTRAINT PKUser PRIMARY KEY CLUSTERED (Id),
+		CONSTRAINT UXUserEmail UNIQUE NONCLUSTERED (Email)
 		CONSTRAINT FKRoleUserRoleId FOREIGN KEY(RoleId) REFERENCES Role(Id),
-		INDEX UXUserEmail UNIQUE NONCLUSTERED (Email) INCLUDE (Password)
+		INDEX IXUserLookup NONCLUSTERED (Email, FirstName, LastName, RoleId)
 	);
 END
 
@@ -103,8 +105,8 @@ BEGIN
 		Expiration DATETIME2(7) NOT NULL,
 		RefreshToken BINARY(32) NOT NULL,
 		CONSTRAINT PKSession PRIMARY KEY CLUSTERED (Id),
+		CONSTRAINT UXSessionSessionId UNIQUE NONCLUSTERED (SessionId),
 		CONSTRAINT FKUserSessionUserId FOREIGN KEY (UserId) REFERENCES [User](Id),
-		INDEX UXSessionSessionId UNIQUE NONCLUSTERED (SessionId)
 	);
 END
 
