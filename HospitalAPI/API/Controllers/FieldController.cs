@@ -20,7 +20,7 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<APIResponse>> Get(int id)
+        public async Task<ActionResult<APIResponse>> List()
         {
             APIResponse response = new APIResponse();
             response.Data = (await this._fieldService.List())
