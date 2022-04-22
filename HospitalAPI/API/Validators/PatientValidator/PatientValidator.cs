@@ -36,7 +36,7 @@ namespace API.Validators
             }
 
 
-            //First Name
+            //FirstName
             if (string.IsNullOrWhiteSpace(data.FirstName))
             {
                 innerMessages.Add("Nombre es requerido");
@@ -46,7 +46,7 @@ namespace API.Validators
                 innerMessages.Add("Nombre no puede contener más de 50 caracteres");
             }
 
-            //Last Name
+            //LastName
             if (string.IsNullOrWhiteSpace(data.LastName))
             {
                 innerMessages.Add("Apellido es requerido");
@@ -100,7 +100,7 @@ namespace API.Validators
             }
 
 
-            //First Name
+            //FirstName
             if (string.IsNullOrWhiteSpace(data.FirstName))
             {
                 innerMessages.Add("Nombre es requerido");
@@ -110,7 +110,7 @@ namespace API.Validators
                 innerMessages.Add("Nombre no puede contener más de 50 caracteres");
             }
 
-            //Last Name
+            //LastName
             if (string.IsNullOrWhiteSpace(data.LastName))
             {
                 innerMessages.Add("Apellido es requerido");
