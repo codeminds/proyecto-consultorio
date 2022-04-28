@@ -3,7 +3,6 @@ using API.DataTransferObjects;
 using API.Services;
 using API.Validators;
 using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -27,7 +26,6 @@ namespace API.Controllers
         public async Task<ActionResult<APIResponse>> List([FromQuery] FilterAppointmentDTO filter)
         {
             APIResponse response = new APIResponse();
-            response.Success = true;
             response.Data = (await this._appointmentService.List(filter))
                                 .Select(a => this._mapper.Map<Appointment, GetAppointmentDTO>(a));
 
@@ -38,16 +36,14 @@ namespace API.Controllers
         [Route("{id}")]
         public async Task<ActionResult<APIResponse>> Get(int id)
         {
-            APIResponse response = new APIResponse();
-            Appointment? appointment = await this._appointmentService.Get(id);
-
-            if (appointment == null)
+            Appointment? entity = await this._appointmentService.Get(id);
+            if (entity == null)
             {
                 return HttpErrors.NotFound("Cita no encontrada");
             }
 
-            response.Success = true;
-            response.Data = this._mapper.Map<Appointment, GetAppointmentDTO>(appointment);
+            APIResponse response = new APIResponse();
+            response.Data = this._mapper.Map<Appointment, GetAppointmentDTO>(entity);
 
             return response;
         }
@@ -60,8 +56,8 @@ namespace API.Controllers
 
             if (response.Success)
             {
-                Appointment appointment = await this._appointmentService.Insert(data);
-                response.Data = this._mapper.Map<Appointment, GetAppointmentDTO>(appointment);
+                int id = await this._appointmentService.Insert(this._mapper.Map<CreateUpdateAppointmentDTO, Appointment>(data));
+                response.Data = this._mapper.Map<Appointment, GetAppointmentDTO>(await this._appointmentService.Get(id));
                 response.Messages.Add("Cita insertada correctamente");
             }
 
@@ -72,19 +68,20 @@ namespace API.Controllers
         [Route("{id}")]
         public async Task<ActionResult<APIResponse>> Update(int id, CreateUpdateAppointmentDTO data)
         {
+
+            Appointment? entity = await this._appointmentService.Get(id);
+            if (entity == null)
+            {
+                return HttpErrors.NotFound("Cita no encontrada");
+            }
+
             APIResponse response = new APIResponse();
             response.Success = this._appointmentValidator.ValidateUpdate(id, data, response.Messages);
 
             if (response.Success)
             {
-                Appointment? appointment = await this._appointmentService.Update(id, data);
-
-                if (appointment == null)
-                {
-                    return HttpErrors.NotFound("Cita no encontrada");
-                }
-
-                response.Data = this._mapper.Map<Appointment, GetAppointmentDTO>(appointment);
+                await this._appointmentService.Update(this._mapper.Map(data, entity));
+                response.Data = this._mapper.Map<Appointment, GetAppointmentDTO>(entity);
                 response.Messages.Add("Cita actualizada correctamente");
             }
 
@@ -95,19 +92,19 @@ namespace API.Controllers
         [Route("{id}")]
         public async Task<ActionResult<APIResponse>> Delete(int id)
         {
+            Appointment? entity = await this._appointmentService.Get(id);
+            if (entity == null)
+            {
+                return HttpErrors.NotFound("Cita no encontrada");
+            }
+
             APIResponse response = new APIResponse();
             response.Success = this._appointmentValidator.ValidateDelete(id, response.Messages);
 
             if (response.Success)
             {
-                Appointment? appointment = await this._appointmentService.Delete(id);
-
-                if (appointment == null)
-                {
-                    return HttpErrors.NotFound("Cita no encontrada");
-                }
-
-                response.Data = this._mapper.Map<Appointment, GetAppointmentDTO>(appointment);
+                await this._appointmentService.Delete(entity);
+                response.Data = this._mapper.Map<Appointment, GetAppointmentDTO>(entity);
                 response.Messages.Add("Cita borrada correctamente");
             }
             return response;

@@ -46,41 +46,23 @@ namespace API.Services
                                     .FirstOrDefaultAsync(d => d.Id == id);
         }
 
-        public async Task<Appointment> Insert(CreateUpdateAppointmentDTO data)
+        public async Task<int> Insert(Appointment entity)
         {
-            Appointment entity = this._mapper.Map<CreateUpdateAppointmentDTO, Appointment>(data);
-
             this._database.Appointment.Add(entity);
             await this._database.SaveChangesAsync();
 
-            return await this.Get(entity.Id);
+            return entity.Id;
         }
 
-        public async Task<Appointment?> Update(int id, CreateUpdateAppointmentDTO data)
+        public async Task Update(Appointment entity)
         {
-            Appointment? entity = await this.Get(id);
-
-            if (entity != null)
-            {
-                this._mapper.Map(data, entity);
-                this._database.Appointment.Update(entity);
-                await this._database.SaveChangesAsync();
-            }
-
-            return entity;
+            this._database.Appointment.Update(entity);
+            await this._database.SaveChangesAsync();
         }
-
-        public async Task<Appointment?> Delete(int id)
+        public async Task Delete(Appointment entity)
         {
-            Appointment? entity = await this.Get(id);
-
-            if (entity != null)
-            {
-                this._database.Appointment.Remove(entity);
-                await this._database.SaveChangesAsync();
-            }
-
-            return entity;
+            this._database.Appointment.Remove(entity);
+            await this._database.SaveChangesAsync();
         }
     }
 }
