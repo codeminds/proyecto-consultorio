@@ -122,7 +122,7 @@ BEGIN
 	INSERT INTO Appointment(Date, PatientId, DoctorId) VALUES ('2020-12-20 20:45:00.000', @PatientId3, @DoctorId3);
 END
 
--- INSERT USERS (Passwords generados con PBKDF2 utlizando SHA512 con 10234 iteraciones)
+-- INSERT USERS (Passwords generados con PBKDF2 utlizando SHA512 con 10234 iteraciones. Password es: 123)
 IF NOT EXISTS (SELECT * FROM [User] WHERE Email = 'test@admin.com')
 BEGIN
 	DECLARE @AdminId INT;

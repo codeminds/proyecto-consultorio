@@ -1,6 +1,8 @@
-﻿using API.Data.Models;
+﻿using API.Attributes;
+using API.Data.Models;
 using API.DataTransferObjects;
 using API.Services;
+using API.Utils;
 using API.Validators;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
@@ -10,6 +12,7 @@ namespace API.Controllers
 {
     [Route("api/appointments")]
     [ApiController]
+    [Authorize]
     public class AppointmentController : ControllerBase
     {
         private readonly IMapper _mapper;
@@ -50,6 +53,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
+        [Authorize(UserRole.Administrator, UserRole.Editor)]
         public async Task<ActionResult<APIResponse>> Insert(CreateUpdateAppointmentDTO data)
         {
             APIResponse response = new APIResponse();
@@ -67,6 +71,7 @@ namespace API.Controllers
 
         [HttpPut]
         [Route("{id}")]
+        [Authorize(UserRole.Administrator, UserRole.Editor)]
         public async Task<ActionResult<APIResponse>> Update(int id, CreateUpdateAppointmentDTO data)
         {
 
@@ -91,6 +96,7 @@ namespace API.Controllers
 
         [HttpDelete]
         [Route("{id}")]
+        [Authorize(UserRole.Administrator, UserRole.Editor)]
         public async Task<ActionResult<APIResponse>> Delete(int id)
         {
             Appointment? entity = await this._appointmentService.Get(id);

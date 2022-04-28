@@ -1,6 +1,8 @@
-﻿using API.Data.Models;
+﻿using API.Attributes;
+using API.Data.Models;
 using API.DataTransferObjects;
 using API.Services;
+using API.Utils;
 using API.Validators;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +11,7 @@ namespace API.Controllers
 {
     [Route("api/patients")]
     [ApiController]
+    [Authorize]
     public class PatientController : ControllerBase
     {
         private readonly IMapper _mapper;
@@ -60,6 +63,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
+        [Authorize(UserRole.Administrator, UserRole.Editor)]
         public async Task<ActionResult<APIResponse>> Insert(CreateUpdatePatientDTO data)
         {
             APIResponse response = new APIResponse();
@@ -77,6 +81,7 @@ namespace API.Controllers
 
         [HttpPut]
         [Route("{id}")]
+        [Authorize(UserRole.Administrator, UserRole.Editor)]
         public async Task<ActionResult<APIResponse>> Update(int id, CreateUpdatePatientDTO data)
         {
             Patient? entity = await this._patientService.Get(id);
@@ -100,6 +105,7 @@ namespace API.Controllers
 
         [HttpDelete]
         [Route("{id}")]
+        [Authorize(UserRole.Administrator, UserRole.Editor)]
         public async Task<ActionResult<APIResponse>> Delete(int id)
         {
             Patient? entity = await this._patientService.Get(id);

@@ -5,7 +5,8 @@ namespace API.Data.Models
 {
     public partial class Session
     {
-        public Guid Id { get; set; }
+        public long Id { get; set; }
+        public Guid SessionId { get; set; }
         public int UserId { get; set; }
         public DateTime Date { get; set; }
         public DateTime Expiration { get; set; }

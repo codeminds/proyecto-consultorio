@@ -7,26 +7,26 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [Route("api/fields")]
+    [Route("api/roles")]
     [ApiController]
     [Authorize]
-    public class FieldController : ControllerBase
+    public class RoleController : ControllerBase
     {
         private readonly IMapper _mapper;
-        private readonly IFieldService _fieldService;
+        private readonly IRoleService _RoleService;
 
-        public FieldController(IMapper mapper, IFieldService fieldService)
+        public RoleController(IMapper mapper, IRoleService RoleService)
         {
             this._mapper = mapper;
-            this._fieldService = fieldService;
+            this._RoleService = RoleService;
         }
 
         [HttpGet]
         public async Task<ActionResult<APIResponse>> List()
         {
             APIResponse response = new APIResponse();
-            response.Data = (await this._fieldService.List())
-                                .Select(f => this._mapper.Map<Field, GetFieldDTO>(f));
+            response.Data = (await this._RoleService.List())
+                                .Select(f => this._mapper.Map<Role, GetRoleDTO>(f));
 
             return response;
         }

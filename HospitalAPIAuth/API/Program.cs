@@ -1,5 +1,6 @@
 using API;
 using API.Data;
+using API.Middlewares;
 using API.Services;
 using API.Services.PatientService;
 using API.Validators;
@@ -29,11 +30,14 @@ builder.Services.AddScoped<IDoctorService, DoctorService>();
 builder.Services.AddScoped<IFieldService, FieldService>();
 builder.Services.AddScoped<IPatientService, PatientService>();
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IRoleService, RoleService>();
 
 //VALIDATORS
 builder.Services.AddScoped<IDoctorValidator, DoctorValidator>();
 builder.Services.AddScoped<IPatientValidator, PatientValidator>();
 builder.Services.AddScoped<IAppointmentValidator, AppointmentValidator>();
+builder.Services.AddScoped<IUserValidator, UserValidator>();
 
 //APP
 var app = builder.Build();
@@ -49,6 +53,7 @@ app.UseCors(options =>
 app.UseExceptionHandler("/errors/500");
 app.UseStatusCodePagesWithReExecute("/errors/{0}");
 
+app.UseMiddleware<AuthorizationMiddleware>();
 app.MapControllers();
 
 app.Run();

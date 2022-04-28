@@ -37,6 +37,8 @@ namespace API.Data
         {
             modelBuilder.Entity<Appointment>(entity =>
             {
+                entity.HasIndex(e => new { e.Date, e.DoctorId, e.PatientId }, "IXAppointmentLookup");
+
                 entity.HasOne(d => d.Doctor)
                     .WithMany(p => p.Appointment)
                     .HasForeignKey(d => d.DoctorId)
@@ -52,6 +54,8 @@ namespace API.Data
 
             modelBuilder.Entity<Doctor>(entity =>
             {
+                entity.HasIndex(e => new { e.DocumentId, e.FirstName, e.LastName, e.FieldId }, "IXDoctorLookup");
+
                 entity.HasIndex(e => e.DocumentId, "UXDoctorDocumentId")
                     .IsUnique();
 
@@ -77,6 +81,8 @@ namespace API.Data
 
             modelBuilder.Entity<Patient>(entity =>
             {
+                entity.HasIndex(e => new { e.DocumentId, e.FirstName, e.LastName, e.BirthDate, e.Gender }, "IXPatientLookup");
+
                 entity.HasIndex(e => e.DocumentId, "UXPatientDocumentId")
                     .IsUnique();
 
@@ -98,11 +104,14 @@ namespace API.Data
 
             modelBuilder.Entity<Session>(entity =>
             {
-                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+                entity.HasIndex(e => e.SessionId, "UXSessionSessionId")
+                    .IsUnique();
 
                 entity.Property(e => e.RefreshToken)
                     .HasMaxLength(32)
                     .IsFixedLength();
+
+                entity.Property(e => e.SessionId).HasDefaultValueSql("(newid())");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Session)
@@ -113,6 +122,11 @@ namespace API.Data
 
             modelBuilder.Entity<User>(entity =>
             {
+                entity.HasIndex(e => new { e.Email, e.FirstName, e.LastName, e.RoleId }, "IXUserLookup");
+
+                entity.HasIndex(e => e.Email, "UXUserEmail")
+                    .IsUnique();
+
                 entity.Property(e => e.Email)
                     .HasMaxLength(100)
                     .IsUnicode(false);

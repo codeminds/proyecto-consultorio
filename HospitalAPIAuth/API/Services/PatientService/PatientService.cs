@@ -58,7 +58,7 @@ namespace API.Services.PatientService
         public async Task<Patient?> Get(int id)
         {
             return await this._database.Patient
-                                .FirstOrDefaultAsync(d => d.Id == id);
+                                .FirstOrDefaultAsync(p => p.Id == id);
         }
 
         public async Task<int> Insert(Patient entity)

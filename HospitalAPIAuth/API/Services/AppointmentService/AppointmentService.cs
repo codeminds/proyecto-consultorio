@@ -59,7 +59,6 @@ namespace API.Services
             this._database.Appointment.Update(entity);
             await this._database.SaveChangesAsync();
         }
-
         public async Task Delete(Appointment entity)
         {
             this._database.Appointment.Remove(entity);
