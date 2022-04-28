@@ -9,11 +9,11 @@ using System.Security.Claims;
 
 namespace API.Middlewares
 {
-    public class AuhtorizationMiddleware
+    public class AuthorizationMiddleware
     {
         private readonly RequestDelegate _next;
 
-        public AuhtorizationMiddleware(RequestDelegate next)
+        public AuthorizationMiddleware(RequestDelegate next)
         {
             this._next = next;
         }
