@@ -8,14 +8,14 @@ namespace API.Utils
 {
     public static class Token
     {
-        public static string IssueToken(List<Claim> claims, IConfiguration configuration, DateTime? expiry = null)
+        public static string IssueToken(List<Claim> claims, DateTime? expiry = null)
         {
             //Se define una llave secreta en la cuál sólo tenemos acceso desde el API, de esta manera
             //un intento de forjado sería sumamente poco probable
-            SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.GetSection("JWT:Secret").Get<string>()));
+            SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration.Get<string>("JWT:Secret")));
             JwtSecurityToken token = new JwtSecurityToken(
-                issuer: configuration.GetSection("JWT:Issuer").Get<string>(),
-                audience: configuration.GetSection("JWT:Audience").Get<string>(),
+                issuer: Configuration.Get<string>("JWT:Issuer"),
+                audience: Configuration.Get<string>("JWT:Audience"),
                 expires: expiry,
                 claims: claims,
                 signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256)
@@ -24,7 +24,7 @@ namespace API.Utils
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        public static string IssueAccessToken(User user, IConfiguration configuration)
+        public static string IssueAccessToken(User user)
         {
             List<Claim> claims = new List<Claim>();
             claims.Add(new Claim(Claims.User, user.Email));
@@ -33,11 +33,11 @@ namespace API.Utils
 
             //Se define una llave secreta en la cuál sólo tenemos acceso desde el API, de esta manera
             //un intento de forjado sería sumamente poco probable
-            SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.GetSection("JWT:Secret").Get<string>()));
+            SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration.Get<string>("JWT:Secret")));
             JwtSecurityToken token = new JwtSecurityToken(
-                issuer: configuration.GetSection("JWT:Issuer").Get<string>(),
-                audience: configuration.GetSection("JWT:Audience").Get<string>(),
-                expires: DateTime.UtcNow.AddMinutes(configuration.GetSection("JWT:Access:ExpirationMinutes").Get<int>()),
+                issuer: Configuration.Get<string>("JWT:Issuer"),
+                audience: Configuration.Get<string>("JWT:Audience"),
+                expires: DateTime.UtcNow.AddMinutes(Configuration.Get<int>("JWT:Access:ExpirationMinutes")),
                 claims: claims,
                 signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256)
             );
@@ -45,7 +45,7 @@ namespace API.Utils
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        public static string IssueRefreshToken(User user, Guid session, IConfiguration configuration)
+        public static string IssueRefreshToken(User user, Guid session)
         {
             List<Claim> claims = new List<Claim>();
             claims.Add(new Claim(Claims.User, user.Email));
@@ -53,10 +53,10 @@ namespace API.Utils
 
             //Se define una llave secreta en la cuál sólo tenemos acceso desde el API, de esta manera
             //un intento de forjado sería sumamente poco probable
-            SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.GetSection("JWT:Secret").Get<string>()));
+            SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration.Get<string>("JWT:Secret")));
             JwtSecurityToken token = new JwtSecurityToken(
-                issuer: configuration.GetSection("JWT:Issuer").Get<string>(),
-                audience: configuration.GetSection("JWT:Audience").Get<string>(),
+                issuer: Configuration.Get<string>("JWT:Issuer"),
+                audience: Configuration.Get<string>("JWT:Audience"),
                 claims: claims,
                 signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256)
             );
@@ -64,17 +64,17 @@ namespace API.Utils
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        public static List<Claim> GetValidTokenClaims(string jwtToken, IConfiguration configuration, bool validateExpiration)
+        public static List<Claim> GetValidTokenClaims(string jwtToken, bool validateExpiration)
         {
             //Antes de utilizar la información del token que estamos recibiendo, se valida su firma,
             //además de otros parámetros para confirmar que este fue gestionado por un ente válido
-            SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.GetSection("JWT:Secret").Get<string>()));
+            SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration.Get<string>("JWT:Secret")));
             TokenValidationParameters validation = new TokenValidationParameters 
             {
                 ValidateIssuer = true,
-                ValidIssuer = configuration.GetSection("JWT:Issuer").Get<string>(),
+                ValidIssuer = Configuration.Get<string>("JWT:Issuer"),
                 ValidateAudience = true,
-                ValidAudience = configuration.GetSection("JWT:Audience").Get<string>(),
+                ValidAudience = Configuration.Get<string>("JWT:Audience"),
                 RequireSignedTokens = true,
                 IssuerSigningKey = key,
             };
@@ -83,7 +83,7 @@ namespace API.Utils
             { 
                 validation.ValidateLifetime = true;
                 validation.RequireExpirationTime = true;
-                validation.ClockSkew = TimeSpan.FromMinutes(configuration.GetSection("JWT:ClockStewMinutes").Get<int>());
+                validation.ClockSkew = TimeSpan.FromMinutes(Configuration.Get<int>("JWT:ClockStewMinutes"));
             }
 
             //Si la validación falla por alguna razón, dependiendo de esta, la función ValidateToken

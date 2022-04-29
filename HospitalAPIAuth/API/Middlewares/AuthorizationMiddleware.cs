@@ -18,7 +18,7 @@ namespace API.Middlewares
             this._next = next;
         }
 
-        public async Task Invoke(HttpContext context, IConfiguration configuration, IUserService userService)
+        public async Task Invoke(HttpContext context, IUserService userService)
         {
             Endpoint endpoint = context.Features.Get<IEndpointFeature>()?.Endpoint;
             AuthorizeAttribute authorize = endpoint?.Metadata.GetMetadata<AuthorizeAttribute>();
@@ -37,7 +37,7 @@ namespace API.Middlewares
                 token = header;
                 try
                 {
-                    List<Claim> claims = Token.GetValidTokenClaims(token.Split(" ")[1], configuration, true);
+                    List<Claim> claims = Token.GetValidTokenClaims(token.Split(" ")[1], true);
                     string username = claims.First(c => c.Type == Claims.User).Value;
                     bool isSuperAdmin = bool.Parse(claims.First(c => c.Type == Claims.SuperAdmin).Value);
 

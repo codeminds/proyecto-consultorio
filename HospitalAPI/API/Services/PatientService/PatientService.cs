@@ -73,7 +73,6 @@ namespace API.Services.PatientService
         {
             this._database.Patient.Update(entity);
             await this._database.SaveChangesAsync();
-
         }
 
         public async Task Delete(Patient entity)

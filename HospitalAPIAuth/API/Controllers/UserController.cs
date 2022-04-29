@@ -6,6 +6,7 @@ using API.Validators;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using System.Text;
 
 namespace API.Controllers
 {
@@ -13,16 +14,16 @@ namespace API.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
         private readonly IUserService _userService;
+        private readonly ISessionService _sessionService;
         private readonly IUserValidator _userValidator;
 
-        public UserController(IConfiguration configuration, IMapper mapper, IUserService UserService, IUserValidator userValidator)
+        public UserController(IMapper mapper, IUserService userService, ISessionService sessionService, IUserValidator userValidator)
         {
-            this._configuration = configuration;
             this._mapper = mapper;
-            this._userService = UserService;
+            this._userService = userService;
+            this._sessionService = sessionService;
             this._userValidator = userValidator;
         }
 
@@ -41,19 +42,33 @@ namespace API.Controllers
                     return HttpErrors.NotFound("Usuario y contraseña no existen");
                 }
 
-                string hash = Convert.ToHexString(Crypter.Hash(data.Password, entity.PasswordSalt, this._configuration));
+                string hash = Convert.ToHexString(Crypter.Hash(data.Password, entity.PasswordSalt));
                 if (hash != Convert.ToHexString(entity.Password))
                 {
                     return HttpErrors.NotFound("Usuario y contraseña no existen");
                 }
 
-                //TODO: generar un sesión nueva
+                DateTime now = DateTime.Now;
+                Guid sessionId = Guid.NewGuid();
+                string refreshToken = Token.IssueRefreshToken(entity, sessionId);
+                string salt = Configuration.Get<string>("Authentication:RefreshTokenSalt");
 
-                //TODO: cambiar empty GUID por sesión real
+                Session session = new Session
+                {
+                    SessionId = sessionId,
+                    UserId = entity.Id,
+                    DateIssued = now,
+                    AddressIssued = Request.HttpContext.Connection.RemoteIpAddress?.ToString() ?? "N/A",    
+                    DateExpiry = now.AddDays(Configuration.Get<int>("Authentication:SessionDays")),
+                    RefreshToken = Crypter.Hash(refreshToken, Encoding.UTF8.GetBytes(salt))
+                };
+
+                await this._sessionService.Insert(session);                    
+
                 response.Data = new GetUserTokensDTO()
                 {
-                    AccessToken = Token.IssueAccessToken(entity, this._configuration),
-                    RefreshToken = Token.IssueRefreshToken(entity, Guid.Empty, this._configuration)
+                    AccessToken = Token.IssueAccessToken(entity),
+                    RefreshToken = refreshToken
                 };
             }
 

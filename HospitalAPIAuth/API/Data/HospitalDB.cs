@@ -107,11 +107,17 @@ namespace API.Data
                 entity.HasIndex(e => e.SessionId, "UXSessionSessionId")
                     .IsUnique();
 
-                entity.Property(e => e.RefreshToken)
-                    .HasMaxLength(32)
-                    .IsFixedLength();
+                entity.Property(e => e.AddressIssued)
+                    .HasMaxLength(40)
+                    .IsUnicode(false);
 
-                entity.Property(e => e.SessionId).HasDefaultValueSql("(newid())");
+                entity.Property(e => e.AddressRefreshed)
+                    .HasMaxLength(40)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.RefreshToken)
+                    .HasMaxLength(64)
+                    .IsFixedLength();
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Session)

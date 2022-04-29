@@ -6,9 +6,12 @@ using API.Services.PatientService;
 using API.Validators;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using API.Utils;
 
 //BUILDER
 var builder = WebApplication.CreateBuilder(args);
+
+Configuration.Settings = builder.Configuration;
 
 builder.Services.AddControllers()
                 .ConfigureApiBehaviorOptions(options => {
@@ -32,6 +35,7 @@ builder.Services.AddScoped<IPatientService, PatientService>();
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
+builder.Services.AddScoped<ISessionService, SessionService>();
 
 //VALIDATORS
 builder.Services.AddScoped<IDoctorValidator, DoctorValidator>();
