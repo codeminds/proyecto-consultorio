@@ -14,7 +14,7 @@ namespace API.Validators
             this._database = database;
         }
 
-        public bool ValidateLogin(LoginUserDTO data, List<string> messages)
+        public bool ValidateLogin(LoginSessionDTO data, List<string> messages)
         {
             List<string> innerMessages = new List<string>();
 

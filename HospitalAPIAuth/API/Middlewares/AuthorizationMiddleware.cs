@@ -22,6 +22,7 @@ namespace API.Middlewares
         {
             Endpoint endpoint = context.Features.Get<IEndpointFeature>()?.Endpoint;
             AuthorizeAttribute authorize = endpoint?.Metadata.GetMetadata<AuthorizeAttribute>();
+            NoExpireAttribute noExpire = endpoint?.Metadata.GetMetadata<NoExpireAttribute>();
 
             if (authorize != null)
             {
@@ -37,7 +38,7 @@ namespace API.Middlewares
                 token = header;
                 try
                 {
-                    List<Claim> claims = Token.GetValidTokenClaims(token.Split(" ")[1], true);
+                    List<Claim> claims = Token.GetValidTokenClaims(token.Split(" ")[1], noExpire == null);
                     string username = claims.First(c => c.Type == Claims.User).Value;
                     bool isSuperAdmin = bool.Parse(claims.First(c => c.Type == Claims.SuperAdmin).Value);
 

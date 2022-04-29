@@ -1,5 +1,4 @@
-﻿using API.Controllers;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
 namespace API
@@ -13,8 +12,7 @@ namespace API
             response.Success = false;
             response.StatusCode = HttpStatusCode.NotFound;
 
-            NotFoundObjectResult result = new NotFoundObjectResult(response);
-            return result;
+            return new NotFoundObjectResult(response);
         }
     }
 }
