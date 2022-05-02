@@ -72,7 +72,7 @@ namespace API.Controllers
             if (response.Success)
             {
                 int id = await this._doctorService.Insert(this._mapper.Map<CreateUpdateDoctorDTO, Doctor>(data));
-                response.Data = this._mapper.Map<Doctor, GetDoctorDTO>(await this._doctorService.Get(id));
+                response.Data = this._mapper.Map<Doctor, GetDoctorDTO>((await this._doctorService.Get(id))!);
                 response.Messages.Add("Doctor insertado correctamente");
             }
 

@@ -8,26 +8,11 @@ namespace API.Utils
 {
     public static class Token
     {
-        public static string IssueToken(List<Claim> claims, DateTime? expiry = null)
-        {
-            //Se define una llave secreta en la cuál sólo tenemos acceso desde el API, de esta manera
-            //un intento de forjado sería sumamente poco probable
-            SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration.Get<string>("JWT:Secret")));
-            JwtSecurityToken token = new JwtSecurityToken(
-                issuer: Configuration.Get<string>("JWT:Issuer"),
-                audience: Configuration.Get<string>("JWT:Audience"),
-                expires: expiry,
-                claims: claims,
-                signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256)
-            );
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
-        }
-
-        public static string IssueAccessToken(User user)
+        public static string IssueAccessToken(User user, Guid session)
         {
             List<Claim> claims = new List<Claim>();
             claims.Add(new Claim(Claims.User, user.Email));
+            claims.Add(new Claim(Claims.Session, session.ToString()));
             claims.Add(new Claim(Claims.Role, user.RoleId.ToString(), ClaimValueTypes.Integer));
             claims.Add(new Claim(Claims.SuperAdmin, user.IsSuperAdmin.ToString(), ClaimValueTypes.Boolean));
 
@@ -75,6 +60,7 @@ namespace API.Utils
                 ValidIssuer = Configuration.Get<string>("JWT:Issuer"),
                 ValidateAudience = true,
                 ValidAudience = Configuration.Get<string>("JWT:Audience"),
+                RequireExpirationTime = false,
                 RequireSignedTokens = true,
                 IssuerSigningKey = key,
             };
@@ -91,6 +77,13 @@ namespace API.Utils
             ClaimsPrincipal claims = new JwtSecurityTokenHandler().ValidateToken(jwtToken, validation, out _);
 
             return claims.Claims.ToList();
+        }
+
+        public static List<Claim> GetTokenClaims(string jwtToken)
+        {
+            JwtSecurityToken token = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
+
+            return token.Claims.ToList();
         }
     }
 }

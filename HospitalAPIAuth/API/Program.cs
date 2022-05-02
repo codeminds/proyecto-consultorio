@@ -17,11 +17,7 @@ builder.Services.AddControllers()
                 .ConfigureApiBehaviorOptions(options => {
                     options.InvalidModelStateResponseFactory = context =>
                     {
-                        APIResponse response = new APIResponse();
-                        response.StatusCode = HttpStatusCode.BadRequest;
-                        response.Success = false;
-
-                        return new BadRequestObjectResult(response);
+                        return HttpErrors.BadRequest("Objeto de datos no válido");
                     }; 
                 });
 

@@ -5,6 +5,16 @@ namespace API
 {
     public static class HttpErrors
     {
+        public static BadRequestObjectResult BadRequest(string message)
+        {
+            APIResponse response = new APIResponse();
+            response.Messages.Add(message);
+            response.Success = false;
+            response.StatusCode = HttpStatusCode.BadRequest;
+
+            return new BadRequestObjectResult(response);
+        }
+
         public static UnauthorizedObjectResult Unauthorized(string message)
         {
             APIResponse response = new APIResponse();

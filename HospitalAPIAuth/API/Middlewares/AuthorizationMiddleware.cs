@@ -3,6 +3,7 @@ using API.Data.Models;
 using API.Services;
 using API.Utils;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.Tokens;
 using System.Net;
 using System.Security.Claims;
@@ -18,38 +19,35 @@ namespace API.Middlewares
             this._next = next;
         }
 
-        public async Task Invoke(HttpContext context, IUserService userService)
+        public async Task Invoke(HttpContext context, ISessionService sessionService)
         {
-            Endpoint endpoint = context.Features.Get<IEndpointFeature>()?.Endpoint;
-            AuthorizeAttribute authorize = endpoint?.Metadata.GetMetadata<AuthorizeAttribute>();
-            NoExpireAttribute noExpire = endpoint?.Metadata.GetMetadata<NoExpireAttribute>();
+            Endpoint endpoint = context.Features.Get<IEndpointFeature>()?.Endpoint!;
+            AuthorizeAttribute? authorize = endpoint?.Metadata.GetMetadata<AuthorizeAttribute>();
 
             if (authorize != null)
             {
                 UserRole[] roles = authorize.Roles;
-                string token = null;
+                StringValues token;
 
-                if (!context.Request.Headers.TryGetValue("Authorization", out var header))
+                if (!context.Request.Headers.TryGetValue("Authorization", out token))
                 {
                     this.SendResponse(context, HttpStatusCode.BadRequest, "Encabezado de autorización no está presente");
                     return;
                 }
-
-                token = header;
+      
                 try
                 {
-                    List<Claim> claims = Token.GetValidTokenClaims(token.Split(" ")[1], noExpire == null);
-                    string username = claims.First(c => c.Type == Claims.User).Value;
-                    bool isSuperAdmin = bool.Parse(claims.First(c => c.Type == Claims.SuperAdmin).Value);
+                    List<Claim> claims = Token.GetValidTokenClaims(token.ToString().Split(" ")[1], true);
+                    Guid sessionId = Guid.Parse(claims.First(c => c.Type == Claims.Session).Value);
 
-                    User user = await userService.Get(username);
-                    if (user == null)
+                    Session? session = await sessionService.Get(sessionId);
+                    if (session == null)
                     {
                         this.SendResponse(context, HttpStatusCode.Unauthorized, "No está autorizado para realizar esta acción");
                         return;
                     }
 
-                    if (!isSuperAdmin && roles.Any() && !roles.Contains((UserRole)user.Role.Id))
+                    if (!session.User.IsSuperAdmin && roles.Any() && !roles.Contains((UserRole)session.User.RoleId))
                     {
                         this.SendResponse(context, HttpStatusCode.Forbidden, "No está autorizado para realizar esta acción");
                         return;

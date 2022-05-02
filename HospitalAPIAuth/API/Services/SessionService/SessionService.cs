@@ -21,11 +21,11 @@ namespace API.Services
                                         .ToListAsync();
         }
 
-        public async Task<Session?> Get(Guid sessionId, string username)
+        public async Task<Session?> Get(Guid sessionId)
         {
             return await this._database.Session
                                     .Include(s => s.User)
-                                    .FirstOrDefaultAsync(s => s.SessionId == sessionId && s.User.Email == username);
+                                    .FirstOrDefaultAsync(s => s.SessionId == sessionId);
         }
 
         public async Task<long> Insert(Session entity)

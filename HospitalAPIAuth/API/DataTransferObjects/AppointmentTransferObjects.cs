@@ -4,8 +4,8 @@
     {
         public int Id { get; set; }
         public DateTime Date { get; set; }
-        public GetPatientDTO Patient { get; set; }
-        public GetDoctorDTO Doctor { get; set; }
+        public GetPatientDTO Patient { get; set; } = null!;
+        public GetDoctorDTO Doctor { get; set; } = null!;
     }
 
     public class CreateUpdateAppointmentDTO

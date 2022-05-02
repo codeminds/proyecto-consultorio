@@ -62,7 +62,7 @@ namespace API.Controllers
             if (response.Success)
             {
                 int id = await this._appointmentService.Insert(this._mapper.Map<CreateUpdateAppointmentDTO, Appointment>(data));
-                response.Data = this._mapper.Map<Appointment, GetAppointmentDTO>(await this._appointmentService.Get(id));
+                response.Data = this._mapper.Map<Appointment, GetAppointmentDTO>((await this._appointmentService.Get(id))!);
                 response.Messages.Add("Cita insertada correctamente");
             }
 
