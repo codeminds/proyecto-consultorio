@@ -110,7 +110,7 @@
                                 <span data-value="firstName"></span>
                                 <span data-value="lastName"></span>
                             </td>
-                            <td data-value="birthDate" data-format="toLocaleString"></td>
+                            <td data-value="birthDate" data-format="toDisplayString"></td>
                             <td data-value="gender" data-format="displayGender"></td>
                             <td class="buttons">
                                 <button class="button success" data-click="edit" data-attr="data-id: id">Editar</button>
@@ -125,7 +125,7 @@
                                 </p>
                                 <p>
                                     <span class="label">Fecha de Nacimiento:</span>
-                                    <span data-value="birthDate" data-format="toLocaleString"></span>
+                                    <span data-value="birthDate" data-format="toDisplayString"></span>
                                 </p>
                                 <p>
                                     <span class="label">Género:</span>
@@ -165,7 +165,7 @@
                     </div>
                     <div class="form-field">
                         <label for="form-birthdate">Fecha de Nacimiento</label>
-                        <input type="datetime-local" id="form-birthdate" name="birthDate" data-format="formatDateString" />
+                        <input type="datetime-local" id="form-birthdate" name="birthDate" data-format="toInputString" />
                     </div>
                     <div class="form-field">
                         <label>G&eacute;nero</label>
