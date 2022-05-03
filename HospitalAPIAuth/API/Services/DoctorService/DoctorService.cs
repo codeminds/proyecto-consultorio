@@ -1,9 +1,8 @@
 ﻿using API.Data;
+using API.Data.Filters;
 using API.Data.Models;
-using API.DataTransferObjects;
-using Microsoft.Data.SqlClient;
+using API.Repositories;
 using Microsoft.EntityFrameworkCore;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace API.Services
@@ -11,73 +10,66 @@ namespace API.Services
     public class DoctorService : IDoctorService
     {
         private readonly HospitalDB _database;
+        private readonly IDoctorRepository _doctorRepository;
 
-        public DoctorService(HospitalDB database)
+        public DoctorService(HospitalDB database, IDoctorRepository doctorRepository)
         {
             this._database = database;
+            this._doctorRepository = doctorRepository;
         }
 
-        public async Task<List<Doctor>> List(FilterDoctorDTO? filter = null)
+        public async Task<List<Doctor>> ListDoctors(DoctorListFilter? filter = null)
         {
-            filter = filter ?? new FilterDoctorDTO();
+            filter = filter ?? new DoctorListFilter();
 
-            return await this._database.Doctor
-                                        .Include(d => d.Field)
-                                        .Where(d => (string.IsNullOrWhiteSpace(filter.DocumentId) || d.DocumentId.Contains(filter.DocumentId))
+            return await this._doctorRepository.Query
+                                    .Where(d => (string.IsNullOrWhiteSpace(filter.DocumentId) || d.DocumentId.Contains(filter.DocumentId))
                                                     && (string.IsNullOrWhiteSpace(filter.FirstName) || d.FirstName.Contains(filter.FirstName))
                                                     && (string.IsNullOrWhiteSpace(filter.LastName) || d.LastName.Contains(filter.LastName))
                                                     && (!filter.FieldId.HasValue || d.FieldId == filter.FieldId))
-                                        .ToListAsync();
-        }
-
-        public async Task<List<Doctor>> Search(string[] values)
-        {
-            StringBuilder queryString = new StringBuilder();
-            queryString.Append("SELECT d.* FROM Doctor d INNER JOIN Field f ON f.Id = d.FieldId WHERE ");
-            List<SqlParameter> parameters = new List<SqlParameter>();
-            Regex regex = new Regex(@"[^\d\w ]", RegexOptions.IgnoreCase);
-
-            for (int i = 0; i < values.Length; i++)
-            {
-                string value = regex.Replace(values[i], "");
-                queryString.Append($"d.DocumentId LIKE '%{value}%' OR d.FirstName LIKE '%{value}%' OR d.LastName LIKE '%{value}%' OR f.Name LIKE '%{value}%' ");
-
-                if (i < values.Length - 1)
-                {
-                    queryString.Append("OR ");
-                }
-            }
-
-            return await this._database.Doctor
-                                    .FromSqlRaw(queryString.ToString())
                                     .Include(d => d.Field)
                                     .ToListAsync();
         }
 
-        public async Task<Doctor?> Get(int id)
+        public async Task<List<Doctor>> SearchDoctors(string[] values)
         {
-            return await this._database.Doctor
+
+            Regex regex = new Regex(@"[^\d\w ]", RegexOptions.IgnoreCase);
+
+            return await this._doctorRepository
+                                    .Search(values.Select(v => regex.Replace(v, "")))
                                     .Include(d => d.Field)
-                                    .FirstOrDefaultAsync(d => d.Id == id);
+                                    .ToListAsync();
         }
 
-        public async Task<int> Insert(Doctor entity)
+        public async Task<Doctor?> FindDoctor(int id)
         {
-            this._database.Doctor.Add(entity);
+            return await this._doctorRepository
+                                .Find(id)
+                                .Include(d => d.Field)
+                                .FirstOrDefaultAsync();
+        }
+
+        public async Task<Doctor> CreateDoctor(Doctor doctor)
+        {
+            this._doctorRepository.Insert(doctor);
             await this._database.SaveChangesAsync();
 
-            return entity.Id;
+            return (await this._doctorRepository
+                                        .Find(doctor.Id)
+                                        .Include(d => d.Field)
+                                        .FirstOrDefaultAsync())!;
         }
 
-        public async Task Update(Doctor entity)
+        public async Task UpdateDoctor(Doctor doctor)
         {
-            this._database.Doctor.Update(entity);
+            this._doctorRepository.Update(doctor);
             await this._database.SaveChangesAsync();
         }
 
-        public async Task Delete(Doctor entity)
+        public async Task DeleteDoctor(Doctor doctor)
         {
-            this._database.Doctor.Remove(entity);
+            this._doctorRepository.Delete(doctor);
             await this._database.SaveChangesAsync();
         }
     }

@@ -1,50 +1,83 @@
 ﻿using API.Data;
 using API.Data.Models;
-using API.DataTransferObjects;
+using API.Repositories;
+using API.Utils;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
+using System.Text;
 
 namespace API.Services
 {
     public class SessionService : ISessionService
     {
         private readonly HospitalDB _database;
+        private readonly ISessionRepository _sessionRepository;
 
-        public SessionService(HospitalDB database)
+        public SessionService(HospitalDB database, ISessionRepository sessionRepository)
         {
             this._database = database;
+            this._sessionRepository = sessionRepository;
         }
 
-        public async Task<List<Session>> List(int userId)
+        public async Task<List<Session>> ListSessions(int userId)
         {
-            return await this._database.Session
+            return await this._sessionRepository.Query
                                         .Where(s => s.UserId == userId)
                                         .ToListAsync();
         }
 
-        public async Task<Session?> Get(Guid sessionId)
+        public async Task<Session?> FindSession(Guid sessionId)
         {
-            return await this._database.Session
+            return await this._sessionRepository.Query
                                     .Include(s => s.User)
                                     .FirstOrDefaultAsync(s => s.SessionId == sessionId);
         }
 
-        public async Task<long> Insert(Session entity)
+        public async Task<Session> CreateUserSession(User user, IPAddress? address)
         {
-            this._database.Session.Add(entity);
+            DateTime now = DateTime.Now;
+            Guid sessionId = Guid.NewGuid();
+            string salt = Configuration.Get<string>("Authentication:RefreshTokenSalt");
+            string refreshToken = Token.IssueRefreshToken(user, sessionId);
+
+            Session session = new Session
+            {
+                SessionId = sessionId,
+                UserId = user.Id,
+                DateIssued = now,
+                AddressIssued = address?.ToString() ?? "--",
+                DateExpiry = now.AddDays(Configuration.Get<int>("Authentication:SessionDays")),
+                RefreshToken = Crypter.Hash(refreshToken, Encoding.UTF8.GetBytes(salt)),
+                RefreshTokenString = refreshToken,
+                AccessTokenString = Token.IssueAccessToken(user, sessionId)
+            };
+
+            this._sessionRepository.Insert(session);
             await this._database.SaveChangesAsync();
 
-            return entity.Id;
+            return session;
         }
 
-        public async Task Update(Session entity)
+        public async Task RefreshUserSession(User user, Session session, IPAddress? address)
         {
-            this._database.Session.Update(entity);
+            DateTime now = DateTime.Now;
+            string salt = Configuration.Get<string>("Authentication:RefreshTokenSalt");
+            string refreshToken = Token.IssueRefreshToken(session.User, session.SessionId);
+
+            session.DateRefreshed = now;
+            session.AddressRefreshed = address?.ToString() ?? "--";
+            session.DateExpiry = now.AddDays(30);
+            session.RefreshToken = Crypter.Hash(refreshToken, Encoding.UTF8.GetBytes(salt));
+            session.RefreshTokenString = refreshToken;
+            session.AccessTokenString = Token.IssueAccessToken(user, session.SessionId);
+
+            this._sessionRepository.Update(session);
             await this._database.SaveChangesAsync();
         }
 
-        public async Task Delete(Session entity)
+        public async Task DeleteSession(Session session)
         {
-            this._database.Session.Remove(entity);
+            this._sessionRepository.Delete(session);
             await this._database.SaveChangesAsync();
         }
     }

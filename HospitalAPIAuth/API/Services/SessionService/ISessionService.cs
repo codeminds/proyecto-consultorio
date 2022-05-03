@@ -1,14 +1,14 @@
 ﻿using API.Data.Models;
-using API.DataTransferObjects;
+using System.Net;
 
 namespace API.Services
 {
     public interface ISessionService
     {
-        Task<List<Session>> List(int userId);
-        Task<Session?> Get(Guid sessionId);
-        Task<long> Insert(Session entity);
-        Task Update(Session entity);
-        Task Delete(Session entity);
+        Task<List<Session>> ListSessions(int userId);
+        Task<Session?> FindSession(Guid sessionId);
+        Task<Session> CreateUserSession(User user, IPAddress? address);
+        Task RefreshUserSession(User user, Session Session, IPAddress? address);
+        Task DeleteSession(Session entity);
     }
 }

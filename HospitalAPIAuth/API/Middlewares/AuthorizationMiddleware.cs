@@ -40,7 +40,7 @@ namespace API.Middlewares
                     List<Claim> claims = Token.GetValidTokenClaims(token.ToString().Split(" ")[1], true);
                     Guid sessionId = Guid.Parse(claims.First(c => c.Type == Claims.Session).Value);
 
-                    Session? session = await sessionService.Get(sessionId);
+                    Session? session = await sessionService.FindSession(sessionId);
                     if (session == null)
                     {
                         this.SendResponse(context, HttpStatusCode.Unauthorized, "No está autorizado para realizar esta acción");

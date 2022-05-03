@@ -1,15 +1,15 @@
-﻿using API.Data.Models;
-using API.DataTransferObjects;
+﻿using API.Data.Filters;
+using API.Data.Models;
 
 namespace API.Services
 {
     public interface IPatientService
     {
-        Task<List<Patient>> List(FilterPatientDTO? filter);
-        Task<List<Patient>> Search(string[] values);
-        Task<Patient?> Get(int id);
-        Task<int> Insert(Patient entity);
-        Task Update(Patient entity);
-        Task Delete(Patient entity);
+        Task<List<Patient>> ListPatients(PatientListFilter? filter);
+        Task<List<Patient>> SearchPatients(string[] values);
+        Task<Patient?> FindPatient(int id);
+        Task<Patient> CreatePatient(Patient patient);
+        Task UpdatePatient(Patient Patient);
+        Task DeletePatient(Patient entity);
     }
 }

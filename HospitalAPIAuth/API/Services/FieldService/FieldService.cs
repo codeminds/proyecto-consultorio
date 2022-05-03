@@ -1,21 +1,25 @@
 ﻿using API.Data;
 using API.Data.Models;
+using API.Repositories;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Services
 {
     public class FieldService : IFieldService
     {
-        private readonly HospitalDB _database;
+        private readonly IFieldRepository _fieldRepository;
 
-        public FieldService(HospitalDB database)
+        public FieldService(IFieldRepository fieldRepository)
         {
-            this._database = database;
+            this._fieldRepository = fieldRepository;
         }
 
-        public async Task<List<Field>> List()
+        public async Task<List<Field>> ListFields()
         {
-            return await this._database.Field.ToListAsync();
+            return await this._fieldRepository
+                                    .Query
+                                    .ToListAsync();
         }
     }
 }

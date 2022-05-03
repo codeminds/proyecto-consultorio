@@ -2,6 +2,7 @@
 {
     public static class Claims
     {
+        public const string IssueDate = "issue_date";
         public const string User = "user";
         public const string Role = "role";
         public const string Session = "session";

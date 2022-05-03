@@ -1,0 +1,8 @@
+﻿namespace API.Data.Filters
+{
+    public class AppointmentListFilter
+    {
+        public DateTime? DateFrom { get; set; }
+        public DateTime? DateTo { get; set; }
+    }
+}

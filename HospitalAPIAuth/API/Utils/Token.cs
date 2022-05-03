@@ -11,6 +11,7 @@ namespace API.Utils
         public static string IssueAccessToken(User user, Guid session)
         {
             List<Claim> claims = new List<Claim>();
+            claims.Add(new Claim(Claims.IssueDate, DateTimeOffset.Now.ToUnixTimeSeconds().ToString()));
             claims.Add(new Claim(Claims.User, user.Email));
             claims.Add(new Claim(Claims.Session, session.ToString()));
             claims.Add(new Claim(Claims.Role, user.RoleId.ToString(), ClaimValueTypes.Integer));
@@ -33,6 +34,7 @@ namespace API.Utils
         public static string IssueRefreshToken(User user, Guid session)
         {
             List<Claim> claims = new List<Claim>();
+            claims.Add(new Claim(Claims.IssueDate, DateTimeOffset.Now.ToUnixTimeSeconds().ToString()));
             claims.Add(new Claim(Claims.User, user.Email));
             claims.Add(new Claim(Claims.Session, session.ToString()));
 

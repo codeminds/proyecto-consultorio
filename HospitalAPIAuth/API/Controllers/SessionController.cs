@@ -38,7 +38,7 @@ namespace API.Controllers
 
             if (response.Success)
             {
-                User? user = await this._userService.Get(data.Email!);
+                User? user = await this._userService.FindUser(data.Email!);
                 if (user == null)
                 {
                     return HttpErrors.NotFound("Usuario y contraseña no existen");
@@ -50,35 +50,15 @@ namespace API.Controllers
                     return HttpErrors.NotFound("Usuario y contraseña no existen");
                 }
 
-                DateTime now = DateTime.Now;
-                Guid sessionId = Guid.NewGuid();
-                string refreshToken = Token.IssueRefreshToken(user, sessionId);
-                string salt = Configuration.Get<string>("Authentication:RefreshTokenSalt");
-
-                Session session = new Session
-                {
-                    SessionId = sessionId,
-                    UserId = user.Id,
-                    DateIssued = now,
-                    AddressIssued = Request.HttpContext.Connection.RemoteIpAddress?.ToString() ?? "--",    
-                    DateExpiry = now.AddDays(Configuration.Get<int>("Authentication:SessionDays")),
-                    RefreshToken = Crypter.Hash(refreshToken, Encoding.UTF8.GetBytes(salt))
-                };
-
-                await this._sessionService.Insert(session);                    
-
-                response.Data = new GetSessionTokensDTO()
-                {
-                    AccessToken = Token.IssueAccessToken(user, sessionId),
-                    RefreshToken = refreshToken
-                };
+                Session session = await this._sessionService.CreateUserSession(user, Request.HttpContext.Connection.RemoteIpAddress);
+                response.Data = this._mapper.Map<Session, GetSessionTokensDTO>(session);
             }
 
             return response;
         }
 
         [HttpPut]
-        public async Task<ActionResult<APIResponse>> Refresh()
+        public async Task<ActionResult<APIResponse>> RefreshSession()
         {
             try
             {
@@ -94,7 +74,7 @@ namespace API.Controllers
                 string username = claims.First(c => c.Type == Claims.User).Value;
 
                 string salt = Configuration.Get<string>("Authentication:RefreshTokenSalt");
-                Session? session = await this._sessionService.Get(sessionId);
+                Session? session = await this._sessionService.FindSession(sessionId);
                 if (session == null 
                     || session.User.Email != username 
                     || Convert.ToHexString(session.RefreshToken) != Convert.ToHexString(Crypter.Hash(token, Encoding.UTF8.GetBytes(salt))))
@@ -102,27 +82,16 @@ namespace API.Controllers
                     return HttpErrors.Unauthorized("Token de refrescado no válido");
                 }
 
-                DateTime now = DateTime.Now;
-                if (session.DateExpiry <= now)
+                if (session.DateExpiry <= DateTime.Now)
                 {
-                    await this._sessionService.Delete(session);
+                    await this._sessionService.DeleteSession(session);
                     return HttpErrors.Unauthorized("Sesión ha expirado");
                 }
 
-                string refreshToken = Token.IssueRefreshToken(session.User, sessionId);
-                session.DateRefreshed = now;
-                session.AddressRefreshed = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "--";
-                session.DateExpiry = now.AddDays(30);
-                session.RefreshToken = Crypter.Hash(refreshToken, Encoding.UTF8.GetBytes(salt));
-
-                await this._sessionService.Update(session);
+                await this._sessionService.RefreshUserSession(session.User, session, Request.HttpContext.Connection.RemoteIpAddress);
 
                 APIResponse response = new APIResponse();
-                response.Data = new GetSessionTokensDTO()
-                {
-                    AccessToken = Token.IssueAccessToken(session.User, sessionId),
-                    RefreshToken = refreshToken
-                };
+                response.Data = this._mapper.Map<Session, GetSessionTokensDTO>(session);
 
                 return response;
             }
@@ -146,13 +115,13 @@ namespace API.Controllers
             string username = claims.First(c => c.Type == Claims.User).Value;
             sessionId = sessionId ?? Guid.Parse(claims.First(c => c.Type == Claims.Session).Value);
 
-            Session? session = await this._sessionService.Get(sessionId.Value);
+            Session? session = await this._sessionService.FindSession(sessionId.Value);
             if (session == null || session.User.Email != username)
             {
                 return HttpErrors.NotFound("Sesión no encontrada");
             }
 
-            await this._sessionService.Delete(session);
+            await this._sessionService.DeleteSession(session);
 
             APIResponse response = new APIResponse();
             response.Data = this._mapper.Map<Session, GetSessionDTO>(session);

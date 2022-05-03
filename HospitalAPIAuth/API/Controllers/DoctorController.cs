@@ -1,4 +1,5 @@
 ﻿using API.Attributes;
+using API.Data.Filters;
 using API.Data.Models;
 using API.DataTransferObjects;
 using API.Services;
@@ -26,10 +27,12 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<APIResponse>> List([FromQuery] FilterDoctorDTO filter)
+        public async Task<ActionResult<APIResponse>> ListDoctors([FromQuery] FilterDoctorDTO data)
         {
+            DoctorListFilter filter = this._mapper.Map<FilterDoctorDTO, DoctorListFilter>(data);
+
             APIResponse response = new APIResponse();
-            response.Data = (await this._doctorService.List(filter))
+            response.Data = (await this._doctorService.ListDoctors(filter))
                                 .Select(d => this._mapper.Map<Doctor, GetDoctorDTO>(d));
 
             return response;
@@ -37,10 +40,10 @@ namespace API.Controllers
 
         [HttpGet]
         [Route("search")]
-        public async Task<ActionResult<APIResponse>> Search([FromQuery] string[] s)
+        public async Task<ActionResult<APIResponse>> SearchDoctors([FromQuery] string[] s)
         {
             APIResponse response = new APIResponse();
-            response.Data = (await this._doctorService.Search(s))
+            response.Data = (await this._doctorService.SearchDoctors(s))
                                 .Select(d => this._mapper.Map<Doctor, GetDoctorDTO>(d));
 
             return response;
@@ -48,9 +51,9 @@ namespace API.Controllers
 
         [HttpGet]
         [Route("{id}")]
-        public async Task<ActionResult<APIResponse>> Get(int id)
+        public async Task<ActionResult<APIResponse>> FindDoctor(int id)
         {
-            Doctor? entity = await this._doctorService.Get(id);
+            Doctor? entity = await this._doctorService.FindDoctor(id);
             if (entity == null)
             {
                 return HttpErrors.NotFound("Doctor no encontrado");
@@ -64,15 +67,15 @@ namespace API.Controllers
 
         [HttpPost]
         [Authorize(UserRole.Administrator, UserRole.Editor)]
-        public async Task<ActionResult<APIResponse>> Insert(CreateUpdateDoctorDTO data)
+        public async Task<ActionResult<APIResponse>> CreateDoctor(CreateUpdateDoctorDTO data)
         {
             APIResponse response = new APIResponse();
             response.Success = this._doctorValidator.ValidateInsert(data, response.Messages);
 
             if (response.Success)
             {
-                int id = await this._doctorService.Insert(this._mapper.Map<CreateUpdateDoctorDTO, Doctor>(data));
-                response.Data = this._mapper.Map<Doctor, GetDoctorDTO>((await this._doctorService.Get(id))!);
+                Doctor doctor = await this._doctorService.CreateDoctor(this._mapper.Map<CreateUpdateDoctorDTO, Doctor>(data));
+                response.Data = this._mapper.Map<Doctor, GetDoctorDTO>(doctor);
                 response.Messages.Add("Doctor insertado correctamente");
             }
 
@@ -82,9 +85,9 @@ namespace API.Controllers
         [HttpPut]
         [Route("{id}")]
         [Authorize(UserRole.Administrator, UserRole.Editor)]
-        public async Task<ActionResult<APIResponse>> Update(int id, CreateUpdateDoctorDTO data)
+        public async Task<ActionResult<APIResponse>> UpdateDoctor(int id, CreateUpdateDoctorDTO data)
         {
-            Doctor? entity = await this._doctorService.Get(id);
+            Doctor? entity = await this._doctorService.FindDoctor(id);
             if (entity == null)
             {
                 return HttpErrors.NotFound("Doctor no encontrado");
@@ -95,7 +98,7 @@ namespace API.Controllers
 
             if (response.Success)
             {
-                await this._doctorService.Update(this._mapper.Map(data, entity));
+                await this._doctorService.UpdateDoctor(this._mapper.Map(data, entity));
                 response.Data = this._mapper.Map<Doctor, GetDoctorDTO>(entity);
                 response.Messages.Add("Doctor actualizado correctamente");
             }
@@ -106,9 +109,9 @@ namespace API.Controllers
         [HttpDelete]
         [Route("{id}")]
         [Authorize(UserRole.Administrator, UserRole.Editor)]
-        public async Task<ActionResult<APIResponse>> Delete(int id)
+        public async Task<ActionResult<APIResponse>> DeleteDoctor(int id)
         {
-            Doctor? entity = await this._doctorService.Get(id);
+            Doctor? entity = await this._doctorService.FindDoctor(id);
             if (entity == null)
             {
                 return HttpErrors.NotFound("Doctor no encontrado");
@@ -119,7 +122,7 @@ namespace API.Controllers
 
             if (response.Success)
             {
-                await this._doctorService.Delete(entity);
+                await this._doctorService.DeleteDoctor(entity);
                 response.Data = this._mapper.Map<Doctor, GetDoctorDTO>(entity);
                 response.Messages.Add("Doctor borrado correctamente");
             }

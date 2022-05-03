@@ -1,36 +1,39 @@
 ﻿using API.Data;
+using API.Data.Filters;
 using API.Data.Models;
-using API.DataTransferObjects;
+using API.Repositories;
 using Microsoft.EntityFrameworkCore;
+using System.Text.RegularExpressions;
 
 namespace API.Services
 {
     public class UserService : IUserService
     {
         private readonly HospitalDB _database;
+        private readonly IUserRepository _userRepository;
 
-        public UserService(HospitalDB database)
+        public UserService(HospitalDB database, IUserRepository userRepository)
         {
             this._database = database;
+            this._userRepository = userRepository;
         }
 
-        public async Task<User?> Get(int id)
+        public async Task<User?> FindUser(int id)
         {
-            return await this._database.User
-                                    .Include(d => d.Role)
-                                    .FirstOrDefaultAsync(d => d.Id == id);
+            return await this._userRepository
+                                .Find(id)
+                                .FirstOrDefaultAsync();
         }
 
-        public async Task<User?> Get(string email)
+        public async Task<User?> FindUser(string email)
         {
-            return await this._database.User
-                                    .Include(d => d.Role)
-                                    .FirstOrDefaultAsync(d => d.Email == email);
+            return await this._userRepository.Query
+                                .FirstOrDefaultAsync(u => u.Email == email);
         }
 
-        public async Task Update(User entity)
+        public async Task UpdateUser(User user)
         {
-            this._database.User.Update(entity);
+            this._userRepository.Update(user);
             await this._database.SaveChangesAsync();
         }
     }

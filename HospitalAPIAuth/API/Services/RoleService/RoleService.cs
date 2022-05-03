@@ -1,27 +1,23 @@
-﻿using API.Data;
-using API.Data.Models;
+﻿using API.Data.Models;
+using API.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Services
 {
     public class RoleService : IRoleService
     {
-        private readonly HospitalDB _database;
+        private readonly IRoleRepository _roleRepository;
 
-        public RoleService(HospitalDB database)
+        public RoleService(IRoleRepository roleRepository)
         {
-            this._database = database;
+            this._roleRepository = roleRepository;
         }
 
-        public async Task<List<Role>> List()
+        public async Task<List<Role>> ListRoles()
         {
-            return await this._database.Role.ToListAsync();
-        }
-
-        public async Task<Role?> Get(int id)
-        {
-            return await this._database.Role
-                     .FirstOrDefaultAsync(r => r.Id == id);
+            return await this._roleRepository
+                                    .Query
+                                    .ToListAsync();
         }
     }
 }
