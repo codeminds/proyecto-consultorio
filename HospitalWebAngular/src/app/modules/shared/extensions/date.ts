@@ -7,6 +7,7 @@ export {}
 declare global {
     interface DateConstructor {
         isDate(value: any) : boolean;
+        getLocale(locale: string): any;
     }
 }
 
@@ -15,6 +16,7 @@ declare global {
 declare global {
     interface Date {
         toInputDateString(withTime?: boolean): string;
+        toLocaleDisplayString(locale: string): string;
     }
 }
 
@@ -27,6 +29,10 @@ Date.prototype.toInputDateString = function (withTime: boolean = true) {
     }
 
     return dateString;
+}
+
+Date.prototype.toLocaleDisplayString = function (locale: string) {
+    return this.toLocaleString(locale, { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: true });
 }
 
 //Se agrega el método directo al constructor del objeto Date para ser usado de manera estática

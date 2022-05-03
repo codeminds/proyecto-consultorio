@@ -85,7 +85,7 @@
         <ng-template #patientRow let-patient>
             <td>{{patient.documentId}}</td>
             <td>{{patient.firstName}} {{patient.lastName}}</td>
-            <td>{{patient.birthDate.toLocaleString('es-ES', { hour12: true })}}</td>
+            <td>{{patient.birthDate.toLocaleDisplayString('es-US')}}</td>
             <td>{{patient.gender ? 'Masculino' : 'Femenino'}}</td>    
             <td class="table-buttons">
                 <button class="button success" title="Editar" (click)="createUpdate(patient)">
@@ -105,7 +105,7 @@
                     <span class="label">Nombre:</span> {{patient.firstName}} {{patient.lastName}}
                 </p>
                 <p>
-                    <span class="label">Nacimiento:</span> {{patient.birthDate.toLocaleString('es-ES', { hour12: true })}}
+                    <span class="label">Nacimiento:</span> {{patient.birthDate.toLocaleDisplayString('es-US')}}
                 </p>
                 <p>
                     <span class="label">Género:</span> {{patient.gender ? 'Masculino' : 'Femenino'}}

@@ -146,7 +146,7 @@
         [loading]="loading"
         noResultsText="No se han encontrado resultados">
         <ng-template #appointmentRow let-appointment>
-            <td>{{appointment.date.toLocaleString('es-ES', { hour12: true })}}</td>
+            <td>{{appointment.date.toLocaleDisplayString('es-US')}}</td>
             <td>{{appointment.patient.firstName}} {{appointment.patient.lastName}}</td>
             <td>{{appointment.doctor.firstName}} {{appointment.doctor.lastName}}</td>
             <td>{{appointment.doctor.field.name}}</td>    
@@ -163,7 +163,7 @@
         </ng-template>
         <ng-template #appointmentRowMobile let-appointment>
             <div class="mobile-row">
-                <h3>{{appointment.date.toLocaleString('es-ES', { hour12: true })}}</h3>
+                <h3>{{appointment.date.toLocaleDisplayString('es-US')}}</h3>
                 <p>
                     <span class="label">Paciente:</span> {{appointment.patient.firstName}} {{appointment.patient.lastName}}
                 </p>
