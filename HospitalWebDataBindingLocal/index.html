@@ -139,7 +139,7 @@
                     </table>
                     <template id="appointmentResults">
                         <tr>
-                            <td data-value="date" data-format="toLocaleString"></td>
+                            <td data-value="date" data-format="toDisplayString"></td>
                             <td data-value="patientId" data-format="getPatientName"></td>
                             <td data-value="doctorId" data-format="getDoctorName"></td>
                             <td data-value="doctorId" data-format="getDoctorField"></td>
@@ -148,7 +148,7 @@
                                 <button class="button danger" data-click="delete" data-attr="data-id: id">Borrar</button>
                             </td>
                             <td class="mobile">
-                                <h3 data-value="date" data-format="toLocaleString"></h3>
+                                <h3 data-value="date" data-format="toDisplayString"></h3>
                                 <p>
                                     <span class="label">Paciente:</span>
                                     <span data-value="patientId" data-format="getPatientName"></span>
@@ -193,7 +193,7 @@
                     </div>  
                     <div class="form-field">
                         <label for="form-date">Fecha</label>
-                        <input type="datetime-local" name="date" id="form-date" data-format="formatDateString" />
+                        <input type="datetime-local" name="date" id="form-date" data-format="toInputString" />
                     </div>
                     <div class="form-field">
                         <button class="button success" type="button" data-save>Guardar</button>

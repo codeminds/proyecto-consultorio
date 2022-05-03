@@ -40,7 +40,7 @@ class ViewModel extends BaseViewModel {
             doctorId: new OneWayProp(null, 'string'),
             patientId: new OneWayProp(null, 'string'),
             date: new TwoWayProp (null, 'date', {
-                formatDateString: (value) => {
+                toInputString: (value) => {
                     return DateService.toInputDateString(value);
                 }
             })
@@ -94,8 +94,8 @@ class ViewModel extends BaseViewModel {
     #initResults() {
         this.#results = document.querySelector('[data-results]');
         this.#appointments = new OneWayCollectionProp([], {
-            toLocaleString: (value) => {
-                return value.toLocaleString('es-ES', { hour12: true})
+            toDisplayString: (value) => {
+                return DateService.toDisplayLocaleString(value, 'es-US')
             },
             getPatientName: (value) => {
                 let patient;
