@@ -1,9 +1,10 @@
-﻿using API.Data.Models;
+﻿using API.Data.Filters;
+using API.Data.Models;
 
 namespace API.Services
 {
     public interface IFieldService
     {
-        Task<List<Field>> List();
+        Task<List<Field>> ListFields();
     }
 }

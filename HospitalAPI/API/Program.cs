@@ -1,7 +1,7 @@
 using API;
 using API.Data;
+using API.Repositories;
 using API.Services;
-using API.Services.PatientService;
 using API.Validators;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -24,16 +24,22 @@ builder.Services.AddControllers()
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddDbContext<HospitalDB>();
 
+//REPOSITORIES
+builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
+builder.Services.AddScoped<IDoctorRepository, DoctorRepository>();
+builder.Services.AddScoped<IFieldRepository, FieldRepository>();
+builder.Services.AddScoped<IPatientRepository, PatientRepository>();
+
 //SERVICES
+builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 builder.Services.AddScoped<IDoctorService, DoctorService>();
 builder.Services.AddScoped<IFieldService, FieldService>();
 builder.Services.AddScoped<IPatientService, PatientService>();
-builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 
 //VALIDATORS
+builder.Services.AddScoped<IAppointmentValidator, AppointmentValidator>();
 builder.Services.AddScoped<IDoctorValidator, DoctorValidator>();
 builder.Services.AddScoped<IPatientValidator, PatientValidator>();
-builder.Services.AddScoped<IAppointmentValidator, AppointmentValidator>();
 
 //APP
 var app = builder.Build();
