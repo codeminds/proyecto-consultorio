@@ -24,7 +24,7 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<APIResponse>> List([FromQuery] FilterPatientDTO data)
+        public async Task<ActionResult<APIResponse>> ListPatients([FromQuery] FilterPatientDTO data)
         {
             PatientListFilter filter = this._mapper.Map<FilterPatientDTO, PatientListFilter>(data);
 
@@ -37,7 +37,7 @@ namespace API.Controllers
 
         [HttpGet]
         [Route("search")]
-        public async Task<ActionResult<APIResponse>> Search([FromQuery] string[] s)
+        public async Task<ActionResult<APIResponse>> SearchPatients([FromQuery] string[] s)
         {
             APIResponse response = new APIResponse();
             response.Data = (await this._patientService.SearchPatients(s))
@@ -48,7 +48,7 @@ namespace API.Controllers
 
         [HttpGet]
         [Route("{id}")]
-        public async Task<ActionResult<APIResponse>> Get(int id)
+        public async Task<ActionResult<APIResponse>> FindPatient(int id)
         {
             Patient? patient = await this._patientService.FindPatient(id);
             if (patient == null)
@@ -63,7 +63,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<APIResponse>> Insert(CreateUpdatePatientDTO data)
+        public async Task<ActionResult<APIResponse>> CreatePatient(CreateUpdatePatientDTO data)
         {
             APIResponse response = new APIResponse();
             response.Success = this._patientValidator.ValidateInsert(data, response.Messages);
@@ -80,7 +80,7 @@ namespace API.Controllers
 
         [HttpPut]
         [Route("{id}")]
-        public async Task<ActionResult<APIResponse>> Update(int id, CreateUpdatePatientDTO data)
+        public async Task<ActionResult<APIResponse>> UpdatePatient(int id, CreateUpdatePatientDTO data)
         {
             Patient? entity = await this._patientService.FindPatient(id);
             if (entity == null)
@@ -103,7 +103,7 @@ namespace API.Controllers
 
         [HttpDelete]
         [Route("{id}")]
-        public async Task<ActionResult<APIResponse>> Delete(int id)
+        public async Task<ActionResult<APIResponse>> DeletePatient(int id)
         {
             Patient? entity = await this._patientService.FindPatient(id);
             if (entity == null)

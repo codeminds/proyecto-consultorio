@@ -3,8 +3,6 @@ using API.Data;
 using API.Repositories;
 using API.Services;
 using API.Validators;
-using Microsoft.AspNetCore.Mvc;
-using System.Net;
 
 //BUILDER
 var builder = WebApplication.CreateBuilder(args);
@@ -13,11 +11,7 @@ builder.Services.AddControllers()
                 .ConfigureApiBehaviorOptions(options => {
                     options.InvalidModelStateResponseFactory = context =>
                     {
-                        APIResponse response = new APIResponse();
-                        response.StatusCode = HttpStatusCode.BadRequest;
-                        response.Success = false;
-
-                        return new BadRequestObjectResult(response);
+                        return HttpErrors.BadRequest("Objeto de datos no válido");
                     }; 
                 });
 

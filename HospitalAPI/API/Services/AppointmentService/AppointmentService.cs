@@ -2,24 +2,20 @@
 using API.Data.Filters;
 using API.Data.Models;
 using API.Repositories;
-using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using System.Text.RegularExpressions;
 
 namespace API.Services
 {
     public class AppointmentService : IAppointmentService
     {
         private readonly HospitalDB _database;
-        private readonly IMapper _mapper;
         private readonly IAppointmentRepository _appointmentRepository;
         private readonly IPatientService _patientService;
         private readonly IDoctorService _doctorService;
 
-        public AppointmentService(HospitalDB database, IMapper mapper, IAppointmentRepository appointmentRepository, IPatientService patientService, IDoctorService doctorService)
+        public AppointmentService(HospitalDB database, IAppointmentRepository appointmentRepository, IPatientService patientService, IDoctorService doctorService)
         {
             this._database = database;
-            this._mapper = mapper;
             this._appointmentRepository = appointmentRepository;
             this._patientService = patientService;
             this._doctorService = doctorService;
@@ -34,8 +30,8 @@ namespace API.Services
             List<int> doctorIds = (await this._doctorService.ListDoctors(doctorFilter)).Select(d => d.Id).ToList();
             List<int> patientIds = (await this._patientService.ListPatients(patientFilter)).Select(d => d.Id).ToList();
 
-            return await this._appointmentRepository
-                                    .Query(a => (!filter.DateFrom.HasValue || a.Date >= filter.DateFrom)
+            return await this._appointmentRepository.Query
+                                    .Where(a => (!filter.DateFrom.HasValue || a.Date >= filter.DateFrom)
                                                     && (!filter.DateTo.HasValue || a.Date <= filter.DateTo)
                                                     && doctorIds.Contains(a.DoctorId)
                                                     && patientIds.Contains(a.PatientId))

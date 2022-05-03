@@ -1,5 +1,4 @@
-﻿using API.Data.Filters;
-using API.Data.Models;
+﻿using API.Data.Models;
 
 namespace API.Services
 {

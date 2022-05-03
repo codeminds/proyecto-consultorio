@@ -1,15 +1,17 @@
 ﻿using API.Data;
 using API.Data.Models;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
 using System.Text;
-using System.Text.RegularExpressions;
 
 namespace API.Repositories
 {
     public class PatientRepository : IPatientRepository
     {
+        public IQueryable<Patient> Query
+        {
+            get { return this._database.Patient; }
+        }
+
         private readonly HospitalDB _database;
 
         public PatientRepository(HospitalDB database)
@@ -20,16 +22,6 @@ namespace API.Repositories
         public IQueryable<Patient> Find(int id)
         {
             return this._database.Patient.Where(p => p.Id == id);
-        }
-
-        public IQueryable<Patient> Query(Expression<Func<Patient, bool>>? filter = null)
-        {
-            if (filter == null)
-            {
-                return this._database.Patient;
-            }
-
-            return this._database.Patient.Where(filter);
         }
 
         public IQueryable<Patient> Search(IEnumerable<string> values)

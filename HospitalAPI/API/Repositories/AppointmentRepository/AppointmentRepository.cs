@@ -1,15 +1,17 @@
 ﻿using API.Data;
 using API.Data.Models;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
 using System.Text;
-using System.Text.RegularExpressions;
 
 namespace API.Repositories
 {
     public class AppointmentRepository : IAppointmentRepository
     {
+        public IQueryable<Appointment> Query
+        {
+            get { return this._database.Appointment; }
+        }
+
         private readonly HospitalDB _database;
 
         public AppointmentRepository(HospitalDB database)
@@ -20,16 +22,6 @@ namespace API.Repositories
         public IQueryable<Appointment> Find(int id)
         {
             return this._database.Appointment.Where(p => p.Id == id);
-        }
-
-        public IQueryable<Appointment> Query(Expression<Func<Appointment, bool>>? filter = null)
-        {
-            if (filter == null)
-            {
-                return this._database.Appointment;
-            }
-
-            return this._database.Appointment.Where(filter);
         }
 
         public IQueryable<Appointment> Search(IEnumerable<string> values)

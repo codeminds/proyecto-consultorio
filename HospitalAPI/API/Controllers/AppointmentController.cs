@@ -24,7 +24,7 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<APIResponse>> List([FromQuery] FilterAppointmentDTO data)
+        public async Task<ActionResult<APIResponse>> ListAppointments([FromQuery] FilterAppointmentDTO data)
         { 
             AppointmentListFilter filter = this._mapper.Map<FilterAppointmentDTO, AppointmentListFilter>(data);
             PatientListFilter patientFilter = this._mapper.Map<FilterAppointmentDTO, PatientListFilter>(data);
@@ -39,7 +39,7 @@ namespace API.Controllers
 
         [HttpGet]
         [Route("{id}")]
-        public async Task<ActionResult<APIResponse>> Get(int id)
+        public async Task<ActionResult<APIResponse>> FindAppointment(int id)
         {
             Appointment? entity = await this._appointmentService.FindAppointment(id);
             if (entity == null)
@@ -54,7 +54,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<APIResponse>> Insert(CreateUpdateAppointmentDTO data)
+        public async Task<ActionResult<APIResponse>> CreateAppointment(CreateUpdateAppointmentDTO data)
         {
             APIResponse response = new APIResponse();
             response.Success = this._appointmentValidator.ValidateInsert(data, response.Messages);
@@ -71,7 +71,7 @@ namespace API.Controllers
 
         [HttpPut]
         [Route("{id}")]
-        public async Task<ActionResult<APIResponse>> Update(int id, CreateUpdateAppointmentDTO data)
+        public async Task<ActionResult<APIResponse>> UpdateAppointment(int id, CreateUpdateAppointmentDTO data)
         {
 
             Appointment? entity = await this._appointmentService.FindAppointment(id);
@@ -95,7 +95,7 @@ namespace API.Controllers
 
         [HttpDelete]
         [Route("{id}")]
-        public async Task<ActionResult<APIResponse>> Delete(int id)
+        public async Task<ActionResult<APIResponse>> DeleteAppointment(int id)
         {
             Appointment? entity = await this._appointmentService.FindAppointment(id);
             if (entity == null)

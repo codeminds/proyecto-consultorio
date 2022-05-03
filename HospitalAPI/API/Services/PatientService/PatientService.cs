@@ -2,7 +2,6 @@
 using API.Data.Filters;
 using API.Data.Models;
 using API.Repositories;
-using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using System.Text.RegularExpressions;
 
@@ -11,13 +10,11 @@ namespace API.Services
     public class PatientService : IPatientService
     {
         private readonly HospitalDB _database;
-        private readonly IMapper _mapper;
         private readonly IPatientRepository _patientRepository;
 
-        public PatientService(HospitalDB database, IMapper mapper, IPatientRepository patientRepository)
+        public PatientService(HospitalDB database, IPatientRepository patientRepository)
         {
             this._database = database;
-            this._mapper = mapper;
             this._patientRepository = patientRepository;
         }
 
@@ -25,8 +22,8 @@ namespace API.Services
         {
             filter = filter ?? new PatientListFilter();
 
-            return await this._patientRepository
-                                    .Query(p => (string.IsNullOrWhiteSpace(filter.DocumentId) || p.DocumentId.Contains(filter.DocumentId))
+            return await this._patientRepository.Query
+                                    .Where(p => (string.IsNullOrWhiteSpace(filter.DocumentId) || p.DocumentId.Contains(filter.DocumentId))
                                                     && (string.IsNullOrWhiteSpace(filter.FirstName) || p.FirstName.Contains(filter.FirstName))
                                                     && (string.IsNullOrWhiteSpace(filter.LastName) || p.LastName.Contains(filter.LastName))
                                                     && (!filter.BirthDateFrom.HasValue || p.BirthDate >= filter.BirthDateFrom)

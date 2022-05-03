@@ -2,7 +2,6 @@
 using API.Data.Filters;
 using API.Data.Models;
 using API.Repositories;
-using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using System.Text.RegularExpressions;
 
@@ -11,13 +10,11 @@ namespace API.Services
     public class DoctorService : IDoctorService
     {
         private readonly HospitalDB _database;
-        private readonly IMapper _mapper;
         private readonly IDoctorRepository _doctorRepository;
 
-        public DoctorService(HospitalDB database, IMapper mapper, IDoctorRepository doctorRepository)
+        public DoctorService(HospitalDB database, IDoctorRepository doctorRepository)
         {
             this._database = database;
-            this._mapper = mapper;
             this._doctorRepository = doctorRepository;
         }
 
@@ -25,8 +22,8 @@ namespace API.Services
         {
             filter = filter ?? new DoctorListFilter();
 
-            return await this._doctorRepository
-                                    .Query(d => (string.IsNullOrWhiteSpace(filter.DocumentId) || d.DocumentId.Contains(filter.DocumentId))
+            return await this._doctorRepository.Query
+                                    .Where(d => (string.IsNullOrWhiteSpace(filter.DocumentId) || d.DocumentId.Contains(filter.DocumentId))
                                                     && (string.IsNullOrWhiteSpace(filter.FirstName) || d.FirstName.Contains(filter.FirstName))
                                                     && (string.IsNullOrWhiteSpace(filter.LastName) || d.LastName.Contains(filter.LastName))
                                                     && (!filter.FieldId.HasValue || d.FieldId == filter.FieldId))

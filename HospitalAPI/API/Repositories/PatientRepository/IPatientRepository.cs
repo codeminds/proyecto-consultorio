@@ -1,15 +1,14 @@
 ﻿using API.Data.Models;
-using System.Linq.Expressions;
 
 namespace API.Repositories
 {
-    public interface IAppointmentRepository
+    public interface IPatientRepository
     {
-        IQueryable<Appointment> Find(int id);
-        IQueryable<Appointment> Query(Expression<Func<Appointment, bool>>? filter = null);
-        IQueryable<Appointment> Search(IEnumerable<string> values);
-        void Insert(Appointment entity);
-        void Update(Appointment entity);
-        void Delete(Appointment entity);
+        IQueryable<Patient> Query { get; }
+        IQueryable<Patient> Find(int id);
+        IQueryable<Patient> Search(IEnumerable<string> values);
+        void Insert(Patient entity);
+        void Update(Patient entity);
+        void Delete(Patient entity);
     }
 }
