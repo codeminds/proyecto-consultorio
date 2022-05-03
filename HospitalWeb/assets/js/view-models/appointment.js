@@ -353,7 +353,7 @@ class ViewModel extends BaseViewModel {
 
                 //Celda fecha
                 const date = document.createElement ('td');
-                date.textContent = appointment.date.toLocaleString('es-ES', { hour12: true});
+                date.textContent = DateService.toDisplayLocaleString(appointment.date, 'es-US');
                 row.appendChild(date);
                 
                 //Celda paciente
@@ -401,7 +401,7 @@ class ViewModel extends BaseViewModel {
 
                 //Cédula móvil
                 const mobileTitle = document.createElement('h3');
-                mobileTitle.textContent = appointment.date.toLocaleString('es-ES', { hour12: true});
+                mobileTitle.textContent = DateService.toDisplayLocaleString(appointment.date, 'es-US');
                 mobile.appendChild(mobileTitle);
 
                 //Paciente móvil

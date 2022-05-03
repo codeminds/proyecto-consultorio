@@ -170,7 +170,7 @@ class ViewModel extends BaseViewModel{
                 row.appendChild(name);
 
                 const birth = document.createElement ('td');
-                birth.textContent = patient.birthDate.toLocaleString('es-ES', { hour12: true});
+                birth.textContent = DateService.toDisplayLocaleString(patient.birthDate, 'es-US');
                 row.appendChild(birth);
 
                 const gender = document.createElement('td');
@@ -218,7 +218,7 @@ class ViewModel extends BaseViewModel{
                 mobilbirthSpan.classList.add('label');
                 mobilbirthSpan.textContent = 'Fecha de Nacimiento:';
                 mobilbirth.appendChild(mobilbirthSpan);
-                mobilbirth.appendChild(document.createTextNode(patient.birthDate.toLocaleString('es-ES', { hour12: true})));
+                mobilbirth.appendChild(document.createTextNode(DateService.toDisplayLocaleString(patient.birthDate, 'es-US')));
                 mobile.appendChild(mobilbirth);
 
                 const mobileGender = document.createElement('p');
