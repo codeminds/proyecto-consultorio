@@ -1,15 +1,17 @@
-﻿using API.Data;
-using API.DataTransferObjects;
+﻿using API.DataTransferObjects;
+using API.Repositories;
 
 namespace API.Validators
 {
     public class PatientValidator : IPatientValidator
     {
-        private readonly HospitalDB _database;
+        private readonly IPatientRepository _patientRepository;
+        private readonly IAppointmentRepository _appointmentRepository;
 
-        public PatientValidator(HospitalDB database)
+        public PatientValidator(IPatientRepository patientRepository, IAppointmentRepository appointmentRepository)
         {
-            this._database = database;
+            this._patientRepository = patientRepository;
+            this._appointmentRepository = appointmentRepository;
         }
 
 
@@ -30,7 +32,7 @@ namespace API.Validators
             {
                 innerMessages.Add("Cédula sólo puede contener números");
             }
-            else if (this._database.Patient.Any(d => d.DocumentId == data.DocumentId))
+            else if (this._patientRepository.Query.Any(d => d.DocumentId == data.DocumentId))
             {
                 innerMessages.Add("Cédula ya está registrada en el sistema");
             }
@@ -94,7 +96,7 @@ namespace API.Validators
             {
                 innerMessages.Add("Cédula sólo puede contener números");
             }
-            else if (this._database.Patient.Any(d => d.DocumentId == data.DocumentId && d.Id != id))
+            else if (this._patientRepository.Query.Any(d => d.DocumentId == data.DocumentId && d.Id != id))
             {
                 innerMessages.Add("Cédula ya está registrada en el sistema");
             }
@@ -145,7 +147,7 @@ namespace API.Validators
         {
             List<string> innerMessages = new List<string>();
 
-            if (this._database.Appointment.Any(a => a.PatientId == id))
+            if (this._appointmentRepository.Query.Any(a => a.PatientId == id))
             {
                 innerMessages.Add("No se puede borrar el record. El paciente tiene citas asociadas en el sistema");
             }

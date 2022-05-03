@@ -1,15 +1,19 @@
-﻿using API.Data;
-using API.DataTransferObjects;
+﻿using API.DataTransferObjects;
+using API.Repositories;
 
 namespace API.Validators
 {
     public class AppointmentValidator : IAppointmentValidator
     {
-        private readonly HospitalDB _database;
+        private readonly IAppointmentRepository _appointmentRepository;
+        private readonly IPatientRepository _patientRepository;
+        private readonly IDoctorRepository _doctorRepository;
 
-        public AppointmentValidator(HospitalDB database)
+        public AppointmentValidator(IAppointmentRepository appointmentRepository, IPatientRepository patientRepository, IDoctorRepository doctorRepository)
         {
-            this._database = database;
+            this._appointmentRepository = appointmentRepository;
+            this._patientRepository = patientRepository;
+            this._doctorRepository = doctorRepository;
         }
 
 
@@ -28,7 +32,7 @@ namespace API.Validators
             }
             else
             {
-                if (this._database.Appointment.Any(a =>
+                if (this._appointmentRepository.Query.Any(a =>
                             a.DoctorId == data.DoctorId
                             && ((data.Date.Value.AddHours(1) > a.Date && data.Date.Value.AddHours(1) < a.Date.AddHours(1))
                             || (data.Date > a.Date && data.Date < a.Date.AddHours(1)))))
@@ -36,7 +40,7 @@ namespace API.Validators
                     innerMessages.Add("El doctor ya tiene una cita agendada durante la fecha y hora seleccionada");
                 }
 
-                if (this._database.Appointment.Any(a =>
+                if (this._appointmentRepository.Query.Any(a =>
                             a.PatientId == data.PatientId
                             && ((data.Date.Value.AddHours(1) > a.Date && data.Date.Value.AddHours(1) < a.Date.AddHours(1))
                                 || (data.Date > a.Date && data.Date < a.Date.AddHours(1)))))
@@ -50,7 +54,7 @@ namespace API.Validators
             {
                 innerMessages.Add("Doctor es requerido");
             }
-            else if (!this._database.Doctor.Any(d => d.Id == data.DoctorId))
+            else if (!this._appointmentRepository.Query.Any(d => d.Id == data.DoctorId))
             {
                 innerMessages.Add("Debe seleccionar un doctor que esté registrado en el sistema");
             }
@@ -60,7 +64,7 @@ namespace API.Validators
             {
                 innerMessages.Add("Paciente es requerido");
             }
-            else if (!this._database.Patient.Any(d => d.Id == data.PatientId))
+            else if (!this._patientRepository.Query.Any(d => d.Id == data.PatientId))
             {
                 innerMessages.Add("Debe seleccionar un paciente que esté registrado en el sistema");
             }
@@ -81,7 +85,7 @@ namespace API.Validators
             }
             else
             {
-                if (this._database.Appointment.Any(a =>
+                if (this._appointmentRepository.Query.Any(a =>
                             a.Id != id &&
                             a.DoctorId == data.DoctorId
                             && ((data.Date.Value.AddHours(1) > a.Date && data.Date.Value.AddHours(1) < a.Date.AddHours(1))
@@ -90,7 +94,7 @@ namespace API.Validators
                     innerMessages.Add("El doctor ya tiene una cita agendada durante la fecha y hora seleccionada");
                 }
 
-                if (this._database.Appointment.Any(a =>
+                if (this._appointmentRepository.Query.Any(a =>
                             a.Id != id &&
                             a.PatientId == data.PatientId
                             && ((data.Date.Value.AddHours(1) > a.Date && data.Date.Value.AddHours(1) < a.Date.AddHours(1))
@@ -105,7 +109,7 @@ namespace API.Validators
             {
                 innerMessages.Add("Doctor es requerido");
             }
-            else if (!this._database.Doctor.Any(d => d.Id == data.DoctorId))
+            else if (!this._doctorRepository.Query.Any(d => d.Id == data.DoctorId))
             {
                 innerMessages.Add("Debe seleccionar un doctor que esté registrado en el sistema");
             }
@@ -115,7 +119,7 @@ namespace API.Validators
             {
                 innerMessages.Add("Paciente es requerido");
             }
-            else if (!this._database.Patient.Any(d => d.Id == data.PatientId))
+            else if (!this._patientRepository.Query.Any(d => d.Id == data.PatientId))
             {
                 innerMessages.Add("Debe seleccionar un paciente que esté registrado en el sistema");
             }
