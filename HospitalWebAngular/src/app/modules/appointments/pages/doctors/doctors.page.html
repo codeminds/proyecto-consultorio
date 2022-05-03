@@ -17,7 +17,7 @@
             nullOption="Todos"
             [(model)]="filter.fieldId"
             [options]="fields"
-            [option]="{label: 'name', value: 'id'}"
+            [option]="{label: 'name', value: 'id', output: 'id'}"
         ></app-select>
         <app-input 
             name="documentId" 
@@ -116,7 +116,7 @@
             label="Especialidad"
             [(model)]="doctor.field"
             [options]="fields"
-            [option]="{label: 'name'}"
+            [option]="{label: 'name', value: 'id', compare: 'id'}"
         ></app-select>
         <app-input 
             name="documentId" 
@@ -143,7 +143,7 @@
             [attributes]="{'placeholder': 'Smith'}"
         ></app-input>
         <div class="row">
-            <app-button [type]="ButtonType.Success" (clicked)="save()" [disabled]="saving || !modalOpen" [buttonClass]="{'loading': saving}">Guardar <i *ngIf="saving" class="material-icons-sharp rotate">data_saver_off</i></app-button>
+            <app-button [type]="ButtonType.Success" (clicked)="save()" [disabled]="saving || !modalOpen" [buttonClass]="{'loading': saving || !modalOpen}">Guardar <i *ngIf="saving" class="material-icons-sharp rotate">data_saver_off</i></app-button>
             <app-button [type]="ButtonType.Danger" (clicked)="modalOpen = false">Cancelar</app-button>
         </div>
     </form>
@@ -153,7 +153,7 @@
 <app-modal [(open)]="confirmOpen" [transparent]="true" [position]="ModalPosition.Top" [closeOnClickOutside]="false" (onClose)="onConfirmClose()">
     <p class="confirm-text">{{confirmText}}</p>
     <div class="confirm-buttons">
-        <button class="button success" (click)="confirm(true)" [disabled]="saving || !confirmOpen" [ngClass]="{'loading': saving}">Confirmar <i *ngIf="saving" class="material-icons-sharp rotate">data_saver_off</i></button>
+        <button class="button success" (click)="confirm(true)" [disabled]="saving || !confirmOpen" [ngClass]="{'loading': saving || !confirmOpen}">Confirmar <i *ngIf="saving" class="material-icons-sharp rotate">data_saver_off</i></button>
         <button class="button neutral" (click)="confirm(false)">Cancelar</button>
     </div>
 </app-modal>

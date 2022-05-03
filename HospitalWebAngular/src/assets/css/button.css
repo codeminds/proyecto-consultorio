@@ -18,7 +18,7 @@
     cursor: not-allowed;
 }
 
-.button:disabled.loading {
+.button.loading:disabled {
     cursor: wait;
 }
 

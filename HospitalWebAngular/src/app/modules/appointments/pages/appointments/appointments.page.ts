@@ -20,7 +20,6 @@ import { firstValueFrom } from 'rxjs';
 export class AppointmentsPage implements OnInit {
   public appointments: Appointment[];
   public fields: Field[];
-  public genderOptions: any[];
   public modalOpen: boolean;
   public panelOpen: boolean;
   public appointment: Appointment;
@@ -56,7 +55,6 @@ export class AppointmentsPage implements OnInit {
     this.confirmText = null;
     this.confirmOpen = false;
     this.messages = [];
-    this.genderOptions = [{label: 'Femenino', value: false}, {label: 'Masculino', value: true}];
     this.confirmFunction = null;
     this.filter = {
       dateFrom: null,

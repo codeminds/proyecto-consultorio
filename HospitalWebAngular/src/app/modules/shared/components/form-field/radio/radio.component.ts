@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { getProperty } from '../form-field.helpers';
-import { Option } from '../form-field.types';
+import { CompareOption } from '../form-field.types';
 
 @Component({
   selector: 'app-radio',
@@ -18,7 +18,7 @@ export class RadioComponent implements OnInit, OnChanges {
   public options: any[];
 
   @Input()
-  public option?: Option;
+  public option?: CompareOption;
 
   @Input()
   public label?: string;
@@ -47,7 +47,7 @@ export class RadioComponent implements OnInit, OnChanges {
     this.fieldName = null;
     this.form = null;
     this.options = [];
-    this.option = Option.default;
+    this.option = CompareOption.default;
     this.label = null;
     this.model = null;
     this.inline = false;
@@ -85,7 +85,7 @@ export class RadioComponent implements OnInit, OnChanges {
       if(this.model == null && this.nullOption != null) {
         this.selectedIndex = null;
       }else {
-        let index = this.options.findIndex((item: any) => getProperty(item, this.option.value) == this.model);
+        let index = this.options.findIndex((item: any) => getProperty(item, this.option.value) == getProperty(this.model, this.option.compare));
         
         //Para una buena experiencia de usuario, si el index no es encontrado
         //es porque el valor no existe en la lista o el modelo que recibimos es nulo.
@@ -110,7 +110,7 @@ export class RadioComponent implements OnInit, OnChanges {
 
   public onModelChange(index?: number) {
     if(index != null) {
-      this.modelChange.emit(getProperty(this.options[index], this.option.value));
+      this.modelChange.emit(getProperty(this.options[index], this.option.output));
     }else {
       this.modelChange.emit(null);
     } 

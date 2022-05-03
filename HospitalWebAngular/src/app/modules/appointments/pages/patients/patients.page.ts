@@ -25,7 +25,6 @@ export class PatientsPage implements OnInit{
   public confirmText: string;
   public confirmOpen: boolean;
   public messages: string[];
-  public genderOptions: any[];
 
   public InputType = InputType;
   public DateType = DateType;
@@ -50,7 +49,6 @@ export class PatientsPage implements OnInit{
     this.confirmText = null;
     this.confirmOpen = false;
     this.messages = [];
-    this.genderOptions = [{label: 'Femenino', value: false}, {label: 'Masculino', value: true}];
     this.confirmFunction = null;
     this.filter = {
       documentId: null,

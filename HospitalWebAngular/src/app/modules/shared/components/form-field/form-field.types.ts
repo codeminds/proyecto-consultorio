@@ -28,16 +28,29 @@ export interface Attributes {
 
 export interface Option {
     label?: string,
+    output?: string
+    
+}
+
+export interface CompareOption extends Option {
+    compare?: string,
     value?: string
 }
 
 export const Option = {
     default: {
         label: 'label',
-        value: 'value'
+        output: 'value'
     },
     basic: {
-        label: null as string,
-        value: null as string,
+        label: null as string
+    }
+}
+
+export const CompareOption = {
+    default: {
+        label: 'label',
+        value: 'value',
+        output: 'value'
     }
 }

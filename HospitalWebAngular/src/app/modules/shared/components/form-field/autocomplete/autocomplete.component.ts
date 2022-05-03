@@ -261,6 +261,6 @@ export class AutocompleteComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private onModelChange() {
-    this.modelChange.emit(getProperty(this.model, this.option.value));
+    this.modelChange.emit(getProperty(this.model, this.option.output));
   }
 }

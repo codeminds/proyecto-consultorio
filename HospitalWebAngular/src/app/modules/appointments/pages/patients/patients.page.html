@@ -59,7 +59,8 @@
             class="col-3"
             nullOption="Todos"
             [(model)]="filter.gender"
-            [options]="genderOptions"
+            [options]="[{label: 'Femenino', value: false},
+                        {label: 'Masculino', value: true}]"
         ></app-select>
         <app-button [type]="ButtonType.Success" [disabled]="loading" [buttonClass]="{ 'loading': loading }" (clicked)="list()">
             <i class="material-icons-sharp">search</i>
@@ -166,10 +167,11 @@
             form="createUpdate"
             label="Género"
             [(model)]="patient.gender"
-            [options]="genderOptions"
+            [options]="[{label: 'Femenino', value: false},
+                        {label: 'Masculino', value: true}]"
         ></app-select>
         <div class="row">
-            <app-button [type]="ButtonType.Success" (clicked)="save()" [disabled]="saving || !modalOpen" [buttonClass]="{'loading': saving}">Guardar <i *ngIf="saving" class="material-icons-sharp rotate">data_saver_off</i></app-button>
+            <app-button [type]="ButtonType.Success" (clicked)="save()" [disabled]="saving || !modalOpen" [buttonClass]="{'loading': saving || !modalOpen}">Guardar <i *ngIf="saving" class="material-icons-sharp rotate">data_saver_off</i></app-button>
             <app-button [type]="ButtonType.Danger" (clicked)="modalOpen = false">Cancelar</app-button>
         </div>
     </form>
@@ -179,7 +181,7 @@
 <app-modal [(open)]="confirmOpen" [transparent]="true" [position]="ModalPosition.Top" [closeOnClickOutside]="false" (onClose)="onConfirmClose()">
     <p class="confirm-text">{{confirmText}}</p>
     <div class="confirm-buttons">
-        <button class="button success" (click)="confirm(true)" [disabled]="saving || !confirmOpen" [ngClass]="{'loading': saving}">Confirmar <i *ngIf="saving" class="material-icons-sharp rotate">data_saver_off</i></button>
+        <button class="button success" (click)="confirm(true)" [disabled]="saving || !confirmOpen" [ngClass]="{'loading': saving || !confirmOpen}">Confirmar <i *ngIf="saving" class="material-icons-sharp rotate">data_saver_off</i></button>
         <button class="button neutral" (click)="confirm(false)">Cancelar</button>
     </div>
 </app-modal>
