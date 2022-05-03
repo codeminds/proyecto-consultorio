@@ -1,4 +1,5 @@
 ﻿using API.Data;
+using API.Data.Filters;
 using API.Data.Models;
 using API.Repositories;
 using API.Utils;
@@ -19,10 +20,14 @@ namespace API.Services
             this._sessionRepository = sessionRepository;
         }
 
-        public async Task<List<Session>> ListSessions(int userId)
+        public async Task<List<Session>> ListSessions(string username, SessionListFilter filter)
         {
             return await this._sessionRepository.Query
-                                        .Where(s => s.UserId == userId)
+                                        .Where(s => s.User.Email == username
+                                                && (string.IsNullOrWhiteSpace(filter.AddressIssued) || s.AddressIssued.Contains(filter.AddressIssued))
+                                                && (string.IsNullOrWhiteSpace(filter.AddressRefreshed) || s.AddressRefreshed!.Contains(filter.AddressRefreshed))
+                                                && (!filter.DateFrom.HasValue || s.DateIssued >= filter.DateFrom)
+                                                && (!filter.DateTo.HasValue || s.DateExpiry <= filter.DateTo))
                                         .ToListAsync();
         }
 

@@ -1,4 +1,5 @@
 ﻿using API.Attributes;
+using API.Data.Filters;
 using API.Data.Models;
 using API.DataTransferObjects;
 using API.Services;
@@ -28,6 +29,25 @@ namespace API.Controllers
             this._mapper = mapper;
             this._sessionService = sessionService;
             this._userValidator = userValidator;
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<ActionResult<APIResponse>> ListSessions([FromQuery] FilterSessionDTO data)
+        {
+            SessionListFilter filter = this._mapper.Map<FilterSessionDTO, SessionListFilter>(data);
+
+            StringValues tokenHeader;
+            Request.Headers.TryGetValue("Authorization", out tokenHeader);
+
+            List<Claim> claims = Token.GetTokenClaims(tokenHeader.ToString().Split(" ")[1]);
+            string username = claims.First(c => c.Type == Claims.User).Value;
+
+            APIResponse response = new APIResponse();
+            response.Data = (await this._sessionService.ListSessions(username, filter))
+                                .Select(p => this._mapper.Map<Session, GetSessionDTO>(p));
+
+            return response;
         }
 
         [HttpPost]

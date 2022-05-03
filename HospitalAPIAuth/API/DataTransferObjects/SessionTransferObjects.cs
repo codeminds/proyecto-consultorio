@@ -21,4 +21,12 @@
         public string? Email { get; set; }
         public string? Password { get; set; }
     }
+
+    public class FilterSessionDTO
+    {
+        public DateTime? DateFrom { get; set; }
+        public DateTime? DateTo { get; set; }
+        public string? AddressIssued { get; set; }
+        public string? AddressRefreshed { get; set; }
+    }
 }
