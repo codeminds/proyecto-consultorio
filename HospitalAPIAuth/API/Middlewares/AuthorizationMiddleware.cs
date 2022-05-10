@@ -52,6 +52,14 @@ namespace API.Middlewares
                         this.SendResponse(context, HttpStatusCode.Forbidden, "No está autorizado para realizar esta acción");
                         return;
                     }
+
+                    if (session.DateExpiry <= DateTime.Now)
+                    {
+                        await sessionService.DeleteSession(session);
+                        context.Response.Headers.Add("Session-Expired", "true");
+                        this.SendResponse(context, HttpStatusCode.Unauthorized, "Sesión ha expirado");
+                        return;
+                    }
                 }
                 catch (SecurityTokenExpiredException)
                 {

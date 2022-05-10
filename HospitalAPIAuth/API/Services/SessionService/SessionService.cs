@@ -20,10 +20,10 @@ namespace API.Services
             this._sessionRepository = sessionRepository;
         }
 
-        public async Task<List<Session>> ListSessions(string username, SessionListFilter filter)
+        public async Task<List<Session>> ListSessions(int userId, SessionListFilter filter)
         {
             return await this._sessionRepository.Query
-                                        .Where(s => s.User.Email == username
+                                        .Where(s => s.UserId == userId
                                                 && (string.IsNullOrWhiteSpace(filter.AddressIssued) || s.AddressIssued.Contains(filter.AddressIssued))
                                                 && (string.IsNullOrWhiteSpace(filter.AddressRefreshed) || s.AddressRefreshed!.Contains(filter.AddressRefreshed))
                                                 && (!filter.DateFrom.HasValue || s.DateIssued >= filter.DateFrom)
@@ -35,6 +35,7 @@ namespace API.Services
         {
             return await this._sessionRepository.Query
                                     .Include(s => s.User)
+                                    .Include(s => s.User.Role)
                                     .FirstOrDefaultAsync(s => s.SessionId == sessionId);
         }
 

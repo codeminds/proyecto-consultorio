@@ -12,9 +12,9 @@ namespace API.Utils
         {
             List<Claim> claims = new List<Claim>();
             claims.Add(new Claim(Claims.IssueDate, DateTimeOffset.Now.ToUnixTimeSeconds().ToString()));
-            claims.Add(new Claim(Claims.User, user.Email));
-            claims.Add(new Claim(Claims.Session, session.ToString()));
-            claims.Add(new Claim(Claims.Role, user.RoleId.ToString(), ClaimValueTypes.Integer));
+            claims.Add(new Claim(Claims.User, user.Id.ToString(), ClaimValueTypes.Integer));
+            claims.Add(new Claim(Claims.Session, session.ToString(), ClaimValueTypes.String));
+            claims.Add(new Claim(Claims.Role, user.Role.Name, ClaimValueTypes.String));
             claims.Add(new Claim(Claims.SuperAdmin, user.IsSuperAdmin.ToString(), ClaimValueTypes.Boolean));
 
             //Se define una llave secreta en la cuál sólo tenemos acceso desde el API, de esta manera
@@ -35,8 +35,8 @@ namespace API.Utils
         {
             List<Claim> claims = new List<Claim>();
             claims.Add(new Claim(Claims.IssueDate, DateTimeOffset.Now.ToUnixTimeSeconds().ToString()));
-            claims.Add(new Claim(Claims.User, user.Email));
-            claims.Add(new Claim(Claims.Session, session.ToString()));
+            claims.Add(new Claim(Claims.User, user.Id.ToString(), ClaimValueTypes.Integer));
+            claims.Add(new Claim(Claims.Session, session.ToString(), ClaimValueTypes.String));
 
             //Se define una llave secreta en la cuál sólo tenemos acceso desde el API, de esta manera
             //un intento de forjado sería sumamente poco probable

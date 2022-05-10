@@ -14,21 +14,21 @@ using System.Text;
 
 namespace API.Controllers
 {
-    [Route("api/session")]
+    [Route("api/sessions")]
     [ApiController]
     public class SessionController : ControllerBase
     {
         private readonly IMapper _mapper;
         private readonly ISessionService _sessionService;
         private readonly IUserService _userService;
-        private readonly IUserValidator _userValidator;
+        private readonly ISessionValidator _sessionValidator;
 
-        public SessionController(IMapper mapper, ISessionService sessionService, IUserService userService, IUserValidator userValidator)
+        public SessionController(IMapper mapper, ISessionService sessionService, IUserService userService, ISessionValidator sessionValidator)
         {
-            this._userService = userService;
             this._mapper = mapper;
+            this._userService = userService;
             this._sessionService = sessionService;
-            this._userValidator = userValidator;
+            this._sessionValidator = sessionValidator;
         }
 
         [HttpGet]
@@ -41,10 +41,10 @@ namespace API.Controllers
             Request.Headers.TryGetValue("Authorization", out tokenHeader);
 
             List<Claim> claims = Token.GetTokenClaims(tokenHeader.ToString().Split(" ")[1]);
-            string username = claims.First(c => c.Type == Claims.User).Value;
+            int userId = int.Parse(claims.First(c => c.Type == Claims.User).Value);
 
             APIResponse response = new APIResponse();
-            response.Data = (await this._sessionService.ListSessions(username, filter))
+            response.Data = (await this._sessionService.ListSessions(userId, filter))
                                 .Select(p => this._mapper.Map<Session, GetSessionDTO>(p));
 
             return response;
@@ -54,7 +54,7 @@ namespace API.Controllers
         public async Task<ActionResult<APIResponse>> LogIn(LoginSessionDTO data)
         {
             APIResponse response = new APIResponse();
-            response.Success = this._userValidator.ValidateLogin(data, response.Messages);
+            response.Success = this._sessionValidator.ValidateLogin(data, response.Messages);
 
             if (response.Success)
             {
@@ -91,13 +91,12 @@ namespace API.Controllers
                 string token = tokenHeader.ToString().Split(" ")[1];
                 List<Claim> claims = Token.GetValidTokenClaims(token, false);
                 Guid sessionId = Guid.Parse(claims.First(c => c.Type == Claims.Session).Value);
-                string username = claims.First(c => c.Type == Claims.User).Value;
 
                 string salt = Configuration.Get<string>("Authentication:RefreshTokenSalt");
+                byte[] tokenHash = Crypter.Hash(token, Encoding.UTF8.GetBytes(salt));
+
                 Session? session = await this._sessionService.FindSession(sessionId);
-                if (session == null 
-                    || session.User.Email != username 
-                    || Convert.ToHexString(session.RefreshToken) != Convert.ToHexString(Crypter.Hash(token, Encoding.UTF8.GetBytes(salt))))
+                if (session == null || Convert.ToHexString(session.RefreshToken) != Convert.ToHexString(tokenHash))
                 {
                     return HttpErrors.Unauthorized("Token de refrescado no válido");
                 }
@@ -105,6 +104,7 @@ namespace API.Controllers
                 if (session.DateExpiry <= DateTime.Now)
                 {
                     await this._sessionService.DeleteSession(session);
+                    Response.Headers.Add("Session-Expired", "true");
                     return HttpErrors.Unauthorized("Sesión ha expirado");
                 }
 
@@ -132,11 +132,11 @@ namespace API.Controllers
             Request.Headers.TryGetValue("Authorization", out tokenHeader);
 
             List<Claim> claims = Token.GetTokenClaims(tokenHeader.ToString().Split(" ")[1]);
-            string username = claims.First(c => c.Type == Claims.User).Value;
+            int userId = int.Parse(claims.First(c => c.Type == Claims.User).Value);
             sessionId = sessionId ?? Guid.Parse(claims.First(c => c.Type == Claims.Session).Value);
 
             Session? session = await this._sessionService.FindSession(sessionId.Value);
-            if (session == null || session.User.Email != username)
+            if (session == null || session.UserId != userId)
             {
                 return HttpErrors.NotFound("Sesión no encontrada");
             }

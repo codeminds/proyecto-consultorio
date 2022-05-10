@@ -7,6 +7,6 @@ namespace API.Services
     {
         Task<User?> FindUser(int id);
         Task<User?> FindUser(string email);
-        Task UpdateUser(User User);
+        Task UpdateUser(User User, bool expireSessions = false);
     }
 }

@@ -79,8 +79,8 @@ namespace API.Controllers
         public async Task<ActionResult<APIResponse>> UpdateAppointment(int id, CreateUpdateAppointmentDTO data)
         {
 
-            Appointment? entity = await this._appointmentService.FindAppointment(id);
-            if (entity == null)
+            Appointment? appointment = await this._appointmentService.FindAppointment(id);
+            if (appointment == null)
             {
                 return HttpErrors.NotFound("Cita no encontrada");
             }
@@ -90,8 +90,8 @@ namespace API.Controllers
 
             if (response.Success)
             {
-                await this._appointmentService.UpdateAppointment(this._mapper.Map(data, entity));
-                response.Data = this._mapper.Map<Appointment, GetAppointmentDTO>(entity);
+                await this._appointmentService.UpdateAppointment(this._mapper.Map(data, appointment));
+                response.Data = this._mapper.Map<Appointment, GetAppointmentDTO>(appointment);
                 response.Messages.Add("Cita actualizada correctamente");
             }
 
@@ -103,8 +103,8 @@ namespace API.Controllers
         [Authorize(UserRole.Administrator, UserRole.Editor)]
         public async Task<ActionResult<APIResponse>> DeleteAppointment(int id)
         {
-            Appointment? entity = await this._appointmentService.FindAppointment(id);
-            if (entity == null)
+            Appointment? appointment = await this._appointmentService.FindAppointment(id);
+            if (appointment == null)
             {
                 return HttpErrors.NotFound("Cita no encontrada");
             }
@@ -114,8 +114,8 @@ namespace API.Controllers
 
             if (response.Success)
             {
-                await this._appointmentService.DeleteAppointment(entity);
-                response.Data = this._mapper.Map<Appointment, GetAppointmentDTO>(entity);
+                await this._appointmentService.DeleteAppointment(appointment);
+                response.Data = this._mapper.Map<Appointment, GetAppointmentDTO>(appointment);
                 response.Messages.Add("Cita borrada correctamente");
             }
             return response;

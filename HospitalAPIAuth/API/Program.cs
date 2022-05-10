@@ -44,6 +44,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAppointmentValidator, AppointmentValidator>();
 builder.Services.AddScoped<IDoctorValidator, DoctorValidator>();
 builder.Services.AddScoped<IPatientValidator, PatientValidator>();
+builder.Services.AddScoped<ISessionValidator, SessionValidator>();
 builder.Services.AddScoped<IUserValidator, UserValidator>();
 
 //APP

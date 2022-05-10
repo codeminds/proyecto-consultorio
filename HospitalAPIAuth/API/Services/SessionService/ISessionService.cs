@@ -6,7 +6,7 @@ namespace API.Services
 {
     public interface ISessionService
     {
-        Task<List<Session>> ListSessions(string username, SessionListFilter filter);
+        Task<List<Session>> ListSessions(int userId, SessionListFilter filter);
         Task<Session?> FindSession(Guid sessionId);
         Task<Session> CreateUserSession(User user, IPAddress? address);
         Task RefreshUserSession(User user, Session Session, IPAddress? address);
