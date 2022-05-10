@@ -50,14 +50,14 @@ namespace API.Controllers
         [Route("{id}")]
         public async Task<ActionResult<APIResponse>> FindDoctor(int id)
         {
-            Doctor? entity = await this._doctorService.FindDoctor(id);
-            if (entity == null)
+            Doctor? doctor = await this._doctorService.FindDoctor(id);
+            if (doctor == null)
             {
                 return HttpErrors.NotFound("Doctor no encontrado");
             }
 
             APIResponse response = new APIResponse();
-            response.Data = this._mapper.Map<Doctor, GetDoctorDTO>(entity);
+            response.Data = this._mapper.Map<Doctor, GetDoctorDTO>(doctor);
 
             return response;
         }
@@ -82,8 +82,8 @@ namespace API.Controllers
         [Route("{id}")]
         public async Task<ActionResult<APIResponse>> UpdateDoctor(int id, CreateUpdateDoctorDTO data)
         {
-            Doctor? entity = await this._doctorService.FindDoctor(id);
-            if (entity == null)
+            Doctor? doctor = await this._doctorService.FindDoctor(id);
+            if (doctor == null)
             {
                 return HttpErrors.NotFound("Doctor no encontrado");
             }
@@ -93,8 +93,8 @@ namespace API.Controllers
 
             if (response.Success)
             {
-                await this._doctorService.UpdateDoctor(this._mapper.Map(data, entity));
-                response.Data = this._mapper.Map<Doctor, GetDoctorDTO>(entity);
+                await this._doctorService.UpdateDoctor(this._mapper.Map(data, doctor));
+                response.Data = this._mapper.Map<Doctor, GetDoctorDTO>(doctor);
                 response.Messages.Add("Doctor actualizado correctamente");
             }
 
@@ -105,8 +105,8 @@ namespace API.Controllers
         [Route("{id}")]
         public async Task<ActionResult<APIResponse>> DeleteDoctor(int id)
         {
-            Doctor? entity = await this._doctorService.FindDoctor(id);
-            if (entity == null)
+            Doctor? doctor = await this._doctorService.FindDoctor(id);
+            if (doctor == null)
             {
                 return HttpErrors.NotFound("Doctor no encontrado");
             }
@@ -116,8 +116,8 @@ namespace API.Controllers
 
             if (response.Success)
             {
-                await this._doctorService.DeleteDoctor(entity);
-                response.Data = this._mapper.Map<Doctor, GetDoctorDTO>(entity);
+                await this._doctorService.DeleteDoctor(doctor);
+                response.Data = this._mapper.Map<Doctor, GetDoctorDTO>(doctor);
                 response.Messages.Add("Doctor borrado correctamente");
             }
 

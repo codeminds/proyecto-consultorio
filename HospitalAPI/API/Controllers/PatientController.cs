@@ -82,8 +82,8 @@ namespace API.Controllers
         [Route("{id}")]
         public async Task<ActionResult<APIResponse>> UpdatePatient(int id, CreateUpdatePatientDTO data)
         {
-            Patient? entity = await this._patientService.FindPatient(id);
-            if (entity == null)
+            Patient? patient = await this._patientService.FindPatient(id);
+            if (patient == null)
             {
                 return HttpErrors.NotFound("Paciente no encontrado");
             }
@@ -93,8 +93,8 @@ namespace API.Controllers
 
             if (response.Success)
             {
-                await this._patientService.UpdatePatient(this._mapper.Map(data, entity));
-                response.Data = this._mapper.Map<Patient, GetPatientDTO>(entity);
+                await this._patientService.UpdatePatient(this._mapper.Map(data, patient));
+                response.Data = this._mapper.Map<Patient, GetPatientDTO>(patient);
                 response.Messages.Add("Paciente actualizado correctamente");
             }
 
@@ -105,8 +105,8 @@ namespace API.Controllers
         [Route("{id}")]
         public async Task<ActionResult<APIResponse>> DeletePatient(int id)
         {
-            Patient? entity = await this._patientService.FindPatient(id);
-            if (entity == null)
+            Patient? patient = await this._patientService.FindPatient(id);
+            if (patient == null)
             {
                 return HttpErrors.NotFound("Paciente no encontrado");
             }
@@ -116,8 +116,8 @@ namespace API.Controllers
 
             if (response.Success)
             {
-                await this._patientService.DeletePatient(entity);
-                response.Data = this._mapper.Map<Patient, GetPatientDTO>(entity);
+                await this._patientService.DeletePatient(patient);
+                response.Data = this._mapper.Map<Patient, GetPatientDTO>(patient);
                 response.Messages.Add("Paciente borrado correctamente");
             }
 
