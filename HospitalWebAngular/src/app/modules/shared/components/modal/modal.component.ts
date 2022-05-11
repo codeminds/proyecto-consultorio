@@ -59,11 +59,11 @@ export class ModalComponent implements OnInit, OnChanges{
 
   //Cambia el valor temporalmente para evitar que se cierre el modal
   //sin evitar la propagación de eventos para otros listeners globales
-  public onClickInside() {
+  public onClickInside(): void {
     this.clickedInside = true;
   }
 
-  public onClickOutside() {
+  public onClickOutside(): void {
     //Si el click vino de adentro del modal, este ignora el cerrar el mismo
     if(!this.clickedInside && this.closeOnClickOutside) {
       this.emitClose();

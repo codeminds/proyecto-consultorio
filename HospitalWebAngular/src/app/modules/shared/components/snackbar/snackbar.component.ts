@@ -22,7 +22,7 @@ export class SnackbarComponent implements OnInit, AfterViewInit, OnDestroy {
   public onClose: EventEmitter<void>;
 
   @ViewChild('snackbar')
-  private snackbar: ElementRef;
+  private snackbarRef: ElementRef;
 
   public closeSnackbar: boolean;
   public snackbarWidth: number;
@@ -120,7 +120,7 @@ export class SnackbarComponent implements OnInit, AfterViewInit, OnDestroy {
   //acorde a su contenido, sin embargo esto puede cambiar por muchas razones 
   //(e.g.: angular reevaluando nuevos elementos o el usuario modificando el tamaño de la ventana del explorador)
   private refreshSnackbarWidth(): void {
-    this.snackbarWidthNext = this.snackbar?.nativeElement.offsetWidth;
+    this.snackbarWidthNext = this.snackbarRef?.nativeElement.offsetWidth;
 
     //para evitar cálculos constantes ya que angular liga muchos eventos que están constantemente
     //ejecutándose en la aplicación, creamos un nuevo cambio de ancho para la animación sólo si

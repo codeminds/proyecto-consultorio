@@ -41,7 +41,7 @@ export class MainLayout implements OnInit {
     this.menuOpen = !this.menuOpen;
   }
 
-  public handleMenuNavigate() {
+  public handleMenuNavigate(): void {
     this.menuOpen = false;
   }
 }

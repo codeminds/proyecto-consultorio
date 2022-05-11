@@ -24,7 +24,7 @@ export class PanelComponent implements AfterViewChecked, OnChanges, OnInit, OnDe
   public openChange: EventEmitter<boolean>;
 
   @ViewChild('content')
-  private content: ElementRef;
+  private contentRef: ElementRef;
 
   public contentHeight: number;
   public afterAnimateOpen: boolean;
@@ -133,7 +133,7 @@ export class PanelComponent implements AfterViewChecked, OnChanges, OnInit, OnDe
     }
   }
 
-  public toggleOpen() {
+  public toggleOpen(): void {
     //Sólo queremos que la animación suceda
     //al abrir o cerrar el panel y no por recálculos
     //por cambios de elementos o tamaños de pantalla
@@ -142,7 +142,7 @@ export class PanelComponent implements AfterViewChecked, OnChanges, OnInit, OnDe
     this.openChange.emit(this.open);
   }
 
-  private animateOpen(open: boolean) {
+  private animateOpen(open: boolean): void {
     this.contentHeightAnimated = true;
     clearTimeout(this.animatedOpenTimeout);
     this.animatedOpenTimeout = setTimeout(() => {
@@ -165,7 +165,7 @@ export class PanelComponent implements AfterViewChecked, OnChanges, OnInit, OnDe
   //preciso para la animación, sin embargo esto puede cambiar por muchas razones 
   //(e.g.: angular reevaluando nuevos elementos o el usuario modificando el tamaño de la ventana del explorador)
   private refreshContentHeight(): void {
-    this.contentHeightNext = this.content?.nativeElement.offsetHeight;
+    this.contentHeightNext = this.contentRef?.nativeElement.offsetHeight;
 
     //para evitar cálculos constantes ya que angular liga muchos eventos que están constantemente
     //ejecutándose en la aplicación, creamos un nuevo cambio de altura para la animación sólo si

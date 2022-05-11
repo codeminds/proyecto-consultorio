@@ -47,10 +47,13 @@ export class AutocompleteComponent implements OnInit, AfterViewInit, OnDestroy {
   public modelChange: EventEmitter<any>;
 
   @ViewChild('input')
-  private input: ElementRef;
+  private inputRef: ElementRef;
 
   @ViewChild('selection')
-  private selection: ElementRef;
+  private selectionRef: ElementRef;
+
+  @ViewChild('dropdown')
+  private dropdownRef: ElementRef;
 
   public search: string;
   public loading: boolean;
@@ -131,8 +134,8 @@ export class AutocompleteComponent implements OnInit, AfterViewInit, OnDestroy {
     this.eventsService.bodyClick
       .pipe(takeUntil(this.unsubscribe))
       .subscribe((e) =>  {
-        if(![this.input.nativeElement, this.selection?.nativeElement].includes(e.target) 
-            && document.activeElement != this.input.nativeElement)
+        if(![this.inputRef.nativeElement, this.selectionRef?.nativeElement].includes(e.target) 
+            && document.activeElement != this.inputRef.nativeElement)
         {
           this.blur();
         }
@@ -144,7 +147,8 @@ export class AutocompleteComponent implements OnInit, AfterViewInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe))
       .subscribe((e => {
         this.recalculateResultsMaxHeight();
-      }))
+        this.scrollToSelectedOption();
+      }));
   }
 
   //Técnica de unsubscribe de observables en componentes para evitar
@@ -192,6 +196,8 @@ export class AutocompleteComponent implements OnInit, AfterViewInit, OnDestroy {
       } else {
         this.selectedIndex = 0;
       }
+
+      this.scrollToSelectedOption();
     }
   }
 
@@ -204,15 +210,17 @@ export class AutocompleteComponent implements OnInit, AfterViewInit, OnDestroy {
       } else {
         this.selectedIndex = this.results.length - 1;
       }
+
+      this.scrollToSelectedOption();
     }
   }
 
   //Navegación con teclado de las opciones
-  public selectKeyPress(e: any) {
+  public selectKeyPress(e: any): void {
     e.stopPropagation();
     this.selectOption();
     this.blur();
-    this.input.nativeElement.blur();
+    this.inputRef.nativeElement.blur();
   }
 
   //Selección por click de la opción
@@ -223,10 +231,10 @@ export class AutocompleteComponent implements OnInit, AfterViewInit, OnDestroy {
 
   //El control interactivo es una combinación de elementos visuales por
   //lo que al recibir foco necesita ejecutar una serie de funcionalidades
-  public focus() {
+  public focus(): void {
     this.focused = true;
     if(this.model != null && this.showSelection) {
-      this.search = this.selection.nativeElement.textContent.trim();
+      this.search = this.selectionRef.nativeElement.textContent.trim();
     }
   }
 
@@ -234,7 +242,7 @@ export class AutocompleteComponent implements OnInit, AfterViewInit, OnDestroy {
   //lo que al perder foco necesita ejecutar una serie de funcionalidades
   //Esta función debe también ser llamada en varios lugares para simular la pérdida
   //de foco desde cualquier parte del componente visual.
-  public blur(){
+  public blur(): void {
     this.focused = false;
     this.selectedIndex = null;
     this.search = null;
@@ -244,11 +252,11 @@ export class AutocompleteComponent implements OnInit, AfterViewInit, OnDestroy {
   //Cuando el control pierde el foco y tenemos una opción seleccionada una máscara se pone
   //de frente con el valor seleccionado. Al darle click le damos foco al elemento interactivo
   //y esto desencadena una serie de acciones para hacer desaparecer la máscara
-  public clickSelection() {
-    this.input.nativeElement.focus();
+  public clickSelection(): void {
+    this.inputRef.nativeElement.focus();
   }
 
-  private selectOption() {
+  private selectOption(): void {
     if(this.selectedIndex != null) {
       this.model = this.results[this.selectedIndex];
       this.onModelChange();
@@ -256,11 +264,19 @@ export class AutocompleteComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private recalculateResultsMaxHeight(): void {
-    const binding = this.input.nativeElement.getBoundingClientRect();
+    const binding = this.inputRef.nativeElement.getBoundingClientRect();
     this.maxResultsHeight = window.innerHeight - binding.bottom - 10;
   }
 
-  private onModelChange() {
+  private scrollToSelectedOption(): void {
+    if(this.dropdownRef && this.selectedIndex != null) {
+      const element = this.dropdownRef.nativeElement;
+      const selectedOption = element.children[this.selectedIndex];
+      element.scrollTop = selectedOption.offsetTop;
+    }
+  }
+
+  private onModelChange(): void {
     this.modelChange.emit(getProperty(this.model, this.option.output));
   }
 }

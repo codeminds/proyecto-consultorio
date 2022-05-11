@@ -55,7 +55,7 @@ export class CheckComponent implements OnInit {
     }
   }
 
-  public onModelChange(value: boolean) {
+  public onModelChange(value: boolean): void {
     this.modelChange.emit(value);
   }
 }

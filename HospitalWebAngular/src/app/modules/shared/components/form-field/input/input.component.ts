@@ -29,7 +29,7 @@ export class InputComponent implements OnInit, AfterViewInit {
   public modelChange: EventEmitter<any>;
 
   @ViewChild('input')
-  private input: ElementRef;
+  private inputRef: ElementRef;
 
   public get id(): string{
     return `${this.form}-${this.fieldName}`;
@@ -66,12 +66,12 @@ export class InputComponent implements OnInit, AfterViewInit {
   public ngAfterViewInit(): void {
     if(this.attributes != null) {
       for(const prop in this.attributes) {
-        this.input.nativeElement.setAttribute(prop, this.attributes[prop]);
+        this.inputRef.nativeElement.setAttribute(prop, this.attributes[prop]);
       }
     }
   }
 
-  public onModelChange(value: string | number) {
+  public onModelChange(value: string | number): void {
     this.modelChange.emit(value);
   }
 }

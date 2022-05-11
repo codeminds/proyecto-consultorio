@@ -108,7 +108,7 @@ export class RadioComponent implements OnInit, OnChanges {
     }
   }
 
-  public onModelChange(index?: number) {
+  public onModelChange(index?: number): void {
     if(index != null) {
       this.modelChange.emit(getProperty(this.options[index], this.option.output));
     }else {

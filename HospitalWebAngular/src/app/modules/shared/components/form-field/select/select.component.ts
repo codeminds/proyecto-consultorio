@@ -38,7 +38,10 @@ export class SelectComponent implements OnInit, OnChanges, OnDestroy, AfterViewI
   public modelChange: EventEmitter<any>;
 
   @ViewChild('select')
-  private select: ElementRef;
+  private selectRef: ElementRef;
+
+  @ViewChild('dropdown')
+  private dropdownRef: ElementRef;
 
   public selectedIndex: number;
   public open: boolean;
@@ -98,7 +101,7 @@ export class SelectComponent implements OnInit, OnChanges, OnDestroy, AfterViewI
     this.eventsService.bodyClick
       .pipe(takeUntil(this.unsubscribe))
       .subscribe((e) =>  {
-        if(![this.select.nativeElement].includes(e.target))
+        if(![this.selectRef.nativeElement].includes(e.target))
         {
           this.toggle(false);
         }
@@ -110,6 +113,7 @@ export class SelectComponent implements OnInit, OnChanges, OnDestroy, AfterViewI
       .pipe(takeUntil(this.unsubscribe))
       .subscribe((e => {
         this.recalculateResultsMaxHeight();
+        this.scrollToSelectedOption();
       }));
   }
 
@@ -142,7 +146,7 @@ export class SelectComponent implements OnInit, OnChanges, OnDestroy, AfterViewI
           //de JavaScript ejecutará esto hasta el puro final ya que es una operación
           //naturalmente asíncrona
           setTimeout(() => {
-            this.onModelChange(0);
+            this.onModelChange(this.nullOption == null ? 0 : null);
           }, 0);
         } else {
           this.selectedIndex = index;
@@ -164,40 +168,59 @@ export class SelectComponent implements OnInit, OnChanges, OnDestroy, AfterViewI
     this.recalculateResultsMaxHeight();
   }
 
-  public onModelChange(index: number) {
+  public onModelChange(index: number): void {
     this.selectedIndex = index;
+    this.scrollToSelectedOption();
+
     if(index != null) {
       this.modelChange.emit(getProperty(this.options[index], this.option.output));
     }else {
       this.modelChange.emit(null);
-    } 
+    }   
   }
 
-  public toggle(open: boolean) {
+  public toggle(open: boolean): void {
     this.open = open;
+
+    setTimeout(() => {
+      if(this.open) {
+        this.scrollToSelectedOption();
+      }
+    }, 0);
   }
 
-  public handleClickEvent(e: any, open: boolean) {
+  public handleClickEvent(e: any, open: boolean): void {
     e.preventDefault();
     e.target.focus();
     this.toggle(open);
   }
 
-  public handleSelectEvent(e: any, open: boolean) {
+  public handleSelectEvent(e: any, open: boolean): void {
     e.preventDefault();
     this.toggle(open);
   }
 
-  public selectOption(e: any, index?: number) {
+  public selectOption(e: any, index?: number): void {
     e.stopPropagation();
     this.model = index != null ? this.options[index] : null;
     this.open = false;
-    this.select.nativeElement.focus();
+    this.selectRef.nativeElement.focus();
     this.onModelChange(index);
   }
 
   private recalculateResultsMaxHeight(): void {
-    const binding = this.select.nativeElement.getBoundingClientRect();
+    const binding = this.selectRef.nativeElement.getBoundingClientRect();
     this.maxResultsHeight = window.innerHeight - binding.bottom - 10;
+  }
+
+  private scrollToSelectedOption(): void {
+    if(this.dropdownRef) {
+      //Al tener una opción adicional cuando se tiene un null option, los elementos totales
+      //y la colección de opciones varían en sus índices, por lo que se debe calcular acorde
+      const selectedIndex = this.selectedIndex + (this.nullOption != null && this.selectedIndex != null ? 1 : 0)
+      const element = this.dropdownRef.nativeElement;
+      const selectedOption = element.children[selectedIndex];
+      element.scrollTop = selectedOption?.offsetTop || 0;
+    }
   }
 }

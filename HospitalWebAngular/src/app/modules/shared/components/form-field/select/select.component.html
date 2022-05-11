@@ -16,7 +16,7 @@
         <option *ngFor="let item of options; let i = index" [ngValue]="i">{{getProperty(item, option.label)}}</option>
     </select>
     <div class="options">
-        <ul *ngIf="open" [attr.style]="style">
+        <ul #dropdown *ngIf="open" [attr.style]="style">
             <li *ngIf="nullOption != null" [ngClass]="{'selected': selectedIndex == null}" (mousedown)="$event.preventDefault()" (click)="selectOption($event, null)">
                 <h5>{{nullOption}}</h5>
             </li>

@@ -77,12 +77,12 @@ export class PatientsPage implements OnInit{
     }
   }
 
-  public createUpdate(data: any = null) {
+  public createUpdate(data: any = null): void {
     this.patient = new Patient(data);
     this.modalOpen = true;
   }
 
-  public deletePatient(id: number) {
+  public deletePatient(id: number): void {
     this.confirmOpen = true;
     this.confirmText = 'Está seguro que desea eliminar este récord?';
     this.confirmFunction = async () => {
@@ -103,7 +103,7 @@ export class PatientsPage implements OnInit{
     }
   }
 
-  public async save() {
+  public async save(): Promise<void> {
     if(!this.saving) {
       this.saving = true;
       this.messages = [];
@@ -130,7 +130,7 @@ export class PatientsPage implements OnInit{
     }
   }
 
-  public confirm(confirmed: boolean) {
+  public confirm(confirmed: boolean): void {
     if(confirmed) {
       this.confirmFunction();
     }else {
@@ -138,12 +138,12 @@ export class PatientsPage implements OnInit{
     }
   }
 
-  public onConfirmClose() {
+  public onConfirmClose(): void {
     this.confirmText = null;
     this.confirmFunction = null;
   }
 
-  public onModalClose() {
+  public onModalClose(): void {
     this.patient = null;
     this.messages = [];
   }

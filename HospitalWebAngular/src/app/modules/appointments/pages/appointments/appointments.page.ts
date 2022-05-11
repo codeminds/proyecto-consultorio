@@ -88,12 +88,12 @@ export class AppointmentsPage implements OnInit {
     }
   }
 
-  public createUpdate(data: any = null) {
+  public createUpdate(data: any = null): void {
     this.appointment = new Appointment(data);
     this.modalOpen = true;
   }
 
-  public deleteAppointment(id: number) {
+  public deleteAppointment(id: number): void {
     this.confirmOpen = true;
     this.confirmText = 'Está seguro que desea eliminar este récord?';
     this.confirmFunction = async () => {
@@ -114,7 +114,7 @@ export class AppointmentsPage implements OnInit {
     }
   }
 
-  public async save() {
+  public async save(): Promise<void> {
     if(!this.saving) {
       this.saving = true;
       this.messages = [];
@@ -144,7 +144,7 @@ export class AppointmentsPage implements OnInit {
     }
   }
 
-  public confirm(confirmed: boolean) {
+  public confirm(confirmed: boolean): void {
     if(confirmed) {
       this.confirmFunction();
     }else {
@@ -152,21 +152,21 @@ export class AppointmentsPage implements OnInit {
     }
   }
 
-  public onConfirmClose() {
+  public onConfirmClose(): void {
     this.confirmText = null;
     this.confirmFunction = null;
   }
 
-  public onModalClose() {
+  public onModalClose(): void {
     this.appointment = null;
     this.messages = [];
   }
 
-  public selectDoctor(data: any) {
+  public selectDoctor(data: any): void {
     this.appointment.doctor = new Doctor(data);
   }
 
-  public selectPatient(data: any) {
+  public selectPatient(data: any): void {
     this.appointment.patient = new Patient(data);
   }
 

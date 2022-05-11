@@ -26,7 +26,7 @@ export class TableComponent implements OnInit {
   public loading: boolean;
 
   @ViewChild('items')
-  public items: ElementRef;
+  public itemsRef: ElementRef;
 
   constructor() {
     this.template = null;

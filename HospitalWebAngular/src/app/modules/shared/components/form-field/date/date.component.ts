@@ -29,7 +29,7 @@ export class DateComponent implements OnInit, OnChanges {
   public modelChange: EventEmitter<any>;
 
   @ViewChild('input')
-  private input: ElementRef;
+  private inputRef: ElementRef;
 
   public get id(): string{
     return `${this.form}-${this.fieldName}`;
@@ -79,12 +79,12 @@ export class DateComponent implements OnInit, OnChanges {
   public ngAfterViewInit(): void {
     if(this.attributes != null) {
       for(const prop in this.attributes) {
-        this.input.nativeElement.setAttribute(prop, this.attributes[prop]);
+        this.inputRef.nativeElement.setAttribute(prop, this.attributes[prop]);
       }
     }
   }
 
-  public onModelChange(value: string) {
+  public onModelChange(value: string): void {
     this.modelChange.emit(value ? new Date(value) : null);
   }
 }
