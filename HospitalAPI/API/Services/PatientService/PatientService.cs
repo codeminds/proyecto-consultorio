@@ -34,7 +34,9 @@ namespace API.Services
 
         public async Task<List<Patient>> SearchPatients(string[] values)
         {
-
+            //Lo valores pueden tener caracteres especiales que pueden contener
+            //inyecciones de SQL, por lo que por medio de expresiones regulares
+            //creamos un regla para remover caracteres extraños de los valores
             Regex regex = new Regex(@"[^\d\w ]", RegexOptions.IgnoreCase);
 
             return await this._patientRepository

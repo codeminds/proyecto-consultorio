@@ -21,6 +21,9 @@ namespace API.Data
         public virtual DbSet<Doctor> Doctor { get; set; } = null!;
         public virtual DbSet<Field> Field { get; set; } = null!;
         public virtual DbSet<Patient> Patient { get; set; } = null!;
+        public virtual DbSet<Role> Role { get; set; } = null!;
+        public virtual DbSet<Session> Session { get; set; } = null!;
+        public virtual DbSet<User> User { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -34,6 +37,8 @@ namespace API.Data
         {
             modelBuilder.Entity<Appointment>(entity =>
             {
+                entity.HasIndex(e => new { e.Date, e.DoctorId, e.PatientId }, "IXAppointmentLookup");
+
                 entity.HasOne(d => d.Doctor)
                     .WithMany(p => p.Appointment)
                     .HasForeignKey(d => d.DoctorId)
@@ -49,6 +54,8 @@ namespace API.Data
 
             modelBuilder.Entity<Doctor>(entity =>
             {
+                entity.HasIndex(e => new { e.DocumentId, e.FirstName, e.LastName, e.FieldId }, "IXDoctorLookup");
+
                 entity.HasIndex(e => e.DocumentId, "UXDoctorDocumentId")
                     .IsUnique();
 
@@ -74,6 +81,8 @@ namespace API.Data
 
             modelBuilder.Entity<Patient>(entity =>
             {
+                entity.HasIndex(e => new { e.DocumentId, e.FirstName, e.LastName, e.BirthDate, e.Gender }, "IXPatientLookup");
+
                 entity.HasIndex(e => e.DocumentId, "UXPatientDocumentId")
                     .IsUnique();
 
@@ -84,6 +93,67 @@ namespace API.Data
                 entity.Property(e => e.FirstName).HasMaxLength(50);
 
                 entity.Property(e => e.LastName).HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<Role>(entity =>
+            {
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.Name).HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<Session>(entity =>
+            {
+                entity.HasIndex(e => e.SessionId, "UXSessionSessionId")
+                    .IsUnique();
+
+                entity.Property(e => e.AddressIssued)
+                    .HasMaxLength(40)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.AddressRefreshed)
+                    .HasMaxLength(40)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.RefreshToken)
+                    .HasMaxLength(64)
+                    .IsFixedLength();
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.Session)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FKUserSessionUserId");
+            });
+
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.HasIndex(e => new { e.Email, e.FirstName, e.LastName, e.RoleId }, "IXUserLookup");
+
+                entity.HasIndex(e => e.Email, "UXUserEmail")
+                    .IsUnique();
+
+                entity.Property(e => e.Email)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.FirstName).HasMaxLength(50);
+
+                entity.Property(e => e.LastName).HasMaxLength(50);
+
+                entity.Property(e => e.Password)
+                    .HasMaxLength(64)
+                    .IsFixedLength();
+
+                entity.Property(e => e.PasswordSalt)
+                    .HasMaxLength(64)
+                    .IsFixedLength();
+
+                entity.HasOne(d => d.Role)
+                    .WithMany(p => p.User)
+                    .HasForeignKey(d => d.RoleId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FKRoleUserRoleId");
             });
 
             OnModelCreatingPartial(modelBuilder);
