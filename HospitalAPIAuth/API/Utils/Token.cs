@@ -10,6 +10,9 @@ namespace API.Utils
     {
         public static string IssueAccessToken(User user, Guid session)
         {
+            //La lista de información personalizada de un token se conoce como "Claims"
+            //lo cual es una colección de afirmaciones que tiene el token sobre alguien
+            //que lo tiene, como una tarjeta de acceso digital
             List<Claim> claims = new List<Claim>();
             claims.Add(new Claim(Claims.IssueDate, DateTimeOffset.Now.ToUnixTimeSeconds().ToString()));
             claims.Add(new Claim(Claims.User, user.Id.ToString(), ClaimValueTypes.Integer));
@@ -33,6 +36,9 @@ namespace API.Utils
 
         public static string IssueRefreshToken(User user, Guid session)
         {
+            //La lista de información personalizada de un token se conoce como "Claims"
+            //lo cual es una colección de afirmaciones que tiene el token sobre alguien
+            //que lo tiene, como una tarjeta de acceso digital
             List<Claim> claims = new List<Claim>();
             claims.Add(new Claim(Claims.IssueDate, DateTimeOffset.Now.ToUnixTimeSeconds().ToString()));
             claims.Add(new Claim(Claims.User, user.Id.ToString(), ClaimValueTypes.Integer));
@@ -83,6 +89,9 @@ namespace API.Utils
 
         public static List<Claim> GetTokenClaims(string jwtToken)
         {
+            //Obtenemos las afirmaciones del token sin validar la firma del mismo, esto se puede
+            //utilizar para sacar ínformación en otras partes del sistema cuando ya el token
+            //ha sido validado previamente y sería redundante hacerlo de nuevo
             JwtSecurityToken token = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
 
             return token.Claims.ToList();

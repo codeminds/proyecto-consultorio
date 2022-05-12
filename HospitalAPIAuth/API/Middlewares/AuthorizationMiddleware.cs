@@ -37,6 +37,11 @@ namespace API.Middlewares
       
                 try
                 {
+                    //Los tokens siempre tienen el prefijo "Bearer" para marcar que tipo de token se está enviando
+                    //como estándar de la industria. Por lo que un token (e.g.: Bearer 2hfkskwjshfdhussa1312...) debe ser
+                    //extraído sin la palabra "Bearer" o la validación del mismo fallará. Al estar el valor total del token
+                    //separado de dicha palabra por un espacio, creamos un array the strings separando el string por espacios
+                    //en blanco, resultando un array de 2 items (e.g.: ["Bearer", "2hfkskwjshfdhussa1312..."])
                     List<Claim> claims = Token.GetValidTokenClaims(token.ToString().Split(" ")[1], true);
                     Guid sessionId = Guid.Parse(claims.First(c => c.Type == Claims.Session).Value);
 

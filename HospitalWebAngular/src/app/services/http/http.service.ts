@@ -20,7 +20,7 @@ export class HttpService{
 
   public get(url: string, params: QueryParams = null, apiOverride: string = null): Observable<APIResponse> {
     let retries = 0;
-    return this.httpClient.get<APIResponse>(`${apiOverride || environment.apiURL}/${url}${this.getQuery(params)}` , {
+    return this.httpClient.get<APIResponse>(`${apiOverride || environment.apiURL}/${url}${this.getQuery(params)}`, {
       headers: {
         'Content-Type': 'application/json'
       }

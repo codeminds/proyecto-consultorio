@@ -35,6 +35,8 @@ namespace API.Services
 
         public async Task UpdateUser(User user, bool expireSessions = false)
         {
+            //Como acción opcional se pueden invalidar todas las sesiones de un usuario
+            //como producto de un cambio significativo como cambio de contraseña o correo.
             if (expireSessions)
             {
                 List<Session> sessions = await this._sessionRepository.Query.Where(s => s.UserId == user.Id).ToListAsync();

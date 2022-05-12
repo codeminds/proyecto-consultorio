@@ -58,14 +58,11 @@ namespace API.Controllers
 
             if (response.Success)
             {
+                //Al estar el password encriptado y utilizando un password salt aleatorio a la hora
+                //de la creación del usuario necesitamos volver a encriptar con el mismo salt la
+                //contraseña proporcionada en el login, de esta manera sabemos si es igual a la del usuario registrado
                 User? user = await this._userService.FindUser(data.Email!);
-                if (user == null)
-                {
-                    return HttpErrors.NotFound("Usuario y contraseña no existen");
-                }
-
-                string hash = Convert.ToHexString(Crypter.Hash(data.Password!, user.PasswordSalt));
-                if (hash != Convert.ToHexString(user.Password))
+                if (user == null || Convert.ToHexString(Crypter.Hash(data.Password!, user.PasswordSalt)) != Convert.ToHexString(user.Password))
                 {
                     return HttpErrors.NotFound("Usuario y contraseña no existen");
                 }
@@ -88,10 +85,18 @@ namespace API.Controllers
                     return HttpErrors.BadRequest("Encabezado de sesión no está presente");
                 }
 
+                //Los tokens siempre tienen el prefijo "Bearer" para marcar que tipo de token se está enviando
+                //como estándar de la industria. Por lo que un token (e.g.: Bearer 2hfkskwjshfdhussa1312...) debe ser
+                //extraído sin la palabra "Bearer" o la validación del mismo fallará. Al estar el valor total del token
+                //separado de dicha palabra por un espacio, creamos un array the strings separando el string por espacios
+                //en blanco, resultando un array de 2 items (e.g.: ["Bearer", "2hfkskwjshfdhussa1312..."])
                 string token = tokenHeader.ToString().Split(" ")[1];
                 List<Claim> claims = Token.GetValidTokenClaims(token, false);
                 Guid sessionId = Guid.Parse(claims.First(c => c.Type == Claims.Session).Value);
 
+                //Los tokens de refrescado de cada sesión se guardan en ellas como un hash con salt específico
+                //este debe ser utilizado para comparar el token enviado para refrescar la sesión, validando
+                //que no sea un token obsoleto que fue utilizado anteriormente
                 string salt = Configuration.Get<string>("Authentication:RefreshTokenSalt");
                 byte[] tokenHash = Crypter.Hash(token, Encoding.UTF8.GetBytes(salt));
 
@@ -135,6 +140,8 @@ namespace API.Controllers
             int userId = int.Parse(claims.First(c => c.Type == Claims.User).Value);
             sessionId = sessionId ?? Guid.Parse(claims.First(c => c.Type == Claims.Session).Value);
 
+            //La función permite eliminar la sesión que estamos utilizando u otras sesiones por medio de su id,
+            //por esta razón debemos validar que la sesión que se intenta eliminar no sea de otro usuario
             Session? session = await this._sessionService.FindSession(sessionId.Value);
             if (session == null || session.UserId != userId)
             {

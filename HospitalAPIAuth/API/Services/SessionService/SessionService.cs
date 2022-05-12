@@ -46,6 +46,9 @@ namespace API.Services
             string salt = Configuration.Get<string>("Authentication:RefreshTokenSalt");
             string refreshToken = Token.IssueRefreshToken(user, sessionId);
 
+            //El token de refrescado se guarda en la base de datos como un
+            //hash para evitar que el valor sea directamente visible en la
+            //base de datos
             Session session = new Session
             {
                 SessionId = sessionId,
@@ -66,6 +69,10 @@ namespace API.Services
 
         public async Task RefreshUserSession(User user, Session session, IPAddress? address)
         {
+            //Al refrescar la sesión el token utilizado debe ser descartado
+            //ya que sólo debe utilizarse una vez por seguridad, por lo que
+            //se debe crear un nuevo token de refrescado y asociarlo a la sesión
+            //que se está refrescando
             DateTime now = DateTime.Now;
             string salt = Configuration.Get<string>("Authentication:RefreshTokenSalt");
             string refreshToken = Token.IssueRefreshToken(session.User, session.SessionId);

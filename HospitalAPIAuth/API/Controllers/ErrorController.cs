@@ -29,6 +29,9 @@ namespace API.Controllers
                     break;
                 case HttpStatusCode.InternalServerError:
                     response.Messages.Add("Error interno del servidor");
+
+                    //Sólo exponemos información detallada interna de los errores
+                    //en el ambiente de desarrollo, nunca en producción
                     if (this._env.IsDevelopment())
                     {
                         var ex = HttpContext.Features.Get<IExceptionHandlerPathFeature>()?.Error;

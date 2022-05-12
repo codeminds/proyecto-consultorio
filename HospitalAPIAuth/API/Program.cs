@@ -9,8 +9,15 @@ using API.Utils;
 //BUILDER
 var builder = WebApplication.CreateBuilder(args);
 
+//Establecemos la propiedad Settings de nuestra utilidad
+//Configuration con el objeto de configuraciones de .NET
 Configuration.Settings = builder.Configuration;
 
+//Al recibir un objeto JSON que no es compatible con los parámetros
+//de la acción del controlador, el servidor prepara una respuesta con un código
+//HTTP 400 (Bad Request) y crea un objeto específico diferente a nuestro APIResponse,
+//sin embargo con esta configuración personalizada controlamos cómo responde el servidor
+//creando un objeto APIResponse para responder en vez
 builder.Services.AddControllers()
                 .ConfigureApiBehaviorOptions(options => {
                     options.InvalidModelStateResponseFactory = context =>
@@ -58,6 +65,10 @@ app.UseCors(options =>
            .AllowAnyHeader();
 });
 
+//Con estas funciones podemos configurar la respuesta del servidor
+//ante errores HTTP como error 500, 404, 400 u otros, controlando una ruta
+//a la cual dirigirse. En este caso lo enviamos a la ruta de nuestro ErrorController
+//que crear los errores con objetos APIResponse para mantener el estándar de nuestras respuestas 
 app.UseExceptionHandler("/errors/500");
 app.UseStatusCodePagesWithReExecute("/errors/{0}");
 
