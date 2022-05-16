@@ -31,7 +31,6 @@ export class PanelComponent implements AfterViewChecked, OnChanges, OnInit, OnDe
   
   private contentHeightNext: number;
   private contentHeightAnimated: boolean;
-  private contentHeightTimeout: NodeJS.Timeout;
   private animatedOpenTimeout: NodeJS.Timeout;
   private animationTimeout: NodeJS.Timeout;
   private animationTiming: number;
@@ -52,6 +51,9 @@ export class PanelComponent implements AfterViewChecked, OnChanges, OnInit, OnDe
         style += `height: ${this.contentHeight / 10}rem;`;
       }
 
+      //Sólo debe activarse la transición durante una animación para
+      //evitar problemas de UX cuando el usuario cambia el tamaño de
+      //la ventana del explorador
       if(this.contentHeightAnimated) {
         style += `transition: height ${this.animationTiming}s ease-in-out ${this.animationTimingDelay}s;`;
       } 
@@ -71,7 +73,6 @@ export class PanelComponent implements AfterViewChecked, OnChanges, OnInit, OnDe
     this.afterAnimateOpen = false;
     this.contentHeightNext = 0;
     this.contentHeightAnimated = false;
-    this.contentHeightTimeout = null;
     this.animatedOpenTimeout = null;
     this.animationTimeout = null;
     this.animationTiming = 0.4;
@@ -145,15 +146,24 @@ export class PanelComponent implements AfterViewChecked, OnChanges, OnInit, OnDe
   private animateOpen(open: boolean): void {
     this.contentHeightAnimated = true;
     clearTimeout(this.animatedOpenTimeout);
+
+    //Luego de haber terminado la animación cancelamos el estado animado
+    //para no tener transiciones de altura por cambios de tamaño de la ventana
+    //del explorador
     this.animatedOpenTimeout = setTimeout(() => {
       this.contentHeightAnimated = false;
       this.animatedOpenTimeout = null;
     }, this.animationTimingMs);
 
     if(open) {
+      //Al abrir definimos esta propiedad como true para que el elemento
+      //se convierta en block antes de animar y sea visible
       this.afterAnimateOpen = true;
       clearTimeout(this.animationTimeout);
     }else {
+      //Si el elemento lo definimos como display: none antes de la animación
+      //este desaparecerá sin transiciones, por lo que debemos esperar
+      //a la animación antes de cambiar la propiedad a false
       this.animationTimeout = setTimeout(() => {
         this.afterAnimateOpen = false;
         this.animationTimeout = null;
@@ -170,22 +180,12 @@ export class PanelComponent implements AfterViewChecked, OnChanges, OnInit, OnDe
     //para evitar cálculos constantes ya que angular liga muchos eventos que están constantemente
     //ejecutándose en la aplicación, creamos un nuevo cambio de altura para la animación sólo si
     //el nuevo alto del elemento ha cambiado en comparación con su altura anterior
-    if(!this.contentHeightTimeout && this.contentHeight != this.contentHeightNext) {
+    if(this.contentHeight != this.contentHeightNext) {
       //Ejecutar el cambio asícronamente del lifecycle para evitar error de
-      //angular. A pesar de tener un tiempo de 0 milisegundos, el event loop
-      //de JavaScript ejecutará esto hasta el puro final ya que es una operación
-      //naturalmente asíncrona. Guardando el timeout en una variable y
-      //validando que este no sea nulo para ejecutarlo nos ayuda a
-      //evitar que se ejecuten varios timeouts al mismo tiempo mientras
-      //angular resuelve sus cálculos
-      this.contentHeightTimeout = setTimeout(() => {
+      //angular enviándolo al Job Queue
+      queueMicrotask(() => {
         this.contentHeight = this.contentHeightNext;
-
-        //Asegurarse de hacer que la variable sea nula
-        //luego de ejecutar el timeout o si no el chequeo
-        //anterior en el if no permitirá futuros recálculos
-        this.contentHeightTimeout = null; 
-      }, 0);
+      });
     }
   }
 }

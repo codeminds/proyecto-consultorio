@@ -76,7 +76,7 @@ export class RadioComponent implements OnInit, OnChanges {
   //o valor de tipo básico libremente sin tener que crear lógica externa para obtenerlo
   //de listas o mappear entre tipos. Esto significa que también hay que crear lógica
   //especial para que al recibir un valor externo de los input properties este sea
-  //mappeado automáticamente al index de la opción apropiada.
+  //mappeado automáticamente al index de la opción apropiada
   public ngOnChanges(changes: SimpleChanges): void {
     if(changes.hasOwnProperty('model') || changes.hasOwnProperty('options')) {
       //En caso de tener una opción nula hay que forzar el valor del index
@@ -95,12 +95,10 @@ export class RadioComponent implements OnInit, OnChanges {
         //item de la lista
         if(index < 0) {
           //Emitir el modelo asícronamente del lifecycle para evitar error de
-          //angular. A pesar de tener un tiempo de 0 milisegundos, el event loop
-          //de JavaScript ejecutará esto hasta el puro final ya que es una operación
-          //naturalmente asíncrona
-          setTimeout(() => {
+          //angular enviándolo al Job Queue
+          queueMicrotask(() => {
             this.onModelChange(0);
-          }, 0);
+          });
         } else {
           this.selectedIndex = index;
         }

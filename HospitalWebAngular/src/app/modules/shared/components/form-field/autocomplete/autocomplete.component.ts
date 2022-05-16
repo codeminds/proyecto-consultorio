@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { EventsService } from '@shared/services/events/events.service';
 import { Subject, takeUntil } from 'rxjs';
 import { getProperty } from '../form-field.helpers';
@@ -145,10 +145,10 @@ export class AutocompleteComponent implements OnInit, AfterViewInit, OnDestroy {
     //con eventos propios
     this.eventsService.windowResize
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe((e => {
+      .subscribe(() => {
         this.recalculateResultsMaxHeight();
         this.scrollToSelectedOption();
-      }));
+      });
   }
 
   //Técnica de unsubscribe de observables en componentes para evitar
@@ -269,7 +269,7 @@ export class AutocompleteComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private scrollToSelectedOption(): void {
-    if(this.dropdownRef && this.selectedIndex != null) {
+    if(this.dropdownRef != null && this.selectedIndex != null) {
       const element = this.dropdownRef.nativeElement;
       const selectedOption = element.children[this.selectedIndex];
       element.scrollTop = selectedOption.offsetTop;

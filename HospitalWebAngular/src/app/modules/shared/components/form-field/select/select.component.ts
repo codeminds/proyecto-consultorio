@@ -111,7 +111,7 @@ export class SelectComponent implements OnInit, OnChanges, OnDestroy, AfterViewI
     //con eventos propios
     this.eventsService.windowResize
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe((e => {
+      .subscribe((() => {
         this.recalculateResultsMaxHeight();
         this.scrollToSelectedOption();
       }));
@@ -142,12 +142,10 @@ export class SelectComponent implements OnInit, OnChanges, OnDestroy, AfterViewI
         //item de la lista
         if(index < 0) {
           //Emitir el modelo asícronamente del lifecycle para evitar error de
-          //angular. A pesar de tener un tiempo de 0 milisegundos, el event loop
-          //de JavaScript ejecutará esto hasta el puro final ya que es una operación
-          //naturalmente asíncrona
-          setTimeout(() => {
+          //angular enviándolo al Job Queue
+          queueMicrotask(() => {
             this.onModelChange(this.nullOption == null ? 0 : null);
-          }, 0);
+          });
         } else {
           this.selectedIndex = index;
         }
@@ -164,8 +162,13 @@ export class SelectComponent implements OnInit, OnChanges, OnDestroy, AfterViewI
     this.unsubscribe.complete();
   }
 
-  public ngAfterViewInit(): void {
-    this.recalculateResultsMaxHeight();
+  public ngAfterViewInit(): void { 
+    //Ejecutar el cambio asícronamente del lifecycle para evitar error de
+    //angular enviándolo al Job Queue
+    queueMicrotask(() => { 
+      //Refrescar el alto máximo por contenido inicial
+      this.recalculateResultsMaxHeight();
+    });
   }
 
   public onModelChange(index: number): void {
@@ -181,12 +184,13 @@ export class SelectComponent implements OnInit, OnChanges, OnDestroy, AfterViewI
 
   public toggle(open: boolean): void {
     this.open = open;
-
-    setTimeout(() => {
-      if(this.open) {
+    if(this.open) {
+      //Ejecutamos el scroll hasta que el lifecycle del componente
+      //termina, mandando la acción al Event Loop a esperar.
+      setTimeout(() => {
         this.scrollToSelectedOption();
-      }
-    }, 0);
+      });
+    }
   }
 
   public handleClickEvent(e: any, open: boolean): void {
@@ -214,7 +218,7 @@ export class SelectComponent implements OnInit, OnChanges, OnDestroy, AfterViewI
   }
 
   private scrollToSelectedOption(): void {
-    if(this.dropdownRef) {
+    if(this.open && this.dropdownRef != null) {
       //Al tener una opción adicional cuando se tiene un null option, los elementos totales
       //y la colección de opciones varían en sus índices, por lo que se debe calcular acorde
       const selectedIndex = this.selectedIndex + (this.nullOption != null && this.selectedIndex != null ? 1 : 0)

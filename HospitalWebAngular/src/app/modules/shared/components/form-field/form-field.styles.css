@@ -85,6 +85,11 @@ textarea.resizable {
 
 .options {
     position: absolute;
+    display: none;
+}
+
+.options.open {
+    display: block;
 }
 
 .options ul {
@@ -116,7 +121,6 @@ textarea.resizable {
     min-width: 17rem;
     padding: 1rem 1.5rem;
     cursor: pointer;
-    height: 10rem;
 }
 
 .options li.selected, .options li:hover {

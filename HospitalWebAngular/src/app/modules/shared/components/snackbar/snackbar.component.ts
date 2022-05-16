@@ -1,4 +1,4 @@
-import { AfterViewChecked, AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { EventsService } from '@shared/services/events/events.service';
 import { Subject, takeUntil } from 'rxjs';
 import { SnackbarType } from './snackbar.types';
@@ -28,7 +28,6 @@ export class SnackbarComponent implements OnInit, AfterViewInit, OnDestroy {
   public snackbarWidth: number;
 
   private snackbarWidthNext: number;
-  private snackbarWidthTimeout: NodeJS.Timeout;
   private snackbarTimeout: NodeJS.Timeout;
   private unsubscribe: Subject<void>;
 
@@ -48,7 +47,6 @@ export class SnackbarComponent implements OnInit, AfterViewInit, OnDestroy {
     this.closeSnackbar = false
     this.snackbarWidth = null;
     this.snackbarWidthNext = null;
-    this.snackbarWidthTimeout = null;
     this.onClose = new EventEmitter();
     this.unsubscribe = new Subject();
   }
@@ -74,7 +72,7 @@ export class SnackbarComponent implements OnInit, AfterViewInit, OnDestroy {
     //con eventos propios
     this.eventsService.windowResize
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe((e) => {
+      .subscribe(() => {
         this.refreshSnackbarWidth();
       });
   }
@@ -89,9 +87,13 @@ export class SnackbarComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public ngAfterViewInit(): void {
+    //Ejecutar el cambio asícronamente del lifecycle para evitar error de
+    //angular enviándolo al Job Queue
+    queueMicrotask(() => {
       //Refrescar el ancho por contenido inicial
       //del snackbar definiendo el tamaño del elemento
       this.refreshSnackbarWidth();
+    });
   }
   
   public close(): void {
@@ -125,22 +127,8 @@ export class SnackbarComponent implements OnInit, AfterViewInit, OnDestroy {
     //para evitar cálculos constantes ya que angular liga muchos eventos que están constantemente
     //ejecutándose en la aplicación, creamos un nuevo cambio de ancho para la animación sólo si
     //el nuevo ancho del elemento ha cambiado en comparación con su ancho anterior
-    if(!this.snackbarWidthTimeout && this.snackbarWidth != this.snackbarWidthNext) {
-      //Ejecutar el cambio asícronamente del lifecycle para evitar error de
-      //angular. A pesar de tener un tiempo de 0 milisegundos, el event loop
-      //de JavaScript ejecutará esto hasta el puro final ya que es una operación
-      //naturalmente asíncrona. Guardando el timeout en una variable y
-      //validando que este no sea nulo para ejecutarlo nos ayuda a
-      //evitar que se ejecuten varios timeouts al mismo tiempo mientras
-      //angular resuelve sus cálculos
-      this.snackbarWidthTimeout = setTimeout(() => {
-        this.snackbarWidth = this.snackbarWidthNext;
-
-        //Asegurarse de hacer que la variable sea nula
-        //luego de ejecutar el timeout o si no el chequeo
-        //anterior en el if no permitirá futuros recálculos
-        this.snackbarWidthTimeout = null; 
-      }, 0);
+    if(this.snackbarWidth != this.snackbarWidthNext) {
+      this.snackbarWidth = this.snackbarWidthNext;
     }
   }
 }

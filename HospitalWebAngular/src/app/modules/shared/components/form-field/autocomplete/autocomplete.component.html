@@ -21,8 +21,8 @@
             <ng-container *ngTemplateOutlet="selectionTemplate; context: {$implicit: model}"></ng-container>
         </div>
     </div>
-    <div class="options">
-        <ul #dropdown *ngIf="results" [attr.style]="style">
+    <div *ngIf="results" class="options open">
+        <ul #dropdown [attr.style]="style">
             <li *ngFor="let item of results; let i = index" [ngClass]="{'selected': i == selectedIndex}" (click)="selectIndex(i)">
                 <h5 [ngClass]="{title: infoTemplate != null}">{{getProperty(item, option.label)}}</h5>
                 <ng-container *ngTemplateOutlet="infoTemplate; context: {$implicit: item}"></ng-container>
