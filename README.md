@@ -10,3 +10,4 @@ Proyecto del curso inicial de Code Minds para aprender a desarrollar una aplicac
 * **HospitalWebDataBindingLocal**: Proyecto de UI con librería básica de Data Binding sin conexión al API
 * **HospitalWebDataBindingFinal**: Proyecto de UI con librería básica de Data Binding conectado al proyecto de API
 * **HospitalWebAngular**: Proyecto de UI con Angular conectado al proyecto de API 
+* **HospitalCrypterCLI**: Proyecto de utilidad CLI para obtener valores encriptados para pruebas en los demás proyectos 
