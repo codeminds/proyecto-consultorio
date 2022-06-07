@@ -1,0 +1,5 @@
+﻿https://www.nuget.org/packages/System.CommandLine
+Install-Package System.CommandLine -Version 2.0.0-beta4.22272.1
+
+https://www.nuget.org/packages/System.CommandLine.NamingConventionBinder
+Install-Package System.CommandLine.NamingConventionBinder -Version 2.0.0-beta4.22272.1
