@@ -1,49 +1,16 @@
 ﻿using System.CommandLine;
-using System.CommandLine.NamingConventionBinder;
+using Crypter;
 
-Option iterationsOption = new Option<int>("--iterations", "La cantidad de iteraciones de hashing a realizar") 
-{
-    IsRequired = false,
-};
+//Creamos el comando para que la consola pueda responder al mismo
+//si el usuario ejecuta la aplicación por su nombre en la consola
+//seguido del nombre del comando
+Command hashCommand = HashCommand.CreateCommand();
 
-iterationsOption.AddAlias("-i");
-iterationsOption.SetDefaultValue(1000);
+RootCommand rootCommand = new RootCommand();
+rootCommand.AddCommand(hashCommand);
 
-Option bytesOption = new Option<int>("--bytes", "La cantidad de bytes del hash resultante")
-{
-    IsRequired = false,
-};
+/* Comentar esta línea para probar comandos específicos */
+rootCommand.Invoke(args);
 
-bytesOption.AddAlias("-b");
-bytesOption.SetDefaultValue(64);
-
-Option saltOption = new Option<int>("--salt", "La cantidad de bytes del salt para las iteraciones de hashing")
-{
-    IsRequired = false,
-};
-
-saltOption.AddAlias("-s");
-saltOption.SetDefaultValue(64);
-
-Argument hashArgument = new Argument<string>("hash", "El valor base para crear el hash");
-
-Command hashCommand = new Command("hash") 
-{
-    Description = "Crea un hash"
-};
-
-hashCommand.AddArgument(hashArgument);
-hashCommand.AddOption(iterationsOption);
-hashCommand.AddOption(bytesOption);
-hashCommand.AddOption(saltOption);
-
-hashCommand.Handler = CommandHandler.Create<string, int, int, int>((hash, iterations, bytes, salt) =>
-{
-    Console.WriteLine(hash);
-    Console.WriteLine(iterations);
-    Console.WriteLine(bytes);
-    Console.WriteLine(salt);
-});
-
-/* Descomentar para probar comando: hash */
+/* Descomentar esta línea para probar comando: hash */
 //hashCommand.InvokeAsync(new string[] { "Test", "-i", "42" });
