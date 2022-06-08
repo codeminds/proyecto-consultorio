@@ -3,6 +3,7 @@ using API.Data.Filters;
 using API.Data.Models;
 using API.Repositories;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 using System.Text.RegularExpressions;
 
 namespace API.Services
@@ -34,13 +35,18 @@ namespace API.Services
 
         public async Task<List<Patient>> SearchPatients(string[] values)
         {
-            //Lo valores pueden tener caracteres especiales que pueden contener
-            //inyecciones de SQL, por lo que por medio de expresiones regulares
-            //creamos un regla para remover caracteres extraños de los valores
-            Regex regex = new Regex(@"[^\d\w ]", RegexOptions.IgnoreCase);
-
             return await this._patientRepository
-                                    .Search(values.Select(v => regex.Replace(v, "")))
+                                    .Search(values,
+                                            (value) => (patient) => patient.DocumentId.Contains(value)
+                                                || patient.FirstName.Contains(value)
+                                                || patient.LastName.Contains(value),
+                                            orderBys: new List<Expression<Func<Patient, object>>> 
+                                            {
+                                                patient => patient.DocumentId,
+                                                patient => patient.FirstName,
+                                                patient => patient.LastName
+                                            }
+                                    )
                                     .ToListAsync();
         }
 

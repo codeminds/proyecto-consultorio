@@ -3,6 +3,7 @@ using API.Data.Filters;
 using API.Data.Models;
 using API.Repositories;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 using System.Text.RegularExpressions;
 
 namespace API.Services
@@ -33,15 +34,24 @@ namespace API.Services
 
         public async Task<List<Doctor>> SearchDoctors(string[] values)
         {
-            //Lo valores pueden tener caracteres especiales que pueden contener
-            //inyecciones de SQL, por lo que por medio de expresiones regulares
-            //creamos un regla para remover caracteres extraños de los valores
-            Regex regex = new Regex(@"[^\d\w ]", RegexOptions.IgnoreCase);
-
             return await this._doctorRepository
-                                    .Search(values.Select(v => regex.Replace(v, "")))
-                                    .Include(d => d.Field)
-                                    .ToListAsync();
+                                .Search(values,
+                                        (value) => (doctor) => doctor.DocumentId.Contains(value)
+                                            || doctor.FirstName.Contains(value)
+                                            || doctor.LastName.Contains(value)
+                                            || doctor.Field.Name.Contains(value),
+                                        includes: new List<Expression<Func<Doctor, object>>>
+                                        { 
+                                            doctor => doctor.Field  
+                                        },
+                                        orderBys: new List<Expression<Func<Doctor, object>>>
+                                        {
+                                            doctor => doctor.DocumentId,
+                                            doctor => doctor.FirstName,
+                                            doctor => doctor.LastName
+                                        }
+                                )
+                                .ToListAsync();
         }
 
         public async Task<Doctor?> FindDoctor(int id)
