@@ -1,5 +1,4 @@
 ﻿using API.DataTransferObjects;
-using API.Repositories;
 using API.Utils;
 using System.Text.RegularExpressions;
 
@@ -16,7 +15,7 @@ namespace API.Validators
 
         public bool ValidateUpdateInfo(UpdateUserDTO data, List<string> messages)
         {
-            List<string> innerMessages = new List<string>();
+            List<string> innerMessages = new();
 
             //FirstName
             if (string.IsNullOrWhiteSpace(data.FirstName))
@@ -45,7 +44,7 @@ namespace API.Validators
 
         public bool ValidateUpdateEmail(int id, UpdateUserEmailDTO data, List<string> messages)
         {
-            List<string> innerMessages = new List<string>();
+            List<string> innerMessages = new();
 
             //Email
             if (string.IsNullOrWhiteSpace(data.Email))
@@ -72,7 +71,7 @@ namespace API.Validators
 
         public bool ValidateUpdatePassword(UpdateUserPasswordDTO data, List<string> messages)
         {
-            List<string> innerMessages = new List<string>();
+            List<string> innerMessages = new();
 
             //Password
             if (string.IsNullOrWhiteSpace(data.Password))

@@ -27,14 +27,13 @@ namespace API.Middlewares
             if (authorize != null)
             {
                 UserRole[] roles = authorize.Roles;
-                StringValues token;
 
-                if (!context.Request.Headers.TryGetValue("Authorization", out token))
+                if (!context.Request.Headers.TryGetValue("Authorization", out StringValues token))
                 {
-                    this.SendResponse(context, HttpStatusCode.BadRequest, "Encabezado de autorización no está presente");
+                    SendResponse(context, HttpStatusCode.BadRequest, "Encabezado de autorización no está presente");
                     return;
                 }
-      
+
                 try
                 {
                     //Los tokens siempre tienen el prefijo "Bearer" para marcar que tipo de token se está enviando
@@ -48,13 +47,13 @@ namespace API.Middlewares
                     Session? session = await sessionService.FindSession(sessionId);
                     if (session == null)
                     {
-                        this.SendResponse(context, HttpStatusCode.Unauthorized, "No está autorizado para realizar esta acción");
+                        SendResponse(context, HttpStatusCode.Unauthorized, "No está autorizado para realizar esta acción");
                         return;
                     }
 
                     if (!session.User.IsSuperAdmin && roles.Any() && !roles.Contains((UserRole)session.User.RoleId))
                     {
-                        this.SendResponse(context, HttpStatusCode.Forbidden, "No está autorizado para realizar esta acción");
+                        SendResponse(context, HttpStatusCode.Forbidden, "No está autorizado para realizar esta acción");
                         return;
                     }
 
@@ -62,24 +61,24 @@ namespace API.Middlewares
                     {
                         await sessionService.DeleteSession(session);
                         context.Response.Headers.Add("Session-Expired", "true");
-                        this.SendResponse(context, HttpStatusCode.Unauthorized, "Sesión ha expirado");
+                        SendResponse(context, HttpStatusCode.Unauthorized, "Sesión ha expirado");
                         return;
                     }
                 }
                 catch (SecurityTokenExpiredException)
                 {
                     context.Response.Headers.Add("Access-Token-Expired", "true");
-                    this.SendResponse(context, HttpStatusCode.Unauthorized, "Token ha expirado");
+                    SendResponse(context, HttpStatusCode.Unauthorized, "Token ha expirado");
                     return;
                 }
                 catch (SecurityTokenValidationException)
                 {
-                    this.SendResponse(context, HttpStatusCode.Unauthorized, "No está autorizado para realizar esta acción");
+                    SendResponse(context, HttpStatusCode.Unauthorized, "No está autorizado para realizar esta acción");
                     return;
                 }
                 catch (SecurityTokenException)
                 {
-                    this.SendResponse(context, HttpStatusCode.BadRequest, "Token no es válido");
+                    SendResponse(context, HttpStatusCode.BadRequest, "Token no es válido");
                     return;
                 }
             }
@@ -87,12 +86,14 @@ namespace API.Middlewares
             await this._next.Invoke(context);
         }
 
-        private async void SendResponse(HttpContext context, HttpStatusCode code, string message)
+        private static async void SendResponse(HttpContext context, HttpStatusCode code, string message)
         {
-            APIResponse response = new APIResponse();
-            response.Success = false;
-            response.StatusCode = code;
-            response.Messages = new List<string>() { message };
+            APIResponse response = new()
+            {
+                Success = false,
+                StatusCode = code,
+                Messages = new List<string>() { message }
+            };
 
             context.Response.StatusCode = (int)code;
             await context.Response.WriteAsJsonAsync(response);

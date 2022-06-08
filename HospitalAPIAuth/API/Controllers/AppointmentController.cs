@@ -33,9 +33,11 @@ namespace API.Controllers
             PatientListFilter patientFilter = this._mapper.Map<FilterAppointmentDTO, PatientListFilter>(data);
             DoctorListFilter doctorFilter = this._mapper.Map<FilterAppointmentDTO, DoctorListFilter>(data);
 
-            APIResponse response = new APIResponse();
-            response.Data = (await this._appointmentService.ListAppointments(filter, patientFilter, doctorFilter))
-                                .Select(a => this._mapper.Map<Appointment, GetAppointmentDTO>(a));
+            APIResponse response = new()
+            {
+                Data = (await this._appointmentService.ListAppointments(filter, patientFilter, doctorFilter))
+                                .Select(a => this._mapper.Map<Appointment, GetAppointmentDTO>(a))
+            };
 
             return response;
         }
@@ -50,8 +52,10 @@ namespace API.Controllers
                 return HttpErrors.NotFound("Cita no encontrada");
             }
 
-            APIResponse response = new APIResponse();
-            response.Data = this._mapper.Map<Appointment, GetAppointmentDTO>(entity);
+            APIResponse response = new()
+            {
+                Data = this._mapper.Map<Appointment, GetAppointmentDTO>(entity)
+            };
 
             return response;
         }
@@ -60,7 +64,7 @@ namespace API.Controllers
         [Authorize(UserRole.Administrator, UserRole.Editor)]
         public async Task<ActionResult<APIResponse>> CreateAppointment(CreateUpdateAppointmentDTO data)
         {
-            APIResponse response = new APIResponse();
+            APIResponse response = new();
             response.Success = this._appointmentValidator.ValidateInsert(data, response.Messages);
 
             if (response.Success)
@@ -85,7 +89,7 @@ namespace API.Controllers
                 return HttpErrors.NotFound("Cita no encontrada");
             }
 
-            APIResponse response = new APIResponse();
+            APIResponse response = new();
             response.Success = this._appointmentValidator.ValidateUpdate(id, data, response.Messages);
 
             if (response.Success)
@@ -109,7 +113,7 @@ namespace API.Controllers
                 return HttpErrors.NotFound("Cita no encontrada");
             }
 
-            APIResponse response = new APIResponse();
+            APIResponse response = new();
             response.Success = this._appointmentValidator.ValidateDelete(id, response.Messages);
 
             if (response.Success)

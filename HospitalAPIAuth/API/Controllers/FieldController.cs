@@ -24,9 +24,11 @@ namespace API.Controllers
         [HttpGet]
         public async Task<ActionResult<APIResponse>> List()
         {
-            APIResponse response = new APIResponse();
-            response.Data = (await this._fieldService.ListFields())
-                                .Select(f => this._mapper.Map<Field, GetFieldDTO>(f));
+            APIResponse response = new()
+            {
+                Data = (await this._fieldService.ListFields())
+                                .Select(f => this._mapper.Map<Field, GetFieldDTO>(f))
+            };
 
             return response;
         }

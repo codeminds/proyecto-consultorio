@@ -13,17 +13,19 @@ namespace API.Utils
             //La lista de información personalizada de un token se conoce como "Claims"
             //lo cual es una colección de afirmaciones que tiene el token sobre alguien
             //que lo tiene, como una tarjeta de acceso digital
-            List<Claim> claims = new List<Claim>();
-            claims.Add(new Claim(Claims.IssueDate, DateTimeOffset.Now.ToUnixTimeSeconds().ToString()));
-            claims.Add(new Claim(Claims.User, user.Id.ToString(), ClaimValueTypes.Integer));
-            claims.Add(new Claim(Claims.Session, session.ToString(), ClaimValueTypes.String));
-            claims.Add(new Claim(Claims.Role, user.Role.Name, ClaimValueTypes.String));
-            claims.Add(new Claim(Claims.SuperAdmin, user.IsSuperAdmin.ToString(), ClaimValueTypes.Boolean));
+            List<Claim> claims = new()
+            {
+                new Claim(Claims.IssueDate, DateTimeOffset.Now.ToUnixTimeSeconds().ToString()),
+                new Claim(Claims.User, user.Id.ToString(), ClaimValueTypes.Integer),
+                new Claim(Claims.Session, session.ToString(), ClaimValueTypes.String),
+                new Claim(Claims.Role, user.Role.Name, ClaimValueTypes.String),
+                new Claim(Claims.SuperAdmin, user.IsSuperAdmin.ToString(), ClaimValueTypes.Boolean)
+            };
 
             //Se define una llave secreta en la cuál sólo tenemos acceso desde el API, de esta manera
             //un intento de forjado sería sumamente poco probable
-            SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration.Get<string>("JWT:Secret")));
-            JwtSecurityToken token = new JwtSecurityToken(
+            SymmetricSecurityKey key = new(Encoding.UTF8.GetBytes(Configuration.Get<string>("JWT:Secret")));
+            JwtSecurityToken token = new(
                 issuer: Configuration.Get<string>("JWT:Issuer"),
                 audience: Configuration.Get<string>("JWT:Audience"),
                 expires: DateTime.UtcNow.AddMinutes(Configuration.Get<int>("JWT:Access:ExpirationMinutes")),
@@ -39,15 +41,17 @@ namespace API.Utils
             //La lista de información personalizada de un token se conoce como "Claims"
             //lo cual es una colección de afirmaciones que tiene el token sobre alguien
             //que lo tiene, como una tarjeta de acceso digital
-            List<Claim> claims = new List<Claim>();
-            claims.Add(new Claim(Claims.IssueDate, DateTimeOffset.Now.ToUnixTimeSeconds().ToString()));
-            claims.Add(new Claim(Claims.User, user.Id.ToString(), ClaimValueTypes.Integer));
-            claims.Add(new Claim(Claims.Session, session.ToString(), ClaimValueTypes.String));
+            List<Claim> claims = new()
+            {
+                new Claim(Claims.IssueDate, DateTimeOffset.Now.ToUnixTimeSeconds().ToString()),
+                new Claim(Claims.User, user.Id.ToString(), ClaimValueTypes.Integer),
+                new Claim(Claims.Session, session.ToString(), ClaimValueTypes.String)
+            };
 
             //Se define una llave secreta en la cuál sólo tenemos acceso desde el API, de esta manera
             //un intento de forjado sería sumamente poco probable
-            SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration.Get<string>("JWT:Secret")));
-            JwtSecurityToken token = new JwtSecurityToken(
+            SymmetricSecurityKey key = new(Encoding.UTF8.GetBytes(Configuration.Get<string>("JWT:Secret")));
+            JwtSecurityToken token = new(
                 issuer: Configuration.Get<string>("JWT:Issuer"),
                 audience: Configuration.Get<string>("JWT:Audience"),
                 claims: claims,
@@ -61,8 +65,8 @@ namespace API.Utils
         {
             //Antes de utilizar la información del token que estamos recibiendo, se valida su firma,
             //además de otros parámetros para confirmar que este fue gestionado por un ente válido
-            SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration.Get<string>("JWT:Secret")));
-            TokenValidationParameters validation = new TokenValidationParameters 
+            SymmetricSecurityKey key = new(Encoding.UTF8.GetBytes(Configuration.Get<string>("JWT:Secret")));
+            TokenValidationParameters validation = new()
             {
                 ValidateIssuer = true,
                 ValidIssuer = Configuration.Get<string>("JWT:Issuer"),

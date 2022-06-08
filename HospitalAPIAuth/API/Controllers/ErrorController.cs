@@ -17,10 +17,12 @@ namespace API.Controllers
 
         [Route("{statusCode}")]
         public ObjectResult HandleStatus(HttpStatusCode statusCode)
-        { 
-            APIResponse response = new APIResponse();
-            response.StatusCode = statusCode;
-            response.Success = false;
+        {
+            APIResponse response = new()
+            {
+                StatusCode = statusCode,
+                Success = false
+            };
 
             switch (response.StatusCode)
             {
@@ -39,11 +41,11 @@ namespace API.Controllers
                         {
                             response.Data = new
                             {
-                                Message = ex.Message,
-                                StackTrace = ex.StackTrace,
+                                ex.Message,
+                                ex.StackTrace,
                                 InnerException = ex.InnerException?.Message,
-                                Source = ex.Source,
-                                HResult = ex.HResult
+                                ex.Source,
+                                ex.HResult
                             };
                         }
                     }
@@ -53,8 +55,10 @@ namespace API.Controllers
                     break;
             }
 
-            ObjectResult result = new ObjectResult(response);
-            result.StatusCode = (int)statusCode;
+            ObjectResult result = new(response)
+            {
+                StatusCode = (int)statusCode
+            };
 
             return result;
         }

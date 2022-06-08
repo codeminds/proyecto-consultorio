@@ -1,6 +1,5 @@
 ﻿using API.Data;
 using API.Data.Models;
-using API.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Services

@@ -1,7 +1,6 @@
 ﻿using API.Data;
 using API.Data.Filters;
 using API.Data.Models;
-using API.Repositories;
 using API.Utils;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
@@ -49,7 +48,7 @@ namespace API.Services
             //El token de refrescado se guarda en la base de datos como un
             //hash para evitar que el valor sea directamente visible en la
             //base de datos
-            Session session = new Session
+            Session session = new()
             {
                 SessionId = sessionId,
                 UserId = user.Id,

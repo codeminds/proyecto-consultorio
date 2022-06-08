@@ -31,8 +31,7 @@ namespace API.Controllers
         [Authorize]
         public async Task<ActionResult<APIResponse>> GetUser()
         {
-            StringValues tokenHeader;
-            Request.Headers.TryGetValue("Authorization", out tokenHeader);
+            Request.Headers.TryGetValue("Authorization", out StringValues tokenHeader);
 
             string token = tokenHeader.ToString().Split(" ")[1];
             List<Claim> claims = Token.GetTokenClaims(token);
@@ -44,8 +43,10 @@ namespace API.Controllers
                 return HttpErrors.NotFound("Usuario no encontrado");
             }
 
-            APIResponse response = new APIResponse();
-            response.Data = this._mapper.Map<User, GetUserDTO>(user);
+            APIResponse response = new()
+            {
+                Data = this._mapper.Map<User, GetUserDTO>(user)
+            };
 
             return response;
         }
@@ -55,8 +56,7 @@ namespace API.Controllers
         [Authorize]
         public async Task<ActionResult<APIResponse>> UpdateUserInfo(UpdateUserDTO data)
         {
-            StringValues tokenHeader;
-            Request.Headers.TryGetValue("Authorization", out tokenHeader);
+            Request.Headers.TryGetValue("Authorization", out StringValues tokenHeader);
 
             //Los tokens siempre tienen el prefijo "Bearer" para marcar que tipo de token se está enviando
             //como estándar de la industria. Por lo que un token (e.g.: Bearer 2hfkskwjshfdhussa1312...) debe ser
@@ -73,7 +73,7 @@ namespace API.Controllers
                 return HttpErrors.NotFound("Usuario no encontrado");
             }
 
-            APIResponse response = new APIResponse();
+            APIResponse response = new();
             response.Success = this._userValidator.ValidateUpdateInfo(data, response.Messages);
 
             if (response.Success)
@@ -91,8 +91,7 @@ namespace API.Controllers
         [Authorize]
         public async Task<ActionResult<APIResponse>> UpdateUserEmail(UpdateUserEmailDTO data)
         {
-            StringValues tokenHeader;
-            Request.Headers.TryGetValue("Authorization", out tokenHeader);
+            Request.Headers.TryGetValue("Authorization", out StringValues tokenHeader);
 
             //Los tokens siempre tienen el prefijo "Bearer" para marcar que tipo de token se está enviando
             //como estándar de la industria. Por lo que un token (e.g.: Bearer 2hfkskwjshfdhussa1312...) debe ser
@@ -109,7 +108,7 @@ namespace API.Controllers
                 return HttpErrors.NotFound("Usuario no encontrado");
             }
 
-            APIResponse response = new APIResponse();
+            APIResponse response = new();
             response.Success = this._userValidator.ValidateUpdateEmail(user.Id, data, response.Messages);
 
             if (response.Success)
@@ -127,8 +126,7 @@ namespace API.Controllers
         [Authorize]
         public async Task<ActionResult<APIResponse>> UpdateUserPassword(UpdateUserPasswordDTO data)
         {
-            StringValues tokenHeader;
-            Request.Headers.TryGetValue("Authorization", out tokenHeader);
+            Request.Headers.TryGetValue("Authorization", out StringValues tokenHeader);
 
             //Los tokens siempre tienen el prefijo "Bearer" para marcar que tipo de token se está enviando
             //como estándar de la industria. Por lo que un token (e.g.: Bearer 2hfkskwjshfdhussa1312...) debe ser
@@ -145,7 +143,7 @@ namespace API.Controllers
                 return HttpErrors.NotFound("Usuario no encontrado");
             }
 
-            APIResponse response = new APIResponse();
+            APIResponse response = new();
             response.Success = this._userValidator.ValidateUpdatePassword(data, response.Messages);
 
             if (response.Success)

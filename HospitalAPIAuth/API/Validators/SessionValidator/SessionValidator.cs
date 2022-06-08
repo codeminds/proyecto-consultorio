@@ -6,7 +6,7 @@ namespace API.Validators
     {
         public bool ValidateLogin(LoginSessionDTO data, List<string> messages)
         {
-            List<string> innerMessages = new List<string>();
+            List<string> innerMessages = new();
 
             //Email
             if (string.IsNullOrWhiteSpace(data.Email))

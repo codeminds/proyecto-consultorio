@@ -7,7 +7,7 @@ namespace API
     {
         public static BadRequestObjectResult BadRequest(string message)
         {
-            APIResponse response = new APIResponse();
+            APIResponse response = new();
             response.Messages.Add(message);
             response.Success = false;
             response.StatusCode = HttpStatusCode.BadRequest;
@@ -17,7 +17,7 @@ namespace API
 
         public static UnauthorizedObjectResult Unauthorized(string message)
         {
-            APIResponse response = new APIResponse();
+            APIResponse response = new();
             response.Messages.Add(message);
             response.Success = false;
             response.StatusCode = HttpStatusCode.Unauthorized;
@@ -27,20 +27,22 @@ namespace API
 
         public static ObjectResult Forbidden(string message)
         {
-            APIResponse response = new APIResponse();
+            APIResponse response = new();
             response.Messages.Add(message);
             response.Success = false;
             response.StatusCode = HttpStatusCode.Forbidden;
 
-            ObjectResult result = new ObjectResult(response);
-            result.StatusCode = (int)HttpStatusCode.Forbidden;
+            ObjectResult result = new(response)
+            {
+                StatusCode = (int)HttpStatusCode.Forbidden
+            };
 
             return result;
         }
 
         public static NotFoundObjectResult NotFound(string message)
         {
-            APIResponse response = new APIResponse();
+            APIResponse response = new();
             response.Messages.Add(message);
             response.Success = false;
             response.StatusCode = HttpStatusCode.NotFound;

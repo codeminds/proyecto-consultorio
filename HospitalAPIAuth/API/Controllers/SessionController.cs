@@ -37,15 +37,16 @@ namespace API.Controllers
         {
             SessionListFilter filter = this._mapper.Map<FilterSessionDTO, SessionListFilter>(data);
 
-            StringValues tokenHeader;
-            Request.Headers.TryGetValue("Authorization", out tokenHeader);
+            Request.Headers.TryGetValue("Authorization", out StringValues tokenHeader);
 
             List<Claim> claims = Token.GetTokenClaims(tokenHeader.ToString().Split(" ")[1]);
             int userId = int.Parse(claims.First(c => c.Type == Claims.User).Value);
 
-            APIResponse response = new APIResponse();
-            response.Data = (await this._sessionService.ListSessions(userId, filter))
-                                .Select(p => this._mapper.Map<Session, GetSessionDTO>(p));
+            APIResponse response = new()
+            {
+                Data = (await this._sessionService.ListSessions(userId, filter))
+                                .Select(p => this._mapper.Map<Session, GetSessionDTO>(p))
+            };
 
             return response;
         }
@@ -53,7 +54,7 @@ namespace API.Controllers
         [HttpPost]
         public async Task<ActionResult<APIResponse>> LogIn(LoginSessionDTO data)
         {
-            APIResponse response = new APIResponse();
+            APIResponse response = new();
             response.Success = this._sessionValidator.ValidateLogin(data, response.Messages);
 
             if (response.Success)
@@ -74,13 +75,12 @@ namespace API.Controllers
             return response;
         }
 
-        [HttpPut]
+        [HttpPatch]
         public async Task<ActionResult<APIResponse>> RefreshSession()
         {
             try
             {
-                StringValues tokenHeader;
-                if (!Request.Headers.TryGetValue("Session", out tokenHeader))
+                if (!Request.Headers.TryGetValue("Session", out StringValues tokenHeader))
                 {
                     return HttpErrors.BadRequest("Encabezado de sesión no está presente");
                 }
@@ -115,8 +115,10 @@ namespace API.Controllers
 
                 await this._sessionService.RefreshUserSession(session.User, session, Request.HttpContext.Connection.RemoteIpAddress);
 
-                APIResponse response = new APIResponse();
-                response.Data = this._mapper.Map<Session, GetSessionTokensDTO>(session);
+                APIResponse response = new()
+                {
+                    Data = this._mapper.Map<Session, GetSessionTokensDTO>(session)
+                };
 
                 return response;
             }
@@ -133,12 +135,11 @@ namespace API.Controllers
         [Authorize]
         public async Task<ActionResult<APIResponse>> LogOut(Guid? sessionId = null)
         {
-            StringValues tokenHeader;
-            Request.Headers.TryGetValue("Authorization", out tokenHeader);
+            Request.Headers.TryGetValue("Authorization", out StringValues tokenHeader);
 
             List<Claim> claims = Token.GetTokenClaims(tokenHeader.ToString().Split(" ")[1]);
             int userId = int.Parse(claims.First(c => c.Type == Claims.User).Value);
-            sessionId = sessionId ?? Guid.Parse(claims.First(c => c.Type == Claims.Session).Value);
+            sessionId ??= Guid.Parse(claims.First(c => c.Type == Claims.Session).Value);
 
             //La función permite eliminar la sesión que estamos utilizando u otras sesiones por medio de su id,
             //por esta razón debemos validar que la sesión que se intenta eliminar no sea de otro usuario
@@ -150,8 +151,10 @@ namespace API.Controllers
 
             await this._sessionService.DeleteSession(session);
 
-            APIResponse response = new APIResponse();
-            response.Data = this._mapper.Map<Session, GetSessionDTO>(session);
+            APIResponse response = new()
+            {
+                Data = this._mapper.Map<Session, GetSessionDTO>(session)
+            };
 
             return response;
         }

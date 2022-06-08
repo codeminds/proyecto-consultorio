@@ -1,5 +1,4 @@
 ﻿using API.DataTransferObjects;
-using API.Repositories;
 
 namespace API.Validators
 {
@@ -17,7 +16,7 @@ namespace API.Validators
 
         public bool ValidateInsert(CreateUpdatePatientDTO data, List<string> messages)
         {
-            List<string> innerMessages = new List<string>();
+            List<string> innerMessages = new();
 
             //DocumentId
             if (string.IsNullOrWhiteSpace(data.DocumentId))
@@ -81,7 +80,7 @@ namespace API.Validators
 
         public bool ValidateUpdate(int id, CreateUpdatePatientDTO data, List<string> messages)
         {
-            List<string> innerMessages = new List<string>();
+            List<string> innerMessages = new();
 
             //DocumentId
             if (string.IsNullOrWhiteSpace(data.DocumentId))
@@ -145,7 +144,7 @@ namespace API.Validators
 
         public bool ValidateDelete(int id, List<string> messages)
         {
-            List<string> innerMessages = new List<string>();
+            List<string> innerMessages = new();
 
             if (this._appointmentRepository.Query.Any(a => a.PatientId == id))
             {
