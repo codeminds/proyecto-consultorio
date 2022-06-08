@@ -28,22 +28,26 @@ namespace API.Controllers
         {
             DoctorListFilter filter = this._mapper.Map<FilterDoctorDTO, DoctorListFilter>(data);
 
-            APIResponse response = new APIResponse();
-            response.Data = (await this._doctorService.ListDoctors(filter))
-                                .Select(d => this._mapper.Map<Doctor, GetDoctorDTO>(d));
+         APIResponse response = new()
+         {
+            Data = (await this._doctorService.ListDoctors(filter))
+                             .Select(d => this._mapper.Map<Doctor, GetDoctorDTO>(d))
+         };
 
-            return response;
+         return response;
         }
 
         [HttpGet]
         [Route("search")]
         public async Task<ActionResult<APIResponse>> SearchDoctors([FromQuery] string[] s)
         {
-            APIResponse response = new APIResponse();
-            response.Data = (await this._doctorService.SearchDoctors(s))
-                                .Select(d => this._mapper.Map<Doctor, GetDoctorDTO>(d));
+         APIResponse response = new()
+         {
+            Data = (await this._doctorService.SearchDoctors(s))
+                             .Select(d => this._mapper.Map<Doctor, GetDoctorDTO>(d))
+         };
 
-            return response;
+         return response;
         }
 
         [HttpGet]
@@ -56,16 +60,18 @@ namespace API.Controllers
                 return HttpErrors.NotFound("Doctor no encontrado");
             }
 
-            APIResponse response = new APIResponse();
-            response.Data = this._mapper.Map<Doctor, GetDoctorDTO>(doctor);
+         APIResponse response = new()
+         {
+            Data = this._mapper.Map<Doctor, GetDoctorDTO>(doctor)
+         };
 
-            return response;
+         return response;
         }
 
         [HttpPost]
         public async Task<ActionResult<APIResponse>> CreateDoctor(CreateUpdateDoctorDTO data)
         {
-            APIResponse response = new APIResponse();
+            APIResponse response = new();
             response.Success = this._doctorValidator.ValidateInsert(data, response.Messages);
 
             if (response.Success)
@@ -88,7 +94,7 @@ namespace API.Controllers
                 return HttpErrors.NotFound("Doctor no encontrado");
             }
 
-            APIResponse response = new APIResponse();
+            APIResponse response = new();
             response.Success = this._doctorValidator.ValidateUpdate(id, data, response.Messages);
 
             if (response.Success)
@@ -111,7 +117,7 @@ namespace API.Controllers
                 return HttpErrors.NotFound("Doctor no encontrado");
             }
 
-            APIResponse response = new APIResponse();
+            APIResponse response = new();
             response.Success = this._doctorValidator.ValidateDelete(id, response.Messages);
 
             if (response.Success)

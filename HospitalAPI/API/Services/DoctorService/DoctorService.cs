@@ -21,7 +21,7 @@ namespace API.Services
 
         public async Task<List<Doctor>> ListDoctors(DoctorListFilter? filter = null)
         {
-            filter = filter ?? new DoctorListFilter();
+            filter ??= new DoctorListFilter();
 
             return await this._doctorRepository.Query
                                     .Where(d => (string.IsNullOrWhiteSpace(filter.DocumentId) || d.DocumentId.Contains(filter.DocumentId))

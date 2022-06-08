@@ -22,11 +22,13 @@ namespace API.Controllers
         [HttpGet]
         public async Task<ActionResult<APIResponse>> ListFields()
         {
-            APIResponse response = new APIResponse();
-            response.Data = (await this._fieldService.ListFields())
-                                .Select(f => this._mapper.Map<Field, GetFieldDTO>(f));
+         APIResponse response = new()
+         {
+            Data = (await this._fieldService.ListFields())
+                             .Select(f => this._mapper.Map<Field, GetFieldDTO>(f))
+         };
 
-            return response;
+         return response;
         }
     }
 }

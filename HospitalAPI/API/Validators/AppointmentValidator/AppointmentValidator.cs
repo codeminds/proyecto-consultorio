@@ -19,7 +19,7 @@ namespace API.Validators
 
         public bool ValidateInsert(CreateUpdateAppointmentDTO data, List<string> messages)
         {
-            List<string> innerMessages = new List<string>();
+            List<string> innerMessages = new();
 
             //Date
             if (!data.Date.HasValue)
@@ -76,7 +76,7 @@ namespace API.Validators
 
         public bool ValidateUpdate(int id, CreateUpdateAppointmentDTO data, List<string> messages)
         {
-            List<string> innerMessages = new List<string>();
+            List<string> innerMessages = new();
 
             //Date
             if (!data.Date.HasValue)

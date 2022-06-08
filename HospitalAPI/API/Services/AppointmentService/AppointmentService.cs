@@ -23,9 +23,9 @@ namespace API.Services
 
         public async Task<List<Appointment>> ListAppointments(AppointmentListFilter? filter = null, PatientListFilter? patientFilter = null, DoctorListFilter? doctorFilter = null)
         {
-            filter = filter ?? new AppointmentListFilter();
-            patientFilter = patientFilter ?? new PatientListFilter();
-            doctorFilter = doctorFilter ?? new DoctorListFilter();
+            filter ??= new AppointmentListFilter();
+            patientFilter ??= new PatientListFilter();
+            doctorFilter ??= new DoctorListFilter();
 
             List<int> doctorIds = (await this._doctorService.ListDoctors(doctorFilter)).Select(d => d.Id).ToList();
             List<int> patientIds = (await this._patientService.ListPatients(patientFilter)).Select(d => d.Id).ToList();

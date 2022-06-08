@@ -19,7 +19,7 @@ namespace API.Validators
 
         public bool ValidateInsert(CreateUpdateDoctorDTO data, List<string> messages)
         {
-            List<string> innerMessages = new List<string>();
+            List<string> innerMessages = new();
 
             //DocumentId
             if (string.IsNullOrWhiteSpace(data.DocumentId))
@@ -77,7 +77,7 @@ namespace API.Validators
 
         public bool ValidateUpdate(int id, CreateUpdateDoctorDTO data, List<string> messages)
         {
-            List<string> innerMessages = new List<string>();
+            List<string> innerMessages = new();
 
             //DocumentId
             if (string.IsNullOrWhiteSpace(data.DocumentId))
@@ -135,7 +135,7 @@ namespace API.Validators
 
         public bool ValidateDelete(int id, List<string> messages)
         {
-            List<string> innerMessages = new List<string>();
+            List<string> innerMessages = new();
 
             if (this._appointmentRepository.Query.Any(a => a.DoctorId == id))
             {

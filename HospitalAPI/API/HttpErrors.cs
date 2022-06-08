@@ -7,7 +7,7 @@ namespace API
     {
         public static BadRequestObjectResult BadRequest(string message)
         {
-            APIResponse response = new APIResponse();
+            APIResponse response = new();
             response.Messages.Add(message);
             response.Success = false;
             response.StatusCode = HttpStatusCode.BadRequest;
@@ -17,7 +17,7 @@ namespace API
 
         public static NotFoundObjectResult NotFound(string message)
         { 
-            APIResponse response = new APIResponse();
+            APIResponse response = new();
             response.Messages.Add(message);
             response.Success = false;
             response.StatusCode = HttpStatusCode.NotFound;
