@@ -3,16 +3,16 @@ using API.Data.Filters;
 using API.Data.Models;
 using API.Repositories;
 using Microsoft.EntityFrameworkCore;
-using System.Text.RegularExpressions;
+using System.Linq.Expressions;
 
 namespace API.Services
 {
     public class DoctorService : IDoctorService
     {
         private readonly HospitalDB _database;
-        private readonly IDoctorRepository _doctorRepository;
+        private readonly IRepository<Doctor, int> _doctorRepository;
 
-        public DoctorService(HospitalDB database, IDoctorRepository doctorRepository)
+        public DoctorService(HospitalDB database, IRepository<Doctor, int> doctorRepository)
         {
             this._database = database;
             this._doctorRepository = doctorRepository;
@@ -20,7 +20,7 @@ namespace API.Services
 
         public async Task<List<Doctor>> ListDoctors(DoctorListFilter? filter = null)
         {
-            filter = filter ?? new DoctorListFilter();
+            filter ??= new DoctorListFilter();
 
             return await this._doctorRepository.Query
                                     .Where(d => (string.IsNullOrWhiteSpace(filter.DocumentId) || d.DocumentId.Contains(filter.DocumentId))
@@ -33,15 +33,24 @@ namespace API.Services
 
         public async Task<List<Doctor>> SearchDoctors(string[] values)
         {
-            //Lo valores pueden tener caracteres especiales que pueden contener
-            //inyecciones de SQL, por lo que por medio de expresiones regulares
-            //creamos un regla para remover caracteres extraños de los valores
-            Regex regex = new Regex(@"[^\d\w ]", RegexOptions.IgnoreCase);
-
             return await this._doctorRepository
-                                    .Search(values.Select(v => regex.Replace(v, "")))
-                                    .Include(d => d.Field)
-                                    .ToListAsync();
+                                .Search(values,
+                                        (value) => (doctor) => doctor.DocumentId.Contains(value)
+                                            || doctor.FirstName.Contains(value)
+                                            || doctor.LastName.Contains(value)
+                                            || doctor.Field.Name.Contains(value),
+                                        includes: new List<Expression<Func<Doctor, object>>>
+                                        { 
+                                            doctor => doctor.Field  
+                                        },
+                                        orderBys: new List<Expression<Func<Doctor, object>>>
+                                        {
+                                            doctor => doctor.DocumentId,
+                                            doctor => doctor.FirstName,
+                                            doctor => doctor.LastName
+                                        }
+                                )
+                                .ToListAsync();
         }
 
         public async Task<Doctor?> FindDoctor(int id)

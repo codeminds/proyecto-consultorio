@@ -1,9 +1,8 @@
 ﻿using API.Data;
 using API.Data.Filters;
 using API.Data.Models;
-using API.Repositories;
 using Microsoft.EntityFrameworkCore;
-using System.Text.RegularExpressions;
+using System.Linq.Expressions;
 
 namespace API.Services
 {
@@ -20,7 +19,7 @@ namespace API.Services
 
         public async Task<List<Patient>> ListPatients(PatientListFilter? filter = null)
         {
-            filter = filter ?? new PatientListFilter();
+            filter ??= new PatientListFilter();
 
             return await this._patientRepository.Query
                                     .Where(p => (string.IsNullOrWhiteSpace(filter.DocumentId) || p.DocumentId.Contains(filter.DocumentId))
@@ -34,13 +33,18 @@ namespace API.Services
 
         public async Task<List<Patient>> SearchPatients(string[] values)
         {
-            //Lo valores pueden tener caracteres especiales que pueden contener
-            //inyecciones de SQL, por lo que por medio de expresiones regulares
-            //creamos un regla para remover caracteres extraños de los valores
-            Regex regex = new Regex(@"[^\d\w ]", RegexOptions.IgnoreCase);
-
             return await this._patientRepository
-                                    .Search(values.Select(v => regex.Replace(v, "")))
+                                    .Search(values,
+                                            (value) => (patient) => patient.DocumentId.Contains(value)
+                                                || patient.FirstName.Contains(value)
+                                                || patient.LastName.Contains(value),
+                                            orderBys: new List<Expression<Func<Patient, object>>> 
+                                            {
+                                                patient => patient.DocumentId,
+                                                patient => patient.FirstName,
+                                                patient => patient.LastName
+                                            }
+                                    )
                                     .ToListAsync();
         }
 
