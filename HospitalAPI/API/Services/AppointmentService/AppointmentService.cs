@@ -3,7 +3,6 @@ using API.Data.Filters;
 using API.Data.Models;
 using API.Repositories;
 using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
 
 namespace API.Services
 {
