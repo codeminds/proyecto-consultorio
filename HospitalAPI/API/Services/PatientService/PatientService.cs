@@ -4,18 +4,15 @@ using API.Data.Models;
 using API.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
-using System.Text.RegularExpressions;
 
 namespace API.Services
 {
-    public class PatientService : IPatientService
+    public class PatientService : Service, IPatientService
     {
-        private readonly HospitalDB _database;
         private readonly IPatientRepository _patientRepository;
 
-        public PatientService(HospitalDB database, IPatientRepository patientRepository)
+        public PatientService(HospitalDB database, IPatientRepository patientRepository) : base(database)
         {
-            this._database = database;
             this._patientRepository = patientRepository;
         }
 
@@ -23,13 +20,8 @@ namespace API.Services
         {
             filter ??= new PatientListFilter();
 
-            return await this._patientRepository.Query
-                                    .Where(p => (string.IsNullOrWhiteSpace(filter.DocumentId) || p.DocumentId.Contains(filter.DocumentId))
-                                                    && (string.IsNullOrWhiteSpace(filter.FirstName) || p.FirstName.Contains(filter.FirstName))
-                                                    && (string.IsNullOrWhiteSpace(filter.LastName) || p.LastName.Contains(filter.LastName))
-                                                    && (!filter.BirthDateFrom.HasValue || p.BirthDate >= filter.BirthDateFrom)
-                                                    && (!filter.BirthDateTo.HasValue || p.BirthDate <= filter.BirthDateTo)
-                                                    && (!filter.Gender.HasValue || p.Gender == filter.Gender))
+            return await this._patientRepository
+                                    .List(filter)
                                     .ToListAsync();
         }
 
@@ -60,23 +52,21 @@ namespace API.Services
         public async Task<Patient> CreatePatient(Patient patient)
         {
             this._patientRepository.Insert(patient);
-            await this._database.SaveChangesAsync();
+            await this.SaveRepositoriesAsync();
 
-            return (await this._patientRepository
-                                        .Find(patient.Id)
-                                        .FirstOrDefaultAsync())!;
+            return patient;
         }
 
         public async Task UpdatePatient(Patient patient)
         {
             this._patientRepository.Update(patient);
-            await this._database.SaveChangesAsync();
+            await this.SaveRepositoriesAsync();
         }
 
         public async Task DeletePatient(Patient patient)
         {
             this._patientRepository.Delete(patient);
-            await this._database.SaveChangesAsync();
+            await this.SaveRepositoriesAsync();
         }
     }
 }
