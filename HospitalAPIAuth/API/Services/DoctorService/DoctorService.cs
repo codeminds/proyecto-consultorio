@@ -7,26 +7,21 @@ using System.Linq.Expressions;
 
 namespace API.Services
 {
-    public class DoctorService : IDoctorService
+    public class DoctorService : Service, IDoctorService
     {
-        private readonly HospitalDB _database;
-        private readonly IRepository<Doctor, int> _doctorRepository;
+        private readonly IDoctorRepository _doctorRepository;
 
-        public DoctorService(HospitalDB database, IRepository<Doctor, int> doctorRepository)
+        public DoctorService(HospitalDB database, IDoctorRepository doctorRepository) : base(database)
         {
-            this._database = database;
             this._doctorRepository = doctorRepository;
         }
 
         public async Task<List<Doctor>> ListDoctors(DoctorListFilter? filter = null)
         {
             filter ??= new DoctorListFilter();
-
-            return await this._doctorRepository.Query
-                                    .Where(d => (string.IsNullOrWhiteSpace(filter.DocumentId) || d.DocumentId.Contains(filter.DocumentId))
-                                                    && (string.IsNullOrWhiteSpace(filter.FirstName) || d.FirstName.Contains(filter.FirstName))
-                                                    && (string.IsNullOrWhiteSpace(filter.LastName) || d.LastName.Contains(filter.LastName))
-                                                    && (!filter.FieldId.HasValue || d.FieldId == filter.FieldId))
+                                    
+            return await this._doctorRepository
+                                    .List(filter)
                                     .Include(d => d.Field)
                                     .ToListAsync();
         }
@@ -64,7 +59,7 @@ namespace API.Services
         public async Task<Doctor> CreateDoctor(Doctor doctor)
         {
             this._doctorRepository.Insert(doctor);
-            await this._database.SaveChangesAsync();
+            await this.SaveRepositoriesAsync();
 
             return (await this._doctorRepository
                                         .Find(doctor.Id)
@@ -75,13 +70,13 @@ namespace API.Services
         public async Task UpdateDoctor(Doctor doctor)
         {
             this._doctorRepository.Update(doctor);
-            await this._database.SaveChangesAsync();
+            await this.SaveRepositoriesAsync();
         }
 
         public async Task DeleteDoctor(Doctor doctor)
         {
             this._doctorRepository.Delete(doctor);
-            await this._database.SaveChangesAsync();
+            await this.SaveRepositoriesAsync();
         }
     }
 }

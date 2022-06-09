@@ -1,6 +1,7 @@
 ﻿using API.Data;
 using API.Data.Filters;
 using API.Data.Models;
+using API.Repositories;
 using API.Utils;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
@@ -8,14 +9,12 @@ using System.Text;
 
 namespace API.Services
 {
-    public class SessionService : ISessionService
+    public class SessionService : Service, ISessionService
     {
-        private readonly HospitalDB _database;
         private readonly ISessionRepository _sessionRepository;
 
-        public SessionService(HospitalDB database, ISessionRepository sessionRepository)
+        public SessionService(HospitalDB database, ISessionRepository sessionRepository) : base(database)
         {
-            this._database = database;
             this._sessionRepository = sessionRepository;
         }
 
@@ -61,7 +60,7 @@ namespace API.Services
             };
 
             this._sessionRepository.Insert(session);
-            await this._database.SaveChangesAsync();
+            await this.SaveRepositoriesAsync();
 
             return session;
         }
@@ -84,13 +83,13 @@ namespace API.Services
             session.AccessTokenString = Token.IssueAccessToken(user, session.SessionId);
 
             this._sessionRepository.Update(session);
-            await this._database.SaveChangesAsync();
+            await this.SaveRepositoriesAsync();
         }
 
         public async Task DeleteSession(Session session)
         {
             this._sessionRepository.Delete(session);
-            await this._database.SaveChangesAsync();
+            await this.SaveRepositoriesAsync();
         }
     }
 }

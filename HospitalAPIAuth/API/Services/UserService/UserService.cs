@@ -1,18 +1,17 @@
 ﻿using API.Data;
 using API.Data.Models;
+using API.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Services
 {
-    public class UserService : IUserService
+    public class UserService : Service, IUserService
     {
-        private readonly HospitalDB _database;
         private readonly IUserRepository _userRepository;
         private readonly ISessionRepository _sessionRepository;
 
-        public UserService(HospitalDB database, IUserRepository userRepository, ISessionRepository sessionRepository)
+        public UserService(HospitalDB database, IUserRepository userRepository, ISessionRepository sessionRepository) : base(database)
         {
-            this._database = database;
             this._userRepository = userRepository;
             this._sessionRepository = sessionRepository;
         }
@@ -47,7 +46,7 @@ namespace API.Services
             }
 
             this._userRepository.Update(user);
-            await this._database.SaveChangesAsync();
+            await this.SaveRepositoriesAsync();
         }
     }
 }

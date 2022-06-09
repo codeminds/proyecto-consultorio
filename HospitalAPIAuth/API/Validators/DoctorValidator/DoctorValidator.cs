@@ -1,4 +1,5 @@
 ﻿using API.DataTransferObjects;
+using API.Repositories;
 
 namespace API.Validators
 {

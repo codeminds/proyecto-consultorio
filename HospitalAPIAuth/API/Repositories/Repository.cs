@@ -3,30 +3,25 @@ using System.Linq.Expressions;
 
 namespace API.Repositories
 {
-    public class Repository<T, I> : IRepository<T, I> where T : class where I : struct
+    public abstract class Repository<T, I>  where T : class where I : struct
     {
         public IQueryable<T> Query
         {
-            get { return _database.Set<T>(); }
+            get { return this._database.Set<T>(); }
         }
 
-        private readonly Func<T, I, bool> _find;
         private readonly DbContext _database;
 
-        public Repository(DbContext database, Func<T, I, bool> find)
+        public Repository(DbContext database)
         {
-            _find = find;
             _database = database;
         }
 
-        public virtual IQueryable<T> Find(I id)
-        {
-            return Query.Where(e => _find(e, id));
-        }
+        public abstract IQueryable<T> Find(I id);
 
         public IQueryable<T> Search(IEnumerable<string> values, Func<string, Expression<Func<T, bool>>> where, IEnumerable<Expression<Func<T, object>>>? includes = null, IEnumerable<Expression<Func<T, object>>>? orderBys = null)
         {
-            IQueryable<T> query = Query;
+            IQueryable<T> query = this.Query;
             includes ??= Enumerable.Empty<Expression<Func<T, object>>>();
             orderBys ??= Enumerable.Empty<Expression<Func<T, object>>>();
 
@@ -42,7 +37,7 @@ namespace API.Repositories
 
                 for (int i = 1; i < items; i++)
                 {
-                    IQueryable<T> unionQuery = Query.Where(where(values.ElementAt(i)));
+                    IQueryable<T> unionQuery = this.Query.Where(where(values.ElementAt(i)));
 
                     foreach (Expression<Func<T, object>> include in includes)
                     {
@@ -69,17 +64,17 @@ namespace API.Repositories
 
         public void Insert(T entity)
         {
-            _database.Set<T>().Add(entity);
+            this._database.Set<T>().Add(entity);
         }
 
         public void Update(T entity)
         {
-            _database.Set<T>().Update(entity);
+            this._database.Set<T>().Update(entity);
         }
 
         public void Delete(T entity)
         {
-            _database.Set<T>().Remove(entity);
+            this._database.Set<T>().Remove(entity);
         }
     }
 }
