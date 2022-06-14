@@ -49,6 +49,7 @@ table {
 
 figure img {
     max-width: 100%;
+    vertical-align: middle;
 }
 
 a {
@@ -75,4 +76,3 @@ select, button {
 * {
     box-sizing: border-box;
 }
-

@@ -49,13 +49,25 @@
     width: 10%;
 }
 
-.col.space, .row.space {
-    padding: 10px;
+col.space {
+    padding: 1rem;
+}
+
+.col.space:first-child {
+    padding-left: 0;
+}
+
+.col.space:last-child {
+    padding-right: 0;
 }
 
 @media screen and (max-width: 1024px) {
     .col.col-1, .col.col-2, .col.col-3, .col.col-4, .col.col-5,
     .col.col-6, .col.col-7, .col.col-8, .col.col-9, .col.col-10 {
         width: 100%;
+    }
+
+    .col.space {
+        padding: 1rem 0;
     }
 }

@@ -1,18 +1,26 @@
 .panel {
-    margin: 10px;
-    box-shadow: 1px 1px 0 0 var(--color-shadow-light);
-    border-radius: 2px;
-    padding: 10px;
-    border: 1px solid var(--color-panel-border);
+    margin: 1rem 0;
+    box-shadow: 0.1rem 0.1rem 0 0 var(--color-shadow-light);
+    border-radius: 0.2rem;
+    padding: 1rem;
+    border: 0.1rem solid var(--color-border);
 }
 
-.panel.flat {
+.panel.slim {
     padding: 0;
 }
 
+.panel:first-child {
+    margin-top: 0;
+}
+
+.panel:last-child {
+    margin-bottom: 0;
+}
+
 .panel .title{
-    border-bottom: 1px solid var(--color-panel-border);
-    margin-bottom: 10px;
+    border-bottom: 0.1rem solid var(--color-border);
+    margin-bottom: 1rem;
     font-size: 2rem;
 }
 

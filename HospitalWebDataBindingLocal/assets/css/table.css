@@ -15,7 +15,7 @@
 }
 
 .table td {
-    padding: 5px;
+    padding: 0.5rem;
 }
 
 .table td.buttons {
@@ -30,11 +30,11 @@
 .table th {
     text-align: left;
     font-weight: 700;
-    padding: 8px 5px;
+    padding: 0.8rem 0.5rem;
 }
 
 .table tbody tr:nth-child(odd) {
-    background: var(--color-table-nth-child-background);
+    background: var(--color-alternate-item-background);
 }
 
 .table td.mobile {
@@ -43,7 +43,7 @@
 
 .table .label {
     font-weight: 700;
-    margin-right: 5px;
+    margin-right: 0.5rem;
 }
 
 .table td.mobile div {
