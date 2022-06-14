@@ -16,7 +16,7 @@
             class="col-3"
             [type]="InputType.Text" 
             [(model)]="filter.documentId"
-            [attributes]="{'placeholder': '123456789'}"
+            [attributes]="{'placeholder': 'E.g.:123456789'}"
         ></app-input>
         <app-input 
             name="firstName" 
@@ -25,7 +25,7 @@
             class="col-3"
             [type]="InputType.Text" 
             [(model)]="filter.firstName"
-            [attributes]="{'placeholder': 'John'}"
+            [attributes]="{'placeholder': 'E.g.:John'}"
         ></app-input>
         <app-input 
             name="lastName" 
@@ -34,7 +34,7 @@
             class="col-3"
             [type]="InputType.Text" 
             [(model)]="filter.lastName"
-            [attributes]="{'placeholder': 'Smith'}"
+            [attributes]="{'placeholder': 'E.g.:Smith'}"
         ></app-input>
         <app-date 
             name="birthDateFrom" 
@@ -62,7 +62,7 @@
             [options]="[{label: 'Femenino', value: false},
                         {label: 'Masculino', value: true}]"
         ></app-select>
-        <app-button [type]="ButtonType.Success" [disabled]="loading" [buttonClass]="{ 'loading': loading }" (clicked)="list()">
+        <app-button [type]="ButtonType.Success" [disabled]="loading" [loading]="loading" (clicked)="list()">
             <i class="material-icons-sharp">search</i>
             <span>Buscar</span>
         </app-button>
@@ -137,7 +137,7 @@
             label="Cédula"
             [type]="InputType.Text" 
             [(model)]="patient.documentId"
-            [attributes]="{'placeholder': '123456789'}"
+            [attributes]="{'placeholder': 'E.g.:123456789'}"
         ></app-input>
         <app-input 
             name="firstName" 
@@ -145,7 +145,7 @@
             label="Nombre"
             [type]="InputType.Text" 
             [(model)]="patient.firstName"
-            [attributes]="{'placeholder': 'John'}"
+            [attributes]="{'placeholder': 'E.g.:John'}"
         ></app-input>
         <app-input 
             name="lastName" 
@@ -153,7 +153,7 @@
             label="Apellido"
             [type]="InputType.Text" 
             [(model)]="patient.lastName"
-            [attributes]="{'placeholder': 'Smith'}"
+            [attributes]="{'placeholder': 'E.g.:Smith'}"
         ></app-input>
         <app-date 
             name="birthDate" 
@@ -171,7 +171,7 @@
                         {label: 'Masculino', value: true}]"
         ></app-select>
         <div class="row">
-            <app-button [type]="ButtonType.Success" (clicked)="save()" [disabled]="saving || !modalOpen" [buttonClass]="{'loading': saving || !modalOpen}">Guardar <i *ngIf="saving" class="material-icons-sharp rotate">data_saver_off</i></app-button>
+            <app-button [type]="ButtonType.Success" (clicked)="save()" [disabled]="saving || !modalOpen" [loading]="loading || !modalOpen">Guardar <i *ngIf="saving" class="material-icons-sharp rotate">data_saver_off</i></app-button>
             <app-button [type]="ButtonType.Danger" (clicked)="modalOpen = false">Cancelar</app-button>
         </div>
     </form>

@@ -1,0 +1,27 @@
+:host {
+    height: 100vh;
+    padding: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    overflow-y: auto;
+}
+
+app-panel {
+    width: min(40rem, 100%);
+}
+
+main {
+    padding: 2.5rem;
+}
+
+figure {
+    max-width: 10rem;
+    margin: 1rem auto 3rem;
+}
+
+app-input {
+    display: block;
+    margin-bottom: 2rem;
+}
