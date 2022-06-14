@@ -12,21 +12,13 @@
     /* MAIN COLORS */
     --color-main: #5ccdcc;
     --color-background: #f1f1f1;
+    --color-border: #d8d8d8;
     --color-text: #292929;
+    --color-alternate-item-background:#d6d6d6;
     --color-shadow-dark: #1d1d1d;
     --color-shadow-light: #adadad;
     --color-scrollbar-dark: rgba(255,255,255,0.1);
     --color-scrollbar-light: rgba(0,0,0,0.1);
-
-    /* PANEL COLORS */
-    --color-panel-border: #d8d8d8;
-
-    /* TABLE COLORS */
-    --color-table-nth-child-background:#d6d6d6;
-
-    /* MODAL COLORS */
-    --color-modal-content-background:#f1f1f1;
-    --color-modal-content-border:#d8d8d8;
 
     /* FORM COLORS */
     --color-placeholder: #adadad;

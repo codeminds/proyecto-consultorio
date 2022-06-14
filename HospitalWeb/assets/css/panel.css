@@ -3,7 +3,7 @@
     box-shadow: 0.1rem 0.1rem 0 0 var(--color-shadow-light);
     border-radius: 0.2rem;
     padding: 1rem;
-    border: 0.1rem solid var(--color-panel-border);
+    border: 0.1rem solid var(--color-border);
 }
 
 .panel.slim {
@@ -19,7 +19,7 @@
 }
 
 .panel .title{
-    border-bottom: 0.1rem solid var(--color-panel-border);
+    border-bottom: 0.1rem solid var(--color-border);
     margin-bottom: 1rem;
     font-size: 2rem;
 }

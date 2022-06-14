@@ -3,7 +3,7 @@
 :root {
     /* LAYOUT */
     --font-main: 'Stick No Bills', Helvetica, sans-serif;
-    --color-navbar: #F9B4ED;
+    --color-navbar: #f9b4ed;
     --color-sidenav: #5f6f70;
     --color-sidenav-text: #ffffff;
     --color-sidenav-category: #101e1f;
@@ -12,25 +12,17 @@
     /* MAIN COLORS */
     --color-main: #ffffff;
     --color-background: #485a5c;
+    --color-border: #f9b4ed;
     --color-text: #ffffff;
+    --color-alternate-item-background:#5f6f70;
     --color-shadow-dark: #101e1f;
     --color-shadow-light: #919b9d;
     --color-scrollbar-dark: rgba(255,255,255,0.1);
     --color-scrollbar-light: rgba(0,0,0,0.1);
 
-    /* PANEL COLORS */
-    --color-panel-border: #F9B4ED;
-
-    /* TABLE COLORS */
-    --color-table-nth-child-background:#5f6f70;
-
-    /* MODAL COLORS */
-    --color-modal-content-background:#5f6f70;
-    --color-modal-content-border:#F9B4ED;
-
     /* FORM COLORS */
     --color-placeholder: #bfbfbf;
-    --color-form-field-input: #F9B4ED;
+    --color-form-field-input: #f9b4ed;
     --color-form-field-focus:#ffffff;
     --color-form-field-select: rgba(0, 0, 0, 0.6);
 
@@ -38,7 +30,7 @@
     --color-success-primary: #043565;
     --color-success-secondary: #052b50;
     --color-success-tertiary: #4f87be;
-    --color-danger-primary: #80004D;
+    --color-danger-primary: #80004d;
     --color-danger-secondary: #730046;
     --color-danger-tertiary: #c04d92;
     --color-neutral-rimary: #4d4d53;
