@@ -44,7 +44,7 @@
 
 .title{
     padding-bottom: 0.2rem;
-    border-bottom: 0.1rem solid var(--color-panel-border);
+    border-bottom: 0.1rem solid var(--color-border);
 }
 
 .open {
@@ -62,10 +62,10 @@
 }
 
 .content {
-    background: var(--color-modal-content-background);
+    background: var(--color-background);
     padding: 2rem;
     border-radius: 0.2rem;
-    border: 0.1rem solid var(--color-modal-content-border);
+    border: 0.1rem solid var(--color-border);
     box-shadow: 0.2rem 0.2rem 0.6rem -0.3rem var(--color-shadow-light);
 }
 
