@@ -14,7 +14,7 @@ export class PatientService{
   constructor(
     private httpService: HttpService
   ) {
-    this._api = 'api/patients';
+    this._api = 'patients';
   }
 
   public list(filter: QueryParams): Observable<Patient[]> {

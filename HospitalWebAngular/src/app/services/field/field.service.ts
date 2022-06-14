@@ -8,12 +8,12 @@ import { Field } from './field.model';
   providedIn: 'root'
 })
 export class FieldService {
-  private _api: string;
+  private _api: Readonly<string>;
 
   constructor(
     private httpService: HttpService
   ) { 
-    this._api = "api/fields";
+    this._api = "fields";
   }
 
   public list(): Observable<Field[]> {

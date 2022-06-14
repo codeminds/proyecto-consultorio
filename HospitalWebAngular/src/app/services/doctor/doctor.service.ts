@@ -14,7 +14,7 @@ export class DoctorService{
   constructor(
     private httpService: HttpService
   ) {
-    this._api = 'api/doctors';
+    this._api = 'doctors';
   }
 
   public list(filter: QueryParams): Observable<Doctor[]> {

@@ -14,7 +14,7 @@ export class AppointmentService {
   constructor(
     private httpService: HttpService
   ) {
-    this._api = 'api/appointments';
+    this._api = 'appointments';
   }
 
   public list(filter: QueryParams): Observable<Appointment[]> {
