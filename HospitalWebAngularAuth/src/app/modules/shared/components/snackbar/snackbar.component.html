@@ -1,0 +1,6 @@
+<div #snackbar [attr.class]="type" [ngClass]="{'close': closeSnackbar}" [attr.style]="style">
+    <p>{{text}}</p>
+    <i (click)="close()">X</i>
+</div>
+
+

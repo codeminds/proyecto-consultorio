@@ -1,0 +1,10 @@
+<div class="modal {{size}} {{position}}" [ngClass]="{'open': open, 'transparent': transparent}" (click)="onClickOutside()">
+    <div class="safewall" [ngClass]="{'safe': !transparent}" (click)="onClickInside()">
+        <div class="content">
+            <header *ngIf="modalTitle">
+                <h3 class="title">{{modalTitle}}</h3>
+            </header>
+            <ng-content></ng-content>
+        </div>
+    </div>
+</div>

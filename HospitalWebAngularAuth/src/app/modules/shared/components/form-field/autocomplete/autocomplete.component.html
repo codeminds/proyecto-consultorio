@@ -1,0 +1,32 @@
+<div class="form-field">
+    <label *ngIf="label" [for]="id">{{label}}</label>
+    <div class="selection">
+        <input 
+        #input 
+        type="text"
+        autocomplete="off" 
+        [id]="id" 
+        [name]="name"
+        [placeholder]="placeholder" 
+        [(ngModel)]="search"
+        (input)="lookup()" 
+        (keydown.arrowdown)="increaseIndex($event)" 
+        (keydown.arrowup)="decreaseIndex($event)"
+        (keydown.enter)="selectKeyPress($event)"
+        (keydown.tab)="selectKeyPress($event)"
+        (keydown.escape)="blur()"
+        (focus)="focus()" />
+        <i *ngIf="loading" class="material-icons-sharp">loop</i>
+        <div #selection *ngIf="model != null && showSelection" [ngClass]="{'hidden': focused}" (click)="clickSelection()">
+            <ng-container *ngTemplateOutlet="selectionTemplate; context: {$implicit: model}"></ng-container>
+        </div>
+    </div>
+    <div *ngIf="results" class="options open">
+        <ul #dropdown [attr.style]="style">
+            <li *ngFor="let item of results; let i = index" [ngClass]="{'selected': i == selectedIndex}" (click)="selectIndex(i)">
+                <h5 [ngClass]="{title: infoTemplate != null}">{{getProperty(item, option.label)}}</h5>
+                <ng-container *ngTemplateOutlet="infoTemplate; context: {$implicit: item}"></ng-container>
+            </li>
+        </ul>
+    </div>
+</div>

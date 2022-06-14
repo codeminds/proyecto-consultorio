@@ -1,0 +1,82 @@
+div {
+    position: relative;
+}
+
+div > i {
+    position: absolute;
+    right: 0.4rem;
+    top: 0.4rem;
+}
+
+i {
+    font-size: 2.1rem;
+    animation: rotate 1s ease-out infinite;
+}
+
+table {
+    width: 100%;
+    table-layout: fixed;
+}
+
+::ng-deep td {
+    padding: 0.5rem;
+}
+
+th {
+    text-align: left;
+    font-weight: 700;
+    padding: 0.8rem 0.5rem;
+}
+
+th:last-child {
+    padding-right: 2.5rem;
+}
+
+tbody tr:nth-child(odd) {
+    background: var(--color-alternate-item-background);
+}
+
+td.mobile {
+    display: none;
+    padding: 1rem;
+}
+
+tr.no-results td, tr.loading td {
+    text-align: center;
+}
+
+@media screen and (max-width: 1024px) {
+    div > i {
+        display: none;
+    }
+    
+    thead {
+        display: none;
+    }
+
+    table.mobile ::ng-deep td {
+        display: none;
+    }
+
+    table.mobile td.mobile {
+        display: block;
+    }
+
+    table.mobile tr.loading {
+        display: block;
+    }
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotateZ(10deg);
+    }
+
+    80% {
+        transform: rotateZ(340deg);
+    }
+
+    100% {
+        transform: rotateZ(360deg);
+    }
+}

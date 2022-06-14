@@ -1,0 +1,187 @@
+<!-- Controles de página -->
+<div class="controls">
+    <button class="button success" (click)="createUpdate()">
+        <i class="material-icons-sharp">add_circle</i>
+        <span>Agregar</span>
+    </button>
+</div>
+
+<!-- Filtro de búsqueda -->
+<app-panel class="unboxed slim" panelTitle="Búsqueda" [(open)]="panelOpen" [expandable]="true">
+    <form class="row" (keyup.enter)="list()">
+        <app-input 
+            name="documentId" 
+            form="filter" 
+            label="Cédula"
+            class="col-3"
+            [type]="InputType.Text" 
+            [(model)]="filter.documentId"
+            [attributes]="{'placeholder': '123456789'}"
+        ></app-input>
+        <app-input 
+            name="firstName" 
+            form="filter" 
+            label="Nombre"
+            class="col-3"
+            [type]="InputType.Text" 
+            [(model)]="filter.firstName"
+            [attributes]="{'placeholder': 'John'}"
+        ></app-input>
+        <app-input 
+            name="lastName" 
+            form="filter" 
+            label="Apellido"
+            class="col-3"
+            [type]="InputType.Text" 
+            [(model)]="filter.lastName"
+            [attributes]="{'placeholder': 'Smith'}"
+        ></app-input>
+        <app-date 
+            name="birthDateFrom" 
+            form="filter" 
+            label="Desde"
+            class="col-3"
+            [type]="DateType.DateTime"
+            [(model)]="filter.birthDateFrom"
+        ></app-date>
+        <app-date 
+            name="birthDateTo" 
+            form="filter" 
+            label="Hasta"
+            class="col-3"
+            [type]="DateType.DateTime"
+            [(model)]="filter.birthDateTo"
+        ></app-date>
+        <app-select
+            name="gender"
+            form="filter"
+            label="Género"
+            class="col-3"
+            nullOption="Todos"
+            [(model)]="filter.gender"
+            [options]="[{label: 'Femenino', value: false},
+                        {label: 'Masculino', value: true}]"
+        ></app-select>
+        <app-button [type]="ButtonType.Success" [disabled]="loading" [buttonClass]="{ 'loading': loading }" (clicked)="list()">
+            <i class="material-icons-sharp">search</i>
+            <span>Buscar</span>
+        </app-button>
+    </form>
+</app-panel>
+
+<!--- Tabla de resultados -->
+<app-panel class="slim">
+    <app-table 
+        [headers]="[{ label: 'Cédula' },
+                    { label: 'Nombre', size: 2 },
+                    { label: 'Nacimiento', size: 2 },
+                    { label: 'Género', size: 0.75 },
+                    { size: 2 }]" 
+        [template]="patientRow" 
+        [templateMobile]="patientRowMobile" 
+        [source]="patients"
+        [loading]="loading"
+        noResultsText="No se han encontrado resultados">
+        <ng-template #patientRow let-patient>
+            <td>{{patient.documentId}}</td>
+            <td>{{patient.firstName}} {{patient.lastName}}</td>
+            <td>{{patient.birthDate.toLocaleDisplayString('es-US')}}</td>
+            <td>{{patient.gender ? 'Masculino' : 'Femenino'}}</td>    
+            <td class="table-buttons">
+                <button class="button success" title="Editar" (click)="createUpdate(patient)">
+                    <i class="material-icons-sharp">edit</i>
+                    <span>Editar</span>
+                </button>
+                <button class="button danger" title="Borrar" (click)="deletePatient(patient.id)">
+                    <i class="material-icons-sharp">delete</i>
+                    <span>Borrar</span>
+                </button>
+            </td>
+        </ng-template>
+        <ng-template #patientRowMobile let-patient>
+            <div class="mobile-row">
+                <h3>{{patient.documentId}}</h3>
+                <p>
+                    <span class="label">Nombre:</span> {{patient.firstName}} {{patient.lastName}}
+                </p>
+                <p>
+                    <span class="label">Nacimiento:</span> {{patient.birthDate.toLocaleDisplayString('es-US')}}
+                </p>
+                <p>
+                    <span class="label">Género:</span> {{patient.gender ? 'Masculino' : 'Femenino'}}
+                </p>
+                <div>
+                    <button class="button success" title="Editar" (click)="createUpdate(patient)">
+                        <i class="material-icons-sharp">edit</i>
+                        <span>Editar</span>
+                    </button>
+                    <button class="button danger" title="Borrar" (click)="deletePatient(patient.id)">
+                        <i class="material-icons-sharp">delete</i>
+                        <span>Borrar</span>
+                    </button>
+                </div>
+            </div>
+        </ng-template>
+    </app-table>
+</app-panel>
+
+<!-- Modal de creación/edición -->
+<app-modal [(open)]="modalOpen" modalTitle="Modal" [position]="ModalPosition.Top" [size]="ModalSize.Medium" (onClose)="onModalClose()">
+    <form *ngIf="patient" (keyup.enter)="save()">
+        <ul class="messages">
+            <li *ngFor="let message of messages">{{message}}</li>
+        </ul>
+        <app-input 
+            name="documentId" 
+            form="createUpdate" 
+            label="Cédula"
+            [type]="InputType.Text" 
+            [(model)]="patient.documentId"
+            [attributes]="{'placeholder': '123456789'}"
+        ></app-input>
+        <app-input 
+            name="firstName" 
+            form="createUpdate" 
+            label="Nombre"
+            [type]="InputType.Text" 
+            [(model)]="patient.firstName"
+            [attributes]="{'placeholder': 'John'}"
+        ></app-input>
+        <app-input 
+            name="lastName" 
+            form="createUpdate" 
+            label="Apellido"
+            [type]="InputType.Text" 
+            [(model)]="patient.lastName"
+            [attributes]="{'placeholder': 'Smith'}"
+        ></app-input>
+        <app-date 
+            name="birthDate" 
+            form="createUpdate" 
+            label="Nacimiento"
+            [type]="DateType.DateTime"
+            [(model)]="patient.birthDate"
+        ></app-date>
+        <app-select
+            name="gender"
+            form="createUpdate"
+            label="Género"
+            [(model)]="patient.gender"
+            [options]="[{label: 'Femenino', value: false},
+                        {label: 'Masculino', value: true}]"
+        ></app-select>
+        <div class="row">
+            <app-button [type]="ButtonType.Success" (clicked)="save()" [disabled]="saving || !modalOpen" [buttonClass]="{'loading': saving || !modalOpen}">Guardar <i *ngIf="saving" class="material-icons-sharp rotate">data_saver_off</i></app-button>
+            <app-button [type]="ButtonType.Danger" (clicked)="modalOpen = false">Cancelar</app-button>
+        </div>
+    </form>
+</app-modal>
+
+<!-- Modal de confirmación -->
+<app-modal [(open)]="confirmOpen" [transparent]="true" [position]="ModalPosition.Top" [closeOnClickOutside]="false" (onClose)="onConfirmClose()">
+    <p class="confirm-text">{{confirmText}}</p>
+    <div class="confirm-buttons">
+        <button class="button success" (click)="confirm(true)" [disabled]="saving || !confirmOpen" [ngClass]="{'loading': saving || !confirmOpen}">Confirmar <i *ngIf="saving" class="material-icons-sharp rotate">data_saver_off</i></button>
+        <button class="button neutral" (click)="confirm(false)">Cancelar</button>
+    </div>
+</app-modal>

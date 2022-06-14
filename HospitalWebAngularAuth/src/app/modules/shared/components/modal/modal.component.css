@@ -1,0 +1,94 @@
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 2rem;
+    box-sizing: border-box;
+    overflow-y: auto;    
+    scrollbar-color: var(--color-scrollbar-dark) var(--color-scrollbar-dark);
+    scrollbar-width: thin;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    z-index: -1;
+    opacity: 0;
+    flex-wrap: wrap;
+    transition: opacity 0.3s ease-out, z-index 0.3s ease-out;
+}
+
+.top {
+    align-items: flex-start;
+    padding-top: 10vh;
+}
+
+.bottom {
+    align-items: flex-end;
+    padding-bottom: 10vh;
+}
+
+.transparent {
+    background: none;
+}
+
+.modal::-webkit-scrollbar-thumb {
+    background: var(--color-scrollbar-dark);
+}
+
+.modal::-webkit-scrollbar {
+    width: 0.7rem;
+    background: var(--color-scrollbar-dark);
+}
+
+.title{
+    padding-bottom: 0.2rem;
+    border-bottom: 0.1rem solid var(--color-border);
+}
+
+.open {
+    z-index: 100;
+    opacity: 1;
+}
+
+.safewall {
+    max-width: 95%;
+    box-sizing: border-box;
+}
+
+.safe {
+    padding: 7rem;
+}
+
+.content {
+    background: var(--color-background);
+    padding: 2rem;
+    border-radius: 0.2rem;
+    border: 0.1rem solid var(--color-border);
+    box-shadow: 0.2rem 0.2rem 0.6rem -0.3rem var(--color-shadow-light);
+}
+
+.small .safewall {
+    width: min(40rem, 95%);
+}
+
+.medium .safewall {
+    width: min(70rem, 95%);
+}
+
+.large .safewall {
+    width: min(100rem, 95%);
+}
+
+@media screen and (max-width: 1024px) {
+    .safe {
+        padding: 4rem;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .safe {
+        padding: 0;
+    }
+}

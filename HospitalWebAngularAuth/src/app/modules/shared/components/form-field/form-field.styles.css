@@ -1,0 +1,150 @@
+.form-field {
+    padding: 0.7rem;
+}
+
+::placeholder{
+    color: var(--color-placeholder);
+    font-size: inherit;
+}
+
+label {
+    display: inline-block;
+    font-weight: 700;
+    cursor: pointer;
+    margin-bottom: 0.5rem;
+    font-size: 1.4rem;
+}
+
+input:not([type="radio"]):not([type="checkbox"]), textarea, select {
+    display: inline-block;
+    width: 100%;
+    padding: 0.5rem;
+    height: 2.8rem;
+    font-size: inherit;
+    background: rgba(255, 255, 255, 0.2);
+    color: inherit;
+    border: solid 0.1rem var(--color-form-field-input);
+    border-radius: 0.2rem;
+    outline: 0;
+}
+
+input:not([type="radio"]):not([type="checkbox"]):focus, textarea:focus, select:focus {
+    border-color: var(--color-form-field-focus);
+}
+
+textarea {
+    min-height: 15rem;
+    resize: none;
+}
+
+textarea.resizable {
+    resize: vertical;
+}
+
+.check-container {
+    margin-bottom: 0.5rem;
+}
+
+.check-container:last-child {
+    margin-bottom: 0;
+}
+
+.check-container.inline {
+    display: inline-block;
+    margin-right: 1rem;
+    margin-bottom: 0;
+}
+
+.check {
+    display: inline-block;
+    margin-bottom: 0;
+}
+
+.check span {
+    vertical-align: text-bottom;
+}
+
+.check i {
+    display: inline-block;
+    width: 2rem;
+    height: 2rem;
+    border: solid 0.1rem #ccc;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 0.2rem;
+    margin-right: 0.4rem;
+    vertical-align: middle;
+}
+
+.check :checked + i {
+    background-color: var(--color-main);
+}
+
+.check input {
+    display: none;
+}
+
+.options {
+    position: absolute;
+    display: none;
+}
+
+.options.open {
+    display: block;
+}
+
+.options ul {
+    position: absolute;
+    z-index: 10;
+    margin-top: 0.1rem;
+    background: var(--color-background);
+    overflow: auto;
+    scrollbar-color: var(--color-scrollbar-light) var(--color-scrollbar-light);
+    scrollbar-width: thin;
+}
+
+.options ul::-webkit-scrollbar-thumb {
+    background: var(--color-scrollbar-light);
+}
+
+.options ul::-webkit-scrollbar {
+    width: 0.7rem;
+    background: var(--color-scrollbar-light);
+}
+
+.options li {
+    font-size: 1.1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    background: rgba(255, 255, 255, 0.2);
+    color: inherit;
+    min-width: 17rem;
+    padding: 1rem 1.5rem;
+    cursor: pointer;
+}
+
+.options li.selected, .options li:hover {
+    background: rgba(255, 255, 255, 0.7);
+}
+
+.options h5 {
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.options h5.title {
+    margin-bottom: 0.6rem;
+    border-bottom: solid 0.1rem var(--color-form-field-input);
+}
+
+@media screen and (max-width: 1024px) {
+    .check-container.inline {
+        display: block;
+        margin-right: 0;
+        margin-bottom: 0.5rem;
+    }
+
+    .check-container.inline:last-child {
+        margin-bottom: 0;
+    }
+}

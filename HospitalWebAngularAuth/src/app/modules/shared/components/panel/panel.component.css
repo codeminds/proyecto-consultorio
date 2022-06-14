@@ -1,0 +1,70 @@
+/*
+Usamos las clases unboxed, flat, slim y el flexbox en el :host por si
+el desarrollador quisiera hacer paneles flex que se alineen
+entre ellos, de esta manera no hay que introducir lógica extra,
+sólo tiene que crear paneles dentro de un contenedor flex. 
+Si en vez las clases flat y slim fueran parte del panel interior
+los paneles no crecerían junto con el contenedor flex,
+sólo el contenedor :host invisible.
+*/
+:host {
+    display: flex;
+    align-items: stretch;
+    margin-bottom: 1rem;
+}
+
+:host:last-child {
+    margin-bottom: 0;
+}
+
+:host.unboxed {
+    margin-bottom: 0;
+}
+
+:host.unboxed .panel {
+    border: 0;
+    box-shadow: none;
+}
+
+:host.flat .panel {
+    box-shadow: none;
+}
+
+:host.slim .panel {
+    padding: 0;
+}
+
+.panel {
+    flex-grow: 1;
+    box-shadow: 0.1rem 0.1rem 0 0 var(--color-shadow-light);
+    border-radius: 0.2rem;
+    padding: 1rem;
+    border: 0.1rem solid var(--color-border);
+}
+
+.title{
+    padding-bottom: 0.2rem;
+    border-bottom: 0.1rem solid var(--color-border);
+}
+
+.toggle {
+    cursor: pointer;
+}
+
+.toggle::after {
+    content: '\025B8';
+}
+
+.toggle.open::after {
+    content: '\025BE';
+}
+
+.toggle-section {
+    height: 0;
+    display: none;
+    overflow: hidden;
+}
+
+.toggle-section.open {
+    display: block;
+}

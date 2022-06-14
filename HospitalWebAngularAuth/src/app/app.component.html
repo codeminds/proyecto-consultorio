@@ -1,0 +1,6 @@
+<!-- 
+Al ser este componente la base de toda la aplicación, cualquier ruta a la que naveguemos,
+inyectará su componente asociado luego de este tag especial "router-outlet".
+-->
+<router-outlet></router-outlet>
+<app-snackbar *ngIf="($message | async) as message" [text]="message.text" [type]="getSnackbarType(message.type)" [timeout]="5000" (onClose)="dismissMessage()"></app-snackbar>
