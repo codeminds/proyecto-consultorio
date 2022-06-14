@@ -22,7 +22,7 @@ builder.Services.AddControllers()
                 .ConfigureApiBehaviorOptions(options => {
                     options.InvalidModelStateResponseFactory = context =>
                     {
-                        return HttpErrors.BadRequest("Objeto de datos no válido");
+                        return HttpErrors.BadRequest("Datos de petición no válidos");
                     }; 
                 });
 

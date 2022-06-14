@@ -65,7 +65,7 @@ namespace API.Controllers
                 User? user = await this._userService.FindUser(data.Email!);
                 if (user == null || Convert.ToHexString(Crypter.Hash(data.Password!, user.PasswordSalt)) != Convert.ToHexString(user.Password))
                 {
-                    return HttpErrors.NotFound("Usuario y contraseña no existen");
+                    return HttpErrors.NotFound("Usuario y contraseña incorrectos");
                 }
 
                 Session session = await this._sessionService.CreateUserSession(user, Request.HttpContext.Connection.RemoteIpAddress);

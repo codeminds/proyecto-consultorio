@@ -26,9 +26,6 @@ namespace API.Controllers
 
             switch (response.StatusCode)
             {
-                case HttpStatusCode.NotFound:
-                    response.Messages.Add("Recurso no encontrado");
-                    break;
                 case HttpStatusCode.InternalServerError:
                     response.Messages.Add("Error interno del servidor");
 
@@ -49,9 +46,6 @@ namespace API.Controllers
                             };
                         }
                     }
-                    break;
-                default:
-                    response.Messages.Add("Hubo un problema procesando su petición");
                     break;
             }
 
