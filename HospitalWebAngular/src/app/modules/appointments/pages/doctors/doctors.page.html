@@ -46,7 +46,7 @@
             [(model)]="filter.lastName"
             [attributes]="{'placeholder': 'Smith'}"
         ></app-input>
-        <app-button [type]="ButtonType.Success" [disabled]="loading" [buttonClass]="{ 'loading': loading }" (clicked)="list()">
+        <app-button [type]="ButtonType.Success" [disabled]="loading" [loading]="loading" (clicked)="list()">
             <i class="material-icons-sharp">search</i>
             <span>Buscar</span>
         </app-button>
@@ -143,7 +143,7 @@
             [attributes]="{'placeholder': 'Smith'}"
         ></app-input>
         <div class="row">
-            <app-button [type]="ButtonType.Success" (clicked)="save()" [disabled]="saving || !modalOpen" [buttonClass]="{'loading': saving || !modalOpen}">Guardar <i *ngIf="saving" class="material-icons-sharp rotate">data_saver_off</i></app-button>
+            <app-button [type]="ButtonType.Success" (clicked)="save()" [disabled]="saving || !modalOpen" [loading]="loading || !modalOpen">Guardar <i *ngIf="saving" class="material-icons-sharp rotate">data_saver_off</i></app-button>
             <app-button [type]="ButtonType.Danger" (clicked)="modalOpen = false">Cancelar</app-button>
         </div>
     </form>
