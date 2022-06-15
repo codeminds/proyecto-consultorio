@@ -1,9 +1,9 @@
 import { Appointment } from "./appointment.model";
 
 export class CreateUpdateAppointmentDTO {
-    public date: Readonly<string>;
-    public doctorId: Readonly<number>;
-    public patientId: Readonly<number>;
+    public readonly date: string;
+    public readonly doctorId: number;
+    public readonly patientId: number;
 
     constructor(data: Appointment) {
         //Convertimos la fecha a date string porque Angular fuerza

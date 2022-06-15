@@ -13,7 +13,7 @@ export class FieldService {
   constructor(
     private httpService: HttpService
   ) { 
-    this._api = "api/fields";
+    this._api = "fields";
   }
 
   public list(): Observable<Field[]> {

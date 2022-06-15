@@ -9,12 +9,12 @@ import { Appointment } from './appointment.model';
   providedIn: 'root'
 })
 export class AppointmentService {
-  private _api: Readonly<string>;
+  private readonly _api: string;
 
   constructor(
     private httpService: HttpService
   ) {
-    this._api = 'api/appointments';
+    this._api = 'appointments';
   }
 
   public list(filter: QueryParams): Observable<Appointment[]> {

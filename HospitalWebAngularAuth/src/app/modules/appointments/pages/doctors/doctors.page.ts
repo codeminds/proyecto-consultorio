@@ -86,14 +86,13 @@ export class DoctorsPage implements OnInit{
       if(!this.saving) {
         this.saving = true;
         const response = await firstValueFrom(this.doctorService.delete(id));
-        if(response != null) {
-          if(response.success) {
-            this.appService.siteMessage = { type: MessageType.Success, text: 'Se eliminó el récord correctamente' };
-            this.list();
-          }else {
-            this.appService.siteMessage = { type: MessageType.Warning, text: response.messages[0] };
-          }
+        if(response.success) {
+          this.appService.siteMessage = { type: MessageType.Success, text: 'Se eliminó el récord correctamente' };
+          this.list();
+        }else {
+          this.appService.siteMessage = { type: MessageType.Warning, text: response.messages[0] };
         }
+
         this.saving = false;
         this.confirmOpen = false;
       }
@@ -107,22 +106,21 @@ export class DoctorsPage implements OnInit{
       
       const isNew = this.doctor.id == null
       const response = await firstValueFrom(isNew ? this.doctorService.post(this.doctor) : this.doctorService.put(this.doctor.id, this.doctor));  
-      if(response != null) {
-        if(response.success) {
-          if(isNew) {
-            this.panelOpen = true;
-            this.filter = {
-              documentId: response.data.documentId
-            }
+      if(response.success) {
+        if(isNew) {
+          this.panelOpen = true;
+          this.filter = {
+            documentId: response.data.documentId
           }
-
-          this.modalOpen = false;
-          this.appService.siteMessage = { type: MessageType.Success, text: 'Se guardó el récord correctamente' };
-          this.list();
-        }else {
-          this.messages = response.messages;
         }
+
+        this.modalOpen = false;
+        this.appService.siteMessage = { type: MessageType.Success, text: 'Se guardó el récord correctamente' };
+        this.list();
+      }else {
+        this.messages = response.messages;
       }
+      
       this.saving = false;
     }
   }

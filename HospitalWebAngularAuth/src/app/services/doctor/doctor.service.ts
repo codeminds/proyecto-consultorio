@@ -9,12 +9,12 @@ import { Doctor } from './doctor.model';
   providedIn: 'root'
 })
 export class DoctorService{
-  private _api: Readonly<string>;
+  private readonly _api: string;
 
   constructor(
     private httpService: HttpService
   ) {
-    this._api = 'api/doctors';
+    this._api = 'doctors';
   }
 
   public list(filter: QueryParams): Observable<Doctor[]> {

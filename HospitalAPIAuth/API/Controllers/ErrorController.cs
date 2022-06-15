@@ -27,7 +27,7 @@ namespace API.Controllers
             switch (response.StatusCode)
             {
                 case HttpStatusCode.InternalServerError:
-                    response.Messages.Add("Ha ocurrido un error desconocido del servidor");
+                    response.Messages.Add("Ha ocurrido un error interno del servidor");
 
                     //Sólo exponemos información detallada interna de los errores
                     //en el ambiente de desarrollo, nunca en producción
@@ -49,12 +49,12 @@ namespace API.Controllers
                     break;
             }
 
-            ObjectResult result = new(response)
+            ObjectResult objectResult = new(response)
             {
                 StatusCode = (int)statusCode
             };
 
-            return result;
+            return objectResult;
         }
     }
 }
