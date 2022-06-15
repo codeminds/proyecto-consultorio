@@ -9,7 +9,7 @@ import { Doctor } from './doctor.model';
   providedIn: 'root'
 })
 export class DoctorService{
-  private _api: Readonly<string>;
+  private readonly _api: string;
 
   constructor(
     private httpService: HttpService

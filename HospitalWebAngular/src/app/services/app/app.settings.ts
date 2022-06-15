@@ -1,5 +1,5 @@
 export class AppSettings {
-    public title: Readonly<string>;
+    public readonly title: string;
 
     constructor(data: any){
         this.title = data.title || null;

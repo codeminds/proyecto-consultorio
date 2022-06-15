@@ -100,14 +100,13 @@ export class AppointmentsPage implements OnInit {
       if(!this.saving) {
         this.saving = true;
         const response = await firstValueFrom(this.appointmentService.delete(id));
-        if(response != null) {
-          if(response.success) {
-            this.appService.siteMessage = { type: MessageType.Success, text: 'Se eliminó el récord correctamente' };
-            this.list();
-          }else {
-            this.appService.siteMessage = { type: MessageType.Warning, text: response.messages[0] };
-          }
+        if(response.success) {
+          this.appService.siteMessage = { type: MessageType.Success, text: 'Se eliminó el récord correctamente' };
+          this.list();
+        }else {
+          this.appService.siteMessage = { type: MessageType.Warning, text: response.messages[0] };
         }
+
         this.saving = false;
         this.confirmOpen = false;
       }
@@ -121,25 +120,24 @@ export class AppointmentsPage implements OnInit {
       
       const isNew = this.appointment.id == null
       const response = await firstValueFrom(isNew ? this.appointmentService.post(this.appointment) : this.appointmentService.put(this.appointment.id, this.appointment));  
-      if(response != null) {
-        if(response.success) {
-          if(isNew) {
-            this.panelOpen = true;
-            this.filter = {
-              doctorDocumentId: response.data.doctor.documentId,
-              patientDocumentId: response.data.patient.documentId,
-              dateFrom: new Date(response.data.date),
-              dateTo: new Date(response.data.date)
-            }
+      if(response.success) {
+        if(isNew) {
+          this.panelOpen = true;
+          this.filter = {
+            doctorDocumentId: response.data.doctor.documentId,
+            patientDocumentId: response.data.patient.documentId,
+            dateFrom: new Date(response.data.date),
+            dateTo: new Date(response.data.date)
           }
-
-          this.modalOpen = false;
-          this.appService.siteMessage = { type: MessageType.Success, text: 'Se guardó el récord correctamente' };
-          this.list();
-        }else {
-          this.messages = response.messages;
         }
+
+        this.modalOpen = false;
+        this.appService.siteMessage = { type: MessageType.Success, text: 'Se guardó el récord correctamente' };
+        this.list();
+      }else {
+        this.messages = response.messages;
       }
+
       this.saving = false;
     }
   }

@@ -89,14 +89,13 @@ export class PatientsPage implements OnInit{
       if(!this.saving) {
         this.saving = true;
         const response = await firstValueFrom(this.patientService.delete(id));
-        if(response != null) {
-          if(response.success) {
-            this.appService.siteMessage = { type: MessageType.Success, text: 'Se eliminó el récord correctamente' };
-            this.list();
-          }else {
-            this.appService.siteMessage = { type: MessageType.Warning, text: response.messages[0] };
-          }
+        if(response.success) {
+          this.appService.siteMessage = { type: MessageType.Success, text: 'Se eliminó el récord correctamente' };
+          this.list();
+        }else {
+          this.appService.siteMessage = { type: MessageType.Warning, text: response.messages[0] };
         }
+
         this.saving = false;
         this.confirmOpen = false;
       }
@@ -110,22 +109,21 @@ export class PatientsPage implements OnInit{
       
       const isNew = this.patient.id == null
       const response = await firstValueFrom(isNew ? this.patientService.post(this.patient) : this.patientService.put(this.patient.id, this.patient));  
-      if(response != null) {
-        if(response.success) {
-          if(isNew) {
-            this.panelOpen = true;
-            this.filter = {
-              documentId: response.data.documentId
-            }
+      if(response.success) {
+        if(isNew) {
+          this.panelOpen = true;
+          this.filter = {
+            documentId: response.data.documentId
           }
-
-          this.modalOpen = false;
-          this.appService.siteMessage = { type: MessageType.Success, text: 'Se guardó el récord correctamente' };
-          this.list();
-        }else {
-          this.messages = response.messages;
         }
+
+        this.modalOpen = false;
+        this.appService.siteMessage = { type: MessageType.Success, text: 'Se guardó el récord correctamente' };
+        this.list();
+      }else {
+        this.messages = response.messages;
       }
+      
       this.saving = false;
     }
   }

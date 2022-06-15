@@ -1,10 +1,10 @@
 import { Doctor } from "./doctor.model";
 
 export class CreateUpdateDoctorDTO {
-    public documentId: Readonly<string>;
-    public firstName: Readonly<string>;
-    public lastName: Readonly<string>;
-    public fieldId: Readonly<number>;
+    public readonly documentId: string;
+    public readonly firstName: string;
+    public readonly lastName: string;
+    public readonly fieldId: number;
 
     constructor(data: Doctor) {
         this.documentId = data.documentId;

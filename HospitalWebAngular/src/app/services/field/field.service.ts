@@ -8,7 +8,7 @@ import { Field } from './field.model';
   providedIn: 'root'
 })
 export class FieldService {
-  private _api: Readonly<string>;
+  private readonly _api: string;
 
   constructor(
     private httpService: HttpService

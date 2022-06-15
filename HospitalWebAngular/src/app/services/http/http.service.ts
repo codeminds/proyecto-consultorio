@@ -1,9 +1,9 @@
-import { HttpClient, HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AppService } from '@services/app/app.service';
 import { catchError, Observable, ObservableInput, of, retryWhen, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { APIResponse, HttpMethod, Message, MessageType, QueryParams } from './http.types';
+import { APIResponse, MessageType, QueryParams } from './http.types';
 
 @Injectable({
   providedIn: 'root'
@@ -32,7 +32,7 @@ export class HttpService{
           }
         })
       )),
-      catchError((response) => this.handleError(response, HttpMethod.GET))
+      catchError((response) => this.handleError(response))
     );
   }
 
@@ -50,7 +50,7 @@ export class HttpService{
           }
         })
       )),
-      catchError((response) => this.handleError(response, HttpMethod.POST))
+      catchError((response) => this.handleError(response))
     );
   }
 
@@ -68,7 +68,7 @@ export class HttpService{
           }
         })
       )),
-      catchError((response) => this.handleError(response, HttpMethod.PUT))
+      catchError((response) => this.handleError(response))
     );
   }
 
@@ -86,36 +86,22 @@ export class HttpService{
           }
         })
       )),
-      catchError((response) => this.handleError(response, HttpMethod.DELETE))
+      catchError((response) => this.handleError(response))
     );
   }
 
-  private handleError(response: HttpErrorResponse, method: HttpMethod): ObservableInput<APIResponse> {
-    const message: Message = {
-      text: '',
-      type: MessageType.Error
-    }
-
-    if(response.error?.messages) {
-      for(const message of response.error.messages) {
-        console.error(`HTTP Response: ${message}`);
-      }
+  private handleError(response: HttpErrorResponse): ObservableInput<APIResponse> {
+    if(response.error?.data) {
+      console.error(`HTTP ${response.status} Response: ${JSON.stringify(response?.error?.data, null, 4)}`);
     }
   
-    switch(response?.status) {
-      case HttpStatusCode.Forbidden:
-        message.text = 'No está autorizado para realizar esta acción';
-        break;
-      case HttpStatusCode.Unauthorized:
-        message.text = 'No está autenticado o su sesión ha expirado. Por favor ingresar de nuevo';
-        break;
-      default:
-        message.text = `Ha ocurrido un error ${method == HttpMethod.GET ? 'obteniendo los datos' : 'procesando los datos'}`;
-        break;
+    if (response.status == 0) {
+      this.appService.siteMessage = { text: 'No se ha podido conectar al servidor', type: MessageType.Error };
+    } else {
+      this.appService.siteMessage = { text: response.error?.messages[0] || 'Ha ocurrido un error inesperado del servidor', type: MessageType.Error };
     }
 
-    this.appService.siteMessage = message;
-    return of(null);
+    return of({ httpStatusCode: response.status , success: false, messages: [], data: null });
   }
 
   private getQuery(params: QueryParams): string {

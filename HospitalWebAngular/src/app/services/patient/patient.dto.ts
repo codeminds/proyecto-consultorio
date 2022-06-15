@@ -1,11 +1,11 @@
 import { Patient } from "./patient.model";
 
 export class CreateUpdatePatientDTO {
-    public documentId: Readonly<string>;
-    public firstName: Readonly<string>;
-    public lastName: Readonly<string>;
-    public birthDate: Readonly<string>;
-    public gender: Readonly<boolean>;
+    public readonly documentId: string;
+    public readonly firstName: string;
+    public readonly lastName: string;
+    public readonly birthDate: string;
+    public readonly gender: boolean;
 
     constructor(data: Patient) {
         this.documentId = data.documentId;

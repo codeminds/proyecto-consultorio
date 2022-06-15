@@ -9,7 +9,7 @@ import { Appointment } from './appointment.model';
   providedIn: 'root'
 })
 export class AppointmentService {
-  private _api: Readonly<string>;
+  private readonly _api: string;
 
   constructor(
     private httpService: HttpService
