@@ -82,7 +82,7 @@ namespace API.Controllers
             {
                 if (!Request.Headers.TryGetValue("Session", out StringValues tokenHeader))
                 {
-                    return HttpErrors.BadRequest("Encabezado de sesión no está presente");
+                    return HttpErrors.BadRequest(data: "Encabezado de sesión no está presente");
                 }
 
                 //Los tokens siempre tienen el prefijo "Bearer" para marcar que tipo de token se está enviando
@@ -103,14 +103,14 @@ namespace API.Controllers
                 Session? session = await this._sessionService.FindSession(sessionId);
                 if (session == null || Convert.ToHexString(session.RefreshToken) != Convert.ToHexString(tokenHash))
                 {
-                    return HttpErrors.Unauthorized("Token de refrescado no válido");
+                    return HttpErrors.Unauthorized("Su sesión no es válida, debe ingresar de nuevo al sistema");
                 }
 
                 if (session.DateExpiry <= DateTime.Now)
                 {
                     await this._sessionService.DeleteSession(session);
                     Response.Headers.Add("Session-Expired", "true");
-                    return HttpErrors.Unauthorized("Sesión ha expirado");
+                    return HttpErrors.Unauthorized("Su sesión ha expirado, debe ingresar de nuevo al sistema");
                 }
 
                 await this._sessionService.RefreshUserSession(session.User, session, Request.HttpContext.Connection.RemoteIpAddress);
@@ -122,11 +122,9 @@ namespace API.Controllers
 
                 return response;
             }
-            catch (Exception ex) 
-            when (ex is SecurityTokenValidationException 
-               || ex is SecurityTokenException)
+            catch (SecurityTokenException)
             {
-                return HttpErrors.Unauthorized("Token de refrescado no válido");
+                return HttpErrors.BadRequest(data: "Token de refrescado no válido");
             }
         }
 
@@ -146,7 +144,7 @@ namespace API.Controllers
             Session? session = await this._sessionService.FindSession(sessionId.Value);
             if (session == null || session.UserId != userId)
             {
-                return HttpErrors.NotFound("Sesión no encontrada");
+                return HttpErrors.NotFound("Sesión no existe en el sistema");
             }
 
             await this._sessionService.DeleteSession(session);

@@ -49,7 +49,7 @@ namespace API.Controllers
             Appointment? entity = await this._appointmentService.FindAppointment(id);
             if (entity == null)
             {
-                return HttpErrors.NotFound("Cita no encontrada");
+                return HttpErrors.NotFound("Cita no existe en el sistema");
             }
 
             APIResponse response = new()
@@ -71,7 +71,7 @@ namespace API.Controllers
             {
                 Appointment appointment = await this._appointmentService.CreateAppointment(this._mapper.Map<CreateUpdateAppointmentDTO, Appointment>(data));
                 response.Data = this._mapper.Map<Appointment, GetAppointmentDTO>(appointment);
-                response.Messages.Add("Cita insertada correctamente");
+                response.Messages.Add("Cita ha sido insertada");
             }
 
             return response;
@@ -86,7 +86,7 @@ namespace API.Controllers
             Appointment? appointment = await this._appointmentService.FindAppointment(id);
             if (appointment == null)
             {
-                return HttpErrors.NotFound("Cita no encontrada");
+                return HttpErrors.NotFound("Cita no existe en el sistema");
             }
 
             APIResponse response = new();
@@ -96,7 +96,7 @@ namespace API.Controllers
             {
                 await this._appointmentService.UpdateAppointment(this._mapper.Map(data, appointment));
                 response.Data = this._mapper.Map<Appointment, GetAppointmentDTO>(appointment);
-                response.Messages.Add("Cita actualizada correctamente");
+                response.Messages.Add("Cita ha sido actualizada");
             }
 
             return response;
@@ -110,7 +110,7 @@ namespace API.Controllers
             Appointment? appointment = await this._appointmentService.FindAppointment(id);
             if (appointment == null)
             {
-                return HttpErrors.NotFound("Cita no encontrada");
+                return HttpErrors.NotFound("Cita no existe en el sistema");
             }
 
             APIResponse response = new();
@@ -120,7 +120,7 @@ namespace API.Controllers
             {
                 await this._appointmentService.DeleteAppointment(appointment);
                 response.Data = this._mapper.Map<Appointment, GetAppointmentDTO>(appointment);
-                response.Messages.Add("Cita borrada correctamente");
+                response.Messages.Add("Cita ha sido borrada");
             }
             return response;
         }

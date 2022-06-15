@@ -30,7 +30,7 @@ namespace API.Middlewares
 
                 if (!context.Request.Headers.TryGetValue("Authorization", out StringValues token))
                 {
-                    SendResponse(context, HttpStatusCode.BadRequest, "Encabezado de autorización no está presente");
+                    SendResponse(context, HttpStatusCode.BadRequest, data: "Encabezado de autorización no está presente");
                     return;
                 }
 
@@ -47,7 +47,7 @@ namespace API.Middlewares
                     Session? session = await sessionService.FindSession(sessionId);
                     if (session == null)
                     {
-                        SendResponse(context, HttpStatusCode.Unauthorized, "No está autorizado para realizar esta acción");
+                        SendResponse(context, HttpStatusCode.Unauthorized, "Su sesión no es válida, debe ingresar de nuevo al sistema");
                         return;
                     }
 
@@ -61,24 +61,19 @@ namespace API.Middlewares
                     {
                         await sessionService.DeleteSession(session);
                         context.Response.Headers.Add("Session-Expired", "true");
-                        SendResponse(context, HttpStatusCode.Unauthorized, "Sesión ha expirado");
+                        SendResponse(context, HttpStatusCode.Unauthorized, "Su sesión ha expirado, debe ingresar de nuevo al sistema");
                         return;
                     }
                 }
                 catch (SecurityTokenExpiredException)
                 {
                     context.Response.Headers.Add("Access-Token-Expired", "true");
-                    SendResponse(context, HttpStatusCode.Unauthorized, "Token ha expirado");
-                    return;
-                }
-                catch (SecurityTokenValidationException)
-                {
-                    SendResponse(context, HttpStatusCode.Unauthorized, "No está autorizado para realizar esta acción");
+                    SendResponse(context, HttpStatusCode.Unauthorized);
                     return;
                 }
                 catch (SecurityTokenException)
                 {
-                    SendResponse(context, HttpStatusCode.BadRequest, "Token no es válido");
+                    SendResponse(context, HttpStatusCode.BadRequest, data: "Token de acceso no es válido");
                     return;
                 }
             }
@@ -86,14 +81,19 @@ namespace API.Middlewares
             await this._next.Invoke(context);
         }
 
-        private static async void SendResponse(HttpContext context, HttpStatusCode code, string message)
+        private static async void SendResponse(HttpContext context, HttpStatusCode code, string? message = null, object? data = null)
         {
             APIResponse response = new()
             {
                 Success = false,
                 StatusCode = code,
-                Messages = new List<string>() { message }
+                Data = data
             };
+            
+            if(!string.IsNullOrEmpty(message))
+            { 
+                response.Messages.Add(message);
+            }
 
             context.Response.StatusCode = (int)code;
             await context.Response.WriteAsJsonAsync(response);

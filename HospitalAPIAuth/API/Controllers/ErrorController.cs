@@ -27,7 +27,7 @@ namespace API.Controllers
             switch (response.StatusCode)
             {
                 case HttpStatusCode.InternalServerError:
-                    response.Messages.Add("Error interno del servidor");
+                    response.Messages.Add("Ha ocurrido un error desconocido del servidor");
 
                     //Sólo exponemos información detallada interna de los errores
                     //en el ambiente de desarrollo, nunca en producción

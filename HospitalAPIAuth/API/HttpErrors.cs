@@ -5,49 +5,47 @@ namespace API
 {
     public static class HttpErrors
     {
-        public static BadRequestObjectResult BadRequest(string message)
+        public static BadRequestObjectResult BadRequest(string? message = null, object? data = null)
         {
-            APIResponse response = new();
-            response.Messages.Add(message);
-            response.Success = false;
-            response.StatusCode = HttpStatusCode.BadRequest;
-
-            return new BadRequestObjectResult(response);
+            return new BadRequestObjectResult(GetErrorAPIResponse(HttpStatusCode.BadRequest, message, data));
         }
 
-        public static UnauthorizedObjectResult Unauthorized(string message)
+        public static UnauthorizedObjectResult Unauthorized(string? message = null, object? data = null)
         {
-            APIResponse response = new();
-            response.Messages.Add(message);
-            response.Success = false;
-            response.StatusCode = HttpStatusCode.Unauthorized;
-
-            return new UnauthorizedObjectResult(response);
+            return new UnauthorizedObjectResult(GetErrorAPIResponse(HttpStatusCode.Unauthorized, message, data));
         }
 
-        public static ObjectResult Forbidden(string message)
+        public static ObjectResult Forbidden(string? message = null, object? data = null)
         {
-            APIResponse response = new();
-            response.Messages.Add(message);
-            response.Success = false;
-            response.StatusCode = HttpStatusCode.Forbidden;
-
-            ObjectResult result = new(response)
+            APIResponse response = GetErrorAPIResponse(HttpStatusCode.Forbidden, message, data);
+            ObjectResult objectResult = new(response)
             {
                 StatusCode = (int)HttpStatusCode.Forbidden
             };
 
-            return result;
+            return objectResult;
         }
 
-        public static NotFoundObjectResult NotFound(string message)
+        public static NotFoundObjectResult NotFound(string? message = null, object? data = null)
         {
-            APIResponse response = new();
-            response.Messages.Add(message);
-            response.Success = false;
-            response.StatusCode = HttpStatusCode.NotFound;
+            return new NotFoundObjectResult(GetErrorAPIResponse(HttpStatusCode.NotFound, message, data));
+        }
 
-            return new NotFoundObjectResult(response);
+        private static APIResponse GetErrorAPIResponse(HttpStatusCode statusCode, string? message, object? data)
+        { 
+            APIResponse response = new()
+            {
+                Success = false,
+                StatusCode = statusCode,
+                Data = data,
+            };
+
+            if(!string.IsNullOrWhiteSpace(message))
+            { 
+                response.Messages.Add(message);
+            }
+
+            return response;
         }
     }
 }

@@ -40,7 +40,7 @@ namespace API.Controllers
             User? user = await this._userService.FindUser(id);
             if (user == null)
             {
-                return HttpErrors.NotFound("Usuario no encontrado");
+                return HttpErrors.NotFound("Usuario no existe en el sistema");
             }
 
             APIResponse response = new()
@@ -70,7 +70,7 @@ namespace API.Controllers
             User? user = await this._userService.FindUser(id);
             if (user == null)
             {
-                return HttpErrors.NotFound("Usuario no encontrado");
+                return HttpErrors.NotFound("Usuario no existe en el sistema");
             }
 
             APIResponse response = new();
@@ -80,7 +80,7 @@ namespace API.Controllers
             {
                 await this._userService.UpdateUser(this._mapper.Map(data, user));
                 response.Data = this._mapper.Map<User, GetUserDTO>(user);
-                response.Messages.Add("Usuario actualizado correctamente");
+                response.Messages.Add("Usuario ha sido actualizado");
             }
 
             return response;
@@ -105,7 +105,7 @@ namespace API.Controllers
             User? user = await this._userService.FindUser(id);
             if (user == null)
             {
-                return HttpErrors.NotFound("Usuario no encontrado");
+                return HttpErrors.NotFound("Usuario no existe en el sistema");
             }
 
             APIResponse response = new();
@@ -115,7 +115,7 @@ namespace API.Controllers
             {
                 await this._userService.UpdateUser(this._mapper.Map(data, user), true);
                 response.Data = this._mapper.Map<User, GetUserDTO>(user);
-                response.Messages.Add("Usuario actualizado correctamente");
+                response.Messages.Add("Usuario ha sido actualizado");
             }
 
             return response;
@@ -140,7 +140,7 @@ namespace API.Controllers
             User? user = await this._userService.FindUser(id);
             if (user == null)
             {
-                return HttpErrors.NotFound("Usuario no encontrado");
+                return HttpErrors.NotFound("Usuario no existe en el sistema");
             }
 
             APIResponse response = new();
@@ -150,7 +150,7 @@ namespace API.Controllers
             {
                 await this._userService.UpdateUser(this._mapper.Map(data, user), true);
                 response.Data = this._mapper.Map<User, GetUserDTO>(user);
-                response.Messages.Add("Usuario actualizado correctamente");
+                response.Messages.Add("Usuario ha sido actualizado");
             }
 
             return response;
