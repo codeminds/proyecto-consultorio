@@ -57,7 +57,7 @@ namespace API.Controllers
             Doctor? doctor = await this._doctorService.FindDoctor(id);
             if (doctor == null)
             {
-                return HttpErrors.NotFound("Doctor no encontrado");
+                return HttpErrors.NotFound("Doctor no existe en el sistema");
             }
 
          APIResponse response = new()
@@ -78,7 +78,7 @@ namespace API.Controllers
             {
                 Doctor doctor = await this._doctorService.CreateDoctor(this._mapper.Map<CreateUpdateDoctorDTO, Doctor>(data));
                 response.Data = this._mapper.Map<Doctor, GetDoctorDTO>(doctor);
-                response.Messages.Add("Doctor insertado correctamente");
+                response.Messages.Add("Doctor ha sido insertado");
             }
 
             return response;
@@ -91,7 +91,7 @@ namespace API.Controllers
             Doctor? doctor = await this._doctorService.FindDoctor(id);
             if (doctor == null)
             {
-                return HttpErrors.NotFound("Doctor no encontrado");
+                return HttpErrors.NotFound("Doctor no existe en el sistema");
             }
 
             APIResponse response = new();
@@ -101,7 +101,7 @@ namespace API.Controllers
             {
                 await this._doctorService.UpdateDoctor(this._mapper.Map(data, doctor));
                 response.Data = this._mapper.Map<Doctor, GetDoctorDTO>(doctor);
-                response.Messages.Add("Doctor actualizado correctamente");
+                response.Messages.Add("Doctor ha sido actualizado");
             }
 
             return response;
@@ -114,7 +114,7 @@ namespace API.Controllers
             Doctor? doctor = await this._doctorService.FindDoctor(id);
             if (doctor == null)
             {
-                return HttpErrors.NotFound("Doctor no encontrado");
+                return HttpErrors.NotFound("Doctor no existe en el sistema");
             }
 
             APIResponse response = new();
@@ -124,7 +124,7 @@ namespace API.Controllers
             {
                 await this._doctorService.DeleteDoctor(doctor);
                 response.Data = this._mapper.Map<Doctor, GetDoctorDTO>(doctor);
-                response.Messages.Add("Doctor borrado correctamente");
+                response.Messages.Add("Doctor ha sido borrado");
             }
 
             return response;

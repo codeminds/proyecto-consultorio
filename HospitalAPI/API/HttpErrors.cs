@@ -5,24 +5,31 @@ namespace API
 {
     public static class HttpErrors
     {
-        public static BadRequestObjectResult BadRequest(string message)
+        public static BadRequestObjectResult BadRequest(string? message = null, object? data = null)
         {
-            APIResponse response = new();
-            response.Messages.Add(message);
-            response.Success = false;
-            response.StatusCode = HttpStatusCode.BadRequest;
-
-            return new BadRequestObjectResult(response);
+            return new BadRequestObjectResult(GetErrorAPIResponse(HttpStatusCode.BadRequest, message, data));
         }
 
-        public static NotFoundObjectResult NotFound(string message)
-        { 
-            APIResponse response = new();
-            response.Messages.Add(message);
-            response.Success = false;
-            response.StatusCode = HttpStatusCode.NotFound;
+        public static NotFoundObjectResult NotFound(string? message = null, object? data = null)
+        {
+            return new NotFoundObjectResult(GetErrorAPIResponse(HttpStatusCode.NotFound, message, data));
+        }
 
-            return new NotFoundObjectResult(response);
+        private static APIResponse GetErrorAPIResponse(HttpStatusCode statusCode, string? message, object? data)
+        { 
+            APIResponse response = new()
+            {
+                Success = false,
+                StatusCode = statusCode,
+                Data = data,
+            };
+
+            if(!string.IsNullOrWhiteSpace(message))
+            { 
+                response.Messages.Add(message);
+            }
+
+            return response;
         }
     }
 }
