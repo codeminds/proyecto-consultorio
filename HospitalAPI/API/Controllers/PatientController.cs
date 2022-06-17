@@ -57,7 +57,7 @@ namespace API.Controllers
             Patient? patient = await this._patientService.FindPatient(id);
             if (patient == null)
             {
-                return HttpErrors.NotFound("Paciente no encontrado");
+                return HttpErrors.NotFound("Paciente no existe en el sistema");
             }
 
             APIResponse response = new()
@@ -78,7 +78,7 @@ namespace API.Controllers
             {
                 Patient patient = await this._patientService.CreatePatient(this._mapper.Map<CreateUpdatePatientDTO, Patient>(data));
                 response.Data = this._mapper.Map<Patient, GetPatientDTO>(patient);
-                response.Messages.Add("Paciente insertado correctamente");
+                response.Messages.Add("Paciente ha sido insertado");
             }
 
             return response;
@@ -91,7 +91,7 @@ namespace API.Controllers
             Patient? patient = await this._patientService.FindPatient(id);
             if (patient == null)
             {
-                return HttpErrors.NotFound("Paciente no encontrado");
+                return HttpErrors.NotFound("Paciente no existe en el sistema");
             }
 
             APIResponse response = new();
@@ -101,7 +101,7 @@ namespace API.Controllers
             {
                 await this._patientService.UpdatePatient(this._mapper.Map(data, patient));
                 response.Data = this._mapper.Map<Patient, GetPatientDTO>(patient);
-                response.Messages.Add("Paciente actualizado correctamente");
+                response.Messages.Add("Paciente ha sido actualizado");
             }
 
             return response;
@@ -114,7 +114,7 @@ namespace API.Controllers
             Patient? patient = await this._patientService.FindPatient(id);
             if (patient == null)
             {
-                return HttpErrors.NotFound("Paciente no encontrado");
+                return HttpErrors.NotFound("Paciente no existe en el sistema");
             }
 
             APIResponse response = new();
@@ -124,7 +124,7 @@ namespace API.Controllers
             {
                 await this._patientService.DeletePatient(patient);
                 response.Data = this._mapper.Map<Patient, GetPatientDTO>(patient);
-                response.Messages.Add("Paciente borrado correctamente");
+                response.Messages.Add("Paciente ha sido borrado");
             }
 
             return response;

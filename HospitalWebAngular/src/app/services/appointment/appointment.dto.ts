@@ -11,7 +11,7 @@ export class CreateUpdateAppointmentDTO {
         //a la hora de hacer llamados de API, esencialmente cambiando la
         //hora guardada en la base de datos ya que nuestro sistema
         //no maneja conversiones de hora y sólo trabaja con hora local
-        this.date = data.date.toInputDateString();
+        this.date = data.date?.toInputDateString();
         this.doctorId = data.doctor.id;
         this.patientId = data.patient.id;
     }

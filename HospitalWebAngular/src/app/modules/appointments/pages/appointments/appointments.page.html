@@ -1,5 +1,5 @@
 <!-- Controles de página -->
-<div class="controls">
+<div class="page-controls">
     <button class="button success" (click)="createUpdate()">
         <i class="material-icons-sharp">add_circle</i>
         <span>Agregar</span>
@@ -191,8 +191,8 @@
 <!-- Modal de creación/edición -->
 <app-modal [(open)]="modalOpen" modalTitle="Modal" [position]="ModalPosition.Top" [size]="ModalSize.Medium" (onClose)="onModalClose()">
     <form *ngIf="appointment" (keyup.enter)="save()">
-        <ul class="messages">
-            <li *ngFor="let message of messages">{{message}}</li>
+        <ul>
+            <li class="validation-error" *ngFor="let message of messages">{{message}}</li>
         </ul>
         <app-date 
             name="date" 
@@ -252,8 +252,8 @@
 
 <!-- Modal de confirmación -->
 <app-modal [(open)]="confirmOpen" [transparent]="true" [position]="ModalPosition.Top" [closeOnClickOutside]="false" (onClose)="onConfirmClose()">
-    <p class="confirm-text">{{confirmText}}</p>
-    <div class="confirm-buttons">
+    <p class="prompt-text">{{confirmText}}</p>
+    <div class="prompt-buttons">
         <button class="button success" (click)="confirm(true)" [disabled]="saving || !confirmOpen" [ngClass]="{'loading': saving || !confirmOpen}">Confirmar <i *ngIf="saving" class="material-icons-sharp rotate">data_saver_off</i></button>
         <button class="button neutral" (click)="confirm(false)">Cancelar</button>
     </div>

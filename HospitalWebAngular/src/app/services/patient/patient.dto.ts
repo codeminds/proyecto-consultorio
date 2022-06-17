@@ -16,7 +16,7 @@ export class CreateUpdatePatientDTO {
         //a la hora de hacer llamados de API, esencialmente cambiando la
         //hora guardada en la base de datos ya que nuestro sistema
         //no maneja conversiones de hora y sólo trabaja con hora local
-        this.birthDate = data.birthDate.toInputDateString();
+        this.birthDate = data.birthDate?.toInputDateString();
         this.gender = data.gender;
     }
 }

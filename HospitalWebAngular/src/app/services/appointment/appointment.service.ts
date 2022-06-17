@@ -17,29 +17,23 @@ export class AppointmentService {
     this._api = 'appointments';
   }
 
-  public list(filter: QueryParams): Observable<Appointment[]> {
-    return this.httpService.get(this._api, filter)
-      .pipe<Appointment[]>(
-        map((response: APIResponse) => response?.data.map((item: any) => new Appointment(item)))
-      );
+  public list(filter: QueryParams): Observable<APIResponse<Appointment[]>> {
+    return this.httpService.get(this._api, filter).mapArrayResponse((item: object) => new Appointment(item));
   }
 
-  public get(id: number): Observable<Appointment> {
-    return this.httpService.get(`${this._api}/${id}`)
-      .pipe<Appointment>(
-        map((response: APIResponse) => new Appointment(response?.data))
-      );
+  public get(id: number): Observable<APIResponse<Appointment>> {
+    return this.httpService.get(`${this._api}/${id}`).mapObjectResponse((item: object) => new Appointment(item));
   }
 
-  public post(data: Appointment): Observable<APIResponse> {
-    return this.httpService.post(this._api, new CreateUpdateAppointmentDTO(data));
+  public post(data: Appointment): Observable<APIResponse<Appointment>> {
+    return this.httpService.post(this._api, new CreateUpdateAppointmentDTO(data)).mapObjectResponse((item: object) => new Appointment(item));
   }
 
-  public put(id: number, data: Appointment): Observable<APIResponse> {
-    return this.httpService.put(`${this._api}/${id}`, new CreateUpdateAppointmentDTO(data));
+  public put(id: number, data: Appointment): Observable<APIResponse<Appointment>> {
+    return this.httpService.put(`${this._api}/${id}`, new CreateUpdateAppointmentDTO(data)).mapObjectResponse((item: object) => new Appointment(item));;
   }
 
-  public delete(id: number): Observable<APIResponse> {
-    return this.httpService.delete(`${this._api}/${id}`);
+  public delete(id: number): Observable<APIResponse<Appointment>> {
+    return this.httpService.delete(`${this._api}/${id}`).mapObjectResponse((item: object) => new Appointment(item));;
   }
 }

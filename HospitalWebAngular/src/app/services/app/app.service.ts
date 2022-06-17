@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Message } from '@services/http/http.types';
-import { State } from '@shared/utils/state';
+import { State } from '@utils/state';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { AppSettings } from './app.settings';
 

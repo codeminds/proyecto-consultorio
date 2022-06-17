@@ -1,5 +1,5 @@
-import { AfterViewChecked, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { EventsService } from '@shared/services/events/events.service';
+import { AfterViewChecked, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { EventsService } from '@services/events/events.service';
 import { Subject, takeUntil } from 'rxjs';
 
 @Component({

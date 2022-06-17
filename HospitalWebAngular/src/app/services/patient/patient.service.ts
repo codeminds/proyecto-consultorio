@@ -17,36 +17,27 @@ export class PatientService{
     this._api = 'patients';
   }
 
-  public list(filter: QueryParams): Observable<Patient[]> {
-    return this.httpService.get(this._api, filter)
-      .pipe<Patient[]>(
-        map((response: APIResponse) => response?.data.map((item: any) => new Patient(item)))
-      );
+  public list(filter: QueryParams): Observable<APIResponse<Patient[]>> {
+    return this.httpService.get(this._api, filter).mapArrayResponse((item: object) => new Patient(item));
   }
 
-  public search(values: string[]): Observable<Patient[]> {
-    return this.httpService.get(`${this._api}/search`, { s: values })
-      .pipe<Patient[]>(
-        map((response: APIResponse) => response?.data.map((item: any) => new Patient(item)))
-      );
+  public search(values: string[]): Observable<APIResponse<Patient[]>> {
+    return this.httpService.get(`${this._api}/search`, { s: values }).mapArrayResponse((item: object) => new Patient(item));
   }
 
-  public get(id: number): Observable<Patient> {
-    return this.httpService.get(`${this._api}/${id}`)
-      .pipe<Patient>(
-        map((response: APIResponse) => new Patient(response?.data))
-      );
+  public get(id: number): Observable<APIResponse<Patient>> {
+    return this.httpService.get(`${this._api}/${id}`).mapObjectResponse((item: object) => new Patient(item));
   }
 
-  public post(data: Patient): Observable<APIResponse> {
-    return this.httpService.post(this._api, new CreateUpdatePatientDTO(data));
+  public post(data: Patient): Observable<APIResponse<Patient>> {
+    return this.httpService.post(this._api, new CreateUpdatePatientDTO(data)).mapObjectResponse((item: object) => new Patient(item));
   }
 
-  public put(id: number, data: Patient): Observable<APIResponse> {
-    return this.httpService.put(`${this._api}/${id}`, new CreateUpdatePatientDTO(data));
+  public put(id: number, data: Patient): Observable<APIResponse<Patient>> {
+    return this.httpService.put(`${this._api}/${id}`, new CreateUpdatePatientDTO(data)).mapObjectResponse((item: object) => new Patient(item));
   }
 
-  public delete(id: number): Observable<APIResponse> {
-    return this.httpService.delete(`${this._api}/${id}`);
+  public delete(id: number): Observable<APIResponse<Patient>> {
+    return this.httpService.delete(`${this._api}/${id}`).mapObjectResponse((item: object) => new Patient(item));
   }
 }

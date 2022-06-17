@@ -18,9 +18,9 @@ export class HttpService{
     this.retryLimit = 3;
   }
 
-  public get(url: string, params: QueryParams = null, apiOverride: string = null): Observable<APIResponse> {
+  public get(url: string, params: QueryParams = null, apiOverride: string = null): Observable<APIResponse<any>> {
     let retries = 0;
-    return this.httpClient.get<APIResponse>(`${apiOverride || environment.apiURL}/${url}${this.getQuery(params)}`, {
+    return this.httpClient.get<APIResponse<any>>(`${apiOverride || environment.apiURL}/${url}${this.getQuery(params)}`, {
       headers: {
         'Content-Type': 'application/json'
       }
@@ -36,9 +36,9 @@ export class HttpService{
     );
   }
 
-  public post(url: string, data: any = null, params: QueryParams = null, apiOverride: string = null): Observable<APIResponse> {
+  public post(url: string, data: any = null, params: QueryParams = null, apiOverride: string = null): Observable<APIResponse<any>> {
     let retries = 0;
-    return this.httpClient.post<APIResponse>(`${apiOverride || environment.apiURL}/${url}${this.getQuery(params)}`, data, {
+    return this.httpClient.post<APIResponse<any>>(`${apiOverride || environment.apiURL}/${url}${this.getQuery(params)}`, data, {
       headers: {
         'Content-Type': 'application/json'
       }
@@ -54,9 +54,9 @@ export class HttpService{
     );
   }
 
-  public put(url: string, data: any = null, params: QueryParams = null, apiOverride: string = null): Observable<APIResponse> {
+  public put(url: string, data: any = null, params: QueryParams = null, apiOverride: string = null): Observable<APIResponse<any>> {
     let retries = 0;
-    return this.httpClient.put<APIResponse>(`${apiOverride || environment.apiURL}/${url}${this.getQuery(params)}`, data, {
+    return this.httpClient.put<APIResponse<any>>(`${apiOverride || environment.apiURL}/${url}${this.getQuery(params)}`, data, {
       headers: {
         'Content-Type': 'application/json'
       }
@@ -72,9 +72,9 @@ export class HttpService{
     );
   }
 
-  public delete(url: string, params: QueryParams = null, apiOverride: string = null): Observable<APIResponse> {
+  public delete(url: string, params: QueryParams = null, apiOverride: string = null): Observable<APIResponse<any>> {
     let retries = 0;
-    return this.httpClient.delete<APIResponse>(`${apiOverride || environment.apiURL}/${url}${this.getQuery(params)}`, {
+    return this.httpClient.delete<APIResponse<any>>(`${apiOverride || environment.apiURL}/${url}${this.getQuery(params)}`, {
       headers: {
         'Content-Type': 'application/json'
       }
@@ -90,7 +90,7 @@ export class HttpService{
     );
   }
 
-  private handleError(response: HttpErrorResponse): ObservableInput<APIResponse> {
+  private handleError(response: HttpErrorResponse): ObservableInput<APIResponse<any>> {
     if(response.error?.data) {
       console.error(`HTTP ${response.status} Response: ${JSON.stringify(response?.error?.data, null, 4)}`);
     }

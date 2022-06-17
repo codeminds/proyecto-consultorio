@@ -25,7 +25,8 @@
       "@administration/*": ["src/app/modules/administration/*"],
       "@appointments/*": ["src/app/modules/appointments/*"],
       "@services/*": ["src/app/services/*"],
-      "@shared/*": ["src/app/modules/shared/*"]
+      "@shared/*": ["src/app/modules/shared/*"],
+      "@utils/*": ["src/app/utils/*"]
     }
   },
   "angularCompilerOptions": {

@@ -12,11 +12,11 @@ export enum HttpMethod {
     DELETE
 }
 
-export interface APIResponse {
+export interface APIResponse<T> {
     httpStatusCode: number,
     success: boolean,
     messages: string[],
-    data: any
+    data: T
 }
 
 export interface QueryParams {
