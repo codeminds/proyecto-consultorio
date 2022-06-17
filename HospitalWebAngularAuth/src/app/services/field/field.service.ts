@@ -16,10 +16,7 @@ export class FieldService {
     this._api = "fields";
   }
 
-  public list(): Observable<Field[]> {
-    return this.httpService.get(this._api, { authorize: true })
-      .pipe<Field[]>(
-        map((response: APIResponse) => response?.data.map((item: any) => new Field(item)))
-      );
+  public list(): Observable<APIResponse<Field[]>> {
+    return this.httpService.get(this._api, { authorize: true }).mapArrayResponse((item: object) => new Field(item));
   }
 }

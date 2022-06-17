@@ -77,13 +77,21 @@ export class AppointmentsPage implements OnInit {
   }
 
   public async loadFields(): Promise<void> {
-    this.fields = await firstValueFrom(this.fieldService.list()) || [];
+    const response = await firstValueFrom(this.fieldService.list());
+    if(response.success) {
+      this.fields = response.data;
+    }
   }
 
   public async list(): Promise<void> {
     if(!this.loading) {
       this.loading = true;
-      this.appointments = await firstValueFrom(this.appointmentService.list(this.filter)) || [];
+
+      const response = await firstValueFrom(this.appointmentService.list(this.filter));
+      if(response.success) {
+        this.appointments = response.data;
+      }
+
       this.loading = false;
     }
   }
@@ -101,7 +109,7 @@ export class AppointmentsPage implements OnInit {
         this.saving = true;
         const response = await firstValueFrom(this.appointmentService.delete(id));
         if(response.success) {
-          this.appService.siteMessage = { type: MessageType.Success, text: 'Se eliminó el récord correctamente' };
+          this.appService.siteMessage = { type: MessageType.Success, text: response.messages[0] };
           this.list();
         }else {
           this.appService.siteMessage = { type: MessageType.Warning, text: response.messages[0] };
@@ -132,7 +140,7 @@ export class AppointmentsPage implements OnInit {
         }
 
         this.modalOpen = false;
-        this.appService.siteMessage = { type: MessageType.Success, text: 'Se guardó el récord correctamente' };
+        this.appService.siteMessage = { type: MessageType.Success, text: response.messages[0] };
         this.list();
       }else {
         this.messages = response.messages;
@@ -169,10 +177,10 @@ export class AppointmentsPage implements OnInit {
   }
 
   public getLookupDoctorsFunction(): (search: string) => Promise<Doctor[]> {
-    return ((search: string) => firstValueFrom(this.doctorService.search(search.trim().split(' ')))).bind(this);
+    return ((search: string) => firstValueFrom(this.doctorService.search(search.trim().split(' '))).then((response) => response.data)).bind(this);
   }
 
   public getLookupPatientsFunction(): (search: string) => Promise<Patient[]> {
-    return ((search: string) => firstValueFrom(this.patientService.search(search.trim().split(' ')))).bind(this);
+    return ((search: string) => firstValueFrom(this.patientService.search(search.trim().split(' '))).then((response) => response.data)).bind(this);
   }
 }

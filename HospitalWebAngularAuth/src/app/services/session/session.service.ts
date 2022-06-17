@@ -17,7 +17,7 @@ export class SessionService {
     this._api = 'sessions';
   }
 
-  public login(username: string, password: string): Observable<APIResponse> {
-    return this.httpService.post(this._api, new LoginSessionDTO(username, password));
+  public login(username: string, password: string): Observable<APIResponse<Session>> {
+    return this.httpService.post(this._api, new LoginSessionDTO(username, password)).mapObjectResponse((item: object) => new Session(item));
   }
 }

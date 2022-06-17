@@ -17,36 +17,27 @@ export class PatientService{
     this._api = 'patients';
   }
 
-  public list(filter: QueryParams): Observable<Patient[]> {
-    return this.httpService.get(this._api, { params: filter, authorize: true })
-      .pipe<Patient[]>(
-        map((response: APIResponse) => response?.data.map((item: any) => new Patient(item)))
-      );
+  public list(filter: QueryParams): Observable<APIResponse<Patient[]>> {
+    return this.httpService.get(this._api, { params: filter, authorize: true }).mapArrayResponse((item: object) => new Patient(item));
   }
 
-  public search(values: string[]): Observable<Patient[]> {
-    return this.httpService.get(`${this._api}/search`, { params: { s: values }, authorize: true })
-      .pipe<Patient[]>(
-        map((response: APIResponse) => response?.data.map((item: any) => new Patient(item)))
-      );
+  public search(values: string[]): Observable<APIResponse<Patient[]>> {
+    return this.httpService.get(`${this._api}/search`, { params: { s: values }, authorize: true }).mapArrayResponse((item: object) => new Patient(item));
   }
 
-  public get(id: number): Observable<Patient> {
-    return this.httpService.get(`${this._api}/${id}`, { authorize: true })
-      .pipe<Patient>(
-        map((response: APIResponse) => new Patient(response?.data))
-      );
+  public get(id: number): Observable<APIResponse<Patient>> {
+    return this.httpService.get(`${this._api}/${id}`, { authorize: true }).mapObjectResponse((item: object) => new Patient(item));
   }
 
-  public post(data: Patient): Observable<APIResponse> {
-    return this.httpService.post(this._api, new CreateUpdatePatientDTO(data), { authorize: true });
+  public post(data: Patient): Observable<APIResponse<Patient>> {
+    return this.httpService.post(this._api, new CreateUpdatePatientDTO(data), { authorize: true }).mapObjectResponse((item: object) => new Patient(item));
   }
 
-  public put(id: number, data: Patient): Observable<APIResponse> {
-    return this.httpService.put(`${this._api}/${id}`, new CreateUpdatePatientDTO(data), { authorize: true });
+  public put(id: number, data: Patient): Observable<APIResponse<Patient>> {
+    return this.httpService.put(`${this._api}/${id}`, new CreateUpdatePatientDTO(data), { authorize: true }).mapObjectResponse((item: object) => new Patient(item));
   }
 
-  public delete(id: number): Observable<APIResponse> {
-    return this.httpService.delete(`${this._api}/${id}`, { authorize: true });
+  public delete(id: number): Observable<APIResponse<Patient>> {
+    return this.httpService.delete(`${this._api}/${id}`, { authorize: true }).mapObjectResponse((item: object) => new Patient(item));
   }
 }

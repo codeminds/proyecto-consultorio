@@ -63,13 +63,21 @@ export class DoctorsPage implements OnInit{
   }
 
   public async loadFields(): Promise<void> {
-    this.fields = await firstValueFrom(this.fieldService.list()) || [];
+    const response = await firstValueFrom(this.fieldService.list());
+    if(response.success) {
+      this.fields = response.data;
+    }
   }
 
   public async list(): Promise<void> {
     if(!this.loading) {
       this.loading = true;
-      this.doctors = await firstValueFrom(this.doctorService.list(this.filter)) || [];
+
+      const response = await firstValueFrom(this.doctorService.list(this.filter));
+      if(response.success) {
+        this.doctors = response.data;
+      }
+
       this.loading = false;
     }
   }
@@ -87,7 +95,7 @@ export class DoctorsPage implements OnInit{
         this.saving = true;
         const response = await firstValueFrom(this.doctorService.delete(id));
         if(response.success) {
-          this.appService.siteMessage = { type: MessageType.Success, text: 'Se eliminó el récord correctamente' };
+          this.appService.siteMessage = { type: MessageType.Success, text: response.messages[0] };
           this.list();
         }else {
           this.appService.siteMessage = { type: MessageType.Warning, text: response.messages[0] };
@@ -115,7 +123,7 @@ export class DoctorsPage implements OnInit{
         }
 
         this.modalOpen = false;
-        this.appService.siteMessage = { type: MessageType.Success, text: 'Se guardó el récord correctamente' };
+        this.appService.siteMessage = { type: MessageType.Success, text: response.messages[0] };
         this.list();
       }else {
         this.messages = response.messages;

@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-import { EventsService } from '@shared/services/events/events.service';
+import { EventsService } from '@services/events/events.service';
 import { Subject, takeUntil } from 'rxjs';
 import { SnackbarType } from './snackbar.types';
 

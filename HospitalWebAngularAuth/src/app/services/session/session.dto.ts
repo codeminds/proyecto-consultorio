@@ -1,9 +1,9 @@
 export class LoginSessionDTO {
-    public username: string;
+    public email: string;
     public password: string;
 
     constructor(username: string, password: string) {
-        this.username = username;
+        this.email = username;
         this.password = password;
     }
 }

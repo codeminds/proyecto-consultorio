@@ -1,6 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AppService } from '@services/app/app.service';
+import { StorageKeys } from '@utils/constants';
 import { catchError, Observable, ObservableInput, of, retryWhen, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { APIResponse, HttpOptions, MessageType, QueryParams } from './http.types';
@@ -18,9 +19,9 @@ export class HttpService{
     this.retryLimit = 3;
   }
 
-  public get(url: string, options: HttpOptions = null): Observable<APIResponse> {
+  public get(url: string, options: HttpOptions = null): Observable<APIResponse<any>> {
     let retries = 0;
-    return this.httpClient.get<APIResponse>(`${options?.apiUrl || environment.apiURL}/${url}${this.getQuery(options?.params)}`, {
+    return this.httpClient.get<APIResponse<any>>(`${options?.apiUrl || environment.apiURL}/${url}${this.getQuery(options?.params)}`, {
       headers: this.getHeaders(options?.authorize)
     }).pipe(
       retryWhen(errors => errors.pipe(
@@ -34,9 +35,9 @@ export class HttpService{
     );
   }
 
-  public post(url: string, data: any, options: HttpOptions = null): Observable<APIResponse> {
+  public post(url: string, data: any, options: HttpOptions = null): Observable<APIResponse<any>> {
     let retries = 0;
-    return this.httpClient.post<APIResponse>(`${options?.apiUrl || environment.apiURL}/${url}${this.getQuery(options?.params)}`, data, {
+    return this.httpClient.post<APIResponse<any>>(`${options?.apiUrl || environment.apiURL}/${url}${this.getQuery(options?.params)}`, data, {
       headers: this.getHeaders(options?.authorize)
     }).pipe(
       retryWhen(errors => errors.pipe(
@@ -50,9 +51,9 @@ export class HttpService{
     );
   }
 
-  public put(url: string, data: any, options: HttpOptions = null): Observable<APIResponse> {
+  public put(url: string, data: any, options: HttpOptions = null): Observable<APIResponse<any>> {
     let retries = 0;
-    return this.httpClient.put<APIResponse>(`${options?.apiUrl || environment.apiURL}/${url}${this.getQuery(options?.params)}`, data, {
+    return this.httpClient.put<APIResponse<any>>(`${options?.apiUrl || environment.apiURL}/${url}${this.getQuery(options?.params)}`, data, {
       headers: this.getHeaders(options?.authorize)
     }).pipe(
       retryWhen(errors => errors.pipe(
@@ -66,9 +67,9 @@ export class HttpService{
     );
   }
 
-  public patch(url: string, data: any, options: HttpOptions = null): Observable<APIResponse> {
+  public patch(url: string, data: any, options: HttpOptions = null): Observable<APIResponse<any>> {
     let retries = 0;
-    return this.httpClient.patch<APIResponse>(`${options?.apiUrl || environment.apiURL}/${url}${this.getQuery(options?.params)}`, data, {
+    return this.httpClient.patch<APIResponse<any>>(`${options?.apiUrl || environment.apiURL}/${url}${this.getQuery(options?.params)}`, data, {
       headers: this.getHeaders(options?.authorize)
     }).pipe(
       retryWhen(errors => errors.pipe(
@@ -82,9 +83,9 @@ export class HttpService{
     );
   }
 
-  public delete(url: string, options: HttpOptions = null): Observable<APIResponse> {
+  public delete(url: string, options: HttpOptions = null): Observable<APIResponse<any>> {
     let retries = 0;
-    return this.httpClient.delete<APIResponse>(`${options?.apiUrl || environment.apiURL}/${url}${this.getQuery(options?.params)}`, {
+    return this.httpClient.delete<APIResponse<any>>(`${options?.apiUrl || environment.apiURL}/${url}${this.getQuery(options?.params)}`, {
       headers: this.getHeaders(options?.authorize)
     }).pipe(
       retryWhen(errors => errors.pipe(
@@ -98,7 +99,7 @@ export class HttpService{
     );
   }
 
-  private handleError(response: HttpErrorResponse): ObservableInput<APIResponse> {
+  private handleError(response: HttpErrorResponse): ObservableInput<APIResponse<any>> {
     if(response.error?.data) {
       console.error(`HTTP ${response.status} Response: ${JSON.stringify(response?.error?.data, null, 4)}`);
     }
@@ -115,7 +116,7 @@ export class HttpService{
   private getHeaders(authorize: boolean): { [header: string]: string | string[] } {
     return {
       'Content-Type': 'application/json',
-      ...authorize && { 'Authorization': localStorage.getItem('accessToken') }
+      ...authorize && { 'Authorization': `Bearer ${localStorage.getItem(StorageKeys.ACCESS_TOKEN)}` }
     };
   }
 

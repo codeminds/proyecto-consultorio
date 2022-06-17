@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
-import { EventsService } from '@shared/services/events/events.service';
+import { EventsService } from '@services/events/events.service';
 import { Subject, takeUntil } from 'rxjs';
 import { getProperty } from '../form-field.helpers';
 import { CompareOption } from '../form-field.types';

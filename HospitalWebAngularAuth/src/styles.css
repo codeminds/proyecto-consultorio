@@ -68,27 +68,27 @@ p {
     animation: rotate 1s ease-out infinite;
 }
 
-.form-page {
+.page {
     position: relative;
 }
 
-.form-page .controls {
+.page-controls {
     position: absolute;
     top: 3rem;
     right: 2rem;
 }
 
-.form-page .confirm-text {
+.prompt-text {
     font-size: 1.6rem;
     font-weight: 500;
     margin-bottom: 2rem;
 }
 
-.form-page .confirm-buttons {
+.prompt-buttons {
     text-align: right;
 }
 
-.form-page .messages li {
+.validation-message {
     margin-bottom: 0.2rem;
     padding: 0.5rem;
     background: var(--color-danger-primary);

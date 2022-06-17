@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { AppService } from '@services/app/app.service';
 import { Patient } from '@services/patient/patient.model';
 import { PatientService } from '@services/patient/patient.service';
-import { Field } from '@services/field/field.model';
-import { FieldService } from '@services/field/field.service';
 import { MessageType } from '@services/http/http.types';
 import { ButtonType, DateType, InputType } from '@shared/components/form-field/form-field.types';
 import { ModalPosition, ModalSize } from '@shared/components/modal/modal.types';
@@ -15,7 +13,6 @@ import { firstValueFrom } from 'rxjs';
 })
 export class PatientsPage implements OnInit{
   public patients: Patient[];
-  public fields: Field[];
   public modalOpen: boolean;
   public panelOpen: boolean;
   public patient: Patient;
@@ -36,11 +33,9 @@ export class PatientsPage implements OnInit{
   
   constructor(
     private patientService: PatientService,
-    private fieldService: FieldService,
     private appService: AppService
   ) { 
     this.patients = [];
-    this.fields = [];
     this.modalOpen = false;
     this.panelOpen = false;
     this.patient = null;
@@ -61,18 +56,17 @@ export class PatientsPage implements OnInit{
   }
 
   public ngOnInit(): void {
-    this.loadFields();
     this.list();
   }
-
-  public async loadFields(): Promise<void> {
-    this.fields = await firstValueFrom(this.fieldService.list()) || [];
-  }
-
   public async list(): Promise<void> {
     if(!this.loading) {
       this.loading = true;
-      this.patients = await firstValueFrom(this.patientService.list(this.filter)) || [];
+
+      const response = await firstValueFrom(this.patientService.list(this.filter));
+      if(response.success) {
+        this.patients = response.data;
+      }
+
       this.loading = false;
     }
   }
@@ -90,7 +84,7 @@ export class PatientsPage implements OnInit{
         this.saving = true;
         const response = await firstValueFrom(this.patientService.delete(id));
         if(response.success) {
-          this.appService.siteMessage = { type: MessageType.Success, text: 'Se eliminó el récord correctamente' };
+          this.appService.siteMessage = { type: MessageType.Success, text: response.messages[0] };
           this.list();
         }else {
           this.appService.siteMessage = { type: MessageType.Warning, text: response.messages[0] };
@@ -118,7 +112,7 @@ export class PatientsPage implements OnInit{
         }
 
         this.modalOpen = false;
-        this.appService.siteMessage = { type: MessageType.Success, text: 'Se guardó el récord correctamente' };
+        this.appService.siteMessage = { type: MessageType.Success, text: response.messages[0] };
         this.list();
       }else {
         this.messages = response.messages;
