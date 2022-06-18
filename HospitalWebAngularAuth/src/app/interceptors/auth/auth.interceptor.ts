@@ -23,7 +23,7 @@ export class AuthInterceptor implements HttpInterceptor {
       return next.handle(request).pipe(
         catchError((error) => {
           if(error instanceof HttpErrorResponse && error.status == HttpStatusCode.Unauthorized) {
-            if(!error.headers.has('Session-Expired')) {
+            if(error.headers.has('Access-Token-Expired')) {
               //Refresh functionality
             }
 
