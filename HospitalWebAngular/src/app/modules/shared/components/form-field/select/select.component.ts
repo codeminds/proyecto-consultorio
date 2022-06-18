@@ -17,7 +17,7 @@ export class SelectComponent implements OnInit, OnChanges, OnDestroy, AfterViewI
   public form: string;
 
   @Input()
-  public infoTemplate?: TemplateRef<any>;
+  public infoTemplate?: TemplateRef<unknown>;
   
   @Input()
   public options: any[];
@@ -29,7 +29,7 @@ export class SelectComponent implements OnInit, OnChanges, OnDestroy, AfterViewI
   public label?: string;
 
   @Input()
-  public model?: any;
+  public model?: unknown;
 
   @Input()
   public nullOption?: string;
@@ -132,7 +132,7 @@ export class SelectComponent implements OnInit, OnChanges, OnDestroy, AfterViewI
       if(this.model == null && this.nullOption != null) {
         this.selectedIndex = null;
       }else {
-        let index = this.options.findIndex((item: any) => getProperty(item, this.option.value) == getProperty(this.model, this.option.compare));
+        let index = this.options.findIndex((item: unknown) => getProperty(item, this.option.value) == getProperty(this.model, this.option.compare));
         
         //Para una buena experiencia de usuario, si el index no es encontrado
         //es porque el valor no existe en la lista o el modelo que recibimos es nulo.
@@ -193,18 +193,18 @@ export class SelectComponent implements OnInit, OnChanges, OnDestroy, AfterViewI
     }
   }
 
-  public handleClickEvent(e: any, open: boolean): void {
+  public handleClickEvent(e: Event, open: boolean): void {
     e.preventDefault();
-    e.target.focus();
+    (e.target as HTMLElement).focus();
     this.toggle(open);
   }
 
-  public handleSelectEvent(e: any, open: boolean): void {
+  public handleSelectEvent(e: Event, open: boolean): void {
     e.preventDefault();
     this.toggle(open);
   }
 
-  public selectOption(e: any, index?: number): void {
+  public selectOption(e: Event, index?: number): void {
     e.stopPropagation();
     this.model = index != null ? this.options[index] : null;
     this.open = false;

@@ -11,7 +11,7 @@ import { Option } from '../form-field.types';
 })
 export class AutocompleteComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input()
-  public selectionTemplate: TemplateRef<any>;
+  public selectionTemplate: TemplateRef<unknown>;
   
   @Input('name')
   public fieldName: string;
@@ -20,7 +20,7 @@ export class AutocompleteComponent implements OnInit, AfterViewInit, OnDestroy {
   public form: string;
 
   @Input()
-  public infoTemplate?: TemplateRef<any>;
+  public infoTemplate?: TemplateRef<unknown>;
 
   @Input()
   public label?: string;
@@ -29,7 +29,7 @@ export class AutocompleteComponent implements OnInit, AfterViewInit, OnDestroy {
   public placeholderText?: string;
 
   @Input()
-  public model?: any;
+  public model?: unknown;
 
   @Input()
   public option?: Option;
@@ -41,7 +41,7 @@ export class AutocompleteComponent implements OnInit, AfterViewInit, OnDestroy {
   public showSelection?: boolean;
 
   @Input()
-  public lookupFunction: (search: string, maxItems?: number) => Promise<any[]>;
+  public lookupFunction: (search: string, maxItems?: number) => Promise<unknown[]>;
 
   @Output()
   public modelChange: EventEmitter<any>;
@@ -58,7 +58,7 @@ export class AutocompleteComponent implements OnInit, AfterViewInit, OnDestroy {
   public search: string;
   public loading: boolean;
   public selectedIndex: number;
-  public results: any[];
+  public results: unknown[];
   public focused: boolean;
 
   public getProperty = getProperty;
@@ -188,7 +188,7 @@ export class AutocompleteComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   //Navegación con teclado de las opciones
-  public increaseIndex(e: any): void {
+  public increaseIndex(e: Event): void {
     e.preventDefault();
     if(this.results?.length > 0) {
       if(this.selectedIndex != null && this.selectedIndex < this.results.length - 1){
@@ -202,7 +202,7 @@ export class AutocompleteComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   //Navegación con teclado de las opciones
-  public decreaseIndex(e: any): void {
+  public decreaseIndex(e: Event): void {
     e.preventDefault();
     if(this.results?.length > 0) {
       if(this.selectedIndex > 0){
@@ -216,7 +216,7 @@ export class AutocompleteComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   //Navegación con teclado de las opciones
-  public selectKeyPress(e: any): void {
+  public selectKeyPress(e: Event): void {
     e.stopPropagation();
     this.selectOption();
     this.blur();

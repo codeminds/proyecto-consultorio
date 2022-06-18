@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Data, NavigationEnd, Router, RouterEvent } from '@angular/router';
 import { AppService } from '@services/app/app.service';
-import { AppSettings } from '@services/app/app.settings';
+import { AppSettings } from '@services/app/app.model';
 import { Message, MessageType } from '@services/http/http.types';
 import { SnackbarType } from '@shared/components/snackbar/snackbar.types';
 import { filter, Observable } from 'rxjs';

@@ -11,8 +11,8 @@ export class Appointment {
         //Técnica de deep copy para eliminar referencias de memoria
         data = data ? JSON.parse(JSON.stringify(data)) : {};
 
-        this.id = data.id || null;
-        this.date = data.date ? new Date(data.date) : null;
+        this.id = data.id != null ? Number(data.id) : null;
+        this.date = data.date != null ? new Date(data.date) : null;
         this.doctor = new Doctor(data.doctor);
         this.patient = new Patient(data.patient);
     }

@@ -20,7 +20,7 @@ export interface APIResponse<T> {
 }
 
 export interface QueryParams {
-    [name: string]: string | number | boolean | Date | string[] | number[] | boolean[] | Date[];
+    [name: string]: any;
 }
 
 export interface Message {

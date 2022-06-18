@@ -8,13 +8,13 @@ import { TableHeader } from './table.types';
 })
 export class TableComponent implements OnInit {
   @Input()
-  public template: TemplateRef<any>;
+  public template: TemplateRef<unknown>;
 
   @Input()
-  public templateMobile: TemplateRef<any>;
+  public templateMobile: TemplateRef<unknown>;
 
   @Input()
-  public source: any[];
+  public source: unknown[];
 
   @Input()
   public headers?: TableHeader[];

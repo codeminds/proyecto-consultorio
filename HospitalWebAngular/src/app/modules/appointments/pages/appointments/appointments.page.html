@@ -17,7 +17,7 @@
                 class="col-3"
                 [type]="InputType.Text" 
                 [(model)]="filter.patientDocumentId"
-                [attributes]="{'placeholder': '123456789'}"
+                [attributes]="{'placeholder': 'E.g.:123456789'}"
             ></app-input>
             <app-input 
                 name="firstName" 
@@ -25,8 +25,8 @@
                 label="Nombre"
                 class="col-3"
                 [type]="InputType.Text" 
-                [(model)]="filter.patientFirstName"
-                [attributes]="{'placeholder': 'John'}"
+                [(model)]="filter.patient.firstName"
+                [attributes]="{'placeholder': 'E.g.:John'}"
             ></app-input>
             <app-input 
                 name="lastName" 
@@ -34,8 +34,8 @@
                 label="Apellido"
                 class="col-3"
                 [type]="InputType.Text" 
-                [(model)]="filter.patientLastName"
-                [attributes]="{'placeholder': 'Smith'}"
+                [(model)]="filter.patient.lastName"
+                [attributes]="{'placeholder': 'E.g.:Smith'}"
             ></app-input>
             <app-date 
                 name="birthDateFrom" 
@@ -43,7 +43,7 @@
                 label="Desde"
                 class="col-3"
                 [type]="DateType.DateTime"
-                [(model)]="filter.patientBirthDateFrom"
+                [(model)]="filter.patient.birthDateFrom"
             ></app-date>
             <app-date 
                 name="birthDateTo" 
@@ -51,7 +51,7 @@
                 label="Hasta"
                 class="col-3"
                 [type]="DateType.DateTime"
-                [(model)]="filter.patientBirthDateTo"
+                [(model)]="filter.patient.birthDateTo"
             ></app-date>
             <app-select
                 name="gender"
@@ -59,7 +59,7 @@
                 label="Género"
                 class="col-3"
                 nullOption="Todos"
-                [(model)]="filter.patientGender"
+                [(model)]="filter.patient.gender"
                 [options]="[{label: 'Femenino', value: false},
                             {label: 'Masculino', value: true}]"
             ></app-select>
@@ -73,7 +73,7 @@
                 label="Especialidad"
                 class="col-2"
                 nullOption="Todos"
-                [(model)]="filter.doctorFieldId"
+                [(model)]="filter.doctor.fieldId"
                 [options]="fields"
                 [option]="{label: 'name', value: 'id', output: 'id'}"
             ></app-select>
@@ -83,8 +83,8 @@
                 label="Cédula"
                 class="col-2"
                 [type]="InputType.Text" 
-                [(model)]="filter.doctorDocumentId"
-                [attributes]="{'placeholder': '123456789'}"
+                [(model)]="filter.doctor.documentId"
+                [attributes]="{'placeholder': 'E.g.:123456789'}"
             ></app-input>
             <app-input 
                 name="firstName" 
@@ -92,8 +92,8 @@
                 label="Nombre"
                 class="col-2"
                 [type]="InputType.Text" 
-                [(model)]="filter.doctorFirstName"
-                [attributes]="{'placeholder': 'John'}"
+                [(model)]="filter.doctor.firstName"
+                [attributes]="{'placeholder': 'E.g.:John'}"
             ></app-input>
             <app-input 
                 name="lastName" 
@@ -101,8 +101,8 @@
                 label="Apellido"
                 class="col-2"
                 [type]="InputType.Text" 
-                [(model)]="filter.doctorLastName"
-                [attributes]="{'placeholder': 'Smith'}"
+                [(model)]="filter.doctor.lastName"
+                [attributes]="{'placeholder': 'E.g.:Smith'}"
             ></app-input>
         </form>
     </app-panel>
@@ -192,7 +192,7 @@
 <app-modal [(open)]="modalOpen" modalTitle="Modal" [position]="ModalPosition.Top" [size]="ModalSize.Medium" (onClose)="onModalClose()">
     <form *ngIf="appointment" (keyup.enter)="save()">
         <ul>
-            <li class="validation-error" *ngFor="let message of messages">{{message}}</li>
+            <li class="validation-message" *ngFor="let message of messages">{{message}}</li>
         </ul>
         <app-date 
             name="date" 

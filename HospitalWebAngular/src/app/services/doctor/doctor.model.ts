@@ -11,10 +11,10 @@ export class Doctor {
         //Técnica de deep copy para eliminar referencias de memoria
         data = data ? JSON.parse(JSON.stringify(data)) : {};
 
-        this.id = data.id || null;
-        this.documentId = data.documentId || null;
-        this.firstName = data.firstName || null;
-        this.lastName = data.lastName || null;
+        this.id = data.id != null ? Number(data.id) : null;
+        this.documentId = data.documentId != null ? String(data.documentId) : null;
+        this.firstName = data.firstName != null ? String(data.firstName) : null;
+        this.lastName = data.lastName != null ? String(data.lastName) : null;
         this.field = new Field(data.field);
     }
 }

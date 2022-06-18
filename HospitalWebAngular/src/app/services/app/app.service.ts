@@ -3,7 +3,7 @@ import { Title } from '@angular/platform-browser';
 import { Message } from '@services/http/http.types';
 import { State } from '@utils/state';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { AppSettings } from './app.settings';
+import { AppSettings } from './app.model';
 
 @Injectable({
   providedIn: 'root'

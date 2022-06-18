@@ -26,7 +26,7 @@ export class DateComponent implements OnInit, OnChanges {
   public attributes?: Attributes;
 
   @Output()
-  public modelChange: EventEmitter<any>;
+  public modelChange: EventEmitter<Date>;
 
   @ViewChild('input')
   private inputRef: ElementRef;
