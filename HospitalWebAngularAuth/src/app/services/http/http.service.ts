@@ -19,9 +19,9 @@ export class HttpService{
     this.retryLimit = 3;
   }
 
-  public get(url: string, options: HttpOptions = null): Observable<APIResponse<any>> {
+  public get(url: string, options: HttpOptions = null): Observable<APIResponse<unknown>> {
     let retries = 0;
-    return this.httpClient.get<APIResponse<any>>(`${options?.apiUrl || environment.apiURL}/${url}${this.getQuery(options?.params)}`, {
+    return this.httpClient.get<APIResponse<unknown>>(`${options?.apiUrl || environment.apiURL}/${url}${this.getQuery(options?.params)}`, {
       headers: this.getHeaders(options?.authorize)
     }).pipe(
       retryWhen(errors => errors.pipe(
@@ -35,9 +35,9 @@ export class HttpService{
     );
   }
 
-  public post(url: string, data: any, options: HttpOptions = null): Observable<APIResponse<any>> {
+  public post(url: string, data: unknown, options: HttpOptions = null): Observable<APIResponse<unknown>> {
     let retries = 0;
-    return this.httpClient.post<APIResponse<any>>(`${options?.apiUrl || environment.apiURL}/${url}${this.getQuery(options?.params)}`, data, {
+    return this.httpClient.post<APIResponse<unknown>>(`${options?.apiUrl || environment.apiURL}/${url}${this.getQuery(options?.params)}`, data, {
       headers: this.getHeaders(options?.authorize)
     }).pipe(
       retryWhen(errors => errors.pipe(
@@ -51,9 +51,9 @@ export class HttpService{
     );
   }
 
-  public put(url: string, data: any, options: HttpOptions = null): Observable<APIResponse<any>> {
+  public put(url: string, data: unknown, options: HttpOptions = null): Observable<APIResponse<unknown>> {
     let retries = 0;
-    return this.httpClient.put<APIResponse<any>>(`${options?.apiUrl || environment.apiURL}/${url}${this.getQuery(options?.params)}`, data, {
+    return this.httpClient.put<APIResponse<unknown>>(`${options?.apiUrl || environment.apiURL}/${url}${this.getQuery(options?.params)}`, data, {
       headers: this.getHeaders(options?.authorize)
     }).pipe(
       retryWhen(errors => errors.pipe(
@@ -67,9 +67,9 @@ export class HttpService{
     );
   }
 
-  public patch(url: string, data: any, options: HttpOptions = null): Observable<APIResponse<any>> {
+  public patch(url: string, data: unknown, options: HttpOptions = null): Observable<APIResponse<unknown>> {
     let retries = 0;
-    return this.httpClient.patch<APIResponse<any>>(`${options?.apiUrl || environment.apiURL}/${url}${this.getQuery(options?.params)}`, data, {
+    return this.httpClient.patch<APIResponse<unknown>>(`${options?.apiUrl || environment.apiURL}/${url}${this.getQuery(options?.params)}`, data, {
       headers: this.getHeaders(options?.authorize)
     }).pipe(
       retryWhen(errors => errors.pipe(
@@ -83,9 +83,9 @@ export class HttpService{
     );
   }
 
-  public delete(url: string, options: HttpOptions = null): Observable<APIResponse<any>> {
+  public delete(url: string, options: HttpOptions = null): Observable<APIResponse<unknown>> {
     let retries = 0;
-    return this.httpClient.delete<APIResponse<any>>(`${options?.apiUrl || environment.apiURL}/${url}${this.getQuery(options?.params)}`, {
+    return this.httpClient.delete<APIResponse<unknown>>(`${options?.apiUrl || environment.apiURL}/${url}${this.getQuery(options?.params)}`, {
       headers: this.getHeaders(options?.authorize)
     }).pipe(
       retryWhen(errors => errors.pipe(
@@ -99,7 +99,7 @@ export class HttpService{
     );
   }
 
-  private handleError(response: HttpErrorResponse): ObservableInput<APIResponse<any>> {
+  private handleError(response: HttpErrorResponse): ObservableInput<APIResponse<null>> {
     if(response.error?.data) {
       console.error(`HTTP ${response.status} Response: ${JSON.stringify(response?.error?.data, null, 4)}`);
     }
@@ -120,25 +120,29 @@ export class HttpService{
     };
   }
 
-  private getQuery(params: QueryParams): string {
-    let query = params ? '?' : '';
+  private getQuery(params: QueryParams, prefix: string = null, isFirst: boolean = true): string {
+    let query = params && isFirst ? '?' : '&';
 
     for(const prop in params) {
       const param = params[prop];
 
       if(Array.isArray(param)) {
         for(const value of param) {
-          query += this.getQueryParam(prop, value);
+          query += this.getQueryParam(prop, value, prefix);
         }
+      } else if (param != null && typeof param === 'object' && !(param instanceof Date)) {
+        query += this.getQuery(param, prop);
       } else {
-        query += this.getQueryParam(prop, param);
+        query += this.getQueryParam(prop, param, prefix);
       }
     }
 
     return query;
   }
 
-  private getQueryParam(prop: string, param: any): string {
+  private getQueryParam(prop: string, param: unknown, prefix?: string): string {
+    prop = prefix == null ? prop : prefix + prop.capitalize();
+
     if(param == null){
       return `${prop}=&`
     } else if(param instanceof Date) {

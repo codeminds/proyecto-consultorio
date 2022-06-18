@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AppService } from '@services/app/app.service';
 import { Patient } from '@services/patient/patient.model';
 import { PatientService } from '@services/patient/patient.service';
-import { MessageType } from '@services/http/http.types';
+import { MessageType, QueryParams } from '@services/http/http.types';
 import { ButtonType, DateType, InputType } from '@shared/components/form-field/form-field.types';
 import { ModalPosition, ModalSize } from '@shared/components/modal/modal.types';
 import { firstValueFrom } from 'rxjs';
@@ -18,7 +18,7 @@ export class PatientsPage implements OnInit{
   public patient: Patient;
   public loading: boolean;
   public saving: boolean;
-  public filter: any;
+  public filter: QueryParams;
   public confirmText: string;
   public confirmOpen: boolean;
   public messages: string[];
@@ -71,7 +71,7 @@ export class PatientsPage implements OnInit{
     }
   }
 
-  public createUpdate(data: any = null): void {
+  public createUpdate(data: unknown = null): void {
     this.patient = new Patient(data);
     this.modalOpen = true;
   }
@@ -107,6 +107,7 @@ export class PatientsPage implements OnInit{
         if(isNew) {
           this.panelOpen = true;
           this.filter = {
+            ...this.filter,
             documentId: response.data.documentId
           }
         }

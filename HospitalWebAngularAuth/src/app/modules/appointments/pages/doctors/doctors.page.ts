@@ -4,7 +4,7 @@ import { Doctor } from '@services/doctor/doctor.model';
 import { DoctorService } from '@services/doctor/doctor.service';
 import { Field } from '@services/field/field.model';
 import { FieldService } from '@services/field/field.service';
-import { MessageType } from '@services/http/http.types';
+import { MessageType, QueryParams } from '@services/http/http.types';
 import { ButtonType, InputType } from '@shared/components/form-field/form-field.types';
 import { ModalPosition, ModalSize } from '@shared/components/modal/modal.types';
 import { firstValueFrom } from 'rxjs';
@@ -21,7 +21,7 @@ export class DoctorsPage implements OnInit{
   public doctor: Doctor;
   public loading: boolean;
   public saving: boolean;
-  public filter: any;
+  public filter: QueryParams;
   public confirmText: string;
   public confirmOpen: boolean;
   public messages: string[];
@@ -82,7 +82,7 @@ export class DoctorsPage implements OnInit{
     }
   }
 
-  public createUpdate(data: any = null): void {
+  public createUpdate(data: unknown = null): void {
     this.doctor = new Doctor(data);
     this.modalOpen = true;
   }
@@ -118,6 +118,7 @@ export class DoctorsPage implements OnInit{
         if(isNew) {
           this.panelOpen = true;
           this.filter = {
+            ...this.filter,
             documentId: response.data.documentId
           }
         }

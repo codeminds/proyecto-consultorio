@@ -25,7 +25,7 @@
                 label="Nombre"
                 class="col-3"
                 [type]="InputType.Text" 
-                [(model)]="filter.patientFirstName"
+                [(model)]="filter.patient.firstName"
                 [attributes]="{'placeholder': 'E.g.:John'}"
             ></app-input>
             <app-input 
@@ -34,7 +34,7 @@
                 label="Apellido"
                 class="col-3"
                 [type]="InputType.Text" 
-                [(model)]="filter.patientLastName"
+                [(model)]="filter.patient.lastName"
                 [attributes]="{'placeholder': 'E.g.:Smith'}"
             ></app-input>
             <app-date 
@@ -43,7 +43,7 @@
                 label="Desde"
                 class="col-3"
                 [type]="DateType.DateTime"
-                [(model)]="filter.patientBirthDateFrom"
+                [(model)]="filter.patient.birthDateFrom"
             ></app-date>
             <app-date 
                 name="birthDateTo" 
@@ -51,7 +51,7 @@
                 label="Hasta"
                 class="col-3"
                 [type]="DateType.DateTime"
-                [(model)]="filter.patientBirthDateTo"
+                [(model)]="filter.patient.birthDateTo"
             ></app-date>
             <app-select
                 name="gender"
@@ -59,7 +59,7 @@
                 label="Género"
                 class="col-3"
                 nullOption="Todos"
-                [(model)]="filter.patientGender"
+                [(model)]="filter.patient.gender"
                 [options]="[{label: 'Femenino', value: false},
                             {label: 'Masculino', value: true}]"
             ></app-select>
@@ -73,7 +73,7 @@
                 label="Especialidad"
                 class="col-2"
                 nullOption="Todos"
-                [(model)]="filter.doctorFieldId"
+                [(model)]="filter.doctor.fieldId"
                 [options]="fields"
                 [option]="{label: 'name', value: 'id', output: 'id'}"
             ></app-select>
@@ -83,7 +83,7 @@
                 label="Cédula"
                 class="col-2"
                 [type]="InputType.Text" 
-                [(model)]="filter.doctorDocumentId"
+                [(model)]="filter.doctor.documentId"
                 [attributes]="{'placeholder': 'E.g.:123456789'}"
             ></app-input>
             <app-input 
@@ -92,7 +92,7 @@
                 label="Nombre"
                 class="col-2"
                 [type]="InputType.Text" 
-                [(model)]="filter.doctorFirstName"
+                [(model)]="filter.doctor.firstName"
                 [attributes]="{'placeholder': 'E.g.:John'}"
             ></app-input>
             <app-input 
@@ -101,7 +101,7 @@
                 label="Apellido"
                 class="col-2"
                 [type]="InputType.Text" 
-                [(model)]="filter.doctorLastName"
+                [(model)]="filter.doctor.lastName"
                 [attributes]="{'placeholder': 'E.g.:Smith'}"
             ></app-input>
         </form>

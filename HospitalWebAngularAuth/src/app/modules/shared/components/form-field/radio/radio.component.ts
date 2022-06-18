@@ -15,7 +15,7 @@ export class RadioComponent implements OnInit, OnChanges {
   public form: string;
   
   @Input()
-  public options: any[];
+  public options: unknown[];
 
   @Input()
   public option?: CompareOption;
@@ -85,7 +85,7 @@ export class RadioComponent implements OnInit, OnChanges {
       if(this.model == null && this.nullOption != null) {
         this.selectedIndex = null;
       }else {
-        let index = this.options.findIndex((item: any) => getProperty(item, this.option.value) == getProperty(this.model, this.option.compare));
+        let index = this.options.findIndex((item: unknown) => getProperty(item, this.option.value) == getProperty(this.model, this.option.compare));
         
         //Para una buena experiencia de usuario, si el index no es encontrado
         //es porque el valor no existe en la lista o el modelo que recibimos es nulo.

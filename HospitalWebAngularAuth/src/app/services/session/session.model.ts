@@ -6,7 +6,7 @@ export class Session {
         //Técnica de deep copy para eliminar referencias de memoria
         data = data ? JSON.parse(JSON.stringify(data)) : {};
         
-        this.accessToken = data.accessToken || null;
-        this.refreshToken = data.refreshToken || null;
+        this.accessToken = data.accessToken != null ? String(data.accessToken) : null;
+        this.refreshToken = data.refreshToken != null ? String(data.refreshToken) : null;
     }
 }

@@ -6,7 +6,7 @@ import { Doctor } from '@services/doctor/doctor.model';
 import { DoctorService } from '@services/doctor/doctor.service';
 import { Field } from '@services/field/field.model';
 import { FieldService } from '@services/field/field.service';
-import { MessageType } from '@services/http/http.types';
+import { MessageType, QueryParams } from '@services/http/http.types';
 import { Patient } from '@services/patient/patient.model';
 import { PatientService } from '@services/patient/patient.service';
 import { InputType, ButtonType, DateType } from '@shared/components/form-field/form-field.types';
@@ -25,7 +25,7 @@ export class AppointmentsPage implements OnInit {
   public appointment: Appointment;
   public loading: boolean;
   public saving: boolean;
-  public filter: any;
+  public filter: QueryParams;
   public confirmText: string;
   public confirmOpen: boolean;
   public messages: string[];
@@ -59,15 +59,19 @@ export class AppointmentsPage implements OnInit {
     this.filter = {
       dateFrom: null,
       dateTo: null,
-      patientDocumentId: null,
-      patientFirstName: null,
-      patientLastName: null,
-      patientBirthDateFrom: null,
-      patientBirthDateTo: null,
-      doctorDocumentId: null,
-      doctorFirstName: null,
-      doctorLastName: null,
-      doctorFieldId: null 
+      patient: {
+        documentId: null,
+        firstName: null,
+        lastName: null,
+        birthDateFrom: null,
+        birthDateTo: null,
+      },
+      doctor: {
+        documentId: null,
+        firstName: null,
+        lastName: null,
+        fieldId: null 
+      }
     };
   }
 
@@ -96,7 +100,7 @@ export class AppointmentsPage implements OnInit {
     }
   }
 
-  public createUpdate(data: any = null): void {
+  public createUpdate(data: unknown = null): void {
     this.appointment = new Appointment(data);
     this.modalOpen = true;
   }
@@ -132,8 +136,9 @@ export class AppointmentsPage implements OnInit {
         if(isNew) {
           this.panelOpen = true;
           this.filter = {
-            doctorDocumentId: response.data.doctor.documentId,
-            patientDocumentId: response.data.patient.documentId,
+            ...this.filter,
+            doctor: { documentId: response.data.doctor.documentId },
+            patient: { documentId: response.data.patient.documentId },
             dateFrom: new Date(response.data.date),
             dateTo: new Date(response.data.date)
           }
@@ -168,11 +173,11 @@ export class AppointmentsPage implements OnInit {
     this.messages = [];
   }
 
-  public selectDoctor(data: any): void {
+  public selectDoctor(data: unknown): void {
     this.appointment.doctor = new Doctor(data);
   }
 
-  public selectPatient(data: any): void {
+  public selectPatient(data: unknown): void {
     this.appointment.patient = new Patient(data);
   }
 

@@ -7,7 +7,6 @@ export {}
 declare global {
     interface DateConstructor {
         isDate(value: any) : boolean;
-        getLocale(locale: string): any;
     }
 }
 
