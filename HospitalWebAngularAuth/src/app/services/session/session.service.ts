@@ -3,7 +3,7 @@ import { HttpService } from '@services/http/http.service';
 import { APIResponse } from '@services/http/http.types';
 import { Observable } from 'rxjs';
 import { LoginSessionDTO } from './session.dto';
-import { Session } from './session.model';
+import { Session, SessionTokens } from './session.model';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +17,11 @@ export class SessionService {
     this._api = 'sessions';
   }
 
-  public login(username: string, password: string): Observable<APIResponse<Session>> {
-    return this.httpService.post(this._api, new LoginSessionDTO(username, password)).mapObjectResponse((item: object) => new Session(item));
+  public login(username: string, password: string): Observable<APIResponse<SessionTokens>> {
+    return this.httpService.post(this._api, new LoginSessionDTO(username, password)).mapObjectResponse((item: object) => new SessionTokens(item));
+  }
+
+  public logout(sessionId: string = null): Observable<APIResponse<Session>> {
+    return this.httpService.delete(`${this._api}/${sessionId || ''}`).mapObjectResponse((item: object) => new Session(item));
   }
 }

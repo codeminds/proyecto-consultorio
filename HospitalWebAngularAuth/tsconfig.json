@@ -24,6 +24,8 @@
     "paths": {
       "@administration/*": ["src/app/modules/administration/*"],
       "@appointments/*": ["src/app/modules/appointments/*"],
+      "@guards/*": ["src/app/guards/*"],
+      "@interceptors/*": ["src/app/interceptors/*"],
       "@services/*": ["src/app/services/*"],
       "@shared/*": ["src/app/modules/shared/*"],
       "@utils/*": ["src/app/utils/*"]

@@ -21,7 +21,7 @@ export class HttpService{
 
   public get(url: string, options: HttpOptions = null): Observable<APIResponse<unknown>> {
     let retries = 0;
-    return this.httpClient.get<APIResponse<unknown>>(`${options?.apiUrl || environment.apiURL}/${url}${this.getQuery(options?.params)}`, {
+    return this.httpClient.get<APIResponse<unknown>>(`${options?.apiUrl || environment.apiURL}/${url}?${this.getQuery(options?.params)}`, {
       headers: this.getHeaders(options?.authorize)
     }).pipe(
       retryWhen(errors => errors.pipe(
@@ -37,7 +37,7 @@ export class HttpService{
 
   public post(url: string, data: unknown, options: HttpOptions = null): Observable<APIResponse<unknown>> {
     let retries = 0;
-    return this.httpClient.post<APIResponse<unknown>>(`${options?.apiUrl || environment.apiURL}/${url}${this.getQuery(options?.params)}`, data, {
+    return this.httpClient.post<APIResponse<unknown>>(`${options?.apiUrl || environment.apiURL}/${url}?${this.getQuery(options?.params)}`, data, {
       headers: this.getHeaders(options?.authorize)
     }).pipe(
       retryWhen(errors => errors.pipe(
@@ -53,7 +53,7 @@ export class HttpService{
 
   public put(url: string, data: unknown, options: HttpOptions = null): Observable<APIResponse<unknown>> {
     let retries = 0;
-    return this.httpClient.put<APIResponse<unknown>>(`${options?.apiUrl || environment.apiURL}/${url}${this.getQuery(options?.params)}`, data, {
+    return this.httpClient.put<APIResponse<unknown>>(`${options?.apiUrl || environment.apiURL}/${url}?${this.getQuery(options?.params)}`, data, {
       headers: this.getHeaders(options?.authorize)
     }).pipe(
       retryWhen(errors => errors.pipe(
@@ -69,7 +69,7 @@ export class HttpService{
 
   public patch(url: string, data: unknown, options: HttpOptions = null): Observable<APIResponse<unknown>> {
     let retries = 0;
-    return this.httpClient.patch<APIResponse<unknown>>(`${options?.apiUrl || environment.apiURL}/${url}${this.getQuery(options?.params)}`, data, {
+    return this.httpClient.patch<APIResponse<unknown>>(`${options?.apiUrl || environment.apiURL}/${url}?${this.getQuery(options?.params)}`, data, {
       headers: this.getHeaders(options?.authorize)
     }).pipe(
       retryWhen(errors => errors.pipe(
@@ -85,7 +85,7 @@ export class HttpService{
 
   public delete(url: string, options: HttpOptions = null): Observable<APIResponse<unknown>> {
     let retries = 0;
-    return this.httpClient.delete<APIResponse<unknown>>(`${options?.apiUrl || environment.apiURL}/${url}${this.getQuery(options?.params)}`, {
+    return this.httpClient.delete<APIResponse<unknown>>(`${options?.apiUrl || environment.apiURL}/${url}?${this.getQuery(options?.params)}`, {
       headers: this.getHeaders(options?.authorize)
     }).pipe(
       retryWhen(errors => errors.pipe(
@@ -120,20 +120,22 @@ export class HttpService{
     };
   }
 
-  private getQuery(params: QueryParams, prefix: string = null, isFirst: boolean = true): string {
-    let query = params && isFirst ? '?' : '&';
+  private getQuery(params: QueryParams, prefix: string = null): string {
+    let query = '';
 
     for(const prop in params) {
-      const param = params[prop];
+      const param = params[prop]; 
 
       if(Array.isArray(param)) {
         for(const value of param) {
           query += this.getQueryParam(prop, value, prefix);
+          query += '&';          
         }
       } else if (param != null && typeof param === 'object' && !(param instanceof Date)) {
         query += this.getQuery(param, prop);
       } else {
         query += this.getQueryParam(prop, param, prefix);
+        query += '&';
       }
     }
 
@@ -144,11 +146,11 @@ export class HttpService{
     prop = prefix == null ? prop : prefix + prop.capitalize();
 
     if(param == null){
-      return `${prop}=&`
+      return `${prop}=`
     } else if(param instanceof Date) {
-      return `${prop}=${param.toInputDateString()}&`;
+      return `${prop}=${param.toInputDateString()}`;
     } else {
-      return `${prop}=${param}&`
+      return `${prop}=${param}`
     } 
   }
 }

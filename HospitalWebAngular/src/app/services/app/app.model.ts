@@ -4,6 +4,6 @@ export class AppSettings {
     constructor(data: any = null){
         data = data ? JSON.parse(JSON.stringify(data)) : {};
 
-        this.title = data.data != null ? String(data.title) : null;
+        this.title = data.title != null ? String(data.title) : null;
     }
 }

@@ -47,7 +47,7 @@ namespace API.Middlewares
                     Session? session = await sessionService.FindSession(sessionId);
                     if (session == null)
                     {
-                        SendResponse(context, HttpStatusCode.Unauthorized, "Su sesión no es válida, debe ingresar de nuevo al sistema");
+                        SendResponse(context, HttpStatusCode.Unauthorized, "Su sesión ha expirado");
                         return;
                     }
 
@@ -61,7 +61,7 @@ namespace API.Middlewares
                     {
                         await sessionService.DeleteSession(session);
                         context.Response.Headers.Add("Session-Expired", "true");
-                        SendResponse(context, HttpStatusCode.Unauthorized, "Su sesión ha expirado, debe ingresar de nuevo al sistema");
+                        SendResponse(context, HttpStatusCode.Unauthorized, "Su sesión ha expirado");
                         return;
                     }
                 }

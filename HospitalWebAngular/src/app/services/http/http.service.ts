@@ -20,7 +20,7 @@ export class HttpService{
 
   public get(url: string, params: QueryParams = null, apiOverride: string = null): Observable<APIResponse<unknown>> {
     let retries = 0;
-    return this.httpClient.get<APIResponse<unknown>>(`${apiOverride || environment.apiURL}/${url}${this.getQuery(params)}`, {
+    return this.httpClient.get<APIResponse<unknown>>(`${apiOverride || environment.apiURL}/${url}?${this.getQuery(params)}`, {
       headers: {
         'Content-Type': 'application/json'
       }
@@ -38,7 +38,7 @@ export class HttpService{
 
   public post(url: string, data: unknown = null, params: QueryParams = null, apiOverride: string = null): Observable<APIResponse<unknown>> {
     let retries = 0;
-    return this.httpClient.post<APIResponse<unknown>>(`${apiOverride || environment.apiURL}/${url}${this.getQuery(params)}`, data, {
+    return this.httpClient.post<APIResponse<unknown>>(`${apiOverride || environment.apiURL}/${url}?${this.getQuery(params)}`, data, {
       headers: {
         'Content-Type': 'application/json'
       }
@@ -56,7 +56,7 @@ export class HttpService{
 
   public put(url: string, data: unknown = null, params: QueryParams = null, apiOverride: string = null): Observable<APIResponse<unknown>> {
     let retries = 0;
-    return this.httpClient.put<APIResponse<unknown>>(`${apiOverride || environment.apiURL}/${url}${this.getQuery(params)}`, data, {
+    return this.httpClient.put<APIResponse<unknown>>(`${apiOverride || environment.apiURL}/${url}?${this.getQuery(params)}`, data, {
       headers: {
         'Content-Type': 'application/json'
       }
@@ -74,7 +74,7 @@ export class HttpService{
 
   public delete(url: string, params: QueryParams = null, apiOverride: string = null): Observable<APIResponse<unknown>> {
     let retries = 0;
-    return this.httpClient.delete<APIResponse<unknown>>(`${apiOverride || environment.apiURL}/${url}${this.getQuery(params)}`, {
+    return this.httpClient.delete<APIResponse<unknown>>(`${apiOverride || environment.apiURL}/${url}?${this.getQuery(params)}`, {
       headers: {
         'Content-Type': 'application/json'
       }
@@ -104,8 +104,8 @@ export class HttpService{
     return of({ httpStatusCode: response.status , success: false, messages: [], data: null });
   }
 
-  private getQuery(params: QueryParams, prefix: string = null, isFirst: boolean = true): string {
-    let query = params && isFirst ? '?' : '&';
+  private getQuery(params: QueryParams, prefix: string = null): string {
+    let query = '';
 
     for(const prop in params) {
       const param = params[prop];
@@ -115,7 +115,7 @@ export class HttpService{
           query += this.getQueryParam(prop, value, prefix);
         }
       } else if (param != null && typeof param === 'object' && !(param instanceof Date)) {
-        query += this.getQuery(param, prop);
+        query += `${!query ? '' : '&'}${this.getQuery(param, prop)}`;
       } else {
         query += this.getQueryParam(prop, param, prefix);
       }
