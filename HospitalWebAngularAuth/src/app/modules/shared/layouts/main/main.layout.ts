@@ -1,6 +1,6 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { AppService } from '@services/app/app.service';
-import { AppSettings } from '@services/app/app.settings';
+import { AppSettings } from '@services/app/app.model';
 import { Observable } from 'rxjs';
 
 @Component({
