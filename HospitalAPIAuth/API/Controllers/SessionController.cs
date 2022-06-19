@@ -103,13 +103,13 @@ namespace API.Controllers
                 Session? session = await this._sessionService.FindSession(sessionId);
                 if (session == null || Convert.ToHexString(session.RefreshToken) != Convert.ToHexString(tokenHash))
                 {
-                    return HttpErrors.Unauthorized("Su sesión no es válida", "Token de refrescado no válido o reutilizado");
+                    return HttpErrors.Unauthorized("Su sesión ha expirado", "Token de refrescado no válido o reutilizado");
                 }
 
                 if (session.DateExpiry <= DateTime.Now)
                 {
                     await this._sessionService.DeleteSession(session);
-                    Response.Headers.Add("Session-Expired", "true");
+                    Response.Headers.Add(ResponseHeaders.SessionExpired, "true");
                     return HttpErrors.Unauthorized("Su sesión ha expirado");
                 }
 

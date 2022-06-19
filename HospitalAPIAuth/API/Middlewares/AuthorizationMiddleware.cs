@@ -60,14 +60,14 @@ namespace API.Middlewares
                     if (session.DateExpiry <= DateTime.Now)
                     {
                         await sessionService.DeleteSession(session);
-                        context.Response.Headers.Add("Session-Expired", "true");
+                        context.Response.Headers.Add(ResponseHeaders.SessionExpired, "true");
                         SendResponse(context, HttpStatusCode.Unauthorized, "Su sesión ha expirado");
                         return;
                     }
                 }
                 catch (SecurityTokenExpiredException)
                 {
-                    context.Response.Headers.Add("Access-Token-Expired", "true");
+                    context.Response.Headers.Add(ResponseHeaders.AccessTokenExpired, "true");
                     SendResponse(context, HttpStatusCode.Unauthorized);
                     return;
                 }

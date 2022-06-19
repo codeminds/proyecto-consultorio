@@ -14,4 +14,10 @@
         public const string Email = @"^[\w-\.]+@([\w-]+\.)+[\w]+$";
         public const string Password = @"^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[@$!%*#?&])[A-Za-z0-9@$!%*#?&]{8,}$";
     }
+
+    public static class ResponseHeaders 
+    { 
+        public const string AccessTokenExpired = "access-token-expired";
+        public const string SessionExpired = "session-expired";
+    }
 }

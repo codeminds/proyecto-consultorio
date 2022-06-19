@@ -62,7 +62,8 @@ app.UseCors(options =>
 {
     options.AllowAnyOrigin()
            .AllowAnyMethod()
-           .AllowAnyHeader();
+           .AllowAnyHeader()
+           .WithExposedHeaders(ResponseHeaders.AccessTokenExpired, ResponseHeaders.SessionExpired);
 });
 
 //Con estas funciones podemos configurar la respuesta del servidor

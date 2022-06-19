@@ -73,7 +73,7 @@ namespace API.Services
             //que se está refrescando
             DateTime now = DateTime.Now;
             string salt = Configuration.Get<string>("Authentication:RefreshTokenSalt");
-            string refreshToken = Token.IssueRefreshToken(session.User, session.SessionId);
+            string refreshToken = Token.IssueRefreshToken(user, session.SessionId);
 
             session.DateRefreshed = now;
             session.AddressRefreshed = address?.ToString() ?? "--";
