@@ -18,26 +18,26 @@ export class DoctorService{
   }
 
   public list(filter: QueryParams): Observable<APIResponse<Doctor[]>> {
-    return this.httpService.get(this._api, { params: filter, authorize: true }).mapArrayResponse((item: object) => new Doctor(item));
+    return this.httpService.get(this._api, { params: filter, accessToken: true }).mapArrayResponse((item: object) => new Doctor(item));
   }
 
   public search(values: string[]): Observable<APIResponse<Doctor[]>> {
-    return this.httpService.get(`${this._api}/search`, { params: { s: values }, authorize: true }).mapArrayResponse((item: object) => new Doctor(item));
+    return this.httpService.get(`${this._api}/search`, { params: { s: values }, accessToken: true }).mapArrayResponse((item: object) => new Doctor(item));
   }
 
   public get(id: number): Observable<APIResponse<Doctor>> {
-    return this.httpService.get(`${this._api}/${id}`, { authorize: true }).mapObjectResponse((item: object) => new Doctor(item));
+    return this.httpService.get(`${this._api}/${id}`, { accessToken: true }).mapObjectResponse((item: object) => new Doctor(item));
   }
 
   public post(data: Doctor): Observable<APIResponse<Doctor>> {
-    return this.httpService.post(this._api, new CreateUpdateDoctorDTO(data), { authorize: true }).mapObjectResponse((item: object) => new Doctor(item));
+    return this.httpService.post(this._api, new CreateUpdateDoctorDTO(data), { accessToken: true }).mapObjectResponse((item: object) => new Doctor(item));
   }
 
   public put(id: number, data: Doctor): Observable<APIResponse<Doctor>> {
-    return this.httpService.put(`${this._api}/${id}`, new CreateUpdateDoctorDTO(data), { authorize: true }).mapObjectResponse((item: object) => new Doctor(item));
+    return this.httpService.put(`${this._api}/${id}`, new CreateUpdateDoctorDTO(data), { accessToken: true }).mapObjectResponse((item: object) => new Doctor(item));
   }
 
   public delete(id: number): Observable<APIResponse<Doctor>> {
-    return this.httpService.delete(`${this._api}/${id}`, { authorize: true }).mapObjectResponse((item: object) => new Doctor(item));
+    return this.httpService.delete(`${this._api}/${id}`, { accessToken: true }).mapObjectResponse((item: object) => new Doctor(item));
   }
 }

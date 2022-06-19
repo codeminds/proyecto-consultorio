@@ -98,7 +98,8 @@ export class HttpService{
     if (response.status == 0) {
       this.appService.siteMessage = { text: 'No se ha podido conectar al servidor', type: MessageType.Error };
     } else {
-      this.appService.siteMessage = { text: response.error?.messages[0] || 'Ha ocurrido un error inesperado del servidor', type: MessageType.Error };
+      const message = response.error?.messages[0];
+      this.appService.siteMessage = { text: message != null ? message : 'Ha ocurrido un error inesperado del servidor', type: MessageType.Error };
     }
 
     return of({ httpStatusCode: response.status , success: false, messages: [], data: null });

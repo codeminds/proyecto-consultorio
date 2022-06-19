@@ -30,6 +30,7 @@ export interface Message {
 
 export interface HttpOptions {
     apiUrl?: string,
+    accessToken?: boolean
+    refreshToken?: boolean,
     params?: QueryParams,
-    authorize?: boolean
 }

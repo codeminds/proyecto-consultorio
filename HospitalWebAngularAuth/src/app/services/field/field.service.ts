@@ -17,6 +17,6 @@ export class FieldService {
   }
 
   public list(): Observable<APIResponse<Field[]>> {
-    return this.httpService.get(this._api, { authorize: true }).mapArrayResponse((item: object) => new Field(item));
+    return this.httpService.get(this._api, { accessToken: true }).mapArrayResponse((item: object) => new Field(item));
   }
 }

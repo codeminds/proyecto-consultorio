@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AppService } from '@services/app/app.service';
-import { StorageKeys } from '@utils/constants';
+import { RequestHeaders, StorageKeys } from '@utils/constants';
 import { catchError, Observable, ObservableInput, of, retryWhen, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { APIResponse, HttpOptions, MessageType, QueryParams } from './http.types';
@@ -22,7 +22,7 @@ export class HttpService{
   public get(url: string, options: HttpOptions = null): Observable<APIResponse<unknown>> {
     let retries = 0;
     return this.httpClient.get<APIResponse<unknown>>(`${options?.apiUrl || environment.apiURL}/${url}?${this.getQuery(options?.params)}`, {
-      headers: this.getHeaders(options?.authorize)
+      headers: this.getHeaders(options)
     }).pipe(
       retryWhen(errors => errors.pipe(
         tap(error => {
@@ -38,7 +38,7 @@ export class HttpService{
   public post(url: string, data: unknown, options: HttpOptions = null): Observable<APIResponse<unknown>> {
     let retries = 0;
     return this.httpClient.post<APIResponse<unknown>>(`${options?.apiUrl || environment.apiURL}/${url}?${this.getQuery(options?.params)}`, data, {
-      headers: this.getHeaders(options?.authorize)
+      headers: this.getHeaders(options)
     }).pipe(
       retryWhen(errors => errors.pipe(
         tap(error => {
@@ -54,7 +54,7 @@ export class HttpService{
   public put(url: string, data: unknown, options: HttpOptions = null): Observable<APIResponse<unknown>> {
     let retries = 0;
     return this.httpClient.put<APIResponse<unknown>>(`${options?.apiUrl || environment.apiURL}/${url}?${this.getQuery(options?.params)}`, data, {
-      headers: this.getHeaders(options?.authorize)
+      headers: this.getHeaders(options)
     }).pipe(
       retryWhen(errors => errors.pipe(
         tap(error => {
@@ -70,7 +70,7 @@ export class HttpService{
   public patch(url: string, data: unknown, options: HttpOptions = null): Observable<APIResponse<unknown>> {
     let retries = 0;
     return this.httpClient.patch<APIResponse<unknown>>(`${options?.apiUrl || environment.apiURL}/${url}?${this.getQuery(options?.params)}`, data, {
-      headers: this.getHeaders(options?.authorize)
+      headers: this.getHeaders(options)
     }).pipe(
       retryWhen(errors => errors.pipe(
         tap(error => {
@@ -86,7 +86,7 @@ export class HttpService{
   public delete(url: string, options: HttpOptions = null): Observable<APIResponse<unknown>> {
     let retries = 0;
     return this.httpClient.delete<APIResponse<unknown>>(`${options?.apiUrl || environment.apiURL}/${url}?${this.getQuery(options?.params)}`, {
-      headers: this.getHeaders(options?.authorize)
+      headers: this.getHeaders(options)
     }).pipe(
       retryWhen(errors => errors.pipe(
         tap(error => {
@@ -107,16 +107,19 @@ export class HttpService{
     if (response.status == 0) {
       this.appService.siteMessage = { text: 'No se ha podido conectar al servidor', type: MessageType.Error };
     } else {
-      this.appService.siteMessage = { text: response.error?.messages[0] || 'Ha ocurrido un error inesperado del servidor', type: MessageType.Error };
+      console.log(response?.url, 'Showing errors', JSON.stringify(response?.error?.messages));
+      const message = response.error?.messages[0];
+      this.appService.siteMessage = { text: message != null ? message : 'Ha ocurrido un error inesperado del servidor', type: MessageType.Error };
     }
 
     return of({ httpStatusCode: response.status , success: false, messages: [], data: null });
   }
 
-  private getHeaders(authorize: boolean): { [header: string]: string | string[] } {
+  private getHeaders(options?: HttpOptions): { [header: string]: string | string[] } {
     return {
       'Content-Type': 'application/json',
-      ...authorize && { 'Authorization': `Bearer ${localStorage.getItem(StorageKeys.ACCESS_TOKEN)}` }
+      ...options?.accessToken && { [RequestHeaders.AUTHORIZATION]: `Bearer ${localStorage.getItem(StorageKeys.ACCESS_TOKEN)}` },
+      ...options?.refreshToken && { [RequestHeaders.SESSION]: `Bearer ${localStorage.getItem(StorageKeys.REFRESH_TOKEN)}` }
     };
   }
 

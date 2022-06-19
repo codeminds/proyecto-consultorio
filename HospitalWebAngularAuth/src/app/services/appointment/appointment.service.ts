@@ -18,22 +18,22 @@ export class AppointmentService {
   }
 
   public list(filter: QueryParams): Observable<APIResponse<Appointment[]>> {
-    return this.httpService.get(this._api, { params: filter, authorize: true }).mapArrayResponse((item: object) => new Appointment(item));
+    return this.httpService.get(this._api, { params: filter, accessToken: true }).mapArrayResponse((item: object) => new Appointment(item));
   }
 
   public get(id: number): Observable<APIResponse<Appointment>> {
-    return this.httpService.get(`${this._api}/${id}`, { authorize: true }).mapObjectResponse((item: object) => new Appointment(item));
+    return this.httpService.get(`${this._api}/${id}`, { accessToken: true }).mapObjectResponse((item: object) => new Appointment(item));
   }
 
   public post(data: Appointment): Observable<APIResponse<Appointment>> {
-    return this.httpService.post(this._api, new CreateUpdateAppointmentDTO(data), { authorize: true }).mapObjectResponse((item: object) => new Appointment(item));
+    return this.httpService.post(this._api, new CreateUpdateAppointmentDTO(data), { accessToken: true }).mapObjectResponse((item: object) => new Appointment(item));
   }
 
   public put(id: number, data: Appointment): Observable<APIResponse<Appointment>> {
-    return this.httpService.put(`${this._api}/${id}`, new CreateUpdateAppointmentDTO(data), { authorize: true }).mapObjectResponse((item: object) => new Appointment(item));
+    return this.httpService.put(`${this._api}/${id}`, new CreateUpdateAppointmentDTO(data), { accessToken: true }).mapObjectResponse((item: object) => new Appointment(item));
   }
 
   public delete(id: number): Observable<APIResponse<Appointment>> {
-    return this.httpService.delete(`${this._api}/${id}`, { authorize: true }).mapObjectResponse((item: object) => new Appointment(item));
+    return this.httpService.delete(`${this._api}/${id}`, { accessToken: true }).mapObjectResponse((item: object) => new Appointment(item));
   }
 }
