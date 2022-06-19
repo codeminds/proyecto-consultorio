@@ -100,14 +100,13 @@ export class HttpService{
   }
 
   private handleError(response: HttpErrorResponse): ObservableInput<APIResponse<null>> {
-    if(response.error?.data) {
-      console.error(`HTTP ${response.status} Response: ${JSON.stringify(response?.error?.data, null, 4)}`);
+    if(response.error) {
+      console.error(`HTTP ${response.status} Response: ${JSON.stringify(response.error.data, null, 4)}`);
     }
   
     if (response.status == 0) {
       this.appService.siteMessage = { text: 'No se ha podido conectar al servidor', type: MessageType.Error };
     } else {
-      console.log(response?.url, 'Showing errors', JSON.stringify(response?.error?.messages));
       const message = response.error?.messages[0];
       this.appService.siteMessage = { text: message != null ? message : 'Ha ocurrido un error inesperado del servidor', type: MessageType.Error };
     }
