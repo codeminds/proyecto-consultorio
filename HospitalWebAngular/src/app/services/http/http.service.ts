@@ -1,7 +1,7 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AppService } from '@services/app/app.service';
-import { catchError, Observable, ObservableInput, of, retryWhen, tap } from 'rxjs';
+import { catchError, delay, finalize, Observable, ObservableInput, of, retryWhen, tap, timeout, TimeoutError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { APIResponse, MessageType, QueryParams } from './http.types';
 
@@ -9,100 +9,121 @@ import { APIResponse, MessageType, QueryParams } from './http.types';
   providedIn: 'root'
 })
 export class HttpService{
-  private readonly retryLimit: number;
+  private readonly _retryLimit: number;
+  private readonly _retryCodes: number[];
+  private readonly _takingLongSeconds: number;
   
   constructor(
     private httpClient: HttpClient,
     private appService: AppService
   ) {
-    this.retryLimit = 3;
+    this._retryLimit = 2;
+    this._retryCodes = [0, HttpStatusCode.BadGateway, HttpStatusCode.ServiceUnavailable, HttpStatusCode.GatewayTimeout];
+    this._takingLongSeconds = 10;
   }
 
   public get(url: string, params: QueryParams = null, apiOverride: string = null): Observable<APIResponse<unknown>> {
-    let retries = 0;
+    const takingLong = this.setTakingLongTimeout();
+    
     return this.httpClient.get<APIResponse<unknown>>(`${apiOverride || environment.apiURL}/${url}?${this.getQuery(params)}`, {
       headers: {
         'Content-Type': 'application/json'
       }
     }).pipe(
-      retryWhen(errors => errors.pipe(
-        tap(error => {
-          if(error.status != 0 || ++retries > this.retryLimit) {
-            throw error;
-          }
-        })
-      )),
-      catchError((response) => this.handleError(response))
+      timeout((this._takingLongSeconds / 2) * 3 * 1000),
+      retryWhen(error => this.retryRequest(error)),
+      catchError((error) => this.handleError(error)),
+      finalize(() => { clearTimeout(takingLong) })
     );
   }
 
   public post(url: string, data: unknown = null, params: QueryParams = null, apiOverride: string = null): Observable<APIResponse<unknown>> {
-    let retries = 0;
+    const takingLong = this.setTakingLongTimeout();
+
     return this.httpClient.post<APIResponse<unknown>>(`${apiOverride || environment.apiURL}/${url}?${this.getQuery(params)}`, data, {
       headers: {
         'Content-Type': 'application/json'
       }
     }).pipe(
-      retryWhen(errors => errors.pipe(
-        tap(error => {
-          if(error.status != 0 || ++retries > this.retryLimit) {
-            throw error;
-          }
-        })
-      )),
-      catchError((response) => this.handleError(response))
+      timeout((this._takingLongSeconds / 2) * 3 * 1000),
+      retryWhen(error => this.retryRequest(error)),
+      catchError((error) => this.handleError(error)),
+      finalize(() => { clearTimeout(takingLong) })
     );
   }
 
   public put(url: string, data: unknown = null, params: QueryParams = null, apiOverride: string = null): Observable<APIResponse<unknown>> {
-    let retries = 0;
+    const takingLong = this.setTakingLongTimeout();
+
     return this.httpClient.put<APIResponse<unknown>>(`${apiOverride || environment.apiURL}/${url}?${this.getQuery(params)}`, data, {
       headers: {
         'Content-Type': 'application/json'
       }
     }).pipe(
-      retryWhen(errors => errors.pipe(
-        tap(error => {
-          if(error.status != 0 || ++retries > this.retryLimit) {
-            throw error;
-          }
-        })
-      )),
-      catchError((response) => this.handleError(response))
+      timeout((this._takingLongSeconds / 2) * 3 * 1000),
+      retryWhen(error => this.retryRequest(error)),
+      catchError((error) => this.handleError(error)),
+      finalize(() => { clearTimeout(takingLong) })
     );
   }
 
   public delete(url: string, params: QueryParams = null, apiOverride: string = null): Observable<APIResponse<unknown>> {
-    let retries = 0;
+    const takingLong = this.setTakingLongTimeout();
+
     return this.httpClient.delete<APIResponse<unknown>>(`${apiOverride || environment.apiURL}/${url}?${this.getQuery(params)}`, {
       headers: {
         'Content-Type': 'application/json'
       }
     }).pipe(
-      retryWhen(errors => errors.pipe(
-        tap(error => {
-          if(error.status != 0 || ++retries > this.retryLimit) {
-            throw error;
-          }
-        })
-      )),
-      catchError((response) => this.handleError(response))
+      timeout((this._takingLongSeconds / 2) * 3 * 1000),
+      retryWhen(error => this.retryRequest(error)),
+      catchError((error) => this.handleError(error)),
+      finalize(() => { clearTimeout(takingLong); })
     );
   }
 
-  private handleError(response: HttpErrorResponse): ObservableInput<APIResponse<null>> {
-    if(response.error?.data) {
-      console.error(`HTTP ${response.status} Response: ${JSON.stringify(response?.error?.data, null, 4)}`);
-    }
-  
-    if (response.status == 0) {
+  private setTakingLongTimeout(): NodeJS.Timeout {
+    return setTimeout(() => {
+      this.appService.siteMessage = { text: 'La acción está tardando, por favor espere...', type: MessageType.Warning };
+    }, this._takingLongSeconds * 1000);
+  }
+
+  private retryRequest(error: Observable<any>): Observable<any> {
+    let retries = 0;
+    let takingLong: NodeJS.Timeout[] = [];
+
+    return error.pipe(
+      tap(error => {
+        if(retries > 0) {
+          takingLong.push(this.setTakingLongTimeout());
+        } 
+        
+        if(!(error instanceof HttpErrorResponse) || !this._retryCodes.includes(error.status) || ++retries > this._retryLimit) {
+          throw error;
+        }  
+      }),
+      delay((this._takingLongSeconds / 2) * 1000),
+      finalize(() => { takingLong.forEach(clearTimeout); })
+    );
+  }
+
+  private handleError(error: Error): ObservableInput<APIResponse<null>> {
+    if(error instanceof HttpErrorResponse) {
+      console.warn(`HttpService ${error.status}: ${JSON.stringify(error.error.data, null, 4)}`);
+    
+      if (error.status == 0) {
+        this.appService.siteMessage = { text: 'No se ha podido conectar al servidor', type: MessageType.Error };
+      } else {
+        this.appService.siteMessage = { text: error.error.messages[0] || 'Ha ocurrido un error inesperado del servidor', type: MessageType.Error };
+      }
+
+      return of({ httpStatusCode: error.status , success: false, messages: [], data: null });
+    } else if (error instanceof TimeoutError) {
       this.appService.siteMessage = { text: 'No se ha podido conectar al servidor', type: MessageType.Error };
-    } else {
-      const message = response.error?.messages[0];
-      this.appService.siteMessage = { text: message != null ? message : 'Ha ocurrido un error inesperado del servidor', type: MessageType.Error };
     }
 
-    return of({ httpStatusCode: response.status , success: false, messages: [], data: null });
+    console.warn(`HttpService: ${JSON.stringify(error.message, null, 4)}`);
+    return of({ httpStatusCode: null, success: false, messages: [], data: null });
   }
 
   private getQuery(params: QueryParams, prefix: string = null): string {

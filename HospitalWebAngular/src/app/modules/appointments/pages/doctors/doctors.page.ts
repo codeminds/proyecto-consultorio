@@ -97,7 +97,7 @@ export class DoctorsPage implements OnInit{
         if(response.success) {
           this.appService.siteMessage = { type: MessageType.Success, text: response.messages[0] };
           this.list();
-        }else {
+        }else if(response.messages.length > 0) {
           this.appService.siteMessage = { type: MessageType.Warning, text: response.messages[0] };
         }
 
