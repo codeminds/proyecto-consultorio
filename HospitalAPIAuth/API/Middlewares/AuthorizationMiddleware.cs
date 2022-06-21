@@ -3,6 +3,7 @@ using API.Data.Models;
 using API.Services;
 using API.Utils;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.Tokens;
 using System.Net;
@@ -59,7 +60,18 @@ namespace API.Middlewares
 
                     if (session.DateExpiry <= DateTime.Now)
                     {
-                        await sessionService.DeleteSession(session);
+                        //Una serie de peticiones al mismo tiempo pueden causar que se intente borrar una sesión
+                        //repetidas veces, lo cuál genera problemas con EntityFramework. En este caso específico
+                        //atrapamos la excepción y seguimos adelante sin problema
+                        try
+                        { 
+                            await sessionService.DeleteSession(session);
+                        }
+                        catch (DbUpdateConcurrencyException)
+                        { 
+                            //Log informativo
+                        }
+
                         context.Response.Headers.Add(ResponseHeaders.SessionExpired, "true");
                         SendResponse(context, HttpStatusCode.Unauthorized, "Su sesión ha expirado");
                         return;
@@ -73,7 +85,7 @@ namespace API.Middlewares
                 }
                 catch (SecurityTokenException)
                 {
-                    SendResponse(context, HttpStatusCode.BadRequest, data: "Token de acceso no es válido");
+                    SendResponse(context, HttpStatusCode.Unauthorized, "Su sesión ha expirado", "Token de acceso no es válido");
                     return;
                 }
             }

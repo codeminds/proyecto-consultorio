@@ -11,13 +11,13 @@ namespace API.Validators
             //Email
             if (string.IsNullOrWhiteSpace(data.Email))
             {
-                innerMessages.Add("Email es requerido");
+                innerMessages.Add("Usuario es requerido");
             }
 
             //Password
             if (string.IsNullOrWhiteSpace(data.Password))
             {
-                innerMessages.Add("Nombre es requerido");
+                innerMessages.Add("Contraseña es requerida");
             }
 
             messages.AddRange(innerMessages);

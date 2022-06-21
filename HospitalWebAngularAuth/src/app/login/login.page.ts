@@ -34,10 +34,13 @@ export class LoginPage {
       this.loading = true;
       this.messages = [];
 
+      //Si el proceso de ingreso es correcto se procede a crear en el almacenamiento local
+      //los tokens de acceso y refrescado para utilizar en el sistema
       const response = await firstValueFrom(this.sessionService.login(this.username, this.password));
       if(response.success) {
         localStorage.setItem(StorageKeys.ACCESS_TOKEN, response.data.accessToken);
         localStorage.setItem(StorageKeys.REFRESH_TOKEN, response.data.refreshToken);
+
         this.router.navigate(['']);
       } else {
         this.messages = response.messages;

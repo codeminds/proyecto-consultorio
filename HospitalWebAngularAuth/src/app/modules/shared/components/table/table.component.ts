@@ -53,6 +53,6 @@ export class TableComponent implements OnInit {
   //entre todos los headers actúan como calculadores proporcionales
   //en vez de valores absolutos
   public getHeaderWidth(size?: number): string {
-    return `width: ${size && size > 0 ? (100 * size) : '100'}%;`;
+    return `width: ${size > 0 ? (100 * size) : '100'}%;`;
   }
 }

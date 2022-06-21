@@ -12,7 +12,7 @@ namespace API.Services
         }
 
         protected async Task<int> SaveRepositoriesAsync()
-        { 
+        {
             return await this._database.SaveChangesAsync();
         }
     }

@@ -111,11 +111,12 @@ export class AppointmentsPage implements OnInit {
     this.confirmFunction = async () => {
       if(!this.saving) {
         this.saving = true;
+
         const response = await firstValueFrom(this.appointmentService.delete(id));
         if(response.success) {
           this.appService.siteMessage = { type: MessageType.Success, text: response.messages[0] };
           this.list();
-        }else {
+        }else if(response.messages.length > 0) {
           this.appService.siteMessage = { type: MessageType.Warning, text: response.messages[0] };
         }
 
@@ -137,8 +138,8 @@ export class AppointmentsPage implements OnInit {
           this.panelOpen = true;
           this.filter = {
             ...this.filter,
-            doctor: { documentId: response.data.doctor.documentId },
-            patient: { documentId: response.data.patient.documentId },
+            doctor: { ...this.filter.doctor, documentId: response.data.doctor.documentId },
+            patient: { ...this.filter.patient, documentId: response.data.patient.documentId },
             dateFrom: new Date(response.data.date),
             dateTo: new Date(response.data.date)
           }

@@ -7,6 +7,7 @@ using API.Utils;
 using API.Validators;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
@@ -108,7 +109,18 @@ namespace API.Controllers
 
                 if (session.DateExpiry <= DateTime.Now)
                 {
-                    await this._sessionService.DeleteSession(session);
+                    //Una serie de peticiones al mismo tiempo pueden causar que se intente borrar una sesión
+                    //repetidas veces, lo cuál genera problemas con EntityFramework. En este caso específico
+                    //atrapamos la excepción y seguimos adelante sin problema
+                    try
+                    { 
+                        await this._sessionService.DeleteSession(session);
+                    }
+                    catch (DbUpdateConcurrencyException)
+                    { 
+                        //Log informativo
+                    }
+                    
                     Response.Headers.Add(ResponseHeaders.SessionExpired, "true");
                     return HttpErrors.Unauthorized("Su sesión ha expirado");
                 }
