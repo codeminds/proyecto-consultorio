@@ -26,7 +26,8 @@
       "@appointments/*": ["src/app/modules/appointments/*"],
       "@services/*": ["src/app/services/*"],
       "@shared/*": ["src/app/modules/shared/*"],
-      "@utils/*": ["src/app/utils/*"]
+      "@utils/*": ["src/app/utils/*"],
+      "@store": ["src/app/app.store.ts"]
     }
   },
   "angularCompilerOptions": {

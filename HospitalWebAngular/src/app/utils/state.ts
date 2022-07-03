@@ -1,27 +1,21 @@
 import { BehaviorSubject, Observable } from 'rxjs';
 
-export class State<T extends object> {
+export class State<T> {
   private _state: BehaviorSubject<T>;
-  private _setFunction: (state: T) => void;
 
-  public get $state(): Observable<T> {
+  public get $value(): Observable<T> {
     return this._state.asObservable();
   }
 
-  public get state(): T {
+  public get value(): T {
     return this._state.getValue();
   }
 
-  public set state(value: T) {
-    if(this._setFunction) {
-      this._setFunction(value);
-    }
-  
+  public set value(value: T) {
     this._state.next(value);
   }
 
-  constructor(setFunction: (state: T) => void = null) { 
+  constructor() { 
     this._state = new BehaviorSubject(null);
-    this._setFunction = setFunction;
   }
 }

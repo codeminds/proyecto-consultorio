@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { AppService } from '@services/app/app.service';
 import { Doctor } from '@services/doctor/doctor.model';
 import { DoctorService } from '@services/doctor/doctor.service';
 import { Field } from '@services/field/field.model';
@@ -7,6 +6,7 @@ import { FieldService } from '@services/field/field.service';
 import { MessageType, QueryParams } from '@services/http/http.types';
 import { ButtonType, InputType } from '@shared/components/form-field/form-field.types';
 import { ModalPosition, ModalSize } from '@shared/components/modal/modal.types';
+import { Store } from '@store';
 import { firstValueFrom } from 'rxjs';
 
 @Component({
@@ -36,7 +36,7 @@ export class DoctorsPage implements OnInit{
   constructor(
     private doctorService: DoctorService,
     private fieldService: FieldService,
-    private appService: AppService
+    private store: Store
   ) { 
     this.doctors = [];
     this.fields = [];
@@ -95,10 +95,10 @@ export class DoctorsPage implements OnInit{
         this.saving = true;
         const response = await firstValueFrom(this.doctorService.delete(id));
         if(response.success) {
-          this.appService.siteMessage = { type: MessageType.Success, text: response.messages[0] };
+          this.store.siteMessage = { type: MessageType.Success, text: response.messages[0] };
           this.list();
         }else if(response.messages.length > 0) {
-          this.appService.siteMessage = { type: MessageType.Warning, text: response.messages[0] };
+          this.store.siteMessage = { type: MessageType.Warning, text: response.messages[0] };
         }
 
         this.saving = false;
@@ -124,7 +124,7 @@ export class DoctorsPage implements OnInit{
         }
 
         this.modalOpen = false;
-        this.appService.siteMessage = { type: MessageType.Success, text: response.messages[0] };
+        this.store.siteMessage = { type: MessageType.Success, text: response.messages[0] };
         this.list();
       }else {
         this.messages = response.messages;

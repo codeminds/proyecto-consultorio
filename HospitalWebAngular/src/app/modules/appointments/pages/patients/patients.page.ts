@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { AppService } from '@services/app/app.service';
 import { Patient } from '@services/patient/patient.model';
 import { PatientService } from '@services/patient/patient.service';
 import { MessageType, QueryParams } from '@services/http/http.types';
 import { ButtonType, DateType, InputType } from '@shared/components/form-field/form-field.types';
 import { ModalPosition, ModalSize } from '@shared/components/modal/modal.types';
 import { firstValueFrom } from 'rxjs';
+import { Store } from '@store';
 
 @Component({
   selector: 'app-patients',
@@ -33,7 +33,7 @@ export class PatientsPage implements OnInit{
   
   constructor(
     private patientService: PatientService,
-    private appService: AppService
+    private store: Store
   ) { 
     this.patients = [];
     this.modalOpen = false;
@@ -85,10 +85,10 @@ export class PatientsPage implements OnInit{
         
         const response = await firstValueFrom(this.patientService.delete(id));
         if(response.success) {
-          this.appService.siteMessage = { type: MessageType.Success, text: response.messages[0] };
+          this.store.siteMessage = { type: MessageType.Success, text: response.messages[0] };
           this.list();
         }else if(response.messages.length > 0) {
-          this.appService.siteMessage = { type: MessageType.Warning, text: response.messages[0] };
+          this.store.siteMessage = { type: MessageType.Warning, text: response.messages[0] };
         }
 
         this.saving = false;
@@ -114,7 +114,7 @@ export class PatientsPage implements OnInit{
         }
 
         this.modalOpen = false;
-        this.appService.siteMessage = { type: MessageType.Success, text: response.messages[0] };
+        this.store.siteMessage = { type: MessageType.Success, text: response.messages[0] };
         this.list();
       }else {
         this.messages = response.messages;
