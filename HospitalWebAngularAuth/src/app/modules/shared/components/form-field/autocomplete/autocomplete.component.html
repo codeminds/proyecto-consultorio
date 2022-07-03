@@ -16,7 +16,7 @@
         (keydown.tab)="selectKeyPress($event)"
         (keydown.escape)="blur()"
         (focus)="focus()" />
-        <i *ngIf="loading" class="material-icons-sharp">loop</i>
+        <i *ngIf="loading" class="material-symbols-sharp">loop</i>
         <div #selection *ngIf="model != null && showSelection" [ngClass]="{'hidden': focused}" (click)="clickSelection()">
             <ng-container *ngTemplateOutlet="selectionTemplate; context: {$implicit: model}"></ng-container>
         </div>

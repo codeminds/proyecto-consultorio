@@ -1,5 +1,5 @@
 <div>
-    <i *ngIf="loading" class="material-icons-sharp">loop</i>
+    <i *ngIf="loading" class="material-symbols-sharp">loop</i>
     <table [ngClass]="{'mobile': templateMobile != null}">
         <thead *ngIf="headers.length > 0">
             <tr>
@@ -19,7 +19,7 @@
             </tr>
             <tr *ngIf="loading" class="loading">
                 <td class="mobile">
-                    <i *ngIf="loading" class="material-icons-sharp">loop</i>
+                    <i *ngIf="loading" class="material-symbols-sharp">loop</i>
                 </td>
             </tr>
         </tbody>

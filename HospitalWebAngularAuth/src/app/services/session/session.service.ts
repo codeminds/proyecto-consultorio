@@ -22,7 +22,7 @@ export class SessionService {
   }
 
   public logout(sessionId: string = null): Observable<APIResponse<Session>> {
-    return this.httpService.delete(`${this._api}/${sessionId || ''}`).mapObjectResponse((item: object) => new Session(item));
+    return this.httpService.delete(`${this._api}/${sessionId || ''}`, { accessToken: true }).mapObjectResponse((item: object) => new Session(item));
   }
 
   public refresh(): Observable<APIResponse<SessionTokens>> {

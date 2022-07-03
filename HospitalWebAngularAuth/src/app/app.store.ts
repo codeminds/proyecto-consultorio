@@ -1,4 +1,5 @@
 import { Injectable } from "@angular/core";
+import { Router } from "@angular/router";
 import { Message } from "@services/http/http.types";
 import { User } from "@services/user/user.model";
 import { State } from "@utils/state";
@@ -31,9 +32,17 @@ export class Store {
     public get user() { return this._user.value };
     public set user(value: User) { this._user.value = value };
 
-    constructor() {
+    constructor(
+        private router: Router
+    ) {
         this._siteMessage = new State();
         this._siteTitle = new State();
         this._user = new State();
+    }
+
+    public closeSession(): void {
+        localStorage.clear();
+        this.user = null;
+        this.router.navigate(['login']);
     }
 }

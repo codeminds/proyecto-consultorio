@@ -8,11 +8,11 @@ import {
   HttpErrorResponse
 } from '@angular/common/http';
 import { catchError, finalize, Observable, Subject, switchMap } from 'rxjs';
-import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { SessionTokens } from '@services/session/session.model';
 import { RequestHeaders, ResponseHeaders, StorageKeys } from '@utils/constants';
 import { SessionService } from '@services/session/session.service';
+import { Store } from '@store';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -20,7 +20,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
   constructor(
     private sessionService: SessionService,
-    private router: Router
+    private store: Store
   ) {
     this._refreshingToken = null;
   }
@@ -61,7 +61,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
               //Si la petición con error de autorización no contiene el encabezado de token expirado
               //esto significa que está no autorizado por otras razones y debe salir del sistema
-              this.logout();
+              this.store.closeSession();
             }
     
             //Si el error recibido no es de autorización simplemente 
@@ -96,7 +96,7 @@ export class AuthInterceptor implements HttpInterceptor {
         //a las peticiones en espera para que procedan a ser
         //canceladas
         this._refreshingToken.next(null);
-        this.logout();
+        this.store.closeSession();
         throw new Error('Sesión falló al refrescar');
       }),
       finalize(() => {
@@ -136,10 +136,5 @@ export class AuthInterceptor implements HttpInterceptor {
     
     //Se ejecuta la petición actualizada
     return next.handle(updatedRequest);
-  }
-
-  private logout(): void {
-    localStorage.clear();
-    this.router.navigate(['login']);
   }
 }

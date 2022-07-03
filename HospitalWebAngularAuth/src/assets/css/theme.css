@@ -4,10 +4,12 @@
     /* LAYOUT */
     --font-main: 'Roboto', Helvetica, sans-serif;
     --color-navbar: #e8e8e8;
+    --color-navbar-user: #2e2e2e;
     --color-sidenav: #292929;
     --color-sidenav-text: #fff;
     --color-sidenav-category: #313131;
     --color-sidenav-active: #4d4d4d;
+
 
     /* MAIN COLORS */
     --color-main: #5ccdcc;
@@ -38,7 +40,7 @@
     --color-danger-primary: #b6446a;
     --color-danger-secondary: #75243f;
     --color-danger-tertiary: #9b3a5a;
-    --color-neutral-rimary: #afa9a9;
+    --color-neutral-primary: #afa9a9;
     --color-neutral-secondary: #8f8c8c;
     --color-neutral-tertiary: #8d8585;
 }
