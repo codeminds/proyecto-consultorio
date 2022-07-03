@@ -51,13 +51,3 @@
 .button.neutral:hover:not(:disabled) {
     background: var(--color-neutral-tertiary);
 }
-
-.material-icons-sharp {
-    vertical-align: text-bottom;
-    font-size: 1.6rem;
-    margin-right: 0.4rem;
-}
-
-.material-icons-sharp:last-child {
-    margin-right: 0;
-}
