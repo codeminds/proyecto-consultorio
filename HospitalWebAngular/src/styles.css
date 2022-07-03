@@ -98,6 +98,17 @@ p {
     animation: fade-in 0.2s ease-out forwards ;
 }
 
+.material-symbols-sharp {
+    vertical-align: text-bottom;
+    font-size: 1.6rem;
+    margin-right: 0.4rem;
+    font-weight: 500;
+}
+
+.material-symbols-sharp:last-child {
+    margin-right: 0;
+}
+
 @keyframes fade-in {
     0% {
         opaicty: 0;
