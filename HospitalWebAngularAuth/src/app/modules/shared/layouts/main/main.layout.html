@@ -1,5 +1,5 @@
 <!-- Sintaxis para obsevables con async pipes -->
-<ng-container *ngIf="($appSettings | async) as appSettings">
+<ng-container *ngIf="($siteTitle | async) as siteTitle">
     <header class="navbar">
         <button class="menu" (click)="toggleMenu($event)">&equiv;</button>
         <figure>
@@ -34,7 +34,7 @@
             </ul>
         </nav>
         <main class="page">
-            <h1>{{appSettings.title}}</h1>
+            <h1>{{siteTitle}}</h1>
             <!-- 
             Cuando usamos este layout como component de una ruta padre, la ruta hija inyecta su propio
             component justo después de este tag especial "router-outlet".

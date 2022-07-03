@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { AppService } from '@services/app/app.service';
+import { Store } from '@store';
 import { RequestHeaders, StorageKeys } from '@utils/constants';
 import { catchError, delay, finalize, Observable, ObservableInput, of, retryWhen, tap, timeout, TimeoutError } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -16,7 +16,7 @@ export class HttpService{
   
   constructor(
     private httpClient: HttpClient,
-    private appService: AppService
+    private store: Store
   ) {
     this._retryLimit = 2;
     this._retryCodes = [0, HttpStatusCode.BadGateway, HttpStatusCode.ServiceUnavailable, HttpStatusCode.GatewayTimeout];
@@ -90,7 +90,7 @@ export class HttpService{
 
   private setTakingLongTimeout(): NodeJS.Timeout {
     return setTimeout(() => {
-      this.appService.siteMessage = { text: 'La acción está tardando, por favor espere...', type: MessageType.Warning };
+      this.store.siteMessage = { text: 'La acción está tardando, por favor espere...', type: MessageType.Warning };
     }, this._takingLongSeconds * 1000);
   }
 
@@ -118,14 +118,14 @@ export class HttpService{
       console.warn(`HttpService ${error.status}: ${JSON.stringify(error.error.data, null, 4)}`);
     
       if (error.status == 0) {
-        this.appService.siteMessage = { text: 'No se ha podido conectar al servidor', type: MessageType.Error };
+        this.store.siteMessage = { text: 'No se ha podido conectar al servidor', type: MessageType.Error };
       } else {
-        this.appService.siteMessage = { text: error.error.messages[0] || 'Ha ocurrido un error inesperado del servidor', type: MessageType.Error };
+        this.store.siteMessage = { text: error.error.messages[0] || 'Ha ocurrido un error inesperado del servidor', type: MessageType.Error };
       }
 
       return of({ httpStatusCode: error.status , success: false, messages: [], data: null });
     } else if (error instanceof TimeoutError) {
-      this.appService.siteMessage = { text: 'No se ha podido conectar al servidor', type: MessageType.Error };
+      this.store.siteMessage = { text: 'No se ha podido conectar al servidor', type: MessageType.Error };
     }
 
     console.warn(`HttpService: ${JSON.stringify(error.message, null, 4)}`);

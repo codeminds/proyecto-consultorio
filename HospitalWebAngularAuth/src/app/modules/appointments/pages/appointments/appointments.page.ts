@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { AppService } from '@services/app/app.service';
 import { Appointment } from '@services/appointment/appointment.model';
 import { AppointmentService } from '@services/appointment/appointment.service';
 import { Doctor } from '@services/doctor/doctor.model';
@@ -11,6 +10,7 @@ import { Patient } from '@services/patient/patient.model';
 import { PatientService } from '@services/patient/patient.service';
 import { InputType, ButtonType, DateType } from '@shared/components/form-field/form-field.types';
 import { ModalSize, ModalPosition } from '@shared/components/modal/modal.types';
+import { Store } from '@store';
 import { firstValueFrom } from 'rxjs';
 
 @Component({
@@ -43,7 +43,7 @@ export class AppointmentsPage implements OnInit {
     private doctorService: DoctorService,
     private patientService: PatientService,
     private fieldService: FieldService,
-    private appService: AppService
+    private store: Store
   ) { 
     this.appointments = [];
     this.fields = [];
@@ -114,10 +114,10 @@ export class AppointmentsPage implements OnInit {
 
         const response = await firstValueFrom(this.appointmentService.delete(id));
         if(response.success) {
-          this.appService.siteMessage = { type: MessageType.Success, text: response.messages[0] };
+          this.store.siteMessage = { type: MessageType.Success, text: response.messages[0] };
           this.list();
         }else if(response.messages.length > 0) {
-          this.appService.siteMessage = { type: MessageType.Warning, text: response.messages[0] };
+          this.store.siteMessage = { type: MessageType.Warning, text: response.messages[0] };
         }
 
         this.saving = false;
@@ -146,7 +146,7 @@ export class AppointmentsPage implements OnInit {
         }
 
         this.modalOpen = false;
-        this.appService.siteMessage = { type: MessageType.Success, text: response.messages[0] };
+        this.store.siteMessage = { type: MessageType.Success, text: response.messages[0] };
         this.list();
       }else {
         this.messages = response.messages;

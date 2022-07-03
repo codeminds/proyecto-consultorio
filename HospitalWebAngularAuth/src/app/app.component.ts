@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Data, NavigationEnd, Router, RouterEvent } from '@angular/router';
-import { AppService } from '@services/app/app.service';
-import { AppSettings } from '@services/app/app.model';
 import { Message, MessageType } from '@services/http/http.types';
 import { SnackbarType } from '@shared/components/snackbar/snackbar.types';
 import { filter, Observable } from 'rxjs';
+import { Title } from '@angular/platform-browser';
+import { Store } from '@store';
 
 @Component({
   selector: 'app-root',
@@ -15,13 +15,20 @@ export class AppComponent implements OnInit {
   public $message: Observable<Message>;
 
   constructor(
-    private appService: AppService,
+    private store: Store,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private title: Title
   ){}
 
   public ngOnInit(): void {
-    this.$message = this.appService.$siteMessage;
+    this.$message = this.store.$siteMessage;
+
+    //Cuando el state de App cambia se modifica el título de la pestaña
+    this.store.$siteTitle.subscribe((title) => {
+      this.title.setTitle(`Hospital Angular${title ? ' | ' + title : ''}`);
+    });
+
     this.router.events.pipe(
       //Obtiene un evento del router específico
       filter((e): e is RouterEvent => e instanceof RouterEvent)
@@ -36,7 +43,7 @@ export class AppComponent implements OnInit {
           //por estas razones hay que crear funcionalidad especial para cambiar el título
           //de la pestaña del browser con cada navegación 
           const routeData = this.getRouteData();
-          this.appService.state = new AppSettings(routeData);
+          this.store.siteTitle = routeData.title;
           break;
       }
     });
@@ -58,7 +65,7 @@ export class AppComponent implements OnInit {
   }
 
   public dismissMessage(): void {
-    this.appService.siteMessage = null;
+    this.store.siteMessage = null;
   }
 
   private getRouteData(): Data {

@@ -15,6 +15,6 @@ export class Patient {
         this.firstName = data.firstName != null ? String(data.firstName) : null;
         this.lastName = data.lastName != null ? String(data.lastName) : null;
         this.birthDate = data.birthDate != null ? new Date(data.birthDate) : null;
-        this.gender = data.gender != null ? data.gender : null;
+        this.gender = data.gender != null ? Boolean(data.gender) : null;
     }
 }
