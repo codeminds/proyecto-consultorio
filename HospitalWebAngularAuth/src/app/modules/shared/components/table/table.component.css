@@ -20,6 +20,7 @@ table {
 
 ::ng-deep td {
     padding: 0.5rem;
+    vertical-align: middle;
 }
 
 th {
@@ -34,6 +35,10 @@ th:last-child {
 
 tbody tr:nth-child(odd) {
     background: var(--color-alternate-item-background);
+}
+
+tbody tr {
+    height: 4rem;
 }
 
 td.mobile {

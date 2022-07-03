@@ -3,7 +3,7 @@
     <table [ngClass]="{'mobile': templateMobile != null}">
         <thead *ngIf="headers.length > 0">
             <tr>
-                <th *ngFor="let header of headers" [attr.style]="getHeaderWidth(header.size)">{{header.label}}</th>
+                <th *ngFor="let header of filteredHeaders" [attr.style]="getHeaderWidth(header.size)">{{header.label}}</th>
             </tr>
         </thead>
         <tbody #items>

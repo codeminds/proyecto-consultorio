@@ -78,7 +78,7 @@
     pointer-events: none;
 }
 
-.navbar .account-menu a, .navbar .account-menu button{
+.navbar .account-menu ul a, .navbar .account-menu ul button{
     background: none;
     border: 0;
     padding: 1rem 2rem;

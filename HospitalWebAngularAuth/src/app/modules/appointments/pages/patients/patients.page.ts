@@ -4,8 +4,10 @@ import { PatientService } from '@services/patient/patient.service';
 import { MessageType, QueryParams } from '@services/http/http.types';
 import { ButtonType, DateType, InputType } from '@shared/components/form-field/form-field.types';
 import { ModalPosition, ModalSize } from '@shared/components/modal/modal.types';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, Observable } from 'rxjs';
 import { Store } from '@store';
+import { User } from '@services/user/user.model';
+import { UserRole } from '@utils/enums';
 
 @Component({
   selector: 'app-patients',
@@ -22,6 +24,7 @@ export class PatientsPage implements OnInit{
   public confirmText: string;
   public confirmOpen: boolean;
   public messages: string[];
+  public $user: Observable<User>;
 
   public InputType = InputType;
   public DateType = DateType;
@@ -56,6 +59,7 @@ export class PatientsPage implements OnInit{
   }
 
   public ngOnInit(): void {
+    this.$user = this.store.$user;
     this.list();
   }
   public async list(): Promise<void> {
@@ -140,5 +144,9 @@ export class PatientsPage implements OnInit{
   public onModalClose(): void {
     this.patient = null;
     this.messages = [];
+  }
+
+  public canEdit(user: User): boolean {
+    return user.isSuperAdmin || user.hasRoles([UserRole.Administrator, UserRole.Editor]);
   }
 }

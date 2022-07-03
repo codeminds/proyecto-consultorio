@@ -28,6 +28,10 @@ export class TableComponent implements OnInit {
   @ViewChild('items')
   public itemsRef: ElementRef;
 
+  public get filteredHeaders(): TableHeader[] {
+    return this.headers.filter((item) => item);
+  }
+
   constructor() {
     this.template = null;
     this.templateMobile = null;
@@ -44,7 +48,7 @@ export class TableComponent implements OnInit {
 
     //Si el template proporcionado no respeta la semántica de la tabla que sólo
     //debe tener hijos td, el component causará un fallo
-    if(this.template.createEmbeddedView(null).rootNodes.some((node) => node.tagName != 'TD')) { 
+    if(this.template.createEmbeddedView(null).rootNodes.some((node) => node.tagName != 'TD' && node.nodeType != Node.COMMENT_NODE)) { 
       throw new Error('Template can only have direct children of type td');
     }
   }

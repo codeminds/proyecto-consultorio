@@ -1,3 +1,5 @@
+import { UserRole } from "@utils/enums";
+
 export class User {
     public id: number;
     public email: string;
@@ -16,6 +18,10 @@ export class User {
         this.lastName = data.lastName != null ? String(data.lastName) : null;
         this.role = new Role(data.role);
         this.isSuperAdmin = data.isSuperAdmin != null ? data.isSuperAdmin : null;
+    }
+
+    public hasRoles(roles: UserRole[]): boolean {
+        return roles.includes(this.role.id);
     }
 }
 

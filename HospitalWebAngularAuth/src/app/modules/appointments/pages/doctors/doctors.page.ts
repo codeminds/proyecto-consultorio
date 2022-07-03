@@ -4,10 +4,12 @@ import { DoctorService } from '@services/doctor/doctor.service';
 import { Field } from '@services/field/field.model';
 import { FieldService } from '@services/field/field.service';
 import { MessageType, QueryParams } from '@services/http/http.types';
+import { User } from '@services/user/user.model';
 import { ButtonType, InputType } from '@shared/components/form-field/form-field.types';
 import { ModalPosition, ModalSize } from '@shared/components/modal/modal.types';
 import { Store } from '@store';
-import { firstValueFrom } from 'rxjs';
+import { UserRole } from '@utils/enums';
+import { firstValueFrom, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-doctors',
@@ -25,6 +27,7 @@ export class DoctorsPage implements OnInit{
   public confirmText: string;
   public confirmOpen: boolean;
   public messages: string[];
+  public $user: Observable<User>;
 
   public InputType = InputType;
   public ModalSize = ModalSize;
@@ -58,6 +61,7 @@ export class DoctorsPage implements OnInit{
   }
 
   public ngOnInit(): void {
+    this.$user = this.store.$user;
     this.loadFields();
     this.list();
   }
@@ -151,5 +155,9 @@ export class DoctorsPage implements OnInit{
   public onModalClose(): void {
     this.doctor = null;
     this.messages = [];
+  }
+
+  public canEdit(user: User): boolean {
+    return user.isSuperAdmin || user.hasRoles([UserRole.Administrator, UserRole.Editor]);
   }
 }

@@ -1,6 +1,7 @@
 <!-- Controles de página -->
-<div class="page-controls">
-    <button class="button success" (click)="createUpdate()">
+<!-- Sintaxis para obsevables con async pipes -->
+<div *ngIf="($user | async) as user" class="page-controls">
+    <button *ngIf="canEdit(user)" class="button success" (click)="createUpdate()">
         <i class="material-symbols-sharp">add_circle</i>
         <span>Agregar</span>
     </button>
@@ -70,7 +71,8 @@
 </app-panel>
 
 <!--- Tabla de resultados -->
-<app-panel class="slim">
+<!-- Sintaxis para obsevables con async pipes -->
+<app-panel *ngIf="($user | async) as user" class="slim">
     <app-table 
         [headers]="[{ label: 'Cédula' },
                     { label: 'Nombre', size: 2 },
@@ -88,14 +90,16 @@
             <td>{{patient.birthDate.toLocaleDisplayString('es-US')}}</td>
             <td>{{patient.gender ? 'Masculino' : 'Femenino'}}</td>    
             <td class="table-buttons">
-                <button class="button success" title="Editar" (click)="createUpdate(patient)">
-                    <i class="material-symbols-sharp">edit</i>
-                    <span>Editar</span>
-                </button>
-                <button class="button danger" title="Borrar" (click)="deletePatient(patient.id)">
-                    <i class="material-symbols-sharp">delete</i>
-                    <span>Borrar</span>
-                </button>
+                <ng-container *ngIf="canEdit(user)">
+                    <button class="button success" title="Editar" (click)="createUpdate(patient)">
+                        <i class="material-symbols-sharp">edit</i>
+                        <span>Editar</span>
+                    </button>
+                    <button class="button danger" title="Borrar" (click)="deletePatient(patient.id)">
+                        <i class="material-symbols-sharp">delete</i>
+                        <span>Borrar</span>
+                    </button>
+                </ng-container>
             </td>
         </ng-template>
         <ng-template #patientRowMobile let-patient>
@@ -110,7 +114,7 @@
                 <p>
                     <span class="label">Género:</span> {{patient.gender ? 'Masculino' : 'Femenino'}}
                 </p>
-                <div>
+                <div *ngIf="canEdit(user)">
                     <button class="button success" title="Editar" (click)="createUpdate(patient)">
                         <i class="material-symbols-sharp">edit</i>
                         <span>Editar</span>

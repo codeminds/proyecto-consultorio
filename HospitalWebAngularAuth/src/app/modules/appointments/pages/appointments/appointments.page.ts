@@ -8,10 +8,12 @@ import { FieldService } from '@services/field/field.service';
 import { MessageType, QueryParams } from '@services/http/http.types';
 import { Patient } from '@services/patient/patient.model';
 import { PatientService } from '@services/patient/patient.service';
+import { User } from '@services/user/user.model';
 import { InputType, ButtonType, DateType } from '@shared/components/form-field/form-field.types';
 import { ModalSize, ModalPosition } from '@shared/components/modal/modal.types';
 import { Store } from '@store';
-import { firstValueFrom } from 'rxjs';
+import { UserRole } from '@utils/enums';
+import { firstValueFrom, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-appointments',
@@ -29,6 +31,7 @@ export class AppointmentsPage implements OnInit {
   public confirmText: string;
   public confirmOpen: boolean;
   public messages: string[];
+  public $user: Observable<User>;
 
   public InputType = InputType;
   public ModalSize = ModalSize;
@@ -76,6 +79,7 @@ export class AppointmentsPage implements OnInit {
   }
 
   public ngOnInit(): void {
+    this.$user = this.store.$user;
     this.loadFields();
     this.list();
   }
@@ -188,5 +192,9 @@ export class AppointmentsPage implements OnInit {
 
   public getLookupPatientsFunction(): (search: string) => Promise<Patient[]> {
     return ((search: string) => firstValueFrom(this.patientService.search(search.trim().split(' '))).then((response) => response.data)).bind(this);
+  }
+
+  public canEdit(user: User): boolean {
+    return user.isSuperAdmin || user.hasRoles([UserRole.Administrator, UserRole.Editor]);
   }
 }
