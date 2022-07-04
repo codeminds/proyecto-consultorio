@@ -28,6 +28,12 @@ export class TableComponent implements OnInit {
   @ViewChild('items')
   public itemsRef: ElementRef;
 
+  //Propiedad interna que filtra columnas nulas para poder
+  //crear objetos condicionales
+  public get filteredHeaders(): TableHeader[] {
+    return this.headers.filter((item) => item);
+  }
+
   constructor() {
     this.template = null;
     this.templateMobile = null;

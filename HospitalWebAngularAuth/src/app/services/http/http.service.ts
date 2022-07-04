@@ -94,6 +94,7 @@ export class HttpService{
     }, this._takingLongSeconds * 1000);
   }
 
+  //Reintenta una petición una cantidad de veces si el error cumple con ciertas características
   private retryRequest(error: Observable<any>): Observable<any> {
     let retries = 0;
     let takingLong: NodeJS.Timeout[] = [];
@@ -113,6 +114,7 @@ export class HttpService{
     );
   }
 
+  //Maneja el error de las peticiones a partir de ciertas características
   private handleError(error: Error): ObservableInput<APIResponse<null>> {
     if(error instanceof HttpErrorResponse) {
       console.warn(`HttpService ${error.status}: ${JSON.stringify(error.error.data, null, 4)}`);
@@ -140,6 +142,9 @@ export class HttpService{
     };
   }
 
+  //Genera un query string a partir de un objeto de parámetros que se adapta
+  //a cada tipo de dato de las propiedades, incluyendo una solución recursiva
+  //para objetos complejos
   private getQuery(params: QueryParams, prefix: string = null): string {
     let query = '';
 

@@ -20,6 +20,7 @@ export class Store {
         }, 100);    
     };
 
+    //Site Title
     private readonly _siteTitle: State<string>;
     public get $siteTitle() { return this._siteTitle.$value };
     public get siteTitle() { return this._siteTitle.value };

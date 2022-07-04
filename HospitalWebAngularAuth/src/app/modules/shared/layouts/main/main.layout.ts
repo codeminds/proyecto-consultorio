@@ -4,7 +4,6 @@ import { UserService } from '@services/user/user.service';
 import { User } from '@services/user/user.model';
 import { Store } from '@store';
 import { SessionService } from '@services/session/session.service';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-main',

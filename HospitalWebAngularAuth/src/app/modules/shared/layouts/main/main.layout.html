@@ -6,6 +6,7 @@
         </figure>
     </div>
     <!-- Sintaxis para obsevables con async pipes -->
+    <!-- El evitar el event bubbling en el sidenav evita que este se cierre por el host listener de body  -->
     <nav (click)="$event.stopPropagation()" class="account-menu" *ngIf="($user | async) as user">
         <button (click)="toggleAccountMenu()" [ngClass]="{'open': accountMenuOpen}" class="account-menu-toggle material-symbols-sharp">account_circle</button>
         <ul *ngIf="accountMenuOpen">
