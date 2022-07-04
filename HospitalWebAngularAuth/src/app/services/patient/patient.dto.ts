@@ -20,3 +20,22 @@ export class CreateUpdatePatientDTO {
         this.gender = data.gender;
     }
 }
+
+export class FilterPatientDTO {
+    public documentId: string;
+    public firstName: string;
+    public lastName: string;
+    public birthDateFrom: Date;
+    public birthDateTo: Date;
+
+    constructor(data: any = null) {
+        //Técnica de deep copy para eliminar referencias de memoria
+        data = data ? JSON.parse(JSON.stringify(data)) : {};
+
+        this.documentId = data.documentId != null ? String(data.documentId) : null;
+        this.firstName = data.firstName != null ? String(data.firstName) : null;
+        this.lastName = data.lastName != null ? String(data.lastName) : null;
+        this.birthDateFrom = data.birthDateFrom != null ? new Date(data.birthDateFrom) : null;
+        this.birthDateTo = data.birthDateTo != null ? new Date(data.birthDateTo) : null;
+    }
+}

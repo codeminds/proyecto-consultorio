@@ -8,6 +8,7 @@ import { firstValueFrom, Observable } from 'rxjs';
 import { Store } from '@store';
 import { User } from '@services/user/user.model';
 import { UserRole } from '@utils/enums';
+import { FilterPatientDTO } from '@services/patient/patient.dto';
 
 @Component({
   selector: 'app-patients',
@@ -48,14 +49,7 @@ export class PatientsPage implements OnInit{
     this.confirmOpen = false;
     this.messages = [];
     this.confirmFunction = null;
-    this.filter = {
-      documentId: null,
-      firstName: null,
-      lastName: null,
-      birthDateFrom: null,
-      birthDateTo: null,
-      gender: null
-    };
+    this.filter = new FilterPatientDTO();
   }
 
   public ngOnInit(): void {
@@ -111,10 +105,7 @@ export class PatientsPage implements OnInit{
       if(response.success) {
         if(isNew) {
           this.panelOpen = true;
-          this.filter = {
-            ...this.filter,
-            documentId: response.data.documentId
-          }
+          this.filter = new FilterPatientDTO({ documentId: response.data.documentId });
         }
 
         this.modalOpen = false;

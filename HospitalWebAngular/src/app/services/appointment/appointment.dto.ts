@@ -1,3 +1,5 @@
+import { FilterDoctorDTO } from "@services/doctor/doctor.dto";
+import { FilterPatientDTO } from "@services/patient/patient.dto";
 import { Appointment } from "./appointment.model";
 
 export class CreateUpdateAppointmentDTO {
@@ -14,5 +16,22 @@ export class CreateUpdateAppointmentDTO {
         this.date = data.date?.toInputDateString();
         this.doctorId = data.doctor.id;
         this.patientId = data.patient.id;
+    }
+}
+
+export class FilterAppointmentDTO {
+    public dateFrom: Date;
+    public dateTo: Date;
+    public patient: FilterPatientDTO;
+    public doctor: FilterDoctorDTO;
+
+    constructor(data: any = null) {
+        //Técnica de deep copy para eliminar referencias de memoria
+        data = data ? JSON.parse(JSON.stringify(data)) : {};
+
+        this.dateFrom = data.dateFrom != null ? new Date(data.dateFrom) : null;
+        this.dateTo = data.dateTo != null ? new Date(data.dateTo) : null;
+        this.patient = new FilterPatientDTO(data.patient);
+        this.doctor = new FilterDoctorDTO(data.doctor);
     }
 }

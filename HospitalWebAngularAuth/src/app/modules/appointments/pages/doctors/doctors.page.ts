@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FilterDoctorDTO } from '@services/doctor/doctor.dto';
 import { Doctor } from '@services/doctor/doctor.model';
 import { DoctorService } from '@services/doctor/doctor.service';
 import { Field } from '@services/field/field.model';
@@ -52,12 +53,7 @@ export class DoctorsPage implements OnInit{
     this.confirmOpen = false;
     this.messages = [];
     this.confirmFunction = null;
-    this.filter = {
-      documentId: null,
-      firstName: null,
-      lastName: null,
-      fieldId: null
-    };
+    this.filter = new FilterDoctorDTO();
   }
 
   public ngOnInit(): void {
@@ -122,10 +118,7 @@ export class DoctorsPage implements OnInit{
       if(response.success) {
         if(isNew) {
           this.panelOpen = true;
-          this.filter = {
-            ...this.filter,
-            documentId: response.data.documentId
-          }
+          this.filter = new FilterDoctorDTO({ documentId: response.data.documentId });
         }
 
         this.modalOpen = false;

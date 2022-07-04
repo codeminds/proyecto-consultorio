@@ -4,6 +4,7 @@ import { DoctorService } from '@services/doctor/doctor.service';
 import { Field } from '@services/field/field.model';
 import { FieldService } from '@services/field/field.service';
 import { MessageType, QueryParams } from '@services/http/http.types';
+import { FilterPatientDTO } from '@services/patient/patient.dto';
 import { ButtonType, InputType } from '@shared/components/form-field/form-field.types';
 import { ModalPosition, ModalSize } from '@shared/components/modal/modal.types';
 import { Store } from '@store';
@@ -49,12 +50,7 @@ export class DoctorsPage implements OnInit{
     this.confirmOpen = false;
     this.messages = [];
     this.confirmFunction = null;
-    this.filter = {
-      documentId: null,
-      firstName: null,
-      lastName: null,
-      fieldId: null
-    };
+    this.filter = new FilterPatientDTO();
   }
 
   public ngOnInit(): void {
@@ -117,10 +113,7 @@ export class DoctorsPage implements OnInit{
       if(response.success) {
         if(isNew) {
           this.panelOpen = true;
-          this.filter = {
-            ...this.filter,
-            documentId: response.data.documentId
-          }
+          this.filter = new FilterPatientDTO({ documentId: response.data.documentId });
         }
 
         this.modalOpen = false;

@@ -1,5 +1,5 @@
 # Proyecto Consultorio
-Proyecto del curso inicial de Code Minds para aprender a desarrollar una aplicación web funcional.
+Proyectos de cursos de Code Minds para aprender a desarrollar una aplicación web funcional.
 
 ### Stack
 * **HospitalDB**: Proyecto de base de datos SQL con script de inicialización y datos de prueba
@@ -10,4 +10,5 @@ Proyecto del curso inicial de Code Minds para aprender a desarrollar una aplicac
 * **HospitalWebDataBindingLocal**: Proyecto de UI con librería básica de Data Binding sin conexión al API
 * **HospitalWebDataBindingFinal**: Proyecto de UI con librería básica de Data Binding conectado al proyecto de API
 * **HospitalWebAngular**: Proyecto de UI con Angular conectado al proyecto de API 
+* **HospitalWebAngularAuth**: Proyecto de UI con Angular extendido con autenticación y autorizaciónI 
 * **HospitalCrypterCLI**: Proyecto de utilidad CLI para probar valores encriptados 

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FilterAppointmentDTO } from '@services/appointment/appointment.dto';
 import { Appointment } from '@services/appointment/appointment.model';
 import { AppointmentService } from '@services/appointment/appointment.service';
 import { Doctor } from '@services/doctor/doctor.model';
@@ -56,23 +57,7 @@ export class AppointmentsPage implements OnInit {
     this.confirmOpen = false;
     this.messages = [];
     this.confirmFunction = null;
-    this.filter = {
-      dateFrom: null,
-      dateTo: null,
-      patient: {
-        documentId: null,
-        firstName: null,
-        lastName: null,
-        birthDateFrom: null,
-        birthDateTo: null,
-      },
-      doctor: {
-        documentId: null,
-        firstName: null,
-        lastName: null,
-        fieldId: null 
-      }
-    };
+    this.filter = new FilterAppointmentDTO();
   }
 
   public ngOnInit(): void {
@@ -136,13 +121,12 @@ export class AppointmentsPage implements OnInit {
       if(response.success) {
         if(isNew) {
           this.panelOpen = true;
-          this.filter = {
-            ...this.filter,
-            doctor: { ...this.filter.doctor, documentId: response.data.doctor.documentId },
-            patient: { ...this.filter.patient, documentId: response.data.patient.documentId },
-            dateFrom: new Date(response.data.date),
-            dateTo: new Date(response.data.date)
-          }
+          this.filter = new FilterAppointmentDTO({
+            doctor: { documentId: response.data.doctor.documentId },
+            patient: { documentId: response.data.patient.documentId },
+            dateFrom: response.data.date,
+            dateTo: response.data.date
+          });
         }
 
         this.modalOpen = false;
