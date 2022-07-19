@@ -1,6 +1,7 @@
 import { APIResponse } from "@services/http/http.types";
 import { map, Observable } from "rxjs";
 
+//Se utiliza el módulo rxjs que ya existe para modificar el objeto Observable de contiene
 declare module 'rxjs' {
     interface Observable<T> {
         mapObjectResponse<N>(callback: (item: object) => N): Observable<APIResponse<N>>; 

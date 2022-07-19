@@ -22,11 +22,13 @@ export class Store {
         }, 100);    
     };
 
+    //Site Title
     private readonly _siteTitle: State<string>;
     public get $siteTitle() { return this._siteTitle.$value };
     public get siteTitle() { return this._siteTitle.value };
     public set siteTitle(value: string) { this._siteTitle.value = value };
 
+    //User
     private readonly _user: State<User>;
     public get $user() { return this._user.$value };
     public get user() { return this._user.value };

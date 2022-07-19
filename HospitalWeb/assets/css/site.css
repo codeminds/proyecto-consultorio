@@ -44,7 +44,7 @@ h3 {
 .navbar {
     background: var(--color-navbar);
     padding: 0.5rem;
-    box-shadow: 0px 0px 8px -4px var(--color-shadow-dark);
+    box-shadow: 0 0 0.8rem -0.4rem var(--color-shadow-dark);
 }
 
 .navbar .menu {
