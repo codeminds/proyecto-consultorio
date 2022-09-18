@@ -134,11 +134,17 @@ export class AutocompleteComponent implements OnInit, AfterViewInit, OnDestroy {
     this.eventsService.bodyClick
       .pipe(takeUntil(this.unsubscribe))
       .subscribe((e) =>  {
-        if(![this.inputRef.nativeElement, this.selectionRef?.nativeElement].includes(e.target) 
-            && document.activeElement != this.inputRef.nativeElement)
-        {
-          this.blur();
-        }
+        //Se debe insertar la funcionalidad de click global en un timeout para permitir
+        //a la funcionalidad de click de los elementos de la lista resolver ya que la 
+        //captura de eventos funciona primero y al hacer blur hacemos desaparecer a los elementos
+        //de la lista, así que a la hora de resolver el click ya el elemento no existe.
+        setTimeout(() => {
+          if(![this.inputRef.nativeElement, this.selectionRef?.nativeElement].includes(e.target) 
+          && document.activeElement != this.inputRef.nativeElement)
+          {
+            this.blur();
+          }
+        }, 0);
       });
 
     //Utilizamos el servicio de eventos globales en vez de saturar el DOM
@@ -174,11 +180,11 @@ export class AutocompleteComponent implements OnInit, AfterViewInit, OnDestroy {
         //A la hora de intentar buscar por cualquier valor
         //el usuario ha cambiado de selección y se elimina cualquier
         //valor previo escogido
+        this.selectedIndex = null;
         this.model = null;
         this.onModelChange();
         if(this.search) {
           this.loading = true;
-          this.selectedIndex = null;
           this.results = await this.lookupFunction(this.search, this.maxItems);
           this.lookupTimeout = null;
           this.loading = false;
