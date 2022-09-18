@@ -38,7 +38,7 @@
 }
 
 .button.neutral {
-    background: var(--color-neutral-rimary);
+    background: var(--color-neutral-primary);
     border-color: var(--color-neutral-secondary);
     color: #fff;
 }

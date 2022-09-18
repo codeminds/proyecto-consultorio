@@ -2,17 +2,16 @@
 //ya que "declare global" sólo puede existir en módulos
 export {}
 
-//Declaramos un interfaz nueva que ayuda a sobreescribir el constructor
-//del objeto Date de JavaScript para incluir nuestro método de extensión estático
+
 declare global {
+    //Declaramos un interfaz nueva que ayuda a sobreescribir el constructor
+    //del objeto Date de JavaScript para incluir nuestro método de extensión estático
     interface DateConstructor {
         isDate(value: any) : boolean;
     }
-}
 
-//Declaramos un interfaz nueva que ayuda a sobreescribir el prototipo
-//del objeto Date de JavaScript para incluir nuestro método de extensión a la instancia
-declare global {
+    //Declaramos un interfaz nueva que ayuda a sobreescribir el prototipo
+    //del objeto Date de JavaScript para incluir nuestro método de extensión a la instancia
     interface Date {
         toInputDateString(withTime?: boolean): string;
         toLocaleDisplayString(locale: string): string;
@@ -40,7 +39,7 @@ Date.isDate = (value: any): boolean => {
 }
 
 function pad(num: number, size: number): string {
-    var s = num+"";
-    while (s.length < size) s = "0" + s;
+    var s = num+'';
+    while (s.length < size) s = '0' + s;
     return s;
 }

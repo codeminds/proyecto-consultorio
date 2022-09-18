@@ -13,6 +13,10 @@ import { FilterPatientDTO } from '@services/patient/patient.dto';
   templateUrl: './patients.page.html'
 })
 export class PatientsPage implements OnInit{
+  public get modalTitle() {
+    return this.patient?.id ?  'Editar Paciente' : 'Nuevo Paciente';
+  }
+
   public patients: Patient[];
   public modalOpen: boolean;
   public panelOpen: boolean;

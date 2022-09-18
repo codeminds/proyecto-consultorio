@@ -15,6 +15,10 @@ import { firstValueFrom } from 'rxjs';
   templateUrl: './doctors.page.html'
 })
 export class DoctorsPage implements OnInit{
+  public get modalTitle() {
+    return this.doctor?.id ?  'Editar Doctor' : 'Nuevo Doctor';
+  }
+
   public doctors: Doctor[];
   public fields: Field[];
   public modalOpen: boolean;

@@ -19,6 +19,10 @@ import { firstValueFrom } from 'rxjs';
   templateUrl: './appointments.page.html'
 })
 export class AppointmentsPage implements OnInit {
+  public get modalTitle() {
+    return this.appointment?.id ?  'Editar Cita' : 'Nueva Cita';
+  }
+
   public appointments: Appointment[];
   public fields: Field[];
   public modalOpen: boolean;
