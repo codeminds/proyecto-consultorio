@@ -1,112 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="shortcut icon" href="/assets/img/favicon.ico" type="image/x-icon" />
-        <link rel="stylesheet" href="/assets/css/site.css" />
-        <script src="/assets/js/view-models/doctor.js" type="module"></script>
-        <title>Hospital Web | Doctores</title>
-    </head>
-    <body>
-        <header class="navbar">
-            <button class="menu" data-menu-button>&equiv;</button>
-            <figure>
-                <img src="/assets/img/code-minds.png" alt="Code Minds" />
-            </figure>
-        </header>
-        <section class="wrapper">
-            <nav class="sidenav" data-menu>
-                <h3 class="category main">Men&uacute; Principal</h3>
-                <ul class="menu">
-                    <li>
-                        <a href="/">
-                            <span>Citas</span> 
-                        </a>
-                    </li>
-                    <li class="active">
-                        <a href="/doctors.html">
-                            <span>Doctores</span> 
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/patients.html">
-                            <span>Pacientes</span> 
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-            <main>
-                <h1>Doctores</h1>
-                <section class="panel">
-                    <h3 class="title toggle open" data-toggle>B&uacute;squeda</h3>
-                    <form name="filter" class="toggle-section row open" data-toggle-section>
-                        <div class="form-field col col-4">
-                            <label for="filter-document-id">C&eacute;dula</label>
-                            <input type="text" id="filter-document-id" name="documentId" placeholder="123456789" />
-                        </div>
-                        <div class="form-field col col-4">
-                            <label for="filter-first-name">Nombre</label>
-                            <input type="text" id="filter-first-name" name="firstName" placeholder="John" />
-                        </div>
-                        <div class="form-field col col-4">
-                            <label for="filter-last-name">Apellido</label>
-                            <input type="text" id="filter-last-name" name="lastName" placeholder="Smith" />
-                        </div>
-                        <div class="form-field col col-4">
-                            <label for="filter-field">Especialidad</label>
-                            <select id="filter-field" name="field" data-filter="fields" ></select>                          
-                        </div>
-                        <div class="form-field col col-1">
-                            <button class="button success" type="button" data-search>Buscar</button>
-                        </div>
-                    </form>
-                </section>
-                <section class="table panel slim with-controls">
-                    <div class="controls">
-                        <button class="button success" data-new>Nuevo Doctor</button>
-                    </div>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th style="width: 100%">C&eacute;dula</th>
-                                <th style="width: 200%">Nombre</th>
-                                <th style="width: 100%">Especialidad</th>
-                                <th style="width: 250%"></th>
-                            </tr>
-                        </thead>
-                        <tbody data-results></tbody>
-                    </table>
-                </section>
-            </main>
-        </section>
-        <div class="modal" data-modal>
-            <div class="content">
-                <h2 data-form-title></h2>
-                <form name="createUpdate">
-                    <div class="form-field">
-                        <label for="form-document-id">C&eacute;dula</label>
-                        <input type="text" id="form-document-id" name="documentId" placeholder="123456789" />
-                    </div>
-                    <div class="form-field">
-                        <label for="form-first-name">Nombre</label>
-                        <input type="text" id="form-first-name" name="firstName" placeholder="John" />
-                    </div>
-                    <div class="form-field">
-                        <label for="form-last-name">Apellido</label>
-                        <input type="text" id="form-last-name" name="lastName" placeholder="Smith" />
-                    </div>
-                    <div class="form-field">
-                        <label for="form-field">Especialidad</label>
-                        <select data-form="fields" id="form-field" name="field"></select>
-                    </div>
-                    <div class="form-field">
-                        <button class="button success" type="button" data-save>Guardar</button>
-                        <button class="button neutral" type="button" data-cancel>Cancelar</button>
-                    </div>
-                </form>
+
+<head>
+   <meta charset="UTF-8" />
+   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   <link rel="shortcut icon" href="/assets/img/favicon.ico" type="image/x-icon" />
+   <link rel="stylesheet" href="/assets/css/site.css" />
+   <script src="/assets/js/view-models/doctors.js" type="module"></script>
+   <title>Hospital Web</title>
+</head>
+
+<body>
+   <header class="navbar">
+      <button class="menu" data-menu-button>&equiv;</button>
+      <figure>
+         <img src="/assets/img/code-minds.png" alt="Code Minds" />
+      </figure>
+   </header>
+   <section class="wrapper">
+      <nav class="sidenav" data-menu>
+         <h3 class="category">Men&uacute; Principal</h3>
+         <ul class="menu">
+            <li>
+               <a href="/">
+                  <span>Citas</span>
+               </a>
+            </li>
+            <li class="active">
+               <a href="/doctors.html">
+                  <span>Doctores</span>
+               </a>
+            </li>
+            <li>
+               <a href="/patients.html">
+                  <span>Pacientes</span>
+               </a>
+            </li>
+         </ul>
+      </nav>
+      <main>
+         <h1>Doctores</h1>
+         <section data-panel class="panel">
+            <h3 data-toggle class="title toggle open">B&uacute;squeda</h3>
+            <form name="filter" data-toggle-section class="toggle-section open row">
+               <div class="form-field col col-4">
+                  <label for="filter-document-id">C&eacute;dula</label>
+                  <input type="text" id="filter-document-id" name="documentId" placeholder="123456789" />
+               </div>
+               <div class="form-field col col-4">
+                  <label for="filter-first-name">Nombre</label>
+                  <input type="text" id="filter-first-name" name="firstName" placeholder="John" />
+               </div>
+               <div class="form-field col col-4">
+                  <label for="filter-last-name">Apellido</label>
+                  <input type="text" id="filter-last-name" name="lastName" placeholder="Smith" />
+               </div>
+               <div class="form-field col col-4">
+                  <label for="filter-field">Especialidad</label>
+                  <select id="filter-field" name="field" data-filter="fields"></select>
+               </div>
+               <div class="form-field col col-1">
+                  <button type="button" class="button success" data-search>Buscar</button>
+               </div>
+            </form>
+         </section>
+         <section class="panel slim table with-controls">
+            <div class="controls">
+               <button data-new class="button success">Nuevo Doctor</button>
             </div>
-        </div>
-    </body>
+            <table>
+               <thead>
+                  <th style="width: 100%;">C&eacute;dula</th>
+                  <th style="width: 150%;">Nombre</th>
+                  <th style="width: 100%;">Especialidad</th>
+                  <th style="width: 200%;"></th>
+               </thead>
+               <tbody data-results></tbody>
+            </table>
+         </section>
+      </main>
+   </section>
+   <div data-modal class="modal">
+      <div class="content">
+         <h2 data-form-title></h2>
+         <form name="createUpdate">
+            <div class="form-field">
+               <label for="form-document-id">C&eacute;dula</label>
+               <input type="text" id="form-document-id" name="documentId" placeholder="123456789" />
+            </div>
+            <div class="form-field">
+               <label for="form-first-name">Nombre</label>
+               <input type="text" id="form-first-name" name="firstName" placeholder="John" />
+            </div>
+            <div class="form-field">
+               <label for="form-last-name">Apellido</label>
+               <input type="text" id="form-last-name" name="lastName" placeholder="Smith" />
+            </div>
+            <div class="form-field">
+               <label for="form-field">Especialidad</label>
+               <select id="form-field" name="field" data-form="fields"></select>
+            </div>
+            <div class="form-field">
+               <button type="button" class="button success" data-save>Guardar</button>
+               <button type="button" class="button neutral" data-cancel>Cancelar</button>
+            </div>
+         </form>
+      </div>
+   </div>
+</body>
+
 </html>

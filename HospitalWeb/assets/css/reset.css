@@ -59,13 +59,14 @@ a {
 a:hover {
     text-decoration: none;
 }
-input {
-	padding: 0;
-	margin: 0;
+
+button, select {
+	cursor: pointer;
 }
 
-select, button {
-	cursor: pointer;
+input {
+	margin: 0;
+	padding: 0;
 }
 
 * {

@@ -1,52 +1,52 @@
 .modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    background: rgba(0, 0, 0, 0.8);
-    padding: 2rem;
-    box-sizing: border-box;
-    overflow-y: auto;    
-    scrollbar-color: var(--color-scrollbar-dark) var(--color-scrollbar-dark);
-    scrollbar-width: thin;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 100;
-    flex-wrap: wrap;
+   position: fixed;
+   top: 0;
+   left: 0;
+   height: 100%;
+   width: 100%;
+   background: rgba(0, 0, 0, 0.8);
+   padding: 2rem;
+   box-sizing: border-box;
+   overflow: auto;
+   z-index: 100;
+   display: none;
+   align-items: center;
+   justify-content: center;
+   flex-wrap: wrap;
+   scrollbar-color: var(--color-scrollbar-dark) var(--color-scrollbar-dark);
+   scrollbar-width: thin;
 }
 
 .modal::-webkit-scrollbar-thumb {
-    background: var(--color-scrollbar-dark);
+   background: var(--color-scrollbar-dark);
 }
 
 .modal::-webkit-scrollbar {
-    width: 0.7rem;
-    background: var(--color-scrollbar-dark);
+   width: 0.7rem;
+   background: var(--color-scrollbar-dark);
 }
 
 .modal.open {
-    display: flex;
+   display: flex;
 }
 
-.modal > .content {
-    width: 90%;
-    background: var(--color-background);
-    padding: 1rem;
-    border-radius: 0.2rem;
-    border: 0.1rem solid var(--color-border);
-    box-shadow: 0.2rem 0.2rem 0.6rem -0.3rem var(--color-shadow-light);
+.modal>.content {
+   background: var(--color-background);
+   width: 90%;
+   padding: 1rem;
+   border-radius: 0.2rem;
+   border: 0.1rem solid var(--color-border);
+   box-shadow: 0.2rem 0.2rem 0.6rem -0.3rem var(--color-shadow-light);
 }
 
-.modal.small > .content {
-    width: min(40rem, 95%);
+.modal.small>.content {
+   width: 40rem;
 }
 
-.modal.medium > .content {
-    width: min(70rem, 95%);
+.modal.medium>.content {
+   width: 70rem;
 }
 
-.modal.large > .content {
-    width: min(100rem, 95%);
+.modal.large>.content {
+   width: 100rem;
 }
