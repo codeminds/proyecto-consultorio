@@ -4,7 +4,7 @@
 
    /* LAYOUT */
    --font-main: 'Roboto', Helvetica, sans-serif;
-   --color-navbar: #e8e8e8;
+   --color-navbar: #1c1c1c;
    --color-navbar-menu-hover: rgba(0, 0, 0, 0.1);
    --color-sidenav: #292929;
    --color-sidenav-text: #fff;
@@ -13,20 +13,20 @@
 
    /* MAIN COLORS */
    --color-main: #5ccdcc;
-   --color-text: #292929;
-   --color-border: #d8d8d8;
-   --color-background: #f1f1f1;
-   --color-alternate-item-background: #d6d6d6;
+   --color-text: #fff;
+   --color-border: #515151;
+   --color-background: #363636;
+   --color-alternate-item-background: #454545;
    --color-shadow-dark: #1d1d1d;
-   --color-shadow-light: #adadad;
+   --color-shadow-light: #1d1d1d;
    --color-scrollbar-dark: rgba(255, 255, 255, 0.1);
-   --color-scrollbar-light: rgba(0, 0, 0, 0.1);
+   --color-scrollbar-light: rgba(255, 255, 255, 0.1);
 
    /* FORM COLORS */
-   --color-placeholder: #adadad;
-   --color-form-field-border: #ccc;
-   --color-form-field-focus: #969696;
-   --color-form-field-option: #f1f1f1;
+   --color-placeholder: #bfbfbf;
+   --color-form-field-border: #969696;
+   --color-form-field-focus: #d2d2d2;
+   --color-form-field-option: #363636;
 
    /* ALERT COLORS */
    --color-success-primary: #4ca8a7;

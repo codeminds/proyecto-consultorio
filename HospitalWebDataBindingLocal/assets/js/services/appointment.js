@@ -1,77 +1,103 @@
-import { appointmentTestData, createGuid } from "../test-data.js";
+import { appointmentTestData, doctorTestData, getNextId, patientTestData } from "../test-data.js";
 import { DoctorService } from "./doctor.js";
-import { PatientService } from "./patient.js";
+import { PatientsService } from "./patient.js";
 
-export class AppointmentService {
-    static get(id, callback) {
-        const result = appointmentTestData.find((item) => {
-            return item.id == id;
-        })
+export class AppointmentsService {
+   static list(filter, callback) {
+      filter = filter ?? {};
 
-        callback(result);
-    }
+      let doctors;
+      let patients;
 
-    static list(filter, callback) {
-        const result = []; 
+      DoctorService.list(filter.doctor, (result) => {
+         doctors = result;
+      });
 
-        let doctors;
-        let patients;
+      PatientsService.list(filter.patient, (result) => {
+         patients = result;
+      });
 
-        DoctorService.list(filter.doctor, (result) => {
-            doctors = result;
-        });
+      const result = appointmentTestData.filter((item) => {
+         return ((!filter.dateFrom || item.date >= filter.dateFrom)
+            && (!filter.dateTo || item.date <= filter.dateTo)
+            && doctors.some((doctor) => {
+               return doctor.id == item.doctorId;
+            })
+            && patients.some((patient) => {
+               return patient.id == item.patientId;
+            }));
+      });
 
-        PatientService.list(filter.patient, (result) => {
-            patients = result;
-        });
-        
-        for(const appointment of appointmentTestData) {
-            let add = true;
-            
-            add = add && (!filter.dateFrom || appointment.date >= filter.dateFrom);
-            add = add && (!filter.dateTo || appointment.date <= filter.dateTo);
-            add = add && doctors.length > 0 && doctors.some((doctor) => doctor.id == appointment.doctorId);
-            add = add && patients.length > 0 && patients.some((patient) => patient.id == appointment.patientId);
-          
-            if(add) {
-                result.push(appointment);
-            }
-        }
+      callback(result);
+   }
 
-        callback(result);
-    }
+   static get(id, callback) {
+      const result = appointmentTestData.find((item) => {
+         return item.id == id;
 
-    static create(data, callback) {
-        data.id = createGuid();
-        appointmentTestData.push(data);
-        callback(data);
-    }
+      });
 
-    static update(id, data, callback) {
-        AppointmentService.get(id, (appointment) => {
-            if(appointment != null) {
-                appointment.date = data.date;
-                appointment.patientId = data.patientId;
-                appointment.doctorId = data.doctorId;
+      callback(result);
+   }
 
-                callback(appointment);
+   static insert(data, callback) {
+      data.id = getNextId(appointmentTestData);
 
-            } else {
-                callback(null);              
-            }
-        });
-    }
+      const doctor = doctorTestData.find((item) => {
+         return item.id == data.doctorId;
+      });
 
-    static delete(id, callback) { 
-        const index = appointmentTestData.findIndex((item) => {
-            return item.id == id;
-        });
+      data.doctorName = `${doctor.firstName} ${doctor.lastName}`;
+      data.doctorField = doctor.field;
 
-        if(index >= 0) {
-            appointmentTestData.splice(index, 1);
-            callback(true);
-        } else {
-            callback(false);
-        }
-    }
+      const patient = patientTestData.find((item) => {
+         return item.id == data.patientId;
+      });
+
+      data.patientName = `${patient.firstName} ${patient.lastName}`;
+
+      appointmentTestData.push(data);
+      callback(data);
+   }
+
+   static update(id, data, callback) {
+      const appointment = appointmentTestData.find((item) => {
+         return item.id == id;
+      });
+
+      if (appointment != null) {
+         appointment.date = data.date;
+         appointment.doctorId = data.doctorId;
+         appointment.patientId = data.patientId;
+
+         const doctor = doctorTestData.find((item) => {
+            return item.id == data.doctorId;
+         });
+
+         appointment.doctorName = `${doctor.firstName} ${doctor.lastName}`;
+         appointment.doctorField = doctor.field;
+
+         const patient = patientTestData.find((item) => {
+            return item.id == data.patientId;
+         });
+
+         appointment.patientName = `${patient.firstName} ${patient.lastName}`;
+         callback(appointment);
+      } else {
+         callback(null);
+      }
+   }
+
+   static delete(id, callback) {
+      const index = appointmentTestData.findIndex((item) => {
+         return item.id == id;
+      });
+
+      if (index >= 0) {
+         appointmentTestData.splice(index, 1);
+         callback(true);
+      } else {
+         callback(false);
+      }
+   }
 }

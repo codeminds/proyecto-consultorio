@@ -1,99 +1,75 @@
-import { createGuid, patientTestData } from "../test-data.js";
+import { patientTestData, getNextId, genderTestData } from "../test-data.js";
 
-export class PatientService {
-    static get(id, callback){
-        const result = patientTestData.find((item) => {
-            return item.id == id; 
-        })
+export class PatientsService {
+   static list(filter, callback) {
+      filter = filter ?? {};
 
-        callback(result);
-    }
-    
-    static list(filter, callback) {
-        const result = []; 
-        
-        for(const patient of patientTestData) {
-            let add = true;
+      const result = patientTestData.filter((item) => {
+         return ((!filter.documentId || item.documentId.toLowerCase().includes(filter.documentId.toLowerCase()))
+            && (!filter.firstName || item.firstName.toLowerCase().includes(filter.firstName.toLowerCase()))
+            && (!filter.lastName || item.lastName.toLowerCase().includes(filter.lastName.toLowerCase()))
+            && (!filter.birthDateFrom || item.birthDate >= filter.birthDateFrom)
+            && (!filter.birthDateTo || item.birthDate <= filter.birthDateTo)
+            && (!filter.genderId || item.genderId == filter.genderId));
+      });
 
-            add = !filter.documentId || patient.documentId.toLowerCase().includes(filter.documentId.toLowerCase());
-            add = add && (!filter.firstName || patient.firstName.toLowerCase().includes(filter.firstName.toLowerCase()));
-            add = add && (!filter.lastName || patient.lastName.toLowerCase().includes(filter.lastName.toLowerCase()));
-            add = add && (filter.gender == null || patient.gender == filter.gender);
-            add = add && (!filter.birthDateFrom || patient.birthDate >= filter.birthDateFrom);
-            add = add && (!filter.birthDateTo || patient.birthDate <= filter.birthDateTo);
+      callback(result);
+   }
 
-            if(add) {
-                result.push(patient);
-            }
-        }
+   static get(id, callback) {
+      const result = patientTestData.find((item) => {
+         return item.id == id;
+      });
+      callback(result);
+   }
 
-        callback(result);
-    }
+   static insert(data, callback) {
+      data.id = getNextId(patientTestData);
 
-    //Función de búsqueda que no distingue valores fijos para cada campo de filtro, si no en vez
-    //utiliza una lista de strings para comparar valores con todos los que desea buscar
-    static search(filters, callback) {
-        const result = []; 
-        
-        //A diferencia de la función de lista, en vez de mostrar todos los resultados si no hay
-        //ningún filtro, esta función no busca sin filtros.
-        if(filters.length > 0) {
-            for(const patient of patientTestData) {
-                let add = false;
-    
-                //Filtros de búsqueda pueden cambiar add a true para averiguar si va dentro de los
-                //resultados o no
-                for(const filter of filters) {
-                    add = add || patient.documentId.toLowerCase().includes(filter.toLowerCase());
-                    add = add || patient.firstName.toLowerCase().includes(filter.toLowerCase());
-                    add = add || patient.lastName.toLowerCase().includes(filter.toLowerCase());
-                }
+      const gender = genderTestData.find((item) => {
+         return item.id == data.genderId;
+      })
 
-                //En search el filtro no es aditivo. Cualquier filtro true al comparar
-                //causa que se agregue a los resultados
-                if(add) {
-                    result.push(patient);
-                }
-            }
-        }
+      data.gender = gender.name;
 
-        //Función pasada por parámetro hará lo que desee con lista de resultados
-        callback(result);
-    }
+      patientTestData.push(data);
+      callback(data);
+   }
 
-    static create(data, callback) {
-        data.id = createGuid();
-        patientTestData.push(data);
-        callback(data);
-    }
+   static update(id, data, callback) {
+      const patient = patientTestData.find((item) => {
+         return item.id == id;
+      });
 
-    static update(id, data, callback) {
-        PatientService.get(id, (patient) => {
-            if(patient != null) {
-                patient.documentId = data.documentId;
-                patient.firstName = data.firstName;
-                patient.lastName = data.lastName;
-                patient.gender = data.gender;
-                patient.birthDate = data.birthDate; 
+      if (patient != null) {
+         patient.documentId = data.documentId;
+         patient.firstName = data.firstName;
+         patient.lastName = data.lastName;
+         patient.birthDate = data.birthDate;
 
-                callback(patient)
+         const gender = genderTestData.find((item) => {
+            return item.id == data.genderId;
+         })
 
-            } else {
-                    callback(null);              
-            }
-        });
-    }
+         patient.gender = gender.name;
 
-    static delete(id, callback) { 
-        const index = patientTestData.findIndex((item) => {
-            return item.id == id;
-        });
+         callback(patient);
+      } else {
+         callback(null);
+      }
+   }
 
-        if(index >= 0) {
-            patientTestData.splice(index, 1);
-            callback(true);
-        } else {
-            callback(false);
-        }
-    }
+   static delete(id, callback) {
+      const index = patientTestData.findIndex((item) => {
+         return item.id == id;
+      });
+
+      if (index >= 0) {
+         patientTestData.splice(index, 1);
+         callback(true);
+      } else {
+         callback(false);
+      }
+   }
 }
+
