@@ -1,17 +1,15 @@
-﻿using API.DataTransferObjects;
-using API.Repositories;
+﻿using API.Data;
+using API.DataTransferObjects;
 
 namespace API.Validators
 {
     public class PatientValidator : IPatientValidator
     {
-        private readonly IPatientRepository _patientRepository;
-        private readonly IAppointmentRepository _appointmentRepository;
+        private readonly HospitalDB _database;
 
-        public PatientValidator(IPatientRepository patientRepository, IAppointmentRepository appointmentRepository)
+        public PatientValidator(HospitalDB database)
         {
-            this._patientRepository = patientRepository;
-            this._appointmentRepository = appointmentRepository;
+            this._database = database;
         }
 
 
@@ -32,7 +30,7 @@ namespace API.Validators
             {
                 innerMessages.Add("Cédula sólo puede contener números");
             }
-            else if (this._patientRepository.Query.Any(d => d.DocumentId == data.DocumentId))
+            else if (this._database.Patient.Any(d => d.DocumentId == data.DocumentId))
             {
                 innerMessages.Add("Cédula ya está registrada en el sistema");
             }
@@ -59,9 +57,13 @@ namespace API.Validators
             }
 
             //Gender
-            if (!data.Gender.HasValue)
+            if (!data.GenderId.HasValue)
             {
                 innerMessages.Add("Género es requerido");
+            }
+            else if (!this._database.Gender.Any(f => f.Id == data.GenderId))
+            {
+                innerMessages.Add("Debe seleccionar un género que exista en el sistema");
             }
 
             //BirthDate
@@ -96,7 +98,7 @@ namespace API.Validators
             {
                 innerMessages.Add("Cédula sólo puede contener números");
             }
-            else if (this._patientRepository.Query.Any(d => d.DocumentId == data.DocumentId && d.Id != id))
+            else if (this._database.Patient.Any(d => d.DocumentId == data.DocumentId && d.Id != id))
             {
                 innerMessages.Add("Cédula ya está registrada en el sistema");
             }
@@ -123,9 +125,13 @@ namespace API.Validators
             }
 
             //Gender
-            if (!data.Gender.HasValue)
+            if (!data.GenderId.HasValue)
             {
                 innerMessages.Add("Género es requerido");
+            }
+            else if (!this._database.Gender.Any(f => f.Id == data.GenderId))
+            {
+                innerMessages.Add("Debe seleccionar un género que exista en el sistema");
             }
 
             //BirthDate
@@ -147,7 +153,7 @@ namespace API.Validators
         {
             List<string> innerMessages = new();
 
-            if (this._appointmentRepository.Query.Any(a => a.PatientId == id))
+            if (this._database.Appointment.Any(a => a.PatientId == id))
             {
                 innerMessages.Add("No se puede borrar el record. El paciente tiene citas asociadas en el sistema");
             }

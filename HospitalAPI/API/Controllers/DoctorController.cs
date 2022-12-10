@@ -5,6 +5,7 @@ using API.Services;
 using API.Validators;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
@@ -27,27 +28,17 @@ namespace API.Controllers
         public async Task<ActionResult<APIResponse>> ListDoctors([FromQuery] FilterDoctorDTO data)
         {
             DoctorListFilter filter = this._mapper.Map<FilterDoctorDTO, DoctorListFilter>(data);
+            List<Doctor> list = await this._doctorService
+                                        .ListDoctors(filter)
+                                        .Include(d => d.Field)
+                                        .ToListAsync();
 
-         APIResponse response = new()
-         {
-            Data = (await this._doctorService.ListDoctors(filter))
-                             .Select(d => this._mapper.Map<Doctor, GetDoctorDTO>(d))
-         };
+            APIResponse response = new()
+            {
+                Data = list.Select(d => this._mapper.Map<Doctor, GetDoctorDTO>(d))
+            };
 
-         return response;
-        }
-
-        [HttpGet]
-        [Route("search")]
-        public async Task<ActionResult<APIResponse>> SearchDoctors([FromQuery] string[] s)
-        {
-         APIResponse response = new()
-         {
-            Data = (await this._doctorService.SearchDoctors(s))
-                             .Select(d => this._mapper.Map<Doctor, GetDoctorDTO>(d))
-         };
-
-         return response;
+            return response;
         }
 
         [HttpGet]
@@ -60,12 +51,12 @@ namespace API.Controllers
                 return HttpErrors.NotFound("Doctor no existe en el sistema");
             }
 
-         APIResponse response = new()
-         {
-            Data = this._mapper.Map<Doctor, GetDoctorDTO>(doctor)
-         };
+            APIResponse response = new()
+            {
+                Data = this._mapper.Map<Doctor, GetDoctorDTO>(doctor)
+            };
 
-         return response;
+            return response;
         }
 
         [HttpPost]
@@ -76,7 +67,8 @@ namespace API.Controllers
 
             if (response.Success)
             {
-                Doctor doctor = await this._doctorService.CreateDoctor(this._mapper.Map<CreateUpdateDoctorDTO, Doctor>(data));
+                Doctor doctor = this._mapper.Map<CreateUpdateDoctorDTO, Doctor>(data);
+                await this._doctorService.InsertDoctor(doctor);
                 response.Data = this._mapper.Map<Doctor, GetDoctorDTO>(doctor);
                 response.Messages.Add("Doctor ha sido insertado");
             }

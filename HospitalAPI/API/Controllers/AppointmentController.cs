@@ -5,6 +5,7 @@ using API.Services;
 using API.Validators;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
@@ -27,16 +28,20 @@ namespace API.Controllers
         public async Task<ActionResult<APIResponse>> ListAppointments([FromQuery] FilterAppointmentDTO data)
         { 
             AppointmentListFilter filter = this._mapper.Map<FilterAppointmentDTO, AppointmentListFilter>(data);
-            PatientListFilter patientFilter = this._mapper.Map<FilterAppointmentDTO, PatientListFilter>(data);
-            DoctorListFilter doctorFilter = this._mapper.Map<FilterAppointmentDTO, DoctorListFilter>(data);
 
-         APIResponse response = new()
-         {
-            Data = (await this._appointmentService.ListAppointments(filter, patientFilter, doctorFilter))
-                             .Select(a => this._mapper.Map<Appointment, GetAppointmentDTO>(a))
-         };
+            List<Appointment> list = await this._appointmentService
+                                        .ListAppointments(filter)
+                                        .Include(a => a.Patient)
+                                        .Include(a => a.Doctor)
+                                        .Include(a => a.Doctor.Field)
+                                        .ToListAsync();
 
-         return response;
+            APIResponse response = new()
+            {
+                Data = list.Select(a => this._mapper.Map<Appointment, GetAppointmentDTO>(a))
+            };
+
+            return response;
         }
 
         [HttpGet]
@@ -49,12 +54,12 @@ namespace API.Controllers
                 return HttpErrors.NotFound("Cita no existe en el sistema");
             }
 
-         APIResponse response = new()
-         {
-            Data = this._mapper.Map<Appointment, GetAppointmentDTO>(appointment)
-         };
+            APIResponse response = new()
+            {
+                Data = this._mapper.Map<Appointment, GetAppointmentDTO>(appointment)
+            };
 
-         return response;
+            return response;
         }
 
         [HttpPost]
@@ -65,7 +70,9 @@ namespace API.Controllers
 
             if (response.Success)
             {
-                Appointment appointment = await this._appointmentService.CreateAppointment(this._mapper.Map<CreateUpdateAppointmentDTO, Appointment>(data));
+                Appointment appointment = this._mapper.Map<CreateUpdateAppointmentDTO, Appointment>(data);
+                await this._appointmentService.InsertAppointment(appointment);
+
                 response.Data = this._mapper.Map<Appointment, GetAppointmentDTO>(appointment);
                 response.Messages.Add("Cita ha sido insertada");
             }

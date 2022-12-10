@@ -3,6 +3,7 @@ using API.DataTransferObjects;
 using API.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
@@ -22,13 +23,16 @@ namespace API.Controllers
         [HttpGet]
         public async Task<ActionResult<APIResponse>> ListFields()
         {
-         APIResponse response = new()
-         {
-            Data = (await this._fieldService.ListFields())
-                             .Select(f => this._mapper.Map<Field, GetFieldDTO>(f))
-         };
+            List<Field> list = await this._fieldService
+                                        .ListFields()
+                                        .ToListAsync();
 
-         return response;
+            APIResponse response = new()
+            {
+                Data = list.Select(f => this._mapper.Map<Field, GetFieldDTO>(f))
+            };
+
+            return response;
         }
     }
 }

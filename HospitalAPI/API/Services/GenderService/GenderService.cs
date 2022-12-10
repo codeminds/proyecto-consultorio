@@ -4,19 +4,19 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Services
 {
-    public class FieldService : IFieldService
+    public class GenderService : IGenderService
     {
         private readonly HospitalDB _database;
 
-        public FieldService(HospitalDB database)
+        public GenderService(HospitalDB database)
         {
             this._database = database;
         }
 
-        public IQueryable<Field> ListFields()
+        public IQueryable<Gender> ListGenders()
         {
             return this._database
-                    .Field;
+                    .Gender;
         }
     }
 }

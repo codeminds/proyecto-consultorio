@@ -1,21 +1,21 @@
-﻿using API.DataTransferObjects;
-using API.Repositories;
+﻿using API.Data;
+using API.DataTransferObjects;
+using API.Services;
 
 namespace API.Validators
 {
     public class DoctorValidator : IDoctorValidator
     {
-        private readonly IDoctorRepository _doctorRepository;
-        private readonly IFieldRepository _fieldRepository;
-        private readonly IAppointmentRepository _appointmentRepository;
+        private readonly HospitalDB _database;
+        private readonly IDoctorService _doctorService;
+        private readonly IFieldService _fieldService;
 
-        public DoctorValidator(IDoctorRepository doctorRepository, IFieldRepository fieldRepository, IAppointmentRepository appointmentRepository)
+        public DoctorValidator(HospitalDB database, IDoctorService doctorService, IFieldService fieldService)
         {
-            this._doctorRepository = doctorRepository;
-            this._fieldRepository = fieldRepository;
-            this._appointmentRepository = appointmentRepository;
+            this._database = database;
+            this._doctorService = doctorService;
+            this._fieldService = fieldService;
         }
-
 
         public bool ValidateInsert(CreateUpdateDoctorDTO data, List<string> messages)
         {
@@ -34,7 +34,7 @@ namespace API.Validators
             {
                 innerMessages.Add("Cédula sólo puede contener números");
             }
-            else if (this._doctorRepository.Query.Any(d => d.DocumentId == data.DocumentId))
+            else if (this._database.Doctor.Any(d => d.DocumentId == data.DocumentId))
             {
                 innerMessages.Add("Cédula ya está registrada en el sistema");
             }
@@ -65,7 +65,7 @@ namespace API.Validators
             {
                 innerMessages.Add("Especialidad es requerida");
             }
-            else if (!this._fieldRepository.Query.Any(f => f.Id == data.FieldId))
+            else if (!this._database.Field.Any(f => f.Id == data.FieldId))
             {
                 innerMessages.Add("Debe seleccionar una especialidad que exista en el sistema");
             }
@@ -92,7 +92,7 @@ namespace API.Validators
             {
                 innerMessages.Add("Cédula sólo puede contener números");
             }
-            else if (this._doctorRepository.Query.Any(d => d.DocumentId == data.DocumentId && d.Id != id))
+            else if (this._database.Doctor.Any(d => d.DocumentId == data.DocumentId && d.Id != id))
             {
                 innerMessages.Add("Cédula ya está registrada en el sistema");
             }
@@ -123,7 +123,7 @@ namespace API.Validators
             {
                 innerMessages.Add("Especialidad es requerida");
             }
-            else if (!this._fieldRepository.Query.Any(f => f.Id == data.FieldId))
+            else if (!this._database.Field.Any(f => f.Id == data.FieldId))
             {
                 innerMessages.Add("Debe seleccionar una especialidad que exista en el sistema");
             }
@@ -137,7 +137,7 @@ namespace API.Validators
         {
             List<string> innerMessages = new();
 
-            if (this._appointmentRepository.Query.Any(a => a.DoctorId == id))
+            if (this._database.Appointment.Any(a => a.DoctorId == id))
             {
                 innerMessages.Add("No se puede borrar el record. El doctor tiene citas asociadas en el sistema");
             }

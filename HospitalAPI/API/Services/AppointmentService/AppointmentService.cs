@@ -1,77 +1,70 @@
 ﻿using API.Data;
 using API.Data.Filters;
 using API.Data.Models;
-using API.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Services
 {
-    public class AppointmentService : Service, IAppointmentService
+    public class AppointmentService : IAppointmentService
     {
-        private readonly IAppointmentRepository _appointmentRepository;
-        private readonly IPatientRepository _patientRepository;
-        private readonly IDoctorRepository _doctorRepository;
+        private readonly HospitalDB _database;
+        private readonly IPatientService _patientService;
+        private readonly IDoctorService _doctorService;
 
-        public AppointmentService(HospitalDB database, IAppointmentRepository appointmentRepository, IPatientRepository patientRepository, IDoctorRepository doctorRepository) : base(database)
+        public AppointmentService(HospitalDB database, IPatientService patientService, IDoctorService doctorService)
         {
-            this._appointmentRepository = appointmentRepository;
-            this._patientRepository = patientRepository;
-            this._doctorRepository = doctorRepository;
+            this._database = database;
+            this._patientService = patientService;
+            this._doctorService = doctorService;
         }
 
-        public async Task<List<Appointment>> ListAppointments(AppointmentListFilter? filter = null, PatientListFilter? patientFilter = null, DoctorListFilter? doctorFilter = null)
+        public IQueryable<Appointment> ListAppointments(AppointmentListFilter? filter = null)
         {
             filter ??= new AppointmentListFilter();
-            patientFilter ??= new PatientListFilter();
-            doctorFilter ??= new DoctorListFilter();
 
-            IQueryable<Doctor> doctors = this._doctorRepository.List(doctorFilter);
-            IQueryable<Patient> patients = this._patientRepository.List(patientFilter);
+            IQueryable<Doctor> doctors = this._doctorService.ListDoctors(filter.Doctor);
+            IQueryable<Patient> patients = this._patientService.ListPatients(filter.Patient);
 
-            return await this._appointmentRepository.Query
-                                    .Where(a => (!filter.DateFrom.HasValue || a.Date >= filter.DateFrom)
-                                                    && (!filter.DateTo.HasValue || a.Date <= filter.DateTo)
-                                                    && doctors.Contains(a.Doctor)
-                                                    && patients.Contains(a.Patient))
-                                    .Include(a => a.Patient)
-                                    .Include(a => a.Doctor)
-                                    .Include(a => a.Doctor.Field)
-                                    .ToListAsync();
+            return this._database
+                    .Appointment
+                    .Where(a => (!filter.DateFrom.HasValue || a.Date >= filter.DateFrom)
+                                    && (!filter.DateTo.HasValue || a.Date <= filter.DateTo)
+                                    && doctors.Contains(a.Doctor)
+                                    && patients.Contains(a.Patient));
         }
 
         public async Task<Appointment?> FindAppointment(int id)
         {
-            return await this._appointmentRepository
-                                .Find(id)
-                                .Include(a => a.Patient)
-                                .Include(a => a.Doctor)
-                                .Include(a => a.Doctor.Field)
-                                .FirstOrDefaultAsync();
+            return await this._database
+                            .Appointment
+                            .Include(a => a.Doctor)
+                            .Include(a => a.Doctor.Field)
+                            .Include(a => a.Patient)
+                            .Include(a => a.Patient.Gender)
+                            .Where(d => d.Id == id)
+                            .FirstOrDefaultAsync();
         }
 
-        public async Task<Appointment> CreateAppointment(Appointment appointment)
+        public async Task InsertAppointment(Appointment entity)
         {
-            this._appointmentRepository.Insert(appointment);
-            await this.SaveRepositoriesAsync();
-
-            return (await this._appointmentRepository
-                                        .Find(appointment.Id)
-                                        .Include(a => a.Patient)
-                                        .Include(a => a.Doctor)
-                                        .Include(a => a.Doctor.Field)
-                                        .FirstOrDefaultAsync())!;
+            this._database.Appointment.Add(entity);
+            await this._database.SaveChangesAsync();
+            await this._database.Entry(entity).Reference(a => a.Doctor).LoadAsync();
+            await this._database.Entry(entity).Reference(a => a.Doctor.Field).LoadAsync();
+            await this._database.Entry(entity).Reference(a => a.Patient).LoadAsync();
+            await this._database.Entry(entity).Reference(a => a.Patient.Gender).LoadAsync();
         }
 
-        public async Task UpdateAppointment(Appointment appointment)
+        public async Task UpdateAppointment(Appointment entity)
         {
-            this._appointmentRepository.Update(appointment);
-            await this.SaveRepositoriesAsync();
+            this._database.Appointment.Update(entity);
+            await this._database.SaveChangesAsync();
         }
 
-        public async Task DeleteAppointment(Appointment appointment)
+        public async Task DeleteAppointment(Appointment entity)
         {
-            this._appointmentRepository.Delete(appointment);
-            await this.SaveRepositoriesAsync();
+            this._database.Appointment.Remove(entity);
+            await this._database.SaveChangesAsync();
         }
     }
 }
