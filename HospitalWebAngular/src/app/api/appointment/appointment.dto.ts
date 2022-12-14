@@ -1,5 +1,5 @@
-import { FilterDoctorDTO } from "@services/doctor/doctor.dto";
-import { FilterPatientDTO } from "@services/patient/patient.dto";
+import { FilterDoctorDTO } from "@api/doctor/doctor.dto";
+import { FilterPatientDTO } from "@api/patient/patient.dto";
 import { Appointment } from "./appointment.model";
 
 export class CreateUpdateAppointmentDTO {

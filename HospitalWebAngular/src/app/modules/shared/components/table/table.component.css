@@ -2,7 +2,7 @@ div {
     position: relative;
 }
 
-div > i {
+div>i {
     position: absolute;
     right: 0.4rem;
     top: 0.4rem;
@@ -36,20 +36,47 @@ tbody tr:nth-child(odd) {
     background: var(--color-alternate-item-background);
 }
 
-td.mobile {
-    display: none;
-    padding: 1rem;
+::ng-deep td.buttons {
+    text-align: right;
 }
 
-tr.no-results td, tr.loading td {
+::ng-deep td.mobile {
+    display: none;
+    position: relative;
+    padding: 1rem
+}
+
+::ng-deep td.mobile .heading {
+    font-size: 1.7rem;
+    font-weight: 500;
+    margin-bottom: 0.9rem;
+}
+
+::ng-deep td.mobile .label {
+    font-weight: 700;
+    margin-right: 0.5rem;
+}
+
+::ng-deep td.mobile .data {
+    margin-bottom: 0.5rem;
+}
+
+::ng-deep td.mobile .buttons {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+}
+
+tr.no-results td,
+tr.loading td {
     text-align: center;
 }
 
 @media screen and (max-width: 1024px) {
-    div > i {
+    div>i {
         display: none;
     }
-    
+
     thead {
         display: none;
     }

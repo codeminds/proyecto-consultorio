@@ -45,6 +45,7 @@ sólo el contenedor :host invisible.
 .title{
     padding-bottom: 0.2rem;
     border-bottom: 0.1rem solid var(--color-border);
+    margin-bottom: 0.5rem;
 }
 
 .toggle {

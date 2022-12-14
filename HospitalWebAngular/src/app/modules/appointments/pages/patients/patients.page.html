@@ -87,7 +87,7 @@
             <td>{{patient.firstName}} {{patient.lastName}}</td>
             <td>{{patient.birthDate.toLocaleDisplayString('es-US')}}</td>
             <td>{{patient.gender ? 'Masculino' : 'Femenino'}}</td>    
-            <td class="table-buttons">
+            <td class="buttons">
                 <button class="button success" title="Editar" (click)="createUpdate(patient)">
                     <i class="material-symbols-sharp">edit</i>
                     <span>Editar</span>
@@ -99,18 +99,21 @@
             </td>
         </ng-template>
         <ng-template #patientRowMobile let-patient>
-            <div class="mobile-row">
-                <h3>{{patient.documentId}}</h3>
-                <p>
-                    <span class="label">Nombre:</span> {{patient.firstName}} {{patient.lastName}}
+            <div class="mobile">
+                <h3 class="heading">{{patient.documentId}}</h3>
+                <p class="data">
+                    <span class="label">Nombre:</span> 
+                    <span>{{patient.firstName}} {{patient.lastName}}</span>
                 </p>
-                <p>
-                    <span class="label">Nacimiento:</span> {{patient.birthDate.toLocaleDisplayString('es-US')}}
+                <p class="data">
+                    <span class="label">Nacimiento:</span> 
+                    <span>{{patient.birthDate.toLocaleDisplayString('es-US')}}</span>
                 </p>
-                <p>
-                    <span class="label">Género:</span> {{patient.gender ? 'Masculino' : 'Femenino'}}
+                <p class="data">
+                    <span class="label">Género:</span> 
+                    <span>{{patient.gender ? 'Masculino' : 'Femenino'}}</span>
                 </p>
-                <div>
+                <div class="buttons">
                     <button class="button success" title="Editar" (click)="createUpdate(patient)">
                         <i class="material-symbols-sharp">edit</i>
                         <span>Editar</span>

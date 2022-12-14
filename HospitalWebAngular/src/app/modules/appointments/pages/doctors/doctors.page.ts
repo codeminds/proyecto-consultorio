@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Doctor } from '@services/doctor/doctor.model';
-import { DoctorService } from '@services/doctor/doctor.service';
-import { Field } from '@services/field/field.model';
-import { FieldService } from '@services/field/field.service';
+import { Doctor } from '@api/doctor/doctor.model';
+import { DoctorService } from '@api/doctor/doctor.api';
+import { Field } from '@api/field/field.model';
+import { FieldService } from '@api/field/field.api';
 import { MessageType, QueryParams } from '@services/http/http.types';
-import { FilterPatientDTO } from '@services/patient/patient.dto';
+import { FilterPatientDTO } from '@api/patient/patient.dto';
 import { ButtonType, InputType } from '@shared/components/form-field/form-field.types';
 import { ModalPosition, ModalSize } from '@shared/components/modal/modal.types';
 import { Store } from '@store';

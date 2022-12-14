@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { Patient } from '@services/patient/patient.model';
-import { PatientService } from '@services/patient/patient.service';
+import { Patient } from '@api/patient/patient.model';
+import { PatientService } from '@api/patient/patient.service';
 import { MessageType, QueryParams } from '@services/http/http.types';
 import { ButtonType, DateType, InputType } from '@shared/components/form-field/form-field.types';
 import { ModalPosition, ModalSize } from '@shared/components/modal/modal.types';
 import { firstValueFrom } from 'rxjs';
 import { Store } from '@store';
-import { FilterPatientDTO } from '@services/patient/patient.dto';
+import { FilterPatientDTO } from '@api/patient/patient.dto';
 
 @Component({
   selector: 'app-patients',

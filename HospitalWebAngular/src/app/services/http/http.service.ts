@@ -147,7 +147,7 @@ export class HttpService{
   }
 
   private getQueryParam(prop: string, param: unknown, prefix?: string): string {
-    prop = prefix == null ? prop : prefix + prop.capitalize();
+    prop = prefix != null ? `${prefix}.${prop}` : prop;
 
     if(param == null){
       return `${prop}=&`

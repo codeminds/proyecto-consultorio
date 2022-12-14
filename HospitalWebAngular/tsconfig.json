@@ -23,6 +23,7 @@
     ],
     "paths": {
       "@administration/*": ["src/app/modules/administration/*"],
+      "@api/*": ["src/app/api/*"],
       "@appointments/*": ["src/app/modules/appointments/*"],
       "@services/*": ["src/app/services/*"],
       "@shared/*": ["src/app/modules/shared/*"],

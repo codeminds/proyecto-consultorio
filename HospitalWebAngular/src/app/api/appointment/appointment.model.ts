@@ -1,5 +1,5 @@
-import { Doctor } from "@services/doctor/doctor.model";
-import { Patient } from "@services/patient/patient.model";
+import { Doctor } from "@api/doctor/doctor.model";
+import { Patient } from "@api/patient/patient.model";
 
 export class Appointment {
     public id: number;
