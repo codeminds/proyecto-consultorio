@@ -41,6 +41,24 @@ namespace API.Controllers
             return response;
         }
 
+        //IMPORTANTE: Sólo para proyecto Angular
+        [HttpGet]
+        [Route("search")]
+        public async Task<ActionResult<APIResponse>> SearchPatients([FromQuery] string[] s)
+        {
+
+            List<Patient> list = await this._patientService
+                                        .SearchPatients(s)
+                                        .ToListAsync();
+
+            APIResponse response = new()
+            {
+                Data = list.Select(d => this._mapper.Map<Patient, GetPatientDTO>(d))
+            };
+
+            return response;
+        }
+
         [HttpGet]
         [Route("{id}")]
         public async Task<ActionResult<APIResponse>> FindPatient(int id)

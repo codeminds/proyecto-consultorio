@@ -1,7 +1,9 @@
 ﻿using API.Data;
 using API.Data.Filters;
 using API.Data.Models;
+using API.ExtensionMethods;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace API.Services
 {
@@ -11,8 +13,7 @@ namespace API.Services
 
         public PatientService(HospitalDB database)
         {
-            this._database = database;
-            
+            this._database = database;    
         }
 
         public IQueryable<Patient> ListPatients(PatientListFilter? filter = null)
@@ -27,6 +28,24 @@ namespace API.Services
                         && (!filter.BirthDateFrom.HasValue || p.BirthDate >= filter.BirthDateFrom)
                         && (!filter.BirthDateTo.HasValue || p.BirthDate <= filter.BirthDateTo)
                         && (!filter.GenderId.HasValue || p.GenderId == filter.GenderId));
+        }
+
+        //IMPORTANTE: Sólo para proyecto Angular
+        public IQueryable<Patient> SearchPatients(string[] values)
+        {
+            return this._database
+                    .Patient
+                    .Search(values,
+                        (value) => (patient) => patient.DocumentId.Contains(value)
+                            || patient.FirstName.Contains(value)
+                            || patient.LastName.Contains(value),
+                        orderBys: new List<Expression<Func<Patient, object>>> 
+                        {
+                            patient => patient.DocumentId,
+                            patient => patient.FirstName,
+                            patient => patient.LastName
+                        }
+                    );
         }
 
         public async Task<Patient?> FindPatient(int id)

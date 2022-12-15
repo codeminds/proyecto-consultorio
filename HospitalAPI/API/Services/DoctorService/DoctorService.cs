@@ -1,6 +1,7 @@
 ﻿using API.Data;
 using API.Data.Filters;
 using API.Data.Models;
+using API.ExtensionMethods;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
@@ -25,6 +26,29 @@ namespace API.Services
                         && (string.IsNullOrWhiteSpace(filter.FirstName) || d.FirstName.Contains(filter.FirstName))
                         && (string.IsNullOrWhiteSpace(filter.LastName) || d.LastName.Contains(filter.LastName))
                         && (!filter.FieldId.HasValue || d.FieldId == filter.FieldId));
+        }
+
+        //IMPORTANTE: Sólo para proyecto Angular
+        public IQueryable<Doctor> SearchDoctors(string[] values)
+        {
+            return this._database
+                    .Doctor
+                    .Search(values,
+                        (value) => (doctor) => doctor.DocumentId.Contains(value)
+                            || doctor.FirstName.Contains(value)
+                            || doctor.LastName.Contains(value)
+                            || doctor.Field.Name.Contains(value),
+                        includes: new List<Expression<Func<Doctor, object>>>
+                        { 
+                            doctor => doctor.Field  
+                        },
+                        orderBys: new List<Expression<Func<Doctor, object>>>
+                        {
+                            doctor => doctor.DocumentId,
+                            doctor => doctor.FirstName,
+                            doctor => doctor.LastName
+                        }
+                    );
         }
 
         public async Task<Doctor?> FindDoctor(int id)
