@@ -1,10 +1,12 @@
+import { Gender } from "@api/gender/gender.model";
+
 export class Patient {
     public id: number;
     public documentId: string;
     public firstName: string;
     public lastName: string;
     public birthDate: Date;
-    public gender: boolean;
+    public gender: Gender;
 
     constructor(data: any = null) {
         //Técnica de deep copy para eliminar referencias de memoria
@@ -15,6 +17,6 @@ export class Patient {
         this.firstName = data.firstName != null ? String(data.firstName) : null;
         this.lastName = data.lastName != null ? String(data.lastName) : null;
         this.birthDate = data.birthDate != null ? new Date(data.birthDate) : null;
-        this.gender = data.gender != null ? data.gender : null;
+        this.gender = new Gender(data.gender);
     }
 }

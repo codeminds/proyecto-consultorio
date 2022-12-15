@@ -13,7 +13,7 @@ export class GenderService {
   constructor(
     private httpService: HttpService
   ) { 
-    this._api = "fields";
+    this._api = "genders";
   }
 
   public list(): Observable<APIResponse<Gender[]>> {

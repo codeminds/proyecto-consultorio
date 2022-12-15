@@ -7,7 +7,7 @@
     font-size: inherit;
 }
 
-label {
+.form-field>label {
     display: inline-block;
     font-weight: 700;
     cursor: pointer;
@@ -55,23 +55,17 @@ textarea.resizable {
     resize: vertical;
 }
 
-.check-container {
-    margin-bottom: 0.5rem;
-}
-
-.check-container:last-child {
-    margin-bottom: 0;
+.check-container:not(.inline):not(:last-child) {
+    margin-bottom: 0.4rem;
 }
 
 .check-container.inline {
     display: inline-block;
     margin-right: 1.2rem;
-    margin-bottom: 0;
 }
 
 .check {
     display: inline-block;
-    margin-bottom: 0;
 }
 
 .check span {
@@ -155,11 +149,9 @@ textarea.resizable {
 @media screen and (max-width: 1024px) {
     .check-container.inline {
         display: block;
-        margin-right: 0;
-        margin-bottom: 0.4rem;
     }
 
-    .check-container.inline:last-child {
-        margin-bottom: 0;
+    .check-container:not(:last-child) {
+        margin-bottom: 0.4rem;
     }
 }

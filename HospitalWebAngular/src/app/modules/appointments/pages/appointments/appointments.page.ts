@@ -13,6 +13,8 @@ import { InputType, ButtonType, DateType } from '@shared/components/form-field/f
 import { ModalSize, ModalPosition } from '@shared/components/modal/modal.types';
 import { Store } from '@store';
 import { firstValueFrom } from 'rxjs';
+import { Gender } from '@api/gender/gender.model';
+import { GenderService } from '@api/gender/gender.api';
 
 @Component({
   selector: 'app-appointments',
@@ -25,6 +27,7 @@ export class AppointmentsPage implements OnInit {
 
   public appointments: Appointment[];
   public fields: Field[];
+  public genders: Gender[];
   public modalOpen: boolean;
   public panelOpen: boolean;
   public appointment: Appointment;
@@ -48,10 +51,12 @@ export class AppointmentsPage implements OnInit {
     private doctorService: DoctorService,
     private patientService: PatientService,
     private fieldService: FieldService,
+    private genderService: GenderService,
     private store: Store
   ) { 
     this.appointments = [];
     this.fields = [];
+    this.genders = [];
     this.modalOpen = false;
     this.panelOpen = false;
     this.appointment = null;
@@ -66,6 +71,7 @@ export class AppointmentsPage implements OnInit {
 
   public ngOnInit(): void {
     this.loadFields();
+    this.loadGenders();
     this.list();
   }
 
@@ -73,6 +79,13 @@ export class AppointmentsPage implements OnInit {
     const response = await firstValueFrom(this.fieldService.list());
     if(response.success) {
       this.fields = response.data;
+    }
+  }
+
+  public async loadGenders(): Promise<void> {
+    const response = await firstValueFrom(this.genderService.list());
+    if(response.success) {
+      this.genders = response.data;
     }
   }
 

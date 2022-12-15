@@ -58,9 +58,9 @@
             label="Género"
             class="col-3"
             nullOption="Todos"
-            [(model)]="filter.gender"
-            [options]="[{label: 'Femenino', value: false},
-                        {label: 'Masculino', value: true}]"
+            [(model)]="filter.genderId"
+            [options]="genders"
+            [option]="{label: 'name', value: 'id', output: 'id'}"
         ></app-select>
         <app-button [type]="ButtonType.Success" [disabled]="loading" [loading]="loading" (clicked)="list()">
             <i class="material-symbols-sharp">search</i>
@@ -86,7 +86,7 @@
             <td>{{patient.documentId}}</td>
             <td>{{patient.firstName}} {{patient.lastName}}</td>
             <td>{{patient.birthDate.toLocaleDisplayString('es-US')}}</td>
-            <td>{{patient.gender ? 'Masculino' : 'Femenino'}}</td>    
+            <td>{{patient.gender.name}}</td>    
             <td class="buttons">
                 <button class="button success" title="Editar" (click)="createUpdate(patient)">
                     <i class="material-symbols-sharp">edit</i>
@@ -111,7 +111,7 @@
                 </p>
                 <p class="data">
                     <span class="label">Género:</span> 
-                    <span>{{patient.gender ? 'Masculino' : 'Femenino'}}</span>
+                    <span>{{patient.gender.name}}</span>
                 </p>
                 <div class="buttons">
                     <button class="button success" title="Editar" (click)="createUpdate(patient)">
@@ -170,8 +170,8 @@
             form="createUpdate"
             label="Género"
             [(model)]="patient.gender"
-            [options]="[{label: 'Femenino', value: false},
-                        {label: 'Masculino', value: true}]"
+            [options]="genders"
+            [option]="{label: 'name', value: 'id', compare: 'id'}"
         ></app-select>
         <div class="row">
             <app-button [type]="ButtonType.Success" (clicked)="save()" [disabled]="saving || !modalOpen" [loading]="loading || !modalOpen">Guardar <i *ngIf="saving" class="material-symbols-sharp rotate">data_saver_off</i></app-button>

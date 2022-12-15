@@ -27,6 +27,6 @@ export class FilterDoctorDTO {
         this.documentId = data.documentId != null ? String(data.documentId) : null;
         this.firstName = data.firstName != null ? String(data.firstName) : null;
         this.lastName = data.lastName != null ? String(data.lastName) : null;
-        this.fieldId = data.fieldId != null ?Number(data.fieldId) : null;
+        this.fieldId = data.fieldId != null ? Number(data.fieldId) : null;
     }
 }

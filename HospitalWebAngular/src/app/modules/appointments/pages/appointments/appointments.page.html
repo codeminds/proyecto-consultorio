@@ -8,6 +8,47 @@
 
 <!-- Filtro de búsqueda -->
 <app-panel class="unboxed slim" panelTitle="Búsqueda" contentClass="row" [(open)]="panelOpen" [expandable]="true">
+    <app-panel class="col-2 space-x space-y unboxed slim" panelTitle="Doctores">
+        <form class="row" (keyup.enter)="list()">
+            <app-select
+                name="field"
+                form="doctorFilter"
+                label="Especialidad"
+                class="col-2"
+                nullOption="Todos"
+                [(model)]="filter.doctor.fieldId"
+                [options]="fields"
+                [option]="{label: 'name', value: 'id', output: 'id'}"
+            ></app-select>
+            <app-input 
+                name="documentId" 
+                form="doctorFilter" 
+                label="Cédula"
+                class="col-2"
+                [type]="InputType.Text" 
+                [(model)]="filter.doctor.documentId"
+                [attributes]="{'placeholder': 'E.g.:123456789'}"
+            ></app-input>
+            <app-input 
+                name="firstName" 
+                form="doctorFilter" 
+                label="Nombre"
+                class="col-2"
+                [type]="InputType.Text" 
+                [(model)]="filter.doctor.firstName"
+                [attributes]="{'placeholder': 'E.g.:John'}"
+            ></app-input>
+            <app-input 
+                name="lastName" 
+                form="doctorFilter" 
+                label="Apellido"
+                class="col-2"
+                [type]="InputType.Text" 
+                [(model)]="filter.doctor.lastName"
+                [attributes]="{'placeholder': 'E.g.:Smith'}"
+            ></app-input>
+        </form>
+    </app-panel>
     <app-panel class="col-2 space-x space-y unboxed slim" panelTitle="Pacientes">
         <form class="row" (keyup.enter)="list()">
             <app-input 
@@ -59,51 +100,10 @@
                 label="Género"
                 class="col-3"
                 nullOption="Todos"
-                [(model)]="filter.patient.gender"
-                [options]="[{label: 'Femenino', value: false},
-                            {label: 'Masculino', value: true}]"
-            ></app-select>
-        </form>
-    </app-panel>
-    <app-panel class="col-2 space-x space-y unboxed slim" panelTitle="Doctores">
-        <form class="row" (keyup.enter)="list()">
-            <app-select
-                name="field"
-                form="doctorFilter"
-                label="Especialidad"
-                class="col-2"
-                nullOption="Todos"
-                [(model)]="filter.doctor.fieldId"
-                [options]="fields"
+                [(model)]="filter.patient.genderId"
+                [options]="genders"
                 [option]="{label: 'name', value: 'id', output: 'id'}"
             ></app-select>
-            <app-input 
-                name="documentId" 
-                form="doctorFilter" 
-                label="Cédula"
-                class="col-2"
-                [type]="InputType.Text" 
-                [(model)]="filter.doctor.documentId"
-                [attributes]="{'placeholder': 'E.g.:123456789'}"
-            ></app-input>
-            <app-input 
-                name="firstName" 
-                form="doctorFilter" 
-                label="Nombre"
-                class="col-2"
-                [type]="InputType.Text" 
-                [(model)]="filter.doctor.firstName"
-                [attributes]="{'placeholder': 'E.g.:John'}"
-            ></app-input>
-            <app-input 
-                name="lastName" 
-                form="doctorFilter" 
-                label="Apellido"
-                class="col-2"
-                [type]="InputType.Text" 
-                [(model)]="filter.doctor.lastName"
-                [attributes]="{'placeholder': 'E.g.:Smith'}"
-            ></app-input>
         </form>
     </app-panel>
     <app-panel class="col-1 space-y unboxed slim" panelTitle="Fecha">
@@ -136,8 +136,8 @@
 <app-panel class="slim">
     <app-table 
         [headers]="[{ label: 'Fecha', size: 2 },
-                    { label: 'Paciente', size: 1.5 },
-                    { label: 'Doctor',size: 1.5 },
+                    { label: 'Doctor', size: 1.5 },
+                    { label: 'Paciente',size: 1.5 },
                     { label: 'Especialidad' },
                     { size: 2 }]" 
         [template]="appointmentRow" 
@@ -147,8 +147,8 @@
         noResultsText="No se han encontrado resultados">
         <ng-template #appointmentRow let-appointment>
             <td>{{appointment.date.toLocaleDisplayString('es-US')}}</td>
-            <td>{{appointment.patient.firstName}} {{appointment.patient.lastName}}</td>
             <td>{{appointment.doctor.firstName}} {{appointment.doctor.lastName}}</td>
+            <td>{{appointment.patient.firstName}} {{appointment.patient.lastName}}</td>
             <td>{{appointment.doctor.field.name}}</td>    
             <td class="buttons">
                 <button class="button success" title="Editar" (click)="createUpdate(appointment)">
@@ -165,12 +165,12 @@
             <div class="mobile">
                 <h3 class="heading">{{appointment.date.toLocaleDisplayString('es-US')}}</h3>
                 <p class="data">
-                    <span class="label">Paciente:</span> 
-                    <span>{{appointment.patient.firstName}} {{appointment.patient.lastName}}</span>
-                </p>
-                <p class="data">
                     <span class="label">Doctor:</span> 
                     <span>{{appointment.doctor.firstName}} {{appointment.doctor.lastName}}</span>
+                </p>
+                <p class="data">
+                    <span class="label">Paciente:</span> 
+                    <span>{{appointment.patient.firstName}} {{appointment.patient.lastName}}</span>
                 </p>
                 <p class="data">
                     <span class="label">Especialidad:</span> 
@@ -243,7 +243,7 @@
             </ng-template>
             <ng-template #lookupPatientInfo let-patient>
                 <p><b>{{patient.firstName}} {{patient.lastName}}</b></p>
-                <p>{{patient.gender ? 'Masculino' : 'Femenino'}}</p>
+                <p>{{patient.gender.name}}</p>
             </ng-template>
         </app-autocomplete>
         <div class="row">

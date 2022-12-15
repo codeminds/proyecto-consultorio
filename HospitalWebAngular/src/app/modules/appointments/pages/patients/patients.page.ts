@@ -7,6 +7,8 @@ import { ModalPosition, ModalSize } from '@shared/components/modal/modal.types';
 import { firstValueFrom } from 'rxjs';
 import { Store } from '@store';
 import { FilterPatientDTO } from '@api/patient/patient.dto';
+import { Gender } from '@api/gender/gender.model';
+import { GenderService } from '@api/gender/gender.api';
 
 @Component({
   selector: 'app-patients',
@@ -18,6 +20,7 @@ export class PatientsPage implements OnInit{
   }
 
   public patients: Patient[];
+  public genders: Gender[];
   public modalOpen: boolean;
   public panelOpen: boolean;
   public patient: Patient;
@@ -38,9 +41,11 @@ export class PatientsPage implements OnInit{
   
   constructor(
     private patientService: PatientService,
+    private genderService: GenderService,
     private store: Store
   ) { 
     this.patients = [];
+    this.genders = [];
     this.modalOpen = false;
     this.panelOpen = false;
     this.patient = null;
@@ -54,8 +59,17 @@ export class PatientsPage implements OnInit{
   }
 
   public ngOnInit(): void {
+    this.loadGenders();
     this.list();
   }
+
+  public async loadGenders(): Promise<void> {
+    const response = await firstValueFrom(this.genderService.list());
+    if(response.success) {
+      this.genders = response.data;
+    }
+  }
+
   public async list(): Promise<void> {
     if(!this.loading) {
       this.loading = true;
