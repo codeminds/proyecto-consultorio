@@ -9,9 +9,9 @@ import {
 } from '@angular/common/http';
 import { catchError, finalize, Observable, Subject, switchMap } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { SessionTokens } from '@services/session/session.model';
+import { SessionTokens } from '@api/session/session.model';
 import { RequestHeaders, ResponseHeaders, StorageKeys } from '@utils/constants';
-import { SessionService } from '@services/session/session.service';
+import { SessionApi } from '@api/session/session.api';
 import { Store } from '@store';
 
 @Injectable()
@@ -19,7 +19,7 @@ export class AuthInterceptor implements HttpInterceptor {
   private _refreshingToken: Subject<SessionTokens>;
 
   constructor(
-    private sessionService: SessionService,
+    private sessionApi: SessionApi,
     private store: Store
   ) {
     this._refreshingToken = null;
@@ -77,7 +77,7 @@ export class AuthInterceptor implements HttpInterceptor {
   }
 
   private refreshSession(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    return this.sessionService.refresh().pipe(
+    return this.sessionApi.refresh().pipe(
       switchMap((response) => {
         //Si se logra refrescar la sesión con nuevos tokens estos se reemplazan
         //en el almacenamiento local del explorador web y se reejecuta la petición

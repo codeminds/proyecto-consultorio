@@ -7,7 +7,7 @@ import { Gender } from './gender.model';
 @Injectable({
   providedIn: 'root'
 })
-export class GenderService {
+export class GenderApi {
   private readonly _api: string;
 
   constructor(

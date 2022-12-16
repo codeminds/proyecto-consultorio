@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { Doctor } from '@api/doctor/doctor.model';
-import { DoctorService } from '@api/doctor/doctor.api';
+import { DoctorApi } from '@api/doctor/doctor.api';
 import { Field } from '@api/field/field.model';
-import { FieldService } from '@api/field/field.api';
+import { FieldApi } from '@api/field/field.api';
 import { MessageType, QueryParams } from '@services/http/http.types';
-import { FilterPatientDTO } from '@api/patient/patient.dto';
 import { ButtonType, InputType } from '@shared/components/form-field/form-field.types';
 import { ModalPosition, ModalSize } from '@shared/components/modal/modal.types';
 import { Store } from '@store';
 import { firstValueFrom } from 'rxjs';
+import { FilterDoctorDTO } from '@api/doctor/doctor.dto';
 
 @Component({
   selector: 'app-doctors',
@@ -39,8 +39,8 @@ export class DoctorsPage implements OnInit{
   private confirmFunction: () => void;
   
   constructor(
-    private doctorService: DoctorService,
-    private fieldService: FieldService,
+    private doctorService: DoctorApi,
+    private fieldService: FieldApi,
     private store: Store
   ) { 
     this.doctors = [];
@@ -54,7 +54,7 @@ export class DoctorsPage implements OnInit{
     this.confirmOpen = false;
     this.messages = [];
     this.confirmFunction = null;
-    this.filter = new FilterPatientDTO();
+    this.filter = new FilterDoctorDTO();
   }
 
   public ngOnInit(): void {
@@ -94,6 +94,7 @@ export class DoctorsPage implements OnInit{
       if(!this.saving) {
         this.saving = true;
         const response = await firstValueFrom(this.doctorService.delete(id));
+        
         if(response.success) {
           this.store.siteMessage = { type: MessageType.Success, text: response.messages[0] };
           this.list();
@@ -117,7 +118,7 @@ export class DoctorsPage implements OnInit{
       if(response.success) {
         if(isNew) {
           this.panelOpen = true;
-          this.filter = new FilterPatientDTO({ documentId: response.data.documentId });
+          this.filter = new FilterDoctorDTO({ documentId: response.data.documentId });
         }
 
         this.modalOpen = false;

@@ -8,7 +8,8 @@ export enum MessageType {
 export enum HttpMethod {
     GET,
     PUT,
-    POST, 
+    POST,
+    PATCH, 
     DELETE
 }
 

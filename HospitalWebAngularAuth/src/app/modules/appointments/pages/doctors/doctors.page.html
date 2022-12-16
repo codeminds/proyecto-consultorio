@@ -71,7 +71,7 @@
             <td>{{doctor.field.name}}</td>
             <td>{{doctor.documentId}}</td>
             <td>{{doctor.firstName}} {{doctor.lastName}}</td>    
-            <td class="table-buttons">
+            <td class="buttons">
                 <ng-container *ngIf="canEdit(user)">
                     <button class="button success" title="Editar" (click)="createUpdate(doctor)">
                         <i class="material-symbols-sharp">edit</i>
@@ -85,15 +85,17 @@
             </td>
         </ng-template>
         <ng-template #doctorRowMobile let-doctor>
-            <div class="mobile-row">
-                <h3>{{doctor.field.name}}</h3>
-                <p>
-                    <span class="label">Cédula:</span> {{doctor.documentId}}
+            <div class="mobile">
+                <h3 class="heading">{{doctor.field.name}}</h3>
+                <p class="data">
+                    <span class="label">Cédula:</span> 
+                    <span>{{doctor.documentId}}</span>
                 </p>
-                <p>
-                    <span class="label">Nombre:</span> {{doctor.firstName}} {{doctor.lastName}}
+                <p class="data">
+                    <span class="label">Nombre:</span>
+                    <span>{{doctor.firstName}} {{doctor.lastName}}</span>
                 </p>
-                <div *ngIf="canEdit(user)">
+                <div class="buttons" *ngIf="canEdit(user)">
                     <button class="button success" title="Editar" (click)="createUpdate(doctor)">
                         <i class="material-symbols-sharp">edit</i>
                         <span>Editar</span>

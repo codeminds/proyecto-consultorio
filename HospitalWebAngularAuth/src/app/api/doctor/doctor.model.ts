@@ -1,4 +1,4 @@
-import { Field } from "@services/field/field.model";
+import { Field } from "@api/field/field.model";
 
 export class Doctor {
     public id: number;

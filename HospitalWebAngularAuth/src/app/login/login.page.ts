@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { SessionService } from '@services/session/session.service';
+import { SessionApi } from '@api/session/session.api';
 import { ButtonType, InputType } from '@shared/components/form-field/form-field.types';
 import { StorageKeys } from '@utils/constants';
 import { firstValueFrom } from 'rxjs';
@@ -20,7 +20,7 @@ export class LoginPage {
   public ButtonType = ButtonType;
 
   constructor(
-    private sessionService: SessionService,
+    private sessionApi: SessionApi,
     private router: Router
   ) { 
     this.username = null;
@@ -36,7 +36,7 @@ export class LoginPage {
 
       //Si el proceso de ingreso es correcto se procede a crear en el almacenamiento local
       //los tokens de acceso y refrescado para utilizar en el sistema
-      const response = await firstValueFrom(this.sessionService.login(this.username, this.password));
+      const response = await firstValueFrom(this.sessionApi.login(this.username, this.password));
       if(response.success) {
         localStorage.setItem(StorageKeys.ACCESS_TOKEN, response.data.accessToken);
         localStorage.setItem(StorageKeys.REFRESH_TOKEN, response.data.refreshToken);

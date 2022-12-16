@@ -8,7 +8,7 @@ import { Session, SessionTokens } from './session.model';
 @Injectable({
   providedIn: 'root'
 })
-export class SessionService {
+export class SessionApi {
   private readonly _api: string;
 
   constructor(

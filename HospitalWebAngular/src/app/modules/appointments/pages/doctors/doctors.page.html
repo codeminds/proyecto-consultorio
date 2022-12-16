@@ -26,7 +26,7 @@
             class="col-4"
             [type]="InputType.Text" 
             [(model)]="filter.documentId"
-            [attributes]="{'placeholder': '123456789'}"
+            [attributes]="{'placeholder': 'E.g.:123456789'}"
         ></app-input>
         <app-input 
             name="firstName" 
@@ -35,7 +35,7 @@
             class="col-4"
             [type]="InputType.Text" 
             [(model)]="filter.firstName"
-            [attributes]="{'placeholder': 'John'}"
+            [attributes]="{'placeholder': 'E.g.:John'}"
         ></app-input>
         <app-input 
             name="lastName" 
@@ -44,7 +44,7 @@
             class="col-4"
             [type]="InputType.Text" 
             [(model)]="filter.lastName"
-            [attributes]="{'placeholder': 'Smith'}"
+            [attributes]="{'placeholder': 'E.g.:Smith'}"
         ></app-input>
         <app-button [type]="ButtonType.Success" [disabled]="loading" [loading]="loading" (clicked)="list()">
             <i class="material-symbols-sharp">search</i>
@@ -110,7 +110,7 @@
 <app-modal [(open)]="modalOpen" [modalTitle]="modalTitle" [position]="ModalPosition.Top" [size]="ModalSize.Medium" (onClose)="onModalClose()">
     <form *ngIf="doctor" (keyup.enter)="save()">
         <ul>
-            <li class="validation-error" *ngFor="let message of messages">{{message}}</li>
+            <li class="validation-message" *ngFor="let message of messages">{{message}}</li>
         </ul>
         <app-select
             name="field"
@@ -126,7 +126,7 @@
             label="Cédula"
             [type]="InputType.Text" 
             [(model)]="doctor.documentId"
-            [attributes]="{'placeholder': '123456789'}"
+            [attributes]="{'placeholder': 'E.g.:123456789'}"
         ></app-input>
         <app-input 
             name="firstName" 
@@ -134,7 +134,7 @@
             label="Nombre"
             [type]="InputType.Text" 
             [(model)]="doctor.firstName"
-            [attributes]="{'placeholder': 'John'}"
+            [attributes]="{'placeholder': 'E.g.:John'}"
         ></app-input>
         <app-input 
             name="lastName" 
@@ -142,7 +142,7 @@
             label="Apellido"
             [type]="InputType.Text" 
             [(model)]="doctor.lastName"
-            [attributes]="{'placeholder': 'Smith'}"
+            [attributes]="{'placeholder': 'E.g.:Smith'}"
         ></app-input>
         <div class="row">
             <app-button [type]="ButtonType.Success" (clicked)="save()" [disabled]="saving || !modalOpen" [loading]="loading || !modalOpen">Guardar <i *ngIf="saving" class="material-symbols-sharp rotate">data_saver_off</i></app-button>

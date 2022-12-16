@@ -2,24 +2,25 @@
     padding: 0.7rem;
 }
 
-::placeholder{
+::placeholder {
     color: var(--color-placeholder);
     font-size: inherit;
 }
 
-label {
+.form-field>label {
     display: inline-block;
     font-weight: 700;
     cursor: pointer;
     margin-bottom: 0.5rem;
-    font-size: 1.4rem;
+    font-size: inherit;
 }
 
-input:not([type="radio"]):not([type="checkbox"]), textarea, select {
+input:not([type="radio"]):not([type="checkbox"]),
+textarea,
+select {
     display: inline-block;
     width: 100%;
     padding: 0.5rem;
-    height: 2.8rem;
     font-size: inherit;
     background: rgba(255, 255, 255, 0.2);
     color: inherit;
@@ -28,36 +29,43 @@ input:not([type="radio"]):not([type="checkbox"]), textarea, select {
     outline: 0;
 }
 
-input:not([type="radio"]):not([type="checkbox"]):focus, textarea:focus, select:focus {
+input:not([type="radio"]):not([type="checkbox"]):focus,
+textarea:focus,
+select:focus {
     border-color: var(--color-form-field-focus);
 }
 
 textarea {
     min-height: 15rem;
     resize: none;
+    scrollbar-color: var(--color-scrollbar-light) var(--color-scrollbar-light);
+    scrollbar-width: thin;
+}
+
+textarea::-webkit-scrollbar-thumb {
+    background: var(--color-scrollbar-light);
+}
+
+textarea::-webkit-scrollbar {
+    width: 0.7rem;
+    background: var(--color-scrollbar-light);
 }
 
 textarea.resizable {
     resize: vertical;
 }
 
-.check-container {
-    margin-bottom: 0.5rem;
-}
-
-.check-container:last-child {
-    margin-bottom: 0;
+.check-container:not(.inline):not(:last-child) {
+    margin-bottom: 0.4rem;
 }
 
 .check-container.inline {
     display: inline-block;
-    margin-right: 1rem;
-    margin-bottom: 0;
+    margin-right: 1.2rem;
 }
 
 .check {
     display: inline-block;
-    margin-bottom: 0;
 }
 
 .check span {
@@ -66,8 +74,8 @@ textarea.resizable {
 
 .check i {
     display: inline-block;
-    width: 2rem;
-    height: 2rem;
+    width: 1.8rem;
+    height: 1.8rem;
     border: solid 0.1rem #ccc;
     background: rgba(255, 255, 255, 0.2);
     border-radius: 0.2rem;
@@ -75,7 +83,7 @@ textarea.resizable {
     vertical-align: middle;
 }
 
-.check :checked + i {
+.check :checked+i {
     background-color: var(--color-main);
 }
 
@@ -123,7 +131,8 @@ textarea.resizable {
     cursor: pointer;
 }
 
-.options li.selected, .options li:hover {
+.options li.selected,
+.options li:hover {
     background: rgba(255, 255, 255, 0.7);
 }
 
@@ -140,11 +149,9 @@ textarea.resizable {
 @media screen and (max-width: 1024px) {
     .check-container.inline {
         display: block;
-        margin-right: 0;
-        margin-bottom: 0.5rem;
     }
 
-    .check-container.inline:last-child {
-        margin-bottom: 0;
+    .check-container:not(:last-child) {
+        margin-bottom: 0.4rem;
     }
 }

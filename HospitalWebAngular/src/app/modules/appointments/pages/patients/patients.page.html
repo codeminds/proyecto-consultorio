@@ -16,7 +16,7 @@
             class="col-3"
             [type]="InputType.Text" 
             [(model)]="filter.documentId"
-            [attributes]="{'placeholder': '123456789'}"
+            [attributes]="{'placeholder': 'E.g.:123456789'}"
         ></app-input>
         <app-input 
             name="firstName" 
@@ -25,7 +25,7 @@
             class="col-3"
             [type]="InputType.Text" 
             [(model)]="filter.firstName"
-            [attributes]="{'placeholder': 'John'}"
+            [attributes]="{'placeholder': 'E.g.:John'}"
         ></app-input>
         <app-input 
             name="lastName" 
@@ -34,7 +34,7 @@
             class="col-3"
             [type]="InputType.Text" 
             [(model)]="filter.lastName"
-            [attributes]="{'placeholder': 'Smith'}"
+            [attributes]="{'placeholder': 'E.g.:Smith'}"
         ></app-input>
         <app-date 
             name="birthDateFrom" 
@@ -132,7 +132,7 @@
 <app-modal [(open)]="modalOpen" [modalTitle]="modalTitle" [position]="ModalPosition.Top" [size]="ModalSize.Medium" (onClose)="onModalClose()">
     <form *ngIf="patient" (keyup.enter)="save()">
         <ul>
-            <li class="validation-error" *ngFor="let message of messages">{{message}}</li>
+            <li class="validation-message" *ngFor="let message of messages">{{message}}</li>
         </ul>
         <app-input 
             name="documentId" 
@@ -140,7 +140,7 @@
             label="Cédula"
             [type]="InputType.Text" 
             [(model)]="patient.documentId"
-            [attributes]="{'placeholder': '123456789'}"
+            [attributes]="{'placeholder': 'E.g.:123456789'}"
         ></app-input>
         <app-input 
             name="firstName" 
@@ -148,7 +148,7 @@
             label="Nombre"
             [type]="InputType.Text" 
             [(model)]="patient.firstName"
-            [attributes]="{'placeholder': 'John'}"
+            [attributes]="{'placeholder': 'E.g.:John'}"
         ></app-input>
         <app-input 
             name="lastName" 
@@ -156,7 +156,7 @@
             label="Apellido"
             [type]="InputType.Text" 
             [(model)]="patient.lastName"
-            [attributes]="{'placeholder': 'Smith'}"
+            [attributes]="{'placeholder': 'E.g.:Smith'}"
         ></app-input>
         <app-date 
             name="birthDate" 

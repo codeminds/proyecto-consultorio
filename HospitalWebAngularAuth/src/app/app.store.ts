@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
+import { User } from "@api/user/user.model";
 import { Message } from "@services/http/http.types";
-import { User } from "@services/user/user.model";
 import { State } from "@utils/state";
 
 @Injectable({

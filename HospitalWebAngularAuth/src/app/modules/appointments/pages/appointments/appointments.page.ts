@@ -1,20 +1,22 @@
 import { Component, OnInit } from '@angular/core';
-import { FilterAppointmentDTO } from '@services/appointment/appointment.dto';
-import { Appointment } from '@services/appointment/appointment.model';
-import { AppointmentService } from '@services/appointment/appointment.service';
-import { Doctor } from '@services/doctor/doctor.model';
-import { DoctorService } from '@services/doctor/doctor.service';
-import { Field } from '@services/field/field.model';
-import { FieldService } from '@services/field/field.service';
+import { FilterAppointmentDTO } from 'src/app/api/appointment/appointment.dto';
+import { Appointment } from 'src/app/api/appointment/appointment.model';
+import { AppointmentApi } from '@api/appointment/appointment.api';
+import { Doctor } from '@api/doctor/doctor.model';
+import { DoctorApi } from '@api/doctor/doctor.api';
+import { Field } from '@api/field/field.model';
+import { FieldApi } from '@api/field/field.api';
 import { MessageType, QueryParams } from '@services/http/http.types';
-import { Patient } from '@services/patient/patient.model';
-import { PatientService } from '@services/patient/patient.service';
-import { User } from '@services/user/user.model';
+import { Patient } from '@api/patient/patient.model';
+import { PatientApi } from '@api/patient/patient.api';
 import { InputType, ButtonType, DateType } from '@shared/components/form-field/form-field.types';
 import { ModalSize, ModalPosition } from '@shared/components/modal/modal.types';
 import { Store } from '@store';
-import { UserRole } from '@utils/enums';
 import { firstValueFrom, Observable } from 'rxjs';
+import { Gender } from '@api/gender/gender.model';
+import { GenderApi } from '@api/gender/gender.api';
+import { User } from '@api/user/user.model';
+import { UserRole } from '@utils/enums';
 
 @Component({
   selector: 'app-appointments',
@@ -24,9 +26,10 @@ export class AppointmentsPage implements OnInit {
   public get modalTitle() {
     return this.appointment?.id ?  'Editar Cita' : 'Nueva Cita';
   }
-  
+
   public appointments: Appointment[];
   public fields: Field[];
+  public genders: Gender[];
   public modalOpen: boolean;
   public panelOpen: boolean;
   public appointment: Appointment;
@@ -47,14 +50,16 @@ export class AppointmentsPage implements OnInit {
   private confirmFunction: () => void;
   
   constructor(
-    private appointmentService: AppointmentService,
-    private doctorService: DoctorService,
-    private patientService: PatientService,
-    private fieldService: FieldService,
+    private appointmentService: AppointmentApi,
+    private doctorService: DoctorApi,
+    private patientService: PatientApi,
+    private fieldService: FieldApi,
+    private genderService: GenderApi,
     private store: Store
   ) { 
     this.appointments = [];
     this.fields = [];
+    this.genders = [];
     this.modalOpen = false;
     this.panelOpen = false;
     this.appointment = null;
@@ -70,6 +75,7 @@ export class AppointmentsPage implements OnInit {
   public ngOnInit(): void {
     this.$user = this.store.$user;
     this.loadFields();
+    this.loadGenders();
     this.list();
   }
 
@@ -77,6 +83,13 @@ export class AppointmentsPage implements OnInit {
     const response = await firstValueFrom(this.fieldService.list());
     if(response.success) {
       this.fields = response.data;
+    }
+  }
+
+  public async loadGenders(): Promise<void> {
+    const response = await firstValueFrom(this.genderService.list());
+    if(response.success) {
+      this.genders = response.data;
     }
   }
 
@@ -140,7 +153,7 @@ export class AppointmentsPage implements OnInit {
         this.modalOpen = false;
         this.store.siteMessage = { type: MessageType.Success, text: response.messages[0] };
         this.list();
-      }else {
+      }else if(response.messages.length > 0) {
         this.messages = response.messages;
       }
 

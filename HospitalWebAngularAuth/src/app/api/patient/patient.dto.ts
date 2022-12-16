@@ -5,7 +5,7 @@ export class CreateUpdatePatientDTO {
     public readonly firstName: string;
     public readonly lastName: string;
     public readonly birthDate: string;
-    public readonly gender: boolean;
+    public readonly genderId: number;
 
     constructor(data: Patient) {
         this.documentId = data.documentId;
@@ -16,8 +16,8 @@ export class CreateUpdatePatientDTO {
         //a la hora de hacer llamados de API, esencialmente cambiando la
         //hora guardada en la base de datos ya que nuestro sistema
         //no maneja conversiones de hora y sólo trabaja con hora local
-        this.birthDate = data.birthDate.toInputDateString();
-        this.gender = data.gender;
+        this.birthDate = data.birthDate?.toInputDateString();
+        this.genderId = data.gender.id;
     }
 }
 
@@ -27,6 +27,7 @@ export class FilterPatientDTO {
     public lastName: string;
     public birthDateFrom: Date;
     public birthDateTo: Date;
+    public genderId: number;
 
     constructor(data: any = null) {
         //Técnica de deep copy para eliminar referencias de memoria
@@ -37,5 +38,6 @@ export class FilterPatientDTO {
         this.lastName = data.lastName != null ? String(data.lastName) : null;
         this.birthDateFrom = data.birthDateFrom != null ? new Date(data.birthDateFrom) : null;
         this.birthDateTo = data.birthDateTo != null ? new Date(data.birthDateTo) : null;
+        this.genderId = data.genderId != null ? Number(data.genderId) : null;
     }
 }

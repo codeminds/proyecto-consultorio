@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Patient } from '@api/patient/patient.model';
-import { PatientService } from '@api/patient/patient.service';
+import { PatientApi } from '@api/patient/patient.api';
 import { MessageType, QueryParams } from '@services/http/http.types';
 import { ButtonType, DateType, InputType } from '@shared/components/form-field/form-field.types';
 import { ModalPosition, ModalSize } from '@shared/components/modal/modal.types';
@@ -8,7 +8,7 @@ import { firstValueFrom } from 'rxjs';
 import { Store } from '@store';
 import { FilterPatientDTO } from '@api/patient/patient.dto';
 import { Gender } from '@api/gender/gender.model';
-import { GenderService } from '@api/gender/gender.api';
+import { GenderApi } from '@api/gender/gender.api';
 
 @Component({
   selector: 'app-patients',
@@ -40,8 +40,8 @@ export class PatientsPage implements OnInit{
   private confirmFunction: () => void;
   
   constructor(
-    private patientService: PatientService,
-    private genderService: GenderService,
+    private patientService: PatientApi,
+    private genderService: GenderApi,
     private store: Store
   ) { 
     this.patients = [];

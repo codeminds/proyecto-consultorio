@@ -1,20 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { FilterAppointmentDTO } from 'src/app/api/appointment/appointment.dto';
 import { Appointment } from 'src/app/api/appointment/appointment.model';
-import { AppointmentService } from '@api/appointment/appointment.api';
+import { AppointmentApi } from '@api/appointment/appointment.api';
 import { Doctor } from '@api/doctor/doctor.model';
-import { DoctorService } from '@api/doctor/doctor.api';
+import { DoctorApi } from '@api/doctor/doctor.api';
 import { Field } from '@api/field/field.model';
-import { FieldService } from '@api/field/field.api';
+import { FieldApi } from '@api/field/field.api';
 import { MessageType, QueryParams } from '@services/http/http.types';
 import { Patient } from '@api/patient/patient.model';
-import { PatientService } from '@api/patient/patient.service';
+import { PatientApi } from '@api/patient/patient.api';
 import { InputType, ButtonType, DateType } from '@shared/components/form-field/form-field.types';
 import { ModalSize, ModalPosition } from '@shared/components/modal/modal.types';
 import { Store } from '@store';
 import { firstValueFrom } from 'rxjs';
 import { Gender } from '@api/gender/gender.model';
-import { GenderService } from '@api/gender/gender.api';
+import { GenderApi } from '@api/gender/gender.api';
 
 @Component({
   selector: 'app-appointments',
@@ -47,11 +47,11 @@ export class AppointmentsPage implements OnInit {
   private confirmFunction: () => void;
   
   constructor(
-    private appointmentService: AppointmentService,
-    private doctorService: DoctorService,
-    private patientService: PatientService,
-    private fieldService: FieldService,
-    private genderService: GenderService,
+    private appointmentService: AppointmentApi,
+    private doctorService: DoctorApi,
+    private patientService: PatientApi,
+    private fieldService: FieldApi,
+    private genderService: GenderApi,
     private store: Store
   ) { 
     this.appointments = [];

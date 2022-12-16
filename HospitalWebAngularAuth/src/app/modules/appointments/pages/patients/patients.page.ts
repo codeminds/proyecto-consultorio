@@ -1,14 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { Patient } from '@services/patient/patient.model';
-import { PatientService } from '@services/patient/patient.service';
+import { Patient } from '@api/patient/patient.model';
+import { PatientApi } from '@api/patient/patient.api';
 import { MessageType, QueryParams } from '@services/http/http.types';
 import { ButtonType, DateType, InputType } from '@shared/components/form-field/form-field.types';
 import { ModalPosition, ModalSize } from '@shared/components/modal/modal.types';
 import { firstValueFrom, Observable } from 'rxjs';
 import { Store } from '@store';
-import { User } from '@services/user/user.model';
+import { FilterPatientDTO } from '@api/patient/patient.dto';
+import { Gender } from '@api/gender/gender.model';
+import { GenderApi } from '@api/gender/gender.api';
+import { User } from '@api/user/user.model';
 import { UserRole } from '@utils/enums';
-import { FilterPatientDTO } from '@services/patient/patient.dto';
 
 @Component({
   selector: 'app-patients',
@@ -18,8 +20,9 @@ export class PatientsPage implements OnInit{
   public get modalTitle() {
     return this.patient?.id ?  'Editar Paciente' : 'Nuevo Paciente';
   }
-  
+
   public patients: Patient[];
+  public genders: Gender[];
   public modalOpen: boolean;
   public panelOpen: boolean;
   public patient: Patient;
@@ -40,10 +43,12 @@ export class PatientsPage implements OnInit{
   private confirmFunction: () => void;
   
   constructor(
-    private patientService: PatientService,
+    private patientService: PatientApi,
+    private genderService: GenderApi,
     private store: Store
   ) { 
     this.patients = [];
+    this.genders = [];
     this.modalOpen = false;
     this.panelOpen = false;
     this.patient = null;
@@ -58,8 +63,17 @@ export class PatientsPage implements OnInit{
 
   public ngOnInit(): void {
     this.$user = this.store.$user;
+    this.loadGenders();
     this.list();
   }
+
+  public async loadGenders(): Promise<void> {
+    const response = await firstValueFrom(this.genderService.list());
+    if(response.success) {
+      this.genders = response.data;
+    }
+  }
+
   public async list(): Promise<void> {
     if(!this.loading) {
       this.loading = true;

@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { FilterDoctorDTO } from '@services/doctor/doctor.dto';
-import { Doctor } from '@services/doctor/doctor.model';
-import { DoctorService } from '@services/doctor/doctor.service';
-import { Field } from '@services/field/field.model';
-import { FieldService } from '@services/field/field.service';
+import { Doctor } from '@api/doctor/doctor.model';
+import { DoctorApi } from '@api/doctor/doctor.api';
+import { Field } from '@api/field/field.model';
+import { FieldApi } from '@api/field/field.api';
 import { MessageType, QueryParams } from '@services/http/http.types';
-import { User } from '@services/user/user.model';
 import { ButtonType, InputType } from '@shared/components/form-field/form-field.types';
 import { ModalPosition, ModalSize } from '@shared/components/modal/modal.types';
 import { Store } from '@store';
-import { UserRole } from '@utils/enums';
 import { firstValueFrom, Observable } from 'rxjs';
+import { User } from '@api/user/user.model';
+import { UserRole } from '@utils/enums';
+import { FilterDoctorDTO } from '@api/doctor/doctor.dto';
 
 @Component({
   selector: 'app-doctors',
@@ -20,7 +20,7 @@ export class DoctorsPage implements OnInit{
   public get modalTitle() {
     return this.doctor?.id ?  'Editar Doctor' : 'Nuevo Doctor';
   }
-  
+
   public doctors: Doctor[];
   public fields: Field[];
   public modalOpen: boolean;
@@ -42,8 +42,8 @@ export class DoctorsPage implements OnInit{
   private confirmFunction: () => void;
   
   constructor(
-    private doctorService: DoctorService,
-    private fieldService: FieldService,
+    private doctorService: DoctorApi,
+    private fieldService: FieldApi,
     private store: Store
   ) { 
     this.doctors = [];

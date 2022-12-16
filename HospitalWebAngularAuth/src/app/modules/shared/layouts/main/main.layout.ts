@@ -1,9 +1,9 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { firstValueFrom, Observable } from 'rxjs';
-import { UserService } from '@services/user/user.service';
-import { User } from '@services/user/user.model';
+import { UserApi } from '@api/user/user.api';
+import { User } from '@api/user/user.model';
 import { Store } from '@store';
-import { SessionService } from '@services/session/session.service';
+import { SessionApi } from '@api/session/session.api';
 
 @Component({
   selector: 'app-main',
@@ -26,8 +26,8 @@ export class MainLayout implements OnInit {
 
   constructor(
     private store: Store,
-    private userService: UserService,
-    private sessionService: SessionService
+    private userApi: UserApi,
+    private sessionApi: SessionApi
   ) {
     this.menuOpen = false;
     this.accountMenuOpen = false;
@@ -43,7 +43,7 @@ export class MainLayout implements OnInit {
     this.$user = this.store.$user;
 
     if(this.store.user == null) {
-      this.userService.load();
+      this.userApi.load();
     }
   }
 
@@ -63,7 +63,7 @@ export class MainLayout implements OnInit {
   }
 
   public async logout(): Promise<void> {
-    const response = await firstValueFrom(this.sessionService.logout());
+    const response = await firstValueFrom(this.sessionApi.logout());
     if(response.success) {
       this.store.closeSession();
     }

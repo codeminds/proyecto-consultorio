@@ -20,7 +20,7 @@ export class SelectComponent implements OnInit, OnChanges, OnDestroy, AfterViewI
   public infoTemplate?: TemplateRef<unknown>;
   
   @Input()
-  public options: any[];
+  public options: unknown[];
 
   @Input()
   public option?: CompareOption;

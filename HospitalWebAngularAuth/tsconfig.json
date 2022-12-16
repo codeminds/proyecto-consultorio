@@ -23,6 +23,7 @@
     ],
     "paths": {
       "@administration/*": ["src/app/modules/administration/*"],
+      "@api/*": ["src/app/api/*"],
       "@appointments/*": ["src/app/modules/appointments/*"],
       "@guards/*": ["src/app/guards/*"],
       "@interceptors/*": ["src/app/interceptors/*"],

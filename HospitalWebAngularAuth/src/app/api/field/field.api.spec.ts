@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { SessionService } from './session.service';
+import { FieldApi } from './field.api';
 
-describe('SessionService', () => {
-  let service: SessionService;
+describe('FieldService', () => {
+  let service: FieldApi;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(SessionService);
+    service = TestBed.inject(FieldApi);
   });
 
   it('should be created', () => {

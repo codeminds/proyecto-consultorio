@@ -7,7 +7,6 @@ import { SharedModule } from '@shared/shared.module';
 import { DoctorsPage } from './pages/doctors/doctors.page';
 import { PatientsPage } from './pages/patients/patients.page';
 
-
 @NgModule({
   declarations: [
     AppointmentsPage,

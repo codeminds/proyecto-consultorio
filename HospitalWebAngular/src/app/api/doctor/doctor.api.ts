@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { APIResponse, QueryParams } from '@services/http/http.types';
 import { HttpService } from '@services/http/http.service';
-import { map, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { CreateUpdateDoctorDTO } from './doctor.dto';
 import { Doctor } from './doctor.model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class DoctorService{
+export class DoctorApi{
   private readonly _api: string;
 
   constructor(

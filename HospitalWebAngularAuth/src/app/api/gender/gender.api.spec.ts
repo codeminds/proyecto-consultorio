@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { FieldService } from './field.service';
+import { GenderApi } from './gender.api';
 
-describe('FieldService', () => {
-  let service: FieldService;
+describe('GenderService', () => {
+  let service: GenderApi;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(FieldService);
+    service = TestBed.inject(GenderApi);
   });
 
   it('should be created', () => {
