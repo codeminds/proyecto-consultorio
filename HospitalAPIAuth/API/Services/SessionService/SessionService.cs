@@ -1,7 +1,6 @@
 ﻿using API.Data;
 using API.Data.Filters;
 using API.Data.Models;
-using API.Repositories;
 using API.Utils;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
@@ -9,35 +8,36 @@ using System.Text;
 
 namespace API.Services
 {
-    public class SessionService : Service, ISessionService
+    public class SessionService : ISessionService
     {
-        private readonly ISessionRepository _sessionRepository;
+        private readonly HospitalDB _database;
 
-        public SessionService(HospitalDB database, ISessionRepository sessionRepository) : base(database)
+        public SessionService(HospitalDB database)
         {
-            this._sessionRepository = sessionRepository;
+            this._database = database;
         }
 
-        public async Task<List<Session>> ListSessions(int userId, SessionListFilter filter)
+        public IQueryable<Session> ListSessions(int userId, SessionListFilter filter)
         {
-            return await this._sessionRepository.Query
-                                        .Where(s => s.UserId == userId
-                                                && (string.IsNullOrWhiteSpace(filter.AddressIssued) || s.AddressIssued.Contains(filter.AddressIssued))
-                                                && (string.IsNullOrWhiteSpace(filter.AddressRefreshed) || s.AddressRefreshed!.Contains(filter.AddressRefreshed))
-                                                && (!filter.DateFrom.HasValue || s.DateIssued >= filter.DateFrom)
-                                                && (!filter.DateTo.HasValue || s.DateExpiry <= filter.DateTo))
-                                        .ToListAsync();
+            return this._database
+                    .Session
+                    .Where(s => s.UserId == userId
+                        && (string.IsNullOrWhiteSpace(filter.AddressIssued) || s.AddressIssued.Contains(filter.AddressIssued))
+                        && (string.IsNullOrWhiteSpace(filter.AddressRefreshed) || s.AddressRefreshed!.Contains(filter.AddressRefreshed))
+                        && (!filter.DateFrom.HasValue || s.DateIssued >= filter.DateFrom)
+                        && (!filter.DateTo.HasValue || s.DateExpiry <= filter.DateTo));
         }
 
         public async Task<Session?> FindSession(Guid sessionId)
         {
-            return await this._sessionRepository.Query
-                                    .Include(s => s.User)
-                                    .Include(s => s.User.Role)
-                                    .FirstOrDefaultAsync(s => s.SessionId == sessionId);
+            return await this._database
+                            .Session
+                            .Include(s => s.User)
+                            .Include(s => s.User.Role)
+                            .FirstOrDefaultAsync(s => s.SessionId == sessionId);
         }
 
-        public async Task<Session> CreateUserSession(User user, IPAddress? address)
+        public async Task<Session> InitUserSession(User user, IPAddress? address)
         {
             DateTime now = DateTime.Now;
             Guid sessionId = Guid.NewGuid();
@@ -59,8 +59,8 @@ namespace API.Services
                 AccessTokenString = Token.IssueAccessToken(user, sessionId)
             };
 
-            this._sessionRepository.Insert(session);
-            await this.SaveRepositoriesAsync();
+            this._database.Add(session);
+            await this._database.SaveChangesAsync();
 
             return session;
         }
@@ -82,14 +82,14 @@ namespace API.Services
             session.RefreshTokenString = refreshToken;
             session.AccessTokenString = Token.IssueAccessToken(user, session.SessionId);
 
-            this._sessionRepository.Update(session);
-            await this.SaveRepositoriesAsync();
+            this._database.Update(session);
+            await this._database.SaveChangesAsync();
         }
 
         public async Task DeleteSession(Session session)
         {
-            this._sessionRepository.Delete(session);
-            await this.SaveRepositoriesAsync();
+            this._database.Session.Remove(session);
+            await this._database.SaveChangesAsync();;
         }
     }
 }

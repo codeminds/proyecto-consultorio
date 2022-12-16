@@ -1,10 +1,9 @@
-﻿using API.Data.Filters;
-using API.Data.Models;
+﻿using API.Data.Models;
 
 namespace API.Services
 {
     public interface IRoleService
     {
-        Task<List<Role>> ListRoles();
+        IQueryable<Role> ListRoles();
     }
 }

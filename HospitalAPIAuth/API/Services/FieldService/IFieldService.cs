@@ -4,6 +4,6 @@ namespace API.Services
 {
     public interface IFieldService
     {
-        Task<List<Field>> ListFields();
+        IQueryable<Field> ListFields();
     }
 }

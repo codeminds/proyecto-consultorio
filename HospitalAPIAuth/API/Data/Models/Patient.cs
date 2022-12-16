@@ -15,8 +15,9 @@ namespace API.Data.Models
         public string FirstName { get; set; } = null!;
         public string LastName { get; set; } = null!;
         public DateTime BirthDate { get; set; }
-        public bool Gender { get; set; }
+        public int GenderId { get; set; }
 
+        public virtual Gender Gender { get; set; } = null!;
         public virtual ICollection<Appointment> Appointment { get; set; }
     }
 }

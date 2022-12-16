@@ -8,30 +8,30 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
-    [Route("api/fields")]
+    [Route("api/genders")]
     [ApiController]
     [Authorize]
-    public class FieldController : ControllerBase
+    public class GenderController : ControllerBase
     {
         private readonly IMapper _mapper;
-        private readonly IFieldService _fieldService;
+        private readonly IGenderService _genderService;
 
-        public FieldController(IMapper mapper, IFieldService fieldService)
+        public GenderController(IMapper mapper, IGenderService genderService)
         {
             this._mapper = mapper;
-            this._fieldService = fieldService;
+            this._genderService = genderService;
         }
 
         [HttpGet]
-        public async Task<ActionResult<APIResponse>> ListFields()
+        public async Task<ActionResult<APIResponse>> ListGenders()
         {
-            List<Field> list = await this._fieldService
-                                        .ListFields()
+            List<Gender> list = await this._genderService
+                                        .ListGenders()
                                         .ToListAsync();
 
             APIResponse response = new()
             {
-                Data = list.Select(f => this._mapper.Map<Field, GetFieldDTO>(f))
+                Data = list.Select(g => this._mapper.Map<Gender, GetGenderDTO>(g))
             };
 
             return response;

@@ -4,6 +4,7 @@ using API.DataTransferObjects;
 using API.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
@@ -13,21 +14,24 @@ namespace API.Controllers
     public class RoleController : ControllerBase
     {
         private readonly IMapper _mapper;
-        private readonly IRoleService _RoleService;
+        private readonly IRoleService _roleService;
 
-        public RoleController(IMapper mapper, IRoleService RoleService)
+        public RoleController(IMapper mapper, IRoleService roleService)
         {
             this._mapper = mapper;
-            this._RoleService = RoleService;
+            this._roleService = roleService;
         }
 
         [HttpGet]
         public async Task<ActionResult<APIResponse>> List()
         {
+            List<Role> list = await this._roleService
+                                        .ListRoles()
+                                        .ToListAsync();
+
             APIResponse response = new()
             {
-                Data = (await this._RoleService.ListRoles())
-                                .Select(f => this._mapper.Map<Role, GetRoleDTO>(f))
+                Data = list.Select(r => this._mapper.Map<Role, GetRoleDTO>(r))
             };
 
             return response;

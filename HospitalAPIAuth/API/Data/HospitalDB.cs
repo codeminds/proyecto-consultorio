@@ -20,6 +20,7 @@ namespace API.Data
         public virtual DbSet<Appointment> Appointment { get; set; } = null!;
         public virtual DbSet<Doctor> Doctor { get; set; } = null!;
         public virtual DbSet<Field> Field { get; set; } = null!;
+        public virtual DbSet<Gender> Gender { get; set; } = null!;
         public virtual DbSet<Patient> Patient { get; set; } = null!;
         public virtual DbSet<Role> Role { get; set; } = null!;
         public virtual DbSet<Session> Session { get; set; } = null!;
@@ -37,8 +38,6 @@ namespace API.Data
         {
             modelBuilder.Entity<Appointment>(entity =>
             {
-                entity.HasIndex(e => new { e.Date, e.DoctorId, e.PatientId }, "IXAppointmentLookup");
-
                 entity.HasOne(d => d.Doctor)
                     .WithMany(p => p.Appointment)
                     .HasForeignKey(d => d.DoctorId)
@@ -54,8 +53,6 @@ namespace API.Data
 
             modelBuilder.Entity<Doctor>(entity =>
             {
-                entity.HasIndex(e => new { e.DocumentId, e.FirstName, e.LastName, e.FieldId }, "IXDoctorLookup");
-
                 entity.HasIndex(e => e.DocumentId, "UXDoctorDocumentId")
                     .IsUnique();
 
@@ -63,9 +60,13 @@ namespace API.Data
                     .HasMaxLength(9)
                     .IsUnicode(false);
 
-                entity.Property(e => e.FirstName).HasMaxLength(50);
+                entity.Property(e => e.FirstName)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
 
-                entity.Property(e => e.LastName).HasMaxLength(50);
+                entity.Property(e => e.LastName)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
 
                 entity.HasOne(d => d.Field)
                     .WithMany(p => p.Doctor)
@@ -76,23 +77,37 @@ namespace API.Data
 
             modelBuilder.Entity<Field>(entity =>
             {
-                entity.Property(e => e.Name).HasMaxLength(50);
+                entity.Property(e => e.Name)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<Gender>(entity =>
+            {
+                entity.Property(e => e.Name)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<Patient>(entity =>
             {
-                entity.HasIndex(e => new { e.DocumentId, e.FirstName, e.LastName, e.BirthDate, e.Gender }, "IXPatientLookup");
-
-                entity.HasIndex(e => e.DocumentId, "UXPatientDocumentId")
-                    .IsUnique();
-
                 entity.Property(e => e.DocumentId)
                     .HasMaxLength(9)
                     .IsUnicode(false);
 
-                entity.Property(e => e.FirstName).HasMaxLength(50);
+                entity.Property(e => e.FirstName)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
 
-                entity.Property(e => e.LastName).HasMaxLength(50);
+                entity.Property(e => e.LastName)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.Gender)
+                    .WithMany(p => p.Patient)
+                    .HasForeignKey(d => d.GenderId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FKGenderPatientGenderId");
             });
 
             modelBuilder.Entity<Role>(entity =>

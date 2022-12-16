@@ -7,6 +7,7 @@ using API.Utils;
 using API.Validators;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
@@ -28,15 +29,20 @@ namespace API.Controllers
 
         [HttpGet]
         public async Task<ActionResult<APIResponse>> ListAppointments([FromQuery] FilterAppointmentDTO data)
-        {
+        { 
             AppointmentListFilter filter = this._mapper.Map<FilterAppointmentDTO, AppointmentListFilter>(data);
-            PatientListFilter patientFilter = this._mapper.Map<FilterAppointmentDTO, PatientListFilter>(data);
-            DoctorListFilter doctorFilter = this._mapper.Map<FilterAppointmentDTO, DoctorListFilter>(data);
+
+            List<Appointment> list = await this._appointmentService
+                                        .ListAppointments(filter)
+                                        .Include(a => a.Doctor)
+                                        .Include(a => a.Doctor.Field)
+                                        .Include(a => a.Patient)
+                                        .Include(a => a.Patient.Gender)
+                                        .ToListAsync();
 
             APIResponse response = new()
             {
-                Data = (await this._appointmentService.ListAppointments(filter, patientFilter, doctorFilter))
-                                .Select(a => this._mapper.Map<Appointment, GetAppointmentDTO>(a))
+                Data = list.Select(a => this._mapper.Map<Appointment, GetAppointmentDTO>(a))
             };
 
             return response;
@@ -46,15 +52,15 @@ namespace API.Controllers
         [Route("{id}")]
         public async Task<ActionResult<APIResponse>> FindAppointment(int id)
         {
-            Appointment? entity = await this._appointmentService.FindAppointment(id);
-            if (entity == null)
+            Appointment? appointment = await this._appointmentService.FindAppointment(id);
+            if (appointment == null)
             {
                 return HttpErrors.NotFound("Cita no existe en el sistema");
             }
 
             APIResponse response = new()
             {
-                Data = this._mapper.Map<Appointment, GetAppointmentDTO>(entity)
+                Data = this._mapper.Map<Appointment, GetAppointmentDTO>(appointment)
             };
 
             return response;
@@ -69,7 +75,9 @@ namespace API.Controllers
 
             if (response.Success)
             {
-                Appointment appointment = await this._appointmentService.CreateAppointment(this._mapper.Map<CreateUpdateAppointmentDTO, Appointment>(data));
+                Appointment appointment = this._mapper.Map<CreateUpdateAppointmentDTO, Appointment>(data);
+                await this._appointmentService.InsertAppointment(appointment);
+
                 response.Data = this._mapper.Map<Appointment, GetAppointmentDTO>(appointment);
                 response.Messages.Add("Cita ha sido insertada");
             }

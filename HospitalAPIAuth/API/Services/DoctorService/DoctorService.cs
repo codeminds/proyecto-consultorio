@@ -1,82 +1,82 @@
 ﻿using API.Data;
 using API.Data.Filters;
 using API.Data.Models;
-using API.Repositories;
+using API.ExtensionMethods;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
 namespace API.Services
 {
-    public class DoctorService : Service, IDoctorService
+    public class DoctorService : IDoctorService
     {
-        private readonly IDoctorRepository _doctorRepository;
+        private readonly HospitalDB _database;
 
-        public DoctorService(HospitalDB database, IDoctorRepository doctorRepository) : base(database)
+        public DoctorService(HospitalDB database)
         {
-            this._doctorRepository = doctorRepository;
+            this._database = database;
         }
 
-        public async Task<List<Doctor>> ListDoctors(DoctorListFilter? filter = null)
+        public IQueryable<Doctor> ListDoctors(DoctorListFilter? filter = null)
         {
             filter ??= new DoctorListFilter();
-                                    
-            return await this._doctorRepository
-                                    .List(filter)
-                                    .Include(d => d.Field)
-                                    .ToListAsync();
+
+            return this._database
+                    .Doctor
+                    .Where(d => (string.IsNullOrWhiteSpace(filter.DocumentId) || d.DocumentId.Contains(filter.DocumentId))
+                        && (string.IsNullOrWhiteSpace(filter.FirstName) || d.FirstName.Contains(filter.FirstName))
+                        && (string.IsNullOrWhiteSpace(filter.LastName) || d.LastName.Contains(filter.LastName))
+                        && (!filter.FieldId.HasValue || d.FieldId == filter.FieldId));
         }
 
-        public async Task<List<Doctor>> SearchDoctors(string[] values)
+        //IMPORTANTE: Sólo para proyecto Angular
+        public IQueryable<Doctor> SearchDoctors(string[] values)
         {
-            return await this._doctorRepository
-                                .Search(values,
-                                        (value) => (doctor) => doctor.DocumentId.Contains(value)
-                                            || doctor.FirstName.Contains(value)
-                                            || doctor.LastName.Contains(value)
-                                            || doctor.Field.Name.Contains(value),
-                                        includes: new List<Expression<Func<Doctor, object>>>
-                                        { 
-                                            doctor => doctor.Field  
-                                        },
-                                        orderBys: new List<Expression<Func<Doctor, object>>>
-                                        {
-                                            doctor => doctor.DocumentId,
-                                            doctor => doctor.FirstName,
-                                            doctor => doctor.LastName
-                                        }
-                                )
-                                .ToListAsync();
+            return this._database
+                    .Doctor
+                    .Search(values,
+                        (value) => (doctor) => doctor.DocumentId.Contains(value)
+                            || doctor.FirstName.Contains(value)
+                            || doctor.LastName.Contains(value)
+                            || doctor.Field.Name.Contains(value),
+                        includes: new List<Expression<Func<Doctor, object>>>
+                        { 
+                            doctor => doctor.Field  
+                        },
+                        orderBys: new List<Expression<Func<Doctor, object>>>
+                        {
+                            doctor => doctor.DocumentId,
+                            doctor => doctor.FirstName,
+                            doctor => doctor.LastName
+                        }
+                    );
         }
 
         public async Task<Doctor?> FindDoctor(int id)
         {
-            return await this._doctorRepository
-                                .Find(id)
-                                .Include(d => d.Field)
-                                .FirstOrDefaultAsync();
+            return await this._database
+                            .Doctor
+                            .Include(p => p.Field)
+                            .Where(d => d.Id == id)
+                            .FirstOrDefaultAsync();
         }
 
-        public async Task<Doctor> CreateDoctor(Doctor doctor)
+        public async Task InsertDoctor(Doctor entity)
         {
-            this._doctorRepository.Insert(doctor);
-            await this.SaveRepositoriesAsync();
-
-            return (await this._doctorRepository
-                                        .Find(doctor.Id)
-                                        .Include(d => d.Field)
-                                        .FirstOrDefaultAsync())!;
+            this._database.Doctor.Add(entity);
+            await this._database.SaveChangesAsync();
+            await this._database.Entry(entity).Reference(d => d.Field).LoadAsync();
         }
 
-        public async Task UpdateDoctor(Doctor doctor)
+        public async Task UpdateDoctor(Doctor entity)
         {
-            this._doctorRepository.Update(doctor);
-            await this.SaveRepositoriesAsync();
+            this._database.Doctor.Update(entity);
+            await this._database.SaveChangesAsync();
         }
 
-        public async Task DeleteDoctor(Doctor doctor)
+        public async Task DeleteDoctor(Doctor entity)
         {
-            this._doctorRepository.Delete(doctor);
-            await this.SaveRepositoriesAsync();
+            this._database.Doctor.Remove(entity);
+            await this._database.SaveChangesAsync();
         }
     }
 }

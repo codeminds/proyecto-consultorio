@@ -1,5 +1,5 @@
-﻿using API.DataTransferObjects;
-using API.Repositories;
+﻿using API.Data;
+using API.DataTransferObjects;
 using API.Utils;
 using System.Text.RegularExpressions;
 
@@ -7,11 +7,11 @@ namespace API.Validators
 {
     public class UserValidator : IUserValidator
     {
-        private readonly IUserRepository _userRepository;
+        private readonly HospitalDB _database;
 
-        public UserValidator(IUserRepository userRepository)
+        public UserValidator(HospitalDB database)
         {
-            this._userRepository = userRepository;
+            this._database = database;
         }
 
         public bool ValidateUpdateInfo(UpdateUserDTO data, List<string> messages)
@@ -56,7 +56,7 @@ namespace API.Validators
             {
                 innerMessages.Add("Email no tiene un formato válido");
             }
-            else if (this._userRepository.Query.Any(u => u.Email == data.Email && u.Id != id))
+            else if (this._database.User.Any(u => u.Email == data.Email && u.Id != id))
             {
                 innerMessages.Add("Email ya pertenece a otro usuario");
             }

@@ -1,72 +1,79 @@
 ﻿using API.Data;
 using API.Data.Filters;
 using API.Data.Models;
-using API.Repositories;
+using API.ExtensionMethods;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
 namespace API.Services
 {
-    public class PatientService : Service, IPatientService
+    public class PatientService : IPatientService
     {
-        private readonly IPatientRepository _patientRepository;
+        private readonly HospitalDB _database;
 
-        public PatientService(HospitalDB database, IPatientRepository patientRepository) : base(database)
+        public PatientService(HospitalDB database)
         {
-            this._patientRepository = patientRepository;
+            this._database = database;    
         }
 
-        public async Task<List<Patient>> ListPatients(PatientListFilter? filter = null)
+        public IQueryable<Patient> ListPatients(PatientListFilter? filter = null)
         {
             filter ??= new PatientListFilter();
 
-            return await this._patientRepository
-                                    .List(filter)
-                                    .ToListAsync();
+            return this._database
+                    .Patient
+                    .Where(p => (string.IsNullOrWhiteSpace(filter.DocumentId) || p.DocumentId.Contains(filter.DocumentId))
+                        && (string.IsNullOrWhiteSpace(filter.FirstName) || p.FirstName.Contains(filter.FirstName))
+                        && (string.IsNullOrWhiteSpace(filter.LastName) || p.LastName.Contains(filter.LastName))
+                        && (!filter.BirthDateFrom.HasValue || p.BirthDate >= filter.BirthDateFrom)
+                        && (!filter.BirthDateTo.HasValue || p.BirthDate <= filter.BirthDateTo)
+                        && (!filter.GenderId.HasValue || p.GenderId == filter.GenderId));
         }
 
-        public async Task<List<Patient>> SearchPatients(string[] values)
+        //IMPORTANTE: Sólo para proyecto Angular
+        public IQueryable<Patient> SearchPatients(string[] values)
         {
-            return await this._patientRepository
-                                    .Search(values,
-                                            (value) => (patient) => patient.DocumentId.Contains(value)
-                                                || patient.FirstName.Contains(value)
-                                                || patient.LastName.Contains(value),
-                                            orderBys: new List<Expression<Func<Patient, object>>> 
-                                            {
-                                                patient => patient.DocumentId,
-                                                patient => patient.FirstName,
-                                                patient => patient.LastName
-                                            }
-                                    )
-                                    .ToListAsync();
+            return this._database
+                    .Patient
+                    .Search(values,
+                        (value) => (patient) => patient.DocumentId.Contains(value)
+                            || patient.FirstName.Contains(value)
+                            || patient.LastName.Contains(value),
+                        orderBys: new List<Expression<Func<Patient, object>>> 
+                        {
+                            patient => patient.DocumentId,
+                            patient => patient.FirstName,
+                            patient => patient.LastName
+                        }
+                    );
         }
 
         public async Task<Patient?> FindPatient(int id)
         {
-            return await this._patientRepository
-                                .Find(id)
-                                .FirstOrDefaultAsync();
+            return await this._database
+                            .Patient
+                            .Include(p => p.Gender)
+                            .Where(p => p.Id == id)
+                            .FirstOrDefaultAsync();
         }
 
-        public async Task<Patient> CreatePatient(Patient patient)
+        public async Task InsertPatient(Patient entity)
         {
-            this._patientRepository.Insert(patient);
-            await this.SaveRepositoriesAsync();
-
-            return patient;
+            this._database.Patient.Add(entity);
+            await this._database.SaveChangesAsync();
+            await this._database.Entry(entity).Reference(p => p.Gender).LoadAsync();
         }
 
-        public async Task UpdatePatient(Patient patient)
+        public async Task UpdatePatient(Patient entity)
         {
-            this._patientRepository.Update(patient);
-            await this.SaveRepositoriesAsync();
+            this._database.Patient.Update(entity);
+            await this._database.SaveChangesAsync();
         }
 
-        public async Task DeletePatient(Patient patient)
+        public async Task DeletePatient(Patient entity)
         {
-            this._patientRepository.Delete(patient);
-            await this.SaveRepositoriesAsync();
+            this._database.Patient.Remove(entity);
+            await this._database.SaveChangesAsync();
         }
     }
 }

@@ -31,9 +31,10 @@ namespace API.Controllers
 
             List<Appointment> list = await this._appointmentService
                                         .ListAppointments(filter)
-                                        .Include(a => a.Patient)
                                         .Include(a => a.Doctor)
                                         .Include(a => a.Doctor.Field)
+                                        .Include(a => a.Patient)
+                                        .Include(a => a.Patient.Gender)
                                         .ToListAsync();
 
             APIResponse response = new()

@@ -7,6 +7,7 @@ using API.Utils;
 using API.Validators;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
@@ -30,24 +31,32 @@ namespace API.Controllers
         public async Task<ActionResult<APIResponse>> ListPatients([FromQuery] FilterPatientDTO data)
         {
             PatientListFilter filter = this._mapper.Map<FilterPatientDTO, PatientListFilter>(data);
+            List<Patient> list = await this._patientService
+                                        .ListPatients(filter)
+                                        .Include(p => p.Gender)
+                                        .ToListAsync();
 
             APIResponse response = new()
             {
-                Data = (await this._patientService.ListPatients(filter))
-                                .Select(p => this._mapper.Map<Patient, GetPatientDTO>(p))
+            Data = list.Select(p => this._mapper.Map<Patient, GetPatientDTO>(p))
             };
 
             return response;
         }
 
+        //IMPORTANTE: Sólo para proyecto Angular
         [HttpGet]
         [Route("search")]
         public async Task<ActionResult<APIResponse>> SearchPatients([FromQuery] string[] s)
         {
+
+            List<Patient> list = await this._patientService
+                                        .SearchPatients(s)
+                                        .ToListAsync();
+
             APIResponse response = new()
             {
-                Data = (await this._patientService.SearchPatients(s))
-                                .Select(p => this._mapper.Map<Patient, GetPatientDTO>(p))
+                Data = list.Select(d => this._mapper.Map<Patient, GetPatientDTO>(d))
             };
 
             return response;
@@ -65,10 +74,10 @@ namespace API.Controllers
 
             APIResponse response = new()
             {
-                Data = this._mapper.Map<Patient, GetPatientDTO>(patient)
+               Data = this._mapper.Map<Patient, GetPatientDTO>(patient)
             };
 
-            return response;
+         return response;
         }
 
         [HttpPost]
@@ -80,7 +89,9 @@ namespace API.Controllers
 
             if (response.Success)
             {
-                Patient patient = await this._patientService.CreatePatient(this._mapper.Map<CreateUpdatePatientDTO, Patient>(data));
+                Patient patient = this._mapper.Map<CreateUpdatePatientDTO, Patient>(data);
+                await this._patientService.InsertPatient(patient);
+
                 response.Data = this._mapper.Map<Patient, GetPatientDTO>(patient);
                 response.Messages.Add("Paciente ha sido insertado");
             }

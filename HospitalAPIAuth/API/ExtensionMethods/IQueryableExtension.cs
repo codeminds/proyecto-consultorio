@@ -1,27 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
-namespace API.Repositories
+//IMPORTANTE: Sólo para proyecto Angular
+namespace API.ExtensionMethods
 {
-    public abstract class Repository<T, I>  where T : class where I : struct
+    public static class IQueryableExtension
     {
-        public IQueryable<T> Query
+        public static IQueryable<T> Search<T>(this IQueryable<T> queryable, IEnumerable<string> values, Func<string, Expression<Func<T, bool>>> where, IEnumerable<Expression<Func<T, object>>>? includes = null, IEnumerable<Expression<Func<T, object>>>? orderBys = null) where T : class
         {
-            get { return this._database.Set<T>(); }
-        }
-
-        private readonly DbContext _database;
-
-        public Repository(DbContext database)
-        {
-            _database = database;
-        }
-
-        public abstract IQueryable<T> Find(I id);
-
-        public IQueryable<T> Search(IEnumerable<string> values, Func<string, Expression<Func<T, bool>>> where, IEnumerable<Expression<Func<T, object>>>? includes = null, IEnumerable<Expression<Func<T, object>>>? orderBys = null)
-        {
-            IQueryable<T> query = this.Query;
+            IQueryable<T> query = queryable;
             includes ??= Enumerable.Empty<Expression<Func<T, object>>>();
             orderBys ??= Enumerable.Empty<Expression<Func<T, object>>>();
 
@@ -37,7 +24,7 @@ namespace API.Repositories
 
                 for (int i = 1; i < items; i++)
                 {
-                    IQueryable<T> unionQuery = this.Query.Where(where(values.ElementAt(i)));
+                    IQueryable<T> unionQuery = queryable.Where(where(values.ElementAt(i)));
 
                     foreach (Expression<Func<T, object>> include in includes)
                     {
@@ -60,21 +47,6 @@ namespace API.Repositories
             }
 
             return query;
-        }
-
-        public void Insert(T entity)
-        {
-            this._database.Set<T>().Add(entity);
-        }
-
-        public void Update(T entity)
-        {
-            this._database.Set<T>().Update(entity);
-        }
-
-        public void Delete(T entity)
-        {
-            this._database.Set<T>().Remove(entity);
         }
     }
 }

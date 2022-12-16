@@ -1,2 +1,2 @@
-# Comando para PM console después de build: .\API\DbScaffold.ps1 
+# Comando para PM console: .\API\DbScaffold.ps1 
 Scaffold-DbContext "Name=HospitalDB" Microsoft.EntityFrameworkCore.SqlServer -Context HospitalDB -ContextDir Data -OutputDir Data\Models -Force -NoPluralize

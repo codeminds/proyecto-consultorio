@@ -5,11 +5,11 @@ namespace API.Services
 {
     public interface IPatientService
     {
-        Task<List<Patient>> ListPatients(PatientListFilter? filter);
-        Task<List<Patient>> SearchPatients(string[] values);
+        IQueryable<Patient> ListPatients(PatientListFilter? filter);
+        IQueryable<Patient> SearchPatients(string[] values);
         Task<Patient?> FindPatient(int id);
-        Task<Patient> CreatePatient(Patient patient);
-        Task UpdatePatient(Patient Patient);
+        Task InsertPatient(Patient entity);
+        Task UpdatePatient(Patient entity);
         Task DeletePatient(Patient entity);
     }
 }

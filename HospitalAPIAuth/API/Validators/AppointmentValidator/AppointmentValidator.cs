@@ -1,21 +1,16 @@
-﻿using API.DataTransferObjects;
-using API.Repositories;
+﻿using API.Data;
+using API.DataTransferObjects;
 
 namespace API.Validators
 {
     public class AppointmentValidator : IAppointmentValidator
     {
-        private readonly IAppointmentRepository _appointmentRepository;
-        private readonly IPatientRepository _patientRepository;
-        private readonly IDoctorRepository _doctorRepository;
+        private readonly HospitalDB _database;
 
-        public AppointmentValidator(IAppointmentRepository appointmentRepository, IPatientRepository patientRepository, IDoctorRepository doctorRepository)
+        public AppointmentValidator(HospitalDB database)
         {
-            this._appointmentRepository = appointmentRepository;
-            this._patientRepository = patientRepository;
-            this._doctorRepository = doctorRepository;
+            this._database = database;
         }
-
 
         public bool ValidateInsert(CreateUpdateAppointmentDTO data, List<string> messages)
         {
@@ -32,18 +27,23 @@ namespace API.Validators
             }
             else
             {
-                if (this._appointmentRepository.Query.Any(a =>
-                            a.DoctorId == data.DoctorId
-                            && ((data.Date.Value.AddHours(1) > a.Date && data.Date.Value.AddHours(1) < a.Date.AddHours(1))
-                            || (data.Date > a.Date && data.Date < a.Date.AddHours(1)))))
+                bool doctorHasConflict = this._database
+                                            .Appointment
+                                            .Any(a => a.DoctorId == data.DoctorId
+                                                        && ((data.Date.Value.AddHours(1) > a.Date && data.Date.Value.AddHours(1) < a.Date.AddHours(1))
+                                                            || (data.Date > a.Date && data.Date < a.Date.AddHours(1))));
+                if (doctorHasConflict)
                 {
                     innerMessages.Add("El doctor ya tiene una cita agendada durante la fecha y hora seleccionada");
                 }
 
-                if (this._appointmentRepository.Query.Any(a =>
-                            a.PatientId == data.PatientId
-                            && ((data.Date.Value.AddHours(1) > a.Date && data.Date.Value.AddHours(1) < a.Date.AddHours(1))
-                                || (data.Date > a.Date && data.Date < a.Date.AddHours(1)))))
+                bool patientHasConflict = this._database
+                                            .Appointment
+                                            .Any(a => a.PatientId == data.PatientId
+                                                        && ((data.Date.Value.AddHours(1) > a.Date && data.Date.Value.AddHours(1) < a.Date.AddHours(1))
+                                                            || (data.Date > a.Date && data.Date < a.Date.AddHours(1))));
+
+                if (patientHasConflict)
                 {
                     innerMessages.Add("El paciente ya tiene una cita agendada durante la fecha y hora seleccionada");
                 }
@@ -54,7 +54,7 @@ namespace API.Validators
             {
                 innerMessages.Add("Doctor es requerido");
             }
-            else if (!this._appointmentRepository.Query.Any(d => d.Id == data.DoctorId))
+            else if (!this._database.Appointment.Any(d => d.Id == data.DoctorId))
             {
                 innerMessages.Add("Debe seleccionar un doctor que esté registrado en el sistema");
             }
@@ -64,7 +64,7 @@ namespace API.Validators
             {
                 innerMessages.Add("Paciente es requerido");
             }
-            else if (!this._patientRepository.Query.Any(d => d.Id == data.PatientId))
+            else if (!this._database.Patient.Any(d => d.Id == data.PatientId))
             {
                 innerMessages.Add("Debe seleccionar un paciente que esté registrado en el sistema");
             }
@@ -85,20 +85,26 @@ namespace API.Validators
             }
             else
             {
-                if (this._appointmentRepository.Query.Any(a =>
-                            a.Id != id &&
-                            a.DoctorId == data.DoctorId
-                            && ((data.Date.Value.AddHours(1) > a.Date && data.Date.Value.AddHours(1) < a.Date.AddHours(1))
-                            || (data.Date > a.Date && data.Date < a.Date.AddHours(1)))))
+                bool doctorHasConflict = this._database
+                                            .Appointment
+                                            .Any(a =>a.Id != id 
+                                                        && a.DoctorId == data.DoctorId
+                                                        && ((data.Date.Value.AddHours(1) > a.Date && data.Date.Value.AddHours(1) < a.Date.AddHours(1))
+                                                        || (data.Date > a.Date && data.Date < a.Date.AddHours(1))));
+
+                if (doctorHasConflict)
                 {
                     innerMessages.Add("El doctor ya tiene una cita agendada durante la fecha y hora seleccionada");
                 }
 
-                if (this._appointmentRepository.Query.Any(a =>
-                            a.Id != id &&
-                            a.PatientId == data.PatientId
-                            && ((data.Date.Value.AddHours(1) > a.Date && data.Date.Value.AddHours(1) < a.Date.AddHours(1))
-                                || (data.Date > a.Date && data.Date < a.Date.AddHours(1)))))
+                bool patientHasConflict = this._database
+                                            .Appointment
+                                            .Any(a => a.Id != id &&
+                                                    a.PatientId == data.PatientId
+                                                    && ((data.Date.Value.AddHours(1) > a.Date && data.Date.Value.AddHours(1) < a.Date.AddHours(1))
+                                                        || (data.Date > a.Date && data.Date < a.Date.AddHours(1))));
+
+                if (patientHasConflict)
                 {
                     innerMessages.Add("El paciente ya tiene una cita agendada durante la fecha y hora seleccionada");
                 }
@@ -109,7 +115,7 @@ namespace API.Validators
             {
                 innerMessages.Add("Doctor es requerido");
             }
-            else if (!this._doctorRepository.Query.Any(d => d.Id == data.DoctorId))
+            else if (!this._database.Doctor.Any(d => d.Id == data.DoctorId))
             {
                 innerMessages.Add("Debe seleccionar un doctor que esté registrado en el sistema");
             }
@@ -119,7 +125,7 @@ namespace API.Validators
             {
                 innerMessages.Add("Paciente es requerido");
             }
-            else if (!this._patientRepository.Query.Any(d => d.Id == data.PatientId))
+            else if (!this._database.Patient.Any(d => d.Id == data.PatientId))
             {
                 innerMessages.Add("Debe seleccionar un paciente que esté registrado en el sistema");
             }

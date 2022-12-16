@@ -43,10 +43,13 @@ namespace API.Controllers
             List<Claim> claims = Token.GetTokenClaims(tokenHeader.ToString().Split(" ")[1]);
             int userId = int.Parse(claims.First(c => c.Type == Claims.User).Value);
 
+            List<Session> list = await this._sessionService
+                                        .ListSessions(userId, filter)
+                                        .ToListAsync();
+
             APIResponse response = new()
             {
-                Data = (await this._sessionService.ListSessions(userId, filter))
-                                .Select(p => this._mapper.Map<Session, GetSessionDTO>(p))
+                Data = list.Select(p => this._mapper.Map<Session, GetSessionDTO>(p))
             };
 
             return response;
@@ -69,7 +72,7 @@ namespace API.Controllers
                     return HttpErrors.NotFound("Usuario y contraseña incorrectos");
                 }
 
-                Session session = await this._sessionService.CreateUserSession(user, Request.HttpContext.Connection.RemoteIpAddress);
+                Session session = await this._sessionService.InitUserSession(user, Request.HttpContext.Connection.RemoteIpAddress);
                 response.Data = this._mapper.Map<Session, GetSessionTokensDTO>(session);
             }
 
