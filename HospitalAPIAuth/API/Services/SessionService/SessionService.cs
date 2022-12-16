@@ -17,7 +17,7 @@ namespace API.Services
             this._database = database;
         }
 
-        public IQueryable<Session> ListSessions(int userId, SessionListFilter filter)
+        public IQueryable<Session> ListSessions(int userId, SessionFilters filter)
         {
             return this._database
                     .Session

@@ -1,6 +1,6 @@
 ﻿namespace API.Data.Filters
 {
-    public class SessionListFilter
+    public class SessionFilters
     {
         public DateTime? DateFrom { get; set; }
         public DateTime? DateTo { get; set; }

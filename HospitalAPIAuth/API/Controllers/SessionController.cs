@@ -36,7 +36,7 @@ namespace API.Controllers
         [Authorize]
         public async Task<ActionResult<APIResponse>> ListSessions([FromQuery] FilterSessionDTO data)
         {
-            SessionListFilter filter = this._mapper.Map<FilterSessionDTO, SessionListFilter>(data);
+            SessionFilters filter = this._mapper.Map<FilterSessionDTO, SessionFilters>(data);
 
             Request.Headers.TryGetValue("Authorization", out StringValues tokenHeader);
 
