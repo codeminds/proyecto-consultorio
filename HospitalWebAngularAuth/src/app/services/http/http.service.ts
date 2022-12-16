@@ -149,18 +149,16 @@ export class HttpService{
     let query = '';
 
     for(const prop in params) {
-      const param = params[prop]; 
+      const param = params[prop];
 
       if(Array.isArray(param)) {
         for(const value of param) {
           query += this.getQueryParam(prop, value, prefix);
-          query += '&';          
         }
       } else if (param != null && typeof param === 'object' && !(param instanceof Date)) {
-        query += this.getQuery(param, prop);
+        query += `${!query ? '' : '&'}${this.getQuery(param, prop)}`;
       } else {
         query += this.getQueryParam(prop, param, prefix);
-        query += '&';
       }
     }
 
@@ -168,14 +166,14 @@ export class HttpService{
   }
 
   private getQueryParam(prop: string, param: unknown, prefix?: string): string {
-    prop = prefix == null ? prop : prefix + prop.capitalize();
+    prop = prefix != null ? `${prefix}.${prop}` : prop;
 
     if(param == null){
-      return `${prop}=`
+      return `${prop}=&`
     } else if(param instanceof Date) {
-      return `${prop}=${param.toInputDateString()}`;
+      return `${prop}=${param.toInputDateString()}&`;
     } else {
-      return `${prop}=${param}`
+      return `${prop}=${param}&`
     } 
   }
 }
