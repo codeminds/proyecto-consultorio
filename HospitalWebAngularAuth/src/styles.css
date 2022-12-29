@@ -80,7 +80,7 @@ h2 {
 
 @keyframes fade-in {
     0% {
-        opaicty: 0;
+        opacity: 0;
         transform: scale(0)
     }
 

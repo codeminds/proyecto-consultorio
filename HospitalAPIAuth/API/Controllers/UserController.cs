@@ -28,8 +28,9 @@ namespace API.Controllers
         }
 
         [HttpGet]
+        [Route("me")]
         [Authorize]
-        public async Task<ActionResult<APIResponse>> GetUser()
+        public async Task<ActionResult<APIResponse>> GetCurrentUser()
         {
             Request.Headers.TryGetValue("Authorization", out StringValues tokenHeader);
 

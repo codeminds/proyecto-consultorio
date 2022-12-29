@@ -135,10 +135,12 @@ export class AppointmentsPage implements OnInit {
   public async save(): Promise<void> {
     if(!this.saving) {
       this.saving = true;
-      this.messages = [];
+      
       
       const isNew = this.appointment.id == null
       const response = await firstValueFrom(isNew ? this.appointmentService.post(this.appointment) : this.appointmentService.put(this.appointment.id, this.appointment));  
+      this.messages = [];
+      
       if(response.success) {
         if(isNew) {
           this.panelOpen = true;

@@ -18,7 +18,7 @@ export class UserApi {
   }
 
   public async load(): Promise<void> {
-    const response = await firstValueFrom(this.httpService.get(this._api, { accessToken: true }).mapObjectResponse((item: object) => new User(item)));
+    const response = await firstValueFrom(this.httpService.get(`${this._api}/me`, { accessToken: true }).mapObjectResponse((item: object) => new User(item)));
     if(response.success) {
       this.store.user = response.data;
     }

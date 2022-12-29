@@ -9,8 +9,14 @@
     <!-- El evitar el event bubbling en el sidenav evita que este se cierre por el host listener de body  -->
     <nav (click)="$event.stopPropagation()" class="account-menu" *ngIf="($user | async) as user">
         <button (click)="toggleAccountMenu()" [ngClass]="{'open': accountMenuOpen}" class="account-menu-toggle material-symbols-sharp">account_circle</button>
-        <ul *ngIf="accountMenuOpen">
-            <li class="user">{{user.firstName}} {{user.lastName}}</li>
+        <ul *ngIf="accountMenuOpen" (click)="toggleAccountMenu()">
+            <li class="user" (click)="$event.stopPropagation()">{{user.firstName}} {{user.lastName}}</li>
+            <li>
+               <a routerLink="/user/profile">Perfil</a> 
+            </li>
+            <li>
+                <a routerLink="/user/sessions">Sesiones</a> 
+             </li>
             <li>
                 <button (click)="logout()">Logout</button>
             </li>

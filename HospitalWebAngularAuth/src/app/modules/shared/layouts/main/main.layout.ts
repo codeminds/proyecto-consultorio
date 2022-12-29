@@ -59,6 +59,7 @@ export class MainLayout implements OnInit {
   }
 
   public handleMenuNavigate(): void {
+    console.log('clicked');
     this.menuOpen = false;
   }
 

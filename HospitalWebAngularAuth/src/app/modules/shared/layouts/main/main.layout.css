@@ -58,6 +58,7 @@
 .navbar .account-menu ul {
     position: absolute;
     right: 0.5rem;
+    top: 5rem;
     z-index: 10;
     white-space: nowrap;
     background: var(--color-navbar);
@@ -75,7 +76,6 @@
 .navbar .account-menu .user {
     padding: 1rem 2rem;
     cursor: default;
-    pointer-events: none;
 }
 
 .navbar .account-menu ul a, .navbar .account-menu ul button{
@@ -85,6 +85,7 @@
     display: inline-block;
     width: 100%;
     text-align: left;
+    text-decoration: none;
 }
 
 

@@ -29,6 +29,7 @@
       "@interceptors/*": ["src/app/interceptors/*"],
       "@services/*": ["src/app/services/*"],
       "@shared/*": ["src/app/modules/shared/*"],
+      "@user/*": ["src/app/modules/user/*"],
       "@utils/*": ["src/app/utils/*"],
       "@store": ["src/app/app.store.ts"]
     }

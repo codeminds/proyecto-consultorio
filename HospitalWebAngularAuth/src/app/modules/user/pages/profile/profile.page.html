@@ -1,0 +1,56 @@
+<app-panel panelTitle="Actualizar Información">
+   <form *ngIf="($user | async) as user" (keyup.enter)="save(user)">
+      <ul>
+          <li class="validation-message" *ngFor="let message of messages">{{message}}</li>
+      </ul>
+      <div class="row">
+         <app-input 
+            name="firstName" 
+            form="createUpdate" 
+            label="Nombre"
+            class="col-3"
+            [type]="InputType.Text" 
+            [(model)]="user.firstName"
+            [attributes]="{'placeholder': 'E.g.:John'}"
+         ></app-input>
+         <app-input 
+            name="lastName" 
+            form="createUpdate" 
+            label="Apellido"
+            class="col-3"
+            [type]="InputType.Text" 
+            [(model)]="user.lastName"
+            [attributes]="{'placeholder': 'E.g.:Smith'}"
+         ></app-input>
+         <app-input 
+            name="email" 
+            form="createUpdate" 
+            label="Correo"
+            class="col-3"
+            [type]="InputType.Email" 
+            [(model)]="user.email"
+            [attributes]="{'placeholder': 'E.g.:john.smith@mail.com'}"
+         ></app-input>
+         <app-input 
+            name="password" 
+            form="createUpdate" 
+            label="Nueva Contraseña"
+            class="col-3"
+            [type]="InputType.Password" 
+            [(model)]="password"
+            [attributes]="{'placeholder': 'Ingrese una nueva contraseña si desea cambiarla'}"
+         ></app-input>
+         <app-input 
+            *ngIf="password"
+            name="confirmPassword" 
+            form="createUpdate" 
+            label="Confirmar Contraseña"
+            class="col-3"
+            [type]="InputType.Password" 
+            [(model)]="confirmPassword"
+            [attributes]="{'placeholder': 'Confirmar nueva contraseña'}"
+         ></app-input>
+      </div>
+      <app-button [type]="ButtonType.Success" (clicked)="save(user)" [disabled]="saving" [loading]="loading">Guardar <i *ngIf="saving" class="material-symbols-sharp rotate">data_saver_off</i></app-button>
+  </form>
+</app-panel>

@@ -116,10 +116,11 @@ export class PatientsPage implements OnInit{
   public async save(): Promise<void> {
     if(!this.saving) {
       this.saving = true;
-      this.messages = [];
       
       const isNew = this.patient.id == null
       const response = await firstValueFrom(isNew ? this.patientService.post(this.patient) : this.patientService.put(this.patient.id, this.patient));  
+      this.messages = [];
+      
       if(response.success) {
         if(isNew) {
           this.panelOpen = true;
