@@ -23,9 +23,13 @@ import { UserRole } from '@utils/enums';
   templateUrl: './appointments.page.html'
 })
 export class AppointmentsPage implements OnInit {
-  public get modalTitle() {
+  public get modalTitle(): string {
     return this.appointment?.id ?  'Editar Cita' : 'Nueva Cita';
   }
+
+  public get confirmDelete(): boolean {
+    return this.deleteId != null;
+  } 
 
   public appointments: Appointment[];
   public fields: Field[];
@@ -36,8 +40,7 @@ export class AppointmentsPage implements OnInit {
   public loading: boolean;
   public saving: boolean;
   public filter: QueryParams;
-  public confirmText: string;
-  public confirmOpen: boolean;
+  public deleteId: number;
   public messages: string[];
   public $user: Observable<User>;
 
@@ -46,8 +49,6 @@ export class AppointmentsPage implements OnInit {
   public ModalPosition = ModalPosition;
   public ButtonType = ButtonType;
   public DateType = DateType;
-
-  private confirmFunction: () => void;
   
   constructor(
     private appointmentService: AppointmentApi,
@@ -65,10 +66,7 @@ export class AppointmentsPage implements OnInit {
     this.appointment = null;
     this.loading = false;
     this.saving = false;
-    this.confirmText = null;
-    this.confirmOpen = false;
     this.messages = [];
-    this.confirmFunction = null;
     this.filter = new FilterAppointmentDTO();
   }
 
@@ -111,32 +109,10 @@ export class AppointmentsPage implements OnInit {
     this.modalOpen = true;
   }
 
-  public deleteAppointment(id: number): void {
-    this.confirmOpen = true;
-    this.confirmText = 'Está seguro que desea eliminar este récord?';
-    this.confirmFunction = async () => {
-      if(!this.saving) {
-        this.saving = true;
-
-        const response = await firstValueFrom(this.appointmentService.delete(id));
-        if(response.success) {
-          this.store.siteMessage = { type: MessageType.Success, text: response.messages[0] };
-          this.list();
-        }else if(response.messages.length > 0) {
-          this.store.siteMessage = { type: MessageType.Warning, text: response.messages[0] };
-        }
-
-        this.saving = false;
-        this.confirmOpen = false;
-      }
-    }
-  }
-
-  public async save(): Promise<void> {
+  public async saveAppointment(): Promise<void> {
     if(!this.saving) {
       this.saving = true;
-      
-      
+        
       const isNew = this.appointment.id == null
       const response = await firstValueFrom(isNew ? this.appointmentService.post(this.appointment) : this.appointmentService.put(this.appointment.id, this.appointment));  
       this.messages = [];
@@ -163,17 +139,21 @@ export class AppointmentsPage implements OnInit {
     }
   }
 
-  public confirm(confirmed: boolean): void {
-    if(confirmed) {
-      this.confirmFunction();
-    }else {
-      this.confirmOpen = false;
-    }
-  }
+  public async deleteAppointment(): Promise<void> {
+    if(!this.saving) {
+      this.saving = true;
 
-  public onConfirmClose(): void {
-    this.confirmText = null;
-    this.confirmFunction = null;
+      const response = await firstValueFrom(this.appointmentService.delete(this.deleteId));
+      if(response.success) {
+        this.store.siteMessage = { type: MessageType.Success, text: response.messages[0] };
+        this.list();
+      }else if(response.messages.length > 0) {
+        this.store.siteMessage = { type: MessageType.Warning, text: response.messages[0] };
+      }
+
+      this.saving = false;
+      this.deleteId = null;
+    }
   }
 
   public onModalClose(): void {

@@ -1,45 +1,47 @@
-<!-- Sintaxis para obsevables con async pipes -->
-<ng-container *ngIf="($siteTitle | async) as siteTitle">
-    <header class="navbar">
-        <button class="menu" (click)="toggleMenu($event)">&equiv;</button>
-        <figure>
-            <img src="/assets/img/code-minds.png" alt="Code Minds" />
-        </figure>
-    </header>
-    <section class="wrapper">
-        <!-- El evitar el event bubbling en el sidenav evita que este se cierre por el host listener de body  -->
-        <nav class="sidenav" (click)="$event.stopPropagation()" [ngClass]="{'open': menuOpen}">
-            <h3 class="category main">Men&uacute; Principal</h3>
-            <!-- 
-            A pesar que el evento click del padre "sidenav" evita la propagación para que el menú se cierre,
-            con el evento click en menu queremos que al navegar correctamente en una de las opciones el menú 
-            se cierre para que el usuario pueda ver la pantalla.
-            -->
-            <ul class="menu" (click)="handleMenuNavigate()">
-                <li routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-                    <a routerLink="/">
-                        <span>Citas</span> 
-                    </a>
-                </li>
-                <li routerLinkActive="active">
-                    <a routerLink="/doctors">
-                        <span>Doctores</span> 
-                    </a>
-                </li>
-                <li routerLinkActive="active">
-                    <a routerLink="/patients">
-                        <span>Pacientes</span> 
-                    </a>
-                </li>
-            </ul>
-        </nav>
-        <main class="page">
-            <h1>{{siteTitle}}</h1>
-            <!-- 
-            Cuando usamos este layout como component de una ruta padre, la ruta hija inyecta su propio
-            component justo después de este tag especial "router-outlet".
-            -->
-            <router-outlet></router-outlet>
-        </main>
-    </section>
-</ng-container>
+
+<!-- Barra principal -->
+<header class="navbar">
+    <button class="menu" (click)="toggleMenu($event)">&equiv;</button>
+    <figure>
+        <img src="/assets/img/code-minds.png" alt="Code Minds" />
+    </figure>
+</header>
+
+<!-- Contenido del sitio y barra lateral -->
+<section class="wrapper">
+    <!-- El evitar el event bubbling en el sidenav evita que este se cierre por el host listener de body  -->
+    <nav class="sidenav" (click)="$event.stopPropagation()" [ngClass]="{'open': menuOpen}">
+        <h3 class="category main">Men&uacute; Principal</h3>
+        <!-- 
+        A pesar que el evento click del padre "sidenav" evita la propagación para que el menú se cierre,
+        con el evento click en menu queremos que al navegar correctamente en una de las opciones el menú 
+        se cierre para que el usuario pueda ver la pantalla.
+        -->
+        <ul class="menu" (click)="handleMenuNavigate()">
+            <li routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                <a routerLink="/">
+                    <span>Citas</span> 
+                </a>
+            </li>
+            <li routerLinkActive="active">
+                <a routerLink="/doctors">
+                    <span>Doctores</span> 
+                </a>
+            </li>
+            <li routerLinkActive="active">
+                <a routerLink="/patients">
+                    <span>Pacientes</span> 
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <main class="page">
+        <!-- Sintaxis para obsevables con async pipes -->
+        <h1 *ngIf="($siteTitle | async) as siteTitle">{{siteTitle}}</h1>
+        <!-- 
+        Cuando usamos este layout como component de una ruta padre, la ruta hija inyecta su propio
+        component justo después de este tag especial "router-outlet".
+        -->
+        <router-outlet></router-outlet>
+    </main>
+</section>

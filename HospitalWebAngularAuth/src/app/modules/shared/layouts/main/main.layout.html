@@ -8,7 +8,12 @@
     <!-- Sintaxis para obsevables con async pipes -->
     <!-- El evitar el event bubbling en el sidenav evita que este se cierre por el host listener de body  -->
     <nav (click)="$event.stopPropagation()" class="account-menu" *ngIf="($user | async) as user">
-        <button (click)="toggleAccountMenu()" [ngClass]="{'open': accountMenuOpen}" class="account-menu-toggle material-symbols-sharp">account_circle</button>
+        <button
+            class="account-menu-toggle material-symbols-sharp"
+            [ngClass]="{'open': accountMenuOpen}"
+            (click)="toggleAccountMenu()">
+            account_circle
+        </button>
         <ul *ngIf="accountMenuOpen" (click)="toggleAccountMenu()">
             <li class="user" (click)="$event.stopPropagation()">{{user.firstName}} {{user.lastName}}</li>
             <li>
@@ -23,6 +28,7 @@
         </ul>  
     </nav>
 </header>
+
 <section class="wrapper">
     <!-- El evitar el event bubbling en el sidenav evita que este se cierre por el host listener de body  -->
     <nav class="sidenav" (click)="$event.stopPropagation()" [ngClass]="{'open': menuOpen}">

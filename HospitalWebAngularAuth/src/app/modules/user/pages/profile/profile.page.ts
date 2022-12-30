@@ -3,7 +3,7 @@ import { User } from '@api/user/user.model';
 import { InputType, ButtonType } from '@shared/components/form-field/form-field.types';
 import { ModalSize, ModalPosition } from '@shared/components/modal/modal.types';
 import { Store } from '@store';
-import { Observable, Subject } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-profile',
@@ -11,32 +11,47 @@ import { Observable, Subject } from 'rxjs';
   styleUrls: ['./profile.page.css']
 })
 export class ProfilePage implements OnInit, OnDestroy {
+  public get passwordConfirmed(): boolean {
+    return this.password == this.confirmPassword;
+  }
+
+  public user: User;
   public password: string;
   public confirmPassword: string;
   public loading: boolean;
   public saving: boolean;
+  public confirmOpen: boolean;
   public messages: string[];
-  public $user: Observable<User>;
 
   public InputType = InputType;
   public ModalSize = ModalSize;
   public ModalPosition = ModalPosition;
   public ButtonType = ButtonType;
 
-  private unsubscribe: Subject<void>;
+  private unsubcribe: Subject<void>;
 
   constructor(
     private store: Store
   ) { 
-    this.password = null;
+    this.user = null;
+    this.password = '';
+    this.confirmPassword = '';
     this.loading = false;
     this.saving = false;
+    this.confirmOpen = false;
     this.messages = [];
-    this.unsubscribe = new Subject();
+    this.unsubcribe = new Subject();
   }
 
   public ngOnInit(): void {
-    this.$user = this.store.$user;
+    this.store.$user
+      .pipe(takeUntil(this.unsubcribe))
+      .subscribe((user) => {
+        //Creamos un nuevo objeto User para evitar que sea la misma referencia ya que
+        //si es la misma cualquier cambio temporal en esta página se reflejará en el store
+        //por ende modificando todas las instancias del usuario sin siquiera haber salvado
+        this.user = new User(user);
+      });
   }
 
   //Técnica de unsubscribe de observables en componentes para evitar
@@ -44,11 +59,18 @@ export class ProfilePage implements OnInit, OnDestroy {
   //al Subject unsubscribe y todos los observables con un pipe "takeUntil(this.unsubscribe)"
   //en el componente se desuscriben y liberan esa memoria
   public ngOnDestroy(): void {
-    this.unsubscribe.next();
-    this.unsubscribe.complete();
+    this.unsubcribe.next();
+    this.unsubcribe.complete();
   }
 
-  public async save(user: User): Promise<void> {
-    console.log(user);
+  public confirmSave(): void {
+    if(this.password || this.user.email != this.store.user.email) {
+      this.confirmOpen = true;
+    } else {
+      this.save();
+    }
+  }
+
+  public async save(): Promise<void> {
   }
 }

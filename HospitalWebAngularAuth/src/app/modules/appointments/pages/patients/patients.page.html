@@ -16,9 +16,8 @@
             label="Cédula"
             class="col-3"
             [type]="InputType.Text" 
-            [(model)]="filter.documentId"
-            [attributes]="{'placeholder': 'E.g.:123456789'}"
-        ></app-input>
+            [(model)]="filter.documentId">
+        </app-input>
         <app-input 
             name="firstName" 
             form="filter" 
@@ -26,8 +25,8 @@
             class="col-3"
             [type]="InputType.Text" 
             [(model)]="filter.firstName"
-            [attributes]="{'placeholder': 'E.g.:John'}"
-        ></app-input>
+            [attributes]="{'placeholder': 'E.g.:John'}">
+        </app-input>
         <app-input 
             name="lastName" 
             form="filter" 
@@ -35,24 +34,24 @@
             class="col-3"
             [type]="InputType.Text" 
             [(model)]="filter.lastName"
-            [attributes]="{'placeholder': 'E.g.:Smith'}"
-        ></app-input>
+            [attributes]="{'placeholder': 'E.g.:Smith'}">
+        </app-input>
         <app-date 
             name="birthDateFrom" 
             form="filter" 
             label="Desde"
             class="col-3"
             [type]="DateType.DateTime"
-            [(model)]="filter.birthDateFrom"
-        ></app-date>
+            [(model)]="filter.birthDateFrom">
+        </app-date>
         <app-date 
             name="birthDateTo" 
             form="filter" 
             label="Hasta"
             class="col-3"
             [type]="DateType.DateTime"
-            [(model)]="filter.birthDateTo"
-        ></app-date>
+            [(model)]="filter.birthDateTo">
+        </app-date>
         <app-select
             name="gender"
             form="filter"
@@ -61,9 +60,13 @@
             nullOption="Todos"
             [(model)]="filter.genderId"
             [options]="genders"
-            [option]="{label: 'name', value: 'id', output: 'id'}"
-        ></app-select>
-        <app-button [type]="ButtonType.Success" [disabled]="loading" [loading]="loading" (clicked)="list()">
+            [option]="{label: 'name', value: 'id', output: 'id'}">
+        </app-select>
+        <app-button 
+            [type]="ButtonType.Success" 
+            [disabled]="loading"
+            [loading]="loading"
+            (clicked)="list()">
             <i class="material-symbols-sharp">search</i>
             <span>Buscar</span>
         </app-button>
@@ -95,7 +98,7 @@
                         <i class="material-symbols-sharp">edit</i>
                         <span>Editar</span>
                     </button>
-                    <button class="button danger" title="Borrar" (click)="deletePatient(patient.id)">
+                    <button class="button danger" title="Borrar" (click)="deleteId = patient.id">
                         <i class="material-symbols-sharp">delete</i>
                         <span>Borrar</span>
                     </button>
@@ -122,7 +125,7 @@
                         <i class="material-symbols-sharp">edit</i>
                         <span>Editar</span>
                     </button>
-                    <button class="button danger" title="Borrar" (click)="deletePatient(patient.id)">
+                    <button class="button danger" title="Borrar" (click)="deleteId = patient.id">
                         <i class="material-symbols-sharp">delete</i>
                         <span>Borrar</span>
                     </button>
@@ -133,8 +136,13 @@
 </app-panel>
 
 <!-- Modal de creación/edición -->
-<app-modal [(open)]="modalOpen" [modalTitle]="modalTitle" [position]="ModalPosition.Top" [size]="ModalSize.Medium" (onClose)="onModalClose()">
-    <form *ngIf="patient" (keyup.enter)="save()">
+<app-modal 
+    [(open)]="modalOpen"
+    [modalTitle]="modalTitle"
+    [position]="ModalPosition.Top"
+    [size]="ModalSize.Medium"
+    (onClose)="onModalClose()">
+    <form *ngIf="patient" (keyup.enter)="savePatient()">
         <ul>
             <li class="validation-message" *ngFor="let message of messages">{{message}}</li>
         </ul>
@@ -144,51 +152,69 @@
             label="Cédula"
             [type]="InputType.Text" 
             [(model)]="patient.documentId"
-            [attributes]="{'placeholder': 'E.g.:123456789'}"
-        ></app-input>
+            [attributes]="{'placeholder': 'E.g.:123456789'}">
+        </app-input>
         <app-input 
             name="firstName" 
             form="createUpdate" 
             label="Nombre"
             [type]="InputType.Text" 
             [(model)]="patient.firstName"
-            [attributes]="{'placeholder': 'E.g.:John'}"
-        ></app-input>
+            [attributes]="{'placeholder': 'E.g.:John'}">
+        </app-input>
         <app-input 
             name="lastName" 
             form="createUpdate" 
             label="Apellido"
             [type]="InputType.Text" 
             [(model)]="patient.lastName"
-            [attributes]="{'placeholder': 'E.g.:Smith'}"
-        ></app-input>
+            [attributes]="{'placeholder': 'E.g.:Smith'}">
+        </app-input>
         <app-date 
             name="birthDate" 
             form="createUpdate" 
             label="Nacimiento"
             [type]="DateType.DateTime"
-            [(model)]="patient.birthDate"
-        ></app-date>
+            [(model)]="patient.birthDate">
+        </app-date>
         <app-select
             name="gender"
             form="createUpdate"
             label="Género"
             [(model)]="patient.gender"
             [options]="genders"
-            [option]="{label: 'name', value: 'id', compare: 'id'}"
-        ></app-select>
+            [option]="{label: 'name', value: 'id', compare: 'id'}">
+        </app-select>
         <div class="row">
-            <app-button [type]="ButtonType.Success" (clicked)="save()" [disabled]="saving || !modalOpen" [loading]="loading || !modalOpen">Guardar <i *ngIf="saving" class="material-symbols-sharp rotate">data_saver_off</i></app-button>
+            <app-button 
+                [type]="ButtonType.Success"
+                [disabled]="saving || !modalOpen"
+                [loading]="loading || !modalOpen"
+                (clicked)="savePatient()">
+                Guardar
+                <i *ngIf="saving" class="material-symbols-sharp rotate">data_saver_off</i>
+            </app-button>
             <app-button [type]="ButtonType.Danger" (clicked)="modalOpen = false">Cancelar</app-button>
         </div>
     </form>
 </app-modal>
 
-<!-- Modal de confirmación -->
-<app-modal [(open)]="confirmOpen" [transparent]="true" [position]="ModalPosition.Top" [closeOnClickOutside]="false" (onClose)="onConfirmClose()">
-    <p class="prompt-text">{{confirmText}}</p>
+<!-- Modal de confirmación de eliminación -->
+<app-modal
+    [open]="confirmDelete"
+    [transparent]="true"
+    [position]="ModalPosition.Top"
+    [closeOnClickOutside]="false">
+    <p class="prompt-text">Está seguro que desea eliminar este récord?</p>
     <div class="prompt-buttons">
-        <button class="button success" (click)="confirm(true)" [disabled]="saving || !confirmOpen" [ngClass]="{'loading': saving || !confirmOpen}">Confirmar <i *ngIf="saving" class="material-symbols-sharp rotate">data_saver_off</i></button>
-        <button class="button neutral" (click)="confirm(false)">Cancelar</button>
+        <button
+            class="button danger"
+            [disabled]="saving || !confirmDelete"
+            [ngClass]="{'loading': saving || !confirmDelete}"
+            (click)="deletePatient()">
+            Eliminar
+            <i *ngIf="saving" class="material-symbols-sharp rotate">data_saver_off</i>
+        </button>
+        <button class="button neutral" (click)="deleteId = null">Cancelar</button>
     </div>
 </app-modal>

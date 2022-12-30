@@ -1,4 +1,11 @@
 <div class="form-field">
     <label *ngIf="label" [for]="id">{{label}}</label>
-    <textarea [id]="id" [name]="name" [placeholder]="placeholder" [ngClass]="{'resizable': resizable}" [(ngModel)]="model" (ngModelChange)="onModelChange($event)"></textarea>
+    <textarea
+        [id]="id"
+        [name]="name"
+        [placeholder]="placeholder"
+        [ngClass]="{'resizable': resizable}"
+        [(ngModel)]="model"
+        (ngModelChange)="onModelChange($event)">
+    </textarea>
 </div>

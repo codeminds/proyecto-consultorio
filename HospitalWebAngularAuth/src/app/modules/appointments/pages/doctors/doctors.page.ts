@@ -21,6 +21,10 @@ export class DoctorsPage implements OnInit{
     return this.doctor?.id ?  'Editar Doctor' : 'Nuevo Doctor';
   }
 
+  public get confirmDelete(): boolean {
+    return this.deleteId != null;
+  }
+
   public doctors: Doctor[];
   public fields: Field[];
   public modalOpen: boolean;
@@ -29,8 +33,7 @@ export class DoctorsPage implements OnInit{
   public loading: boolean;
   public saving: boolean;
   public filter: QueryParams;
-  public confirmText: string;
-  public confirmOpen: boolean;
+  public deleteId: number;
   public messages: string[];
   public $user: Observable<User>;
 
@@ -38,8 +41,6 @@ export class DoctorsPage implements OnInit{
   public ModalSize = ModalSize;
   public ModalPosition = ModalPosition;
   public ButtonType = ButtonType;
-
-  private confirmFunction: () => void;
   
   constructor(
     private doctorService: DoctorApi,
@@ -53,10 +54,7 @@ export class DoctorsPage implements OnInit{
     this.doctor = null;
     this.loading = false;
     this.saving = false;
-    this.confirmText = null;
-    this.confirmOpen = false;
     this.messages = [];
-    this.confirmFunction = null;
     this.filter = new FilterDoctorDTO();
   }
 
@@ -91,28 +89,7 @@ export class DoctorsPage implements OnInit{
     this.modalOpen = true;
   }
 
-  public deleteDoctor(id: number): void {
-    this.confirmOpen = true;
-    this.confirmText = 'Está seguro que desea eliminar este récord?';
-    this.confirmFunction = async () => {
-      if(!this.saving) {
-        this.saving = true;
-        
-        const response = await firstValueFrom(this.doctorService.delete(id));
-        if(response.success) {
-          this.store.siteMessage = { type: MessageType.Success, text: response.messages[0] };
-          this.list();
-        }else if(response.messages.length > 0) {
-          this.store.siteMessage = { type: MessageType.Warning, text: response.messages[0] };
-        }
-
-        this.saving = false;
-        this.confirmOpen = false;
-      }
-    }
-  }
-
-  public async save(): Promise<void> {
+  public async saveDoctor(): Promise<void> {
     if(!this.saving) {
       this.saving = true;
       
@@ -137,17 +114,21 @@ export class DoctorsPage implements OnInit{
     }
   }
 
-  public confirm(confirmed: boolean): void {
-    if(confirmed) {
-      this.confirmFunction();
-    }else {
-      this.confirmOpen = false;
-    }
-  }
+  public async deleteDoctor(): Promise<void> {
+    if(!this.saving) {
+      this.saving = true;
 
-  public onConfirmClose(): void {
-    this.confirmText = null;
-    this.confirmFunction = null;
+      const response = await firstValueFrom(this.doctorService.delete(this.deleteId));
+      if(response.success) {
+        this.store.siteMessage = { type: MessageType.Success, text: response.messages[0] };
+        this.list();
+      }else if(response.messages.length > 0) {
+        this.store.siteMessage = { type: MessageType.Warning, text: response.messages[0] };
+      }
+
+      this.saving = false;
+      this.deleteId = null;
+    }
   }
 
   public onModalClose(): void {

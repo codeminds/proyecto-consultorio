@@ -17,8 +17,8 @@
             nullOption="Todos"
             [(model)]="filter.fieldId"
             [options]="fields"
-            [option]="{label: 'name', value: 'id', output: 'id'}"
-        ></app-select>
+            [option]="{label: 'name', value: 'id', output: 'id'}">
+        </app-select>
         <app-input 
             name="documentId" 
             form="filter" 
@@ -26,8 +26,8 @@
             class="col-4"
             [type]="InputType.Text" 
             [(model)]="filter.documentId"
-            [attributes]="{'placeholder': 'E.g.:123456789'}"
-        ></app-input>
+            [attributes]="{'placeholder': 'E.g.:123456789'}">
+        </app-input>
         <app-input 
             name="firstName" 
             form="filter" 
@@ -35,8 +35,8 @@
             class="col-4"
             [type]="InputType.Text" 
             [(model)]="filter.firstName"
-            [attributes]="{'placeholder': 'E.g.:John'}"
-        ></app-input>
+            [attributes]="{'placeholder': 'E.g.:John'}">
+        </app-input>
         <app-input 
             name="lastName" 
             form="filter" 
@@ -44,8 +44,8 @@
             class="col-4"
             [type]="InputType.Text" 
             [(model)]="filter.lastName"
-            [attributes]="{'placeholder': 'E.g.:Smith'}"
-        ></app-input>
+            [attributes]="{'placeholder': 'E.g.:Smith'}">
+        </app-input>
         <app-button [type]="ButtonType.Success" [disabled]="loading" [loading]="loading" (clicked)="list()">
             <i class="material-symbols-sharp">search</i>
             <span>Buscar</span>
@@ -74,7 +74,7 @@
                     <i class="material-symbols-sharp">edit</i>
                     <span>Editar</span>
                 </button>
-                <button class="button danger" title="Borrar" (click)="deleteDoctor(doctor.id)">
+                <button class="button danger" title="Borrar" (click)="deleteId = doctor.id">
                     <i class="material-symbols-sharp">delete</i>
                     <span>Borrar</span>
                 </button>
@@ -96,7 +96,7 @@
                         <i class="material-symbols-sharp">edit</i>
                         <span>Editar</span>
                     </button>
-                    <button class="button danger" title="Borrar" (click)="deleteDoctor(doctor.id)">
+                    <button class="button danger" title="Borrar" (click)="deleteId = doctor.id">
                         <i class="material-symbols-sharp">delete</i>
                         <span>Borrar</span>
                     </button>
@@ -107,8 +107,13 @@
 </app-panel>
 
 <!-- Modal de creación/edición -->
-<app-modal [(open)]="modalOpen" [modalTitle]="modalTitle" [position]="ModalPosition.Top" [size]="ModalSize.Medium" (onClose)="onModalClose()">
-    <form *ngIf="doctor" (keyup.enter)="save()">
+<app-modal
+    [(open)]="modalOpen"
+    [modalTitle]="modalTitle"
+    [position]="ModalPosition.Top"
+    [size]="ModalSize.Medium"
+    (onClose)="onModalClose()">
+    <form *ngIf="doctor" (keyup.enter)="saveDoctor()">
         <ul>
             <li class="validation-message" *ngFor="let message of messages">{{message}}</li>
         </ul>
@@ -118,44 +123,62 @@
             label="Especialidad"
             [(model)]="doctor.field"
             [options]="fields"
-            [option]="{label: 'name', value: 'id', compare: 'id'}"
-        ></app-select>
+            [option]="{label: 'name', value: 'id', compare: 'id'}">
+        </app-select>
         <app-input 
             name="documentId" 
             form="createUpdate" 
             label="Cédula"
             [type]="InputType.Text" 
             [(model)]="doctor.documentId"
-            [attributes]="{'placeholder': 'E.g.:123456789'}"
-        ></app-input>
+            [attributes]="{'placeholder': 'E.g.:123456789'}">
+        </app-input>
         <app-input 
             name="firstName" 
             form="createUpdate" 
             label="Nombre"
             [type]="InputType.Text" 
             [(model)]="doctor.firstName"
-            [attributes]="{'placeholder': 'E.g.:John'}"
-        ></app-input>
+            [attributes]="{'placeholder': 'E.g.:John'}">
+        </app-input>
         <app-input 
             name="lastName" 
             form="createUpdate" 
             label="Apellido"
             [type]="InputType.Text" 
             [(model)]="doctor.lastName"
-            [attributes]="{'placeholder': 'E.g.:Smith'}"
-        ></app-input>
+            [attributes]="{'placeholder': 'E.g.:Smith'}">
+        </app-input>
         <div class="row">
-            <app-button [type]="ButtonType.Success" (clicked)="save()" [disabled]="saving || !modalOpen" [loading]="loading || !modalOpen">Guardar <i *ngIf="saving" class="material-symbols-sharp rotate">data_saver_off</i></app-button>
+            <app-button 
+                [type]="ButtonType.Success"
+                [disabled]="saving || !modalOpen"
+                [loading]="loading || !modalOpen"
+                (clicked)="saveDoctor()">
+                Guardar 
+                <i *ngIf="saving" class="material-symbols-sharp rotate">data_saver_off</i>
+            </app-button>
             <app-button [type]="ButtonType.Danger" (clicked)="modalOpen = false">Cancelar</app-button>
         </div>
     </form>
 </app-modal>
 
-<!-- Modal de confirmación -->
-<app-modal [(open)]="confirmOpen" [transparent]="true" [position]="ModalPosition.Top" [closeOnClickOutside]="false" (onClose)="onConfirmClose()">
-    <p class="prompt-text">{{confirmText}}</p>
+<!-- Modal de confirmación de eliminación -->
+<app-modal
+    [open]="confirmDelete"
+    [transparent]="true"
+    [position]="ModalPosition.Top"
+    [closeOnClickOutside]="false">
+    <p class="prompt-text">Está seguro que desea eliminar este récord?</p>
     <div class="prompt-buttons">
-        <button class="button success" (click)="confirm(true)" [disabled]="saving || !confirmOpen" [ngClass]="{'loading': saving || !confirmOpen}">Confirmar <i *ngIf="saving" class="material-symbols-sharp rotate">data_saver_off</i></button>
-        <button class="button neutral" (click)="confirm(false)">Cancelar</button>
+        <button
+            class="button danger"
+            [disabled]="saving || !confirmDelete"
+            [ngClass]="{'loading': saving || !confirmDelete}"
+            (click)="deleteDoctor()">
+            Eliminar
+            <i *ngIf="saving" class="material-symbols-sharp rotate">data_saver_off</i>
+        </button>
+        <button class="button neutral" (click)="deleteId = null">Cancelar</button>
     </div>
 </app-modal>

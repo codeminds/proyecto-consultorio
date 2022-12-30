@@ -1,7 +1,8 @@
-<app-panel panelTitle="Actualizar Información">
-   <form *ngIf="($user | async) as user" (keyup.enter)="save(user)">
+<!-- Formulario de actualización -->
+<app-panel *ngIf="user" panelTitle="Actualizar Información">
+   <form (keyup.enter)="confirmSave()">
       <ul>
-          <li class="validation-message" *ngFor="let message of messages">{{message}}</li>
+         <li class="validation-message" *ngFor="let message of messages">{{message}}</li>
       </ul>
       <div class="row">
          <app-input 
@@ -11,8 +12,8 @@
             class="col-3"
             [type]="InputType.Text" 
             [(model)]="user.firstName"
-            [attributes]="{'placeholder': 'E.g.:John'}"
-         ></app-input>
+            [attributes]="{'placeholder': 'E.g.:John'}">
+         </app-input>
          <app-input 
             name="lastName" 
             form="createUpdate" 
@@ -20,8 +21,8 @@
             class="col-3"
             [type]="InputType.Text" 
             [(model)]="user.lastName"
-            [attributes]="{'placeholder': 'E.g.:Smith'}"
-         ></app-input>
+            [attributes]="{'placeholder': 'E.g.:Smith'}">
+         </app-input>
          <app-input 
             name="email" 
             form="createUpdate" 
@@ -29,8 +30,8 @@
             class="col-3"
             [type]="InputType.Email" 
             [(model)]="user.email"
-            [attributes]="{'placeholder': 'E.g.:john.smith@mail.com'}"
-         ></app-input>
+            [attributes]="{'placeholder': 'E.g.:john.smith@mail.com'}">
+         </app-input>
          <app-input 
             name="password" 
             form="createUpdate" 
@@ -38,8 +39,8 @@
             class="col-3"
             [type]="InputType.Password" 
             [(model)]="password"
-            [attributes]="{'placeholder': 'Ingrese una nueva contraseña si desea cambiarla'}"
-         ></app-input>
+            [attributes]="{'placeholder': 'Ingrese una nueva contraseña si desea cambiarla'}">
+         </app-input>
          <app-input 
             *ngIf="password"
             name="confirmPassword" 
@@ -48,9 +49,36 @@
             class="col-3"
             [type]="InputType.Password" 
             [(model)]="confirmPassword"
-            [attributes]="{'placeholder': 'Confirmar nueva contraseña'}"
-         ></app-input>
+            [attributes]="{'placeholder': 'Confirmar nueva contraseña'}">
+         </app-input>
       </div>
-      <app-button [type]="ButtonType.Success" (clicked)="save(user)" [disabled]="saving" [loading]="loading">Guardar <i *ngIf="saving" class="material-symbols-sharp rotate">data_saver_off</i></app-button>
-  </form>
+      <app-button 
+         [type]="ButtonType.Success"
+         [disabled]="saving || !passwordConfirmed"
+         [loading]="loading"
+         (clicked)="confirmSave()">
+         Guardar 
+      </app-button>
+   </form>
 </app-panel>
+
+<!-- Modal de confirmación de cambios de credenciales -->
+<app-modal
+   [open]="confirmOpen"
+   [transparent]="true"
+   [position]="ModalPosition.Top"
+   [closeOnClickOutside]="false">
+   <p class="prompt-text">Cambiar el correo y/o contraseña cerrará todas las sesiones activas y deberá volver a ingresar. Desea continuar?</p>
+   <div class="prompt-buttons">
+      <button
+            class="button success"
+            [disabled]="saving || !confirmOpen"
+            [ngClass]="{'loading': saving || !confirmOpen}"
+            (click)="save()">
+            Guardar
+            <i *ngIf="saving" class="material-symbols-sharp rotate">data_saver_off</i>
+      </button>
+      <button class="button neutral" (click)="confirmOpen = false">Cancelar</button>
+   </div>
+</app-modal>
+
