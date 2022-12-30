@@ -14,7 +14,7 @@ namespace API.Validators
             this._database = database;
         }
 
-        public bool ValidateUpdateInfo(UpdateUserDTO data, List<string> messages)
+        public bool ValidateUpdateInfo(UpdateUserInfoDTO data, List<string> messages)
         {
             List<string> innerMessages = new();
 

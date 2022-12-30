@@ -55,7 +55,7 @@ namespace API.Controllers
         [HttpPatch]
         [Route("info")]
         [Authorize]
-        public async Task<ActionResult<APIResponse>> UpdateUserInfo(UpdateUserDTO data)
+        public async Task<ActionResult<APIResponse>> UpdateUserInfo(UpdateUserInfoDTO data)
         {
             Request.Headers.TryGetValue("Authorization", out StringValues tokenHeader);
 
@@ -79,7 +79,7 @@ namespace API.Controllers
 
             if (response.Success)
             {
-                await this._userService.UpdateUser(this._mapper.Map(data, user));
+                await this._userService.UpdateUserInfo(this._mapper.Map(data, user));
                 response.Data = this._mapper.Map<User, GetUserDTO>(user);
                 response.Messages.Add("Usuario ha sido actualizado");
             }
@@ -114,9 +114,9 @@ namespace API.Controllers
 
             if (response.Success)
             {
-                await this._userService.UpdateUser(this._mapper.Map(data, user), true);
-                response.Data = this._mapper.Map<User, GetUserDTO>(user);
-                response.Messages.Add("Usuario ha sido actualizado");
+                await this._userService.UpdateUserEmail(this._mapper.Map(data, user));
+                response.Data = this._mapper.Map<User, GetUserDTO>(this._mapper.Map(data, user));
+                response.Messages.Add("Correo ha sido actualizado");
             }
 
             return response;
@@ -149,9 +149,9 @@ namespace API.Controllers
 
             if (response.Success)
             {
-                await this._userService.UpdateUser(this._mapper.Map(data, user), true);
+                await this._userService.UpdateUserPassword(this._mapper.Map(data, user));
                 response.Data = this._mapper.Map<User, GetUserDTO>(user);
-                response.Messages.Add("Usuario ha sido actualizado");
+                response.Messages.Add("Contraseña ha sido actualizada");
             }
 
             return response;

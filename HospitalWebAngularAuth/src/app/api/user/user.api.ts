@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpService } from '@services/http/http.service';
+import { APIResponse } from '@services/http/http.types';
 import { Store } from '@store';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, Observable } from 'rxjs';
+import { UpdateUserEmail, UpdateUserInfo, UpdateUserPassword } from './user.dto';
 import { User } from './user.model';
 
 @Injectable({
@@ -22,5 +24,17 @@ export class UserApi {
     if(response.success) {
       this.store.user = response.data;
     }
+  }
+
+  public patchInfo(data: User): Observable<APIResponse<User>> {
+    return this.httpService.patch(`${this._api}/info`, new UpdateUserInfo(data), { accessToken: true }).mapObjectResponse((item: object) => new User(item));
+  }
+
+  public patchEmail(data: User): Observable<APIResponse<User>> {
+    return this.httpService.patch(`${this._api}/email`, new UpdateUserEmail(data), { accessToken: true }).mapObjectResponse((item: object) => new User(item));
+  }
+
+  public patchPassword(data: string): Observable<APIResponse<User>> {
+    return this.httpService.patch(`${this._api}/password`, new UpdateUserPassword(data), { accessToken: true }).mapObjectResponse((item: object) => new User(item));
   }
 }

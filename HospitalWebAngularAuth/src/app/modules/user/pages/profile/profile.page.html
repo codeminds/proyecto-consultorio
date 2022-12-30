@@ -55,7 +55,6 @@
       <app-button 
          [type]="ButtonType.Success"
          [disabled]="saving || !passwordConfirmed"
-         [loading]="loading"
          (clicked)="confirmSave()">
          Guardar 
       </app-button>
@@ -74,7 +73,7 @@
             class="button success"
             [disabled]="saving || !confirmOpen"
             [ngClass]="{'loading': saving || !confirmOpen}"
-            (click)="save()">
+            (click)="saveChanges()">
             Guardar
             <i *ngIf="saving" class="material-symbols-sharp rotate">data_saver_off</i>
       </button>

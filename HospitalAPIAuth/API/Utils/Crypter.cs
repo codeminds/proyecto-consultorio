@@ -12,5 +12,10 @@ namespace API.Utils
                                             HashAlgorithmName.SHA512);
             return hash.GetBytes(byteLength);
         }
+
+        public static byte[] GetRandomSalt()
+        { 
+            return RandomNumberGenerator.GetBytes( Configuration.Get<int>("Cryptography:SaltLength"));
+        }
     }
 }
