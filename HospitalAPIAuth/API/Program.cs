@@ -12,6 +12,12 @@ var builder = WebApplication.CreateBuilder(args);
 //Configuration con el objeto de configuraciones de .NET
 Configuration.Settings = builder.Configuration;
 
+//Configuramos la aplicación para que ante variables de ambiente del sistema operativo con
+//el prefijo "HospitalAuth_" reemplacen los valores en appsettings.json que son solamente de
+//desarrollo. E.g.: para reemplazar JWT:Secret en nuestros settings, se debe crear una variable
+//de ambiente en el sistema operativo con el nombre HospitalAuth_JWT__Secret
+builder.Configuration.AddEnvironmentVariables("HospitalAuth_");
+
 //Al recibir un objeto JSON que no es compatible con los parámetros
 //de la acción del controlador, el servidor prepara una respuesta con un código
 //HTTP 400 (Bad Request) y crea un objeto específico diferente a nuestro APIResponse,
