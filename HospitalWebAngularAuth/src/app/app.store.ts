@@ -3,6 +3,7 @@ import { Router } from "@angular/router";
 import { User } from "@api/user/user.model";
 import { Message } from "@services/http/http.types";
 import { State } from "@utils/state";
+import jwtDecode from "jwt-decode";
 
 @Injectable({
     providedIn: 'root'
@@ -40,6 +41,11 @@ export class Store {
         this._siteMessage = new State();
         this._siteTitle = new State();
         this._user = new State();
+    }
+
+    //Session
+    public get session(): string {
+        return jwtDecode<any>(localStorage.getItem('access_token')).session;
     }
 
     public closeSession(): void {
