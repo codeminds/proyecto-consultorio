@@ -22,8 +22,8 @@ namespace API.Services
             return this._database
                     .Session
                     .Where(s => s.UserId == userId
-                        && (string.IsNullOrWhiteSpace(filter.AddressIssued) || s.AddressIssued.Contains(filter.AddressIssued))
                         && (string.IsNullOrWhiteSpace(filter.AddressRefreshed) || s.AddressRefreshed!.Contains(filter.AddressRefreshed))
+                        && (string.IsNullOrWhiteSpace(filter.AddressIssued) || s.AddressIssued.Contains(filter.AddressIssued))
                         && (!filter.DateFrom.HasValue || s.DateIssued >= filter.DateFrom)
                         && (!filter.DateTo.HasValue || s.DateExpiry <= filter.DateTo));
         }

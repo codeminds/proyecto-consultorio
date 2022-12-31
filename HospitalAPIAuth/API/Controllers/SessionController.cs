@@ -166,7 +166,8 @@ namespace API.Controllers
 
             APIResponse response = new()
             {
-                Data = this._mapper.Map<Session, GetSessionDTO>(session)
+                Data = this._mapper.Map<Session, GetSessionDTO>(session),
+                Messages = new(){ "Sesión ha sido eliminada" }
             };
 
             return response;
