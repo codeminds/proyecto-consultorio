@@ -40,8 +40,8 @@ export class DoctorsPage implements OnInit{
   public ButtonType = ButtonType;
   
   constructor(
-    private doctorService: DoctorApi,
-    private fieldService: FieldApi,
+    private doctorApi: DoctorApi,
+    private fieldApi: FieldApi,
     private store: Store
   ) { 
     this.doctors = [];
@@ -61,7 +61,7 @@ export class DoctorsPage implements OnInit{
   }
 
   public async loadFields(): Promise<void> {
-    const response = await firstValueFrom(this.fieldService.list());
+    const response = await firstValueFrom(this.fieldApi.list());
     if(response.success) {
       this.fields = response.data;
     }
@@ -71,7 +71,7 @@ export class DoctorsPage implements OnInit{
     if(!this.loading) {
       this.loading = true;
 
-      const response = await firstValueFrom(this.doctorService.list(this.filter));
+      const response = await firstValueFrom(this.doctorApi.list(this.filter));
       if(response.success) {
         this.doctors = response.data;
       }
@@ -90,7 +90,7 @@ export class DoctorsPage implements OnInit{
       this.saving = true;
       
       const isNew = this.doctor.id == null
-      const response = await firstValueFrom(isNew ? this.doctorService.post(this.doctor) : this.doctorService.put(this.doctor.id, this.doctor));  
+      const response = await firstValueFrom(isNew ? this.doctorApi.post(this.doctor) : this.doctorApi.put(this.doctor.id, this.doctor));  
       this.messages = [];
       
       if(response.success) {
@@ -114,7 +114,7 @@ export class DoctorsPage implements OnInit{
     if(!this.saving) {
       this.saving = true;
 
-      const response = await firstValueFrom(this.doctorService.delete(this.deleteId));
+      const response = await firstValueFrom(this.doctorApi.delete(this.deleteId));
       if(response.success) {
         this.store.siteMessage = { type: MessageType.Success, text: response.messages[0] };
         this.list();

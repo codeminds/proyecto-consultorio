@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { SessionApi } from './session.api';
 
-describe('SessionService', () => {
+describe('SessionApi', () => {
   let service: SessionApi;
 
   beforeEach(() => {

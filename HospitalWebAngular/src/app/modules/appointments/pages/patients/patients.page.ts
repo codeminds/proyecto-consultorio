@@ -41,8 +41,8 @@ export class PatientsPage implements OnInit{
   public ButtonType = ButtonType;
   
   constructor(
-    private patientService: PatientApi,
-    private genderService: GenderApi,
+    private patientApi: PatientApi,
+    private genderApi: GenderApi,
     private store: Store
   ) { 
     this.patients = [];
@@ -62,7 +62,7 @@ export class PatientsPage implements OnInit{
   }
 
   public async loadGenders(): Promise<void> {
-    const response = await firstValueFrom(this.genderService.list());
+    const response = await firstValueFrom(this.genderApi.list());
     if(response.success) {
       this.genders = response.data;
     }
@@ -72,7 +72,7 @@ export class PatientsPage implements OnInit{
     if(!this.loading) {
       this.loading = true;
 
-      const response = await firstValueFrom(this.patientService.list(this.filter));
+      const response = await firstValueFrom(this.patientApi.list(this.filter));
       if(response.success) {
         this.patients = response.data;
       }
@@ -91,7 +91,7 @@ export class PatientsPage implements OnInit{
       this.saving = true;
       
       const isNew = this.patient.id == null
-      const response = await firstValueFrom(isNew ? this.patientService.post(this.patient) : this.patientService.put(this.patient.id, this.patient));  
+      const response = await firstValueFrom(isNew ? this.patientApi.post(this.patient) : this.patientApi.put(this.patient.id, this.patient));  
       this.messages = [];
       
       if(response.success) {
@@ -115,7 +115,7 @@ export class PatientsPage implements OnInit{
     if(!this.saving) {
       this.saving = true;
 
-      const response = await firstValueFrom(this.patientService.delete(this.deleteId));
+      const response = await firstValueFrom(this.patientApi.delete(this.deleteId));
       if(response.success) {
         this.store.siteMessage = { type: MessageType.Success, text: response.messages[0] };
         this.list();

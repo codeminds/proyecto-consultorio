@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { FieldApi } from './field.api';
 
-describe('FieldService', () => {
+describe('FieldApi', () => {
   let service: FieldApi;
 
   beforeEach(() => {

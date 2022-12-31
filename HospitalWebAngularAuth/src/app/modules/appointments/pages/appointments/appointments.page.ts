@@ -51,11 +51,11 @@ export class AppointmentsPage implements OnInit {
   public DateType = DateType;
   
   constructor(
-    private appointmentService: AppointmentApi,
-    private doctorService: DoctorApi,
-    private patientService: PatientApi,
-    private fieldService: FieldApi,
-    private genderService: GenderApi,
+    private appointmentApi: AppointmentApi,
+    private doctorApi: DoctorApi,
+    private patientApi: PatientApi,
+    private fieldApi: FieldApi,
+    private genderApi: GenderApi,
     private store: Store
   ) { 
     this.appointments = [];
@@ -78,14 +78,14 @@ export class AppointmentsPage implements OnInit {
   }
 
   public async loadFields(): Promise<void> {
-    const response = await firstValueFrom(this.fieldService.list());
+    const response = await firstValueFrom(this.fieldApi.list());
     if(response.success) {
       this.fields = response.data;
     }
   }
 
   public async loadGenders(): Promise<void> {
-    const response = await firstValueFrom(this.genderService.list());
+    const response = await firstValueFrom(this.genderApi.list());
     if(response.success) {
       this.genders = response.data;
     }
@@ -95,7 +95,7 @@ export class AppointmentsPage implements OnInit {
     if(!this.loading) {
       this.loading = true;
 
-      const response = await firstValueFrom(this.appointmentService.list(this.filter));
+      const response = await firstValueFrom(this.appointmentApi.list(this.filter));
       if(response.success) {
         this.appointments = response.data;
       }
@@ -114,7 +114,7 @@ export class AppointmentsPage implements OnInit {
       this.saving = true;
         
       const isNew = this.appointment.id == null
-      const response = await firstValueFrom(isNew ? this.appointmentService.post(this.appointment) : this.appointmentService.put(this.appointment.id, this.appointment));  
+      const response = await firstValueFrom(isNew ? this.appointmentApi.post(this.appointment) : this.appointmentApi.put(this.appointment.id, this.appointment));  
       this.messages = [];
       
       if(response.success) {
@@ -143,7 +143,7 @@ export class AppointmentsPage implements OnInit {
     if(!this.saving) {
       this.saving = true;
 
-      const response = await firstValueFrom(this.appointmentService.delete(this.deleteId));
+      const response = await firstValueFrom(this.appointmentApi.delete(this.deleteId));
       if(response.success) {
         this.store.siteMessage = { type: MessageType.Success, text: response.messages[0] };
         this.list();
@@ -170,11 +170,11 @@ export class AppointmentsPage implements OnInit {
   }
 
   public getLookupDoctorsFunction(): (search: string) => Promise<Doctor[]> {
-    return ((search: string) => firstValueFrom(this.doctorService.search(search.trim().split(' '))).then((response) => response.data)).bind(this);
+    return ((search: string) => firstValueFrom(this.doctorApi.search(search.trim().split(' '))).then((response) => response.data)).bind(this);
   }
 
   public getLookupPatientsFunction(): (search: string) => Promise<Patient[]> {
-    return ((search: string) => firstValueFrom(this.patientService.search(search.trim().split(' '))).then((response) => response.data)).bind(this);
+    return ((search: string) => firstValueFrom(this.patientApi.search(search.trim().split(' '))).then((response) => response.data)).bind(this);
   }
 
   public canEdit(user: User): boolean {

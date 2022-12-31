@@ -93,11 +93,11 @@
             <td>{{patient.birthDate.toLocaleDisplayString('es-US')}}</td>
             <td>{{patient.gender.name}}</td>    
             <td class="buttons">
-                <button class="button success" title="Editar" (click)="createUpdate(patient)">
+                <button class="button success" (click)="createUpdate(patient)">
                     <i class="material-symbols-sharp">edit</i>
                     <span>Editar</span>
                 </button>
-                <button class="button danger" title="Borrar" (click)="deleteId = patient.id">
+                <button class="button danger" (click)="deleteId = patient.id">
                     <i class="material-symbols-sharp">delete</i>
                     <span>Borrar</span>
                 </button>
@@ -119,11 +119,11 @@
                     <span>{{patient.gender.name}}</span>
                 </p>
                 <div class="buttons">
-                    <button class="button success" title="Editar" (click)="createUpdate(patient)">
+                    <button class="button success" (click)="createUpdate(patient)">
                         <i class="material-symbols-sharp">edit</i>
                         <span>Editar</span>
                     </button>
-                    <button class="button danger" title="Borrar" (click)="deleteId = patient.id">
+                    <button class="button danger" (click)="deleteId = patient.id">
                         <i class="material-symbols-sharp">delete</i>
                         <span>Borrar</span>
                     </button>

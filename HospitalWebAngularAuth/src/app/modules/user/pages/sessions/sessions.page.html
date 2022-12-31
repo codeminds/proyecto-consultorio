@@ -1,1 +1,127 @@
-<p>sessions works!</p>
+<!-- Filtro de búsqueda -->
+<app-panel class="unboxed slim" panelTitle="Búsqueda" [(open)]="panelOpen" [expandable]="true">
+   <form class="row" (keyup.enter)="list()">
+      <app-input 
+         name="addressRefreshed" 
+         form="filter" 
+         label="Última IP Utilizada"
+         class="col-4"
+         [type]="InputType.Text" 
+         [(model)]="filter.addressRefreshed"
+         [attributes]="{'placeholder': 'E.g.:10.10.1.10'}">
+      </app-input>
+      <app-input 
+         name="addressIssued" 
+         form="filter" 
+         label="IP Inicial"
+         class="col-4"
+         [type]="InputType.Text" 
+         [(model)]="filter.addressIssued"
+         [attributes]="{'placeholder': 'E.g.:10.10.1.10'}">
+      </app-input>
+      <app-date 
+         name="dateFrom" 
+         form="filter" 
+         label="Desde (Acceso Inicial)"
+         class="col-3"
+         [type]="DateType.DateTime"
+         [(model)]="filter.dateFrom">
+      </app-date>
+      <app-date 
+         name="dateTo" 
+         form="filter" 
+         label="Hasta (Expiración)"
+         class="col-3"
+         [type]="DateType.DateTime"
+         [(model)]="filter.dateTo">
+      </app-date>
+      <app-button [type]="ButtonType.Success" [disabled]="loading" [loading]="loading" (clicked)="list()">
+         <i class="material-symbols-sharp">search</i>
+         <span>Buscar</span>
+      </app-button>
+   </form>
+</app-panel>
+
+<!--- Tabla de resultados -->
+<!-- Sintaxis para obsevables con async pipes -->
+<app-panel class="slim">
+   <app-table 
+      [headers]="[{ label: 'Última IP Utilizada' },
+                  { label: 'IP Inicial' },
+                  { label: 'Accesso Inicial' },
+                  { label: 'Última Actualización' },
+                  { label: 'Expiración' },
+                  { size: 0.8 }]" 
+      [template]="sessionRow" 
+      [templateMobile]="sessionRowMobile" 
+      [source]="sessions"
+      [loading]="loading"
+      noResultsText="No se han encontrado resultados">
+      <ng-template #sessionRow let-session>
+         <td>{{session.addressRefreshed ?? session.addressIssued}}</td>
+         <td>{{session.addressIssued}}</td>
+         <td>{{session.dateIssued.toLocaleDisplayString('es-US')}}</td>
+         <td>{{session.dateRefreshed?.toLocaleDisplayString('es-US')}}</td>
+         <td>{{session.dateExpiry?.toLocaleDisplayString('es-US')}}</td>
+         <td class="buttons">
+            <button *ngIf="currentSession != session.sessionId" class="button danger" (click)="deleteId = session.sessionId">
+               <i class="material-symbols-sharp">cloud_off</i>
+               <span>Eliminar</span>
+            </button>
+            <button *ngIf="currentSession == session.sessionId" title="Sesión de este dispositivo" class="button neutral" disabled>
+               <i class="material-symbols-sharp">cloud_off</i>
+               <span>Eliminar</span>
+            </button>
+         </td>
+      </ng-template>
+      <ng-template #sessionRowMobile let-session>
+         <div class="mobile">
+            <h3 class="heading">{{session.addressRefreshed ?? session.addressIssued}}</h3>
+            <p class="data">
+                  <span class="label">IP Inicial:</span> 
+                  <span>{{session.addressIssued}}</span>
+            </p>
+            <p class="data">
+                  <span class="label">Accesso Inicial:</span>
+                  <span>{{session.dateIssued.toLocaleDisplayString('es-US')}}</span>
+            </p>
+            <p class="data">
+               <span class="label">Última Actualización:</span>
+               <span>{{session.dateRefreshed?.toLocaleDisplayString('es-US')}}</span>
+            </p>
+            <p class="data">
+               <span class="label">Expiración:</span>
+               <span>{{session.dateExpiry?.toLocaleDisplayString('es-US')}}</span>
+            </p>
+            <div class="buttons">
+               <button *ngIf="currentSession != session.sessionId" class="button danger" (click)="deleteId = session.sessionId">
+                  <i class="material-symbols-sharp">cloud_off</i>
+                  <span>Eliminar</span>
+               </button>
+               <span *ngIf="currentSession == session.sessionId">(Este Dispositivo)</span>
+            </div>
+         </div>
+      </ng-template>
+   </app-table>
+</app-panel>
+
+<!-- Modal de confirmación de eliminación -->
+<app-modal
+   [open]="confirmDelete"
+   [transparent]="true"
+   [position]="ModalPosition.Top"
+   [size]="ModalSize.Medium"
+   [closeOnClickOutside]="false">
+   <p class="prompt-text">Eliminar esta sesión causará que el dispositivo que la esté utilizando tendrá que reingresar los credenciales del sistema. Desea continuar?</p>
+   <div class="prompt-buttons">
+      <button
+         class="button danger"
+         [disabled]="saving || !confirmDelete"
+         [ngClass]="{'loading': saving || !confirmDelete}"
+         (click)="deleteSession()">
+         Cerrar Sesión
+         <i *ngIf="saving" class="material-symbols-sharp rotate">data_saver_off</i>
+      </button>
+      <button class="button neutral" (click)="deleteId = null">Cancelar</button>
+   </div>
+</app-modal>

@@ -70,11 +70,11 @@
             <td>{{doctor.documentId}}</td>
             <td>{{doctor.firstName}} {{doctor.lastName}}</td>    
             <td class="buttons">
-                <button class="button success" title="Editar" (click)="createUpdate(doctor)">
+                <button class="button success" (click)="createUpdate(doctor)">
                     <i class="material-symbols-sharp">edit</i>
                     <span>Editar</span>
                 </button>
-                <button class="button danger" title="Borrar" (click)="deleteId = doctor.id">
+                <button class="button danger" (click)="deleteId = doctor.id">
                     <i class="material-symbols-sharp">delete</i>
                     <span>Borrar</span>
                 </button>
@@ -92,11 +92,11 @@
                     <span>{{doctor.firstName}} {{doctor.lastName}}</span>
                 </p>
                 <div class="buttons">
-                    <button class="button success" title="Editar" (click)="createUpdate(doctor)">
+                    <button class="button success" (click)="createUpdate(doctor)">
                         <i class="material-symbols-sharp">edit</i>
                         <span>Editar</span>
                     </button>
-                    <button class="button danger" title="Borrar" (click)="deleteId = doctor.id">
+                    <button class="button danger" (click)="deleteId = doctor.id">
                         <i class="material-symbols-sharp">delete</i>
                         <span>Borrar</span>
                     </button>
