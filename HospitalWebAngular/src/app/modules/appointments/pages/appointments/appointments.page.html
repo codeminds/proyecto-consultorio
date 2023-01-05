@@ -1,6 +1,6 @@
 <!-- Controles de página -->
 <div class="page-controls">
-    <button class="button success" (click)="createUpdate()">
+    <button class="button success" (click)="insertUpdate()">
         <i class="material-symbols-sharp">add_circle</i>
         <span>Agregar</span>
     </button>
@@ -151,7 +151,7 @@
             <td>{{appointment.patient.firstName}} {{appointment.patient.lastName}}</td>
             <td>{{appointment.doctor.field.name}}</td>    
             <td class="buttons">
-                <button class="button success" (click)="createUpdate(appointment)">
+                <button class="button success" (click)="insertUpdate(appointment)">
                     <i class="material-symbols-sharp">edit</i>
                     <span>Editar</span>
                 </button>
@@ -177,7 +177,7 @@
                     <span>{{appointment.doctor.field.name}}</span>
                 </p>
                 <div class="buttons">
-                    <button class="button success" (click)="createUpdate(appointment)">
+                    <button class="button success" (click)="insertUpdate(appointment)">
                         <i class="material-symbols-sharp">edit</i>
                         <span>Editar</span>
                     </button>
@@ -204,14 +204,14 @@
         </ul>
         <app-date 
             name="date" 
-            form="createUpdate" 
+            form="insertUpdate" 
             label="Fecha"
             [type]="DateType.DateTime"
             [(model)]="appointment.date">
         </app-date>
         <app-autocomplete
             name="doctor" 
-            form="createUpdate"
+            form="insertUpdate"
             label="Doctor"
             placeholder="Escriba para buscar doctores..."
             [model]="appointment.doctor"
@@ -231,7 +231,7 @@
         </app-autocomplete>
         <app-autocomplete
             name="patient" 
-            form="createUpdate"
+            form="insertUpdate"
             label="Paciente"
             placeholder="Escriba para buscar pacientes..."
             [model]="appointment.patient"

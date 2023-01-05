@@ -37,14 +37,8 @@ namespace API.Controllers
         public async Task<ActionResult<APIResponse>> ListSessions([FromQuery] FilterSessionDTO data)
         {
             SessionFilters filter = this._mapper.Map<FilterSessionDTO, SessionFilters>(data);
-
-            Request.Headers.TryGetValue("Authorization", out StringValues tokenHeader);
-
-            List<Claim> claims = Token.GetTokenClaims(tokenHeader.ToString().Split(" ")[1]);
-            int userId = int.Parse(claims.First(c => c.Type == Claims.User).Value);
-
             List<Session> list = await this._sessionService
-                                        .ListSessions(userId, filter)
+                                        .ListSessions(Convert.ToInt32(HttpContext.Items[Claims.User]), filter)
                                         .ToListAsync();
 
             APIResponse response = new()
@@ -148,16 +142,10 @@ namespace API.Controllers
         [Authorize]
         public async Task<ActionResult<APIResponse>> LogOut(Guid? sessionId = null)
         {
-            Request.Headers.TryGetValue("Authorization", out StringValues tokenHeader);
-
-            List<Claim> claims = Token.GetTokenClaims(tokenHeader.ToString().Split(" ")[1]);
-            int userId = int.Parse(claims.First(c => c.Type == Claims.User).Value);
-            sessionId ??= Guid.Parse(claims.First(c => c.Type == Claims.Session).Value);
-
             //La función permite eliminar la sesión que estamos utilizando u otras sesiones por medio de su id,
             //por esta razón debemos validar que la sesión que se intenta eliminar no sea de otro usuario
-            Session? session = await this._sessionService.FindSession(sessionId.Value);
-            if (session == null || session.UserId != userId)
+            Session? session = await this._sessionService.FindSession(sessionId ?? Guid.Parse(Convert.ToString(HttpContext.Items[Claims.Session])!));
+            if (session == null || session.UserId != Convert.ToInt32(HttpContext.Items[Claims.User]))
             {
                 return HttpErrors.NotFound("Sesión no existe en el sistema");
             }

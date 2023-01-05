@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpService } from '@services/http/http.service';
 import { QueryParams, APIResponse } from '@services/http/http.types';
 import { Observable } from 'rxjs';
-import { CreateUpdateAppointmentDTO } from './appointment.dto';
+import { InsertUpdateAppointmentDTO } from './appointment.dto';
 import { Appointment } from './appointment.model';
 
 @Injectable({
@@ -26,11 +26,11 @@ export class AppointmentApi {
   }
 
   public post(data: Appointment): Observable<APIResponse<Appointment>> {
-    return this.httpService.post(this._api, new CreateUpdateAppointmentDTO(data), { accessToken: true }).mapObjectResponse((item: object) => new Appointment(item));
+    return this.httpService.post(this._api, new InsertUpdateAppointmentDTO(data), { accessToken: true }).mapObjectResponse((item: object) => new Appointment(item));
   }
 
   public put(id: number, data: Appointment): Observable<APIResponse<Appointment>> {
-    return this.httpService.put(`${this._api}/${id}`, new CreateUpdateAppointmentDTO(data), { accessToken: true }).mapObjectResponse((item: object) => new Appointment(item));
+    return this.httpService.put(`${this._api}/${id}`, new InsertUpdateAppointmentDTO(data), { accessToken: true }).mapObjectResponse((item: object) => new Appointment(item));
   }
 
   public delete(id: number): Observable<APIResponse<Appointment>> {

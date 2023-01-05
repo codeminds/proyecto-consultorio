@@ -80,11 +80,11 @@ class ViewModel extends BaseViewModel {
          genderId: new TwoWayProp(this.#genders.form.value[0].id, 'number')
       };
 
-      this.#patient.documentId.subscribe(document.forms.createUpdate.documentId);
-      this.#patient.firstName.subscribe(document.forms.createUpdate.firstName);
-      this.#patient.lastName.subscribe(document.forms.createUpdate.lastName);
-      this.#patient.birthDate.subscribe(document.forms.createUpdate.birthDate);
-      this.#patient.genderId.subscribe(document.forms.createUpdate.gender);
+      this.#patient.documentId.subscribe(document.forms.insertUpdate.documentId);
+      this.#patient.firstName.subscribe(document.forms.insertUpdate.firstName);
+      this.#patient.lastName.subscribe(document.forms.insertUpdate.lastName);
+      this.#patient.birthDate.subscribe(document.forms.insertUpdate.birthDate);
+      this.#patient.genderId.subscribe(document.forms.insertUpdate.gender);
    }
 
    #initModal() {

@@ -7,7 +7,7 @@
       <div class="row">
          <app-input 
             name="firstName" 
-            form="createUpdate" 
+            form="insertUpdate" 
             label="Nombre"
             class="col-3"
             [type]="InputType.Text" 
@@ -16,7 +16,7 @@
          </app-input>
          <app-input 
             name="lastName" 
-            form="createUpdate" 
+            form="insertUpdate" 
             label="Apellido"
             class="col-3"
             [type]="InputType.Text" 
@@ -25,7 +25,7 @@
          </app-input>
          <app-input 
             name="email" 
-            form="createUpdate" 
+            form="insertUpdate" 
             label="Correo"
             class="col-3"
             [type]="InputType.Email" 
@@ -34,7 +34,7 @@
          </app-input>
          <app-input 
             name="password" 
-            form="createUpdate" 
+            form="insertUpdate" 
             label="Nueva Contraseña"
             class="col-3"
             [type]="InputType.Password" 
@@ -44,7 +44,7 @@
          <app-input 
             *ngIf="password"
             name="confirmPassword" 
-            form="createUpdate" 
+            form="insertUpdate" 
             label="Confirmar Contraseña"
             class="col-3"
             [type]="InputType.Password" 

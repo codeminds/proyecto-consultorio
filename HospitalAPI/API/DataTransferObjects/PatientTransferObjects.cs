@@ -10,7 +10,7 @@
         public GetGenderDTO Gender { get; set; } = null!;
     }
 
-    public class CreateUpdatePatientDTO
+    public class InsertUpdatePatientDTO
     {
         public string? DocumentId { get; set; }
         public string? FirstName { set; get; } 

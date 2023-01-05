@@ -13,7 +13,7 @@ namespace API.Validators
         }
 
 
-        public bool ValidateInsert(CreateUpdatePatientDTO data, List<string> messages)
+        public bool ValidateInsert(InsertUpdatePatientDTO data, List<string> messages)
         {
             List<string> innerMessages = new();
 
@@ -81,7 +81,7 @@ namespace API.Validators
             return !innerMessages.Any();
         }
 
-        public bool ValidateUpdate(int id, CreateUpdatePatientDTO data, List<string> messages)
+        public bool ValidateUpdate(int id, InsertUpdatePatientDTO data, List<string> messages)
         {
             List<string> innerMessages = new();
 

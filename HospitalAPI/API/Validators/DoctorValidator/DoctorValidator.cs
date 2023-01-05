@@ -17,7 +17,7 @@ namespace API.Validators
             this._fieldService = fieldService;
         }
 
-        public bool ValidateInsert(CreateUpdateDoctorDTO data, List<string> messages)
+        public bool ValidateInsert(InsertUpdateDoctorDTO data, List<string> messages)
         {
             List<string> innerMessages = new();
 
@@ -75,7 +75,7 @@ namespace API.Validators
             return !innerMessages.Any();
         }
 
-        public bool ValidateUpdate(int id, CreateUpdateDoctorDTO data, List<string> messages)
+        public bool ValidateUpdate(int id, InsertUpdateDoctorDTO data, List<string> messages)
         {
             List<string> innerMessages = new();
 

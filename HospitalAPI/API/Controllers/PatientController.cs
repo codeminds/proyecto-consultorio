@@ -78,14 +78,14 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<APIResponse>> CreatePatient(CreateUpdatePatientDTO data)
+        public async Task<ActionResult<APIResponse>> InsertPatient(InsertUpdatePatientDTO data)
         {
             APIResponse response = new();
             response.Success = this._patientValidator.ValidateInsert(data, response.Messages);
 
             if (response.Success)
             {
-                Patient patient = this._mapper.Map<CreateUpdatePatientDTO, Patient>(data);
+                Patient patient = this._mapper.Map<InsertUpdatePatientDTO, Patient>(data);
                 await this._patientService.InsertPatient(patient);
 
                 response.Data = this._mapper.Map<Patient, GetPatientDTO>(patient);
@@ -97,7 +97,7 @@ namespace API.Controllers
 
         [HttpPut]
         [Route("{id}")]
-        public async Task<ActionResult<APIResponse>> UpdatePatient(int id, CreateUpdatePatientDTO data)
+        public async Task<ActionResult<APIResponse>> UpdatePatient(int id, InsertUpdatePatientDTO data)
         {
             Patient? patient = await this._patientService.FindPatient(id);
             if (patient == null)

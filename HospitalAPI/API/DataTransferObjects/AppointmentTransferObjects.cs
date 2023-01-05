@@ -8,7 +8,7 @@
         public GetDoctorDTO Doctor { get; set; } = null!;
     }
 
-    public class CreateUpdateAppointmentDTO
+    public class InsertUpdateAppointmentDTO
     {
         public DateTime? Date { get; set; }
         public int? PatientId { get; set; }

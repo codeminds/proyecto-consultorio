@@ -1,6 +1,6 @@
 ﻿using API.Data;
+using API.Data.Filters;
 using API.Data.Models;
-using API.Utils;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Services
@@ -12,6 +12,19 @@ namespace API.Services
         public UserService(HospitalDB database)
         {
             this._database = database;
+        }
+
+        public IQueryable<User> ListUsers(UserListFilter? filter = null)
+        {
+            filter ??= new UserListFilter();
+
+            return this._database
+                    .User
+                    .Where(u => (string.IsNullOrWhiteSpace(filter.Email) || u.Email.Contains(filter.Email))
+                        && (string.IsNullOrWhiteSpace(filter.FirstName) || u.FirstName.Contains(filter.FirstName))
+                        && (string.IsNullOrWhiteSpace(filter.LastName) || u.LastName.Contains(filter.LastName))
+                        && (!filter.RoleId.HasValue || u.RoleId == filter.RoleId)
+                        && !u.IsSuperAdmin);
         }
 
         public async Task<User?> FindUser(int id)
@@ -32,49 +45,59 @@ namespace API.Services
                             .FirstOrDefaultAsync();
         }
 
-        public async Task UpdateUser(User user, bool expireSessions = false)
+        public async Task InsertUser(User entity)
         {
-            //Como acción opcional se pueden invalidar todas las sesiones de un usuario
-            //como producto de un cambio significativo como cambio de contraseña o correo.
-            if (expireSessions)
+            this._database.User.Add(entity);
+            await this._database.SaveChangesAsync();
+            await this._database.Entry(entity).Reference(u => u.Role).LoadAsync();
+        }
+
+        public async Task UpdateUserInfo(User entity)
+        {
+            this._database.Entry(entity).Property(u => u.FirstName).IsModified = true;
+            this._database.Entry(entity).Property(u => u.LastName).IsModified = true;
+            await this._database.SaveChangesAsync();
+        }
+
+        public async Task UpdateUserEmail(User entity)
+        {
+            this._database.Attach(entity);
+            this._database.Entry(entity).Property(u => u.Email).IsModified = true;
+            await this.ExpireSessions(entity);
+            await this._database.SaveChangesAsync();
+        }
+
+        public async Task UpdateUserPassword(User entity)
+        {
+            this._database.Attach(entity);
+            this._database.Entry(entity).Property(u => u.Password).IsModified = true;
+            this._database.Entry(entity).Property(u => u.PasswordSalt).IsModified = true;
+            await this.ExpireSessions(entity);
+            await this._database.SaveChangesAsync();
+        }
+
+        public async Task DeleteUser(User entity)
+        {
+            List<Session> sessions = await this._database
+                                            .Session
+                                            .Where(s => s.UserId == entity.Id)
+                                            .ToListAsync();
+
+            foreach (Session session in sessions)
             {
-                await this.ExpireSessions(user);
+                this._database.Remove(session);
             }
 
-            this._database.Update(user);
-            await this._database.SaveChangesAsync();
-        }
-
-        public async Task UpdateUserInfo(User user)
-        {
-            this._database.Entry(user).Property(u => u.FirstName).IsModified = true;
-            this._database.Entry(user).Property(u => u.LastName).IsModified = true;
-            await this._database.SaveChangesAsync();
-        }
-
-        public async Task UpdateUserEmail(User user)
-        {
-            this._database.Attach(user);
-            this._database.Entry(user).Property(u => u.Email).IsModified = true;
-            await this.ExpireSessions(user);
-            await this._database.SaveChangesAsync();
-        }
-
-        public async Task UpdateUserPassword(User user)
-        {
-            this._database.Attach(user);
-            this._database.Entry(user).Property(u => u.Password).IsModified = true;
-            this._database.Entry(user).Property(u => u.PasswordSalt).IsModified = true;
-            await this.ExpireSessions(user);
-            await this._database.SaveChangesAsync();
+            this._database.User.Remove(entity);
+            await this._database.SaveChangesAsync();;
         }
 
         private async Task ExpireSessions(User user)
         { 
             List<Session> sessions = await this._database
-                                                .Session
-                                                .Where(s => s.UserId == user.Id)
-                                                .ToListAsync();
+                                            .Session
+                                            .Where(s => s.UserId == user.Id)
+                                            .ToListAsync();
 
             foreach (Session session in sessions)
             {

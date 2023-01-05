@@ -62,11 +62,11 @@ class ViewModel extends BaseViewModel {
    #initModal() {
       this.#modal = new Modal(document.querySelector('[data-modal]'), 'medium', () => {
          this.#id = null;
-         document.forms.createUpdate.documentId.value = '';
-         document.forms.createUpdate.firstName.value = '';
-         document.forms.createUpdate.lastName.value = '';
-         document.forms.createUpdate.birthDate.value = '';
-         document.forms.createUpdate.gender.value = '1';
+         document.forms.insertUpdate.documentId.value = '';
+         document.forms.insertUpdate.firstName.value = '';
+         document.forms.insertUpdate.lastName.value = '';
+         document.forms.insertUpdate.birthDate.value = '';
+         document.forms.insertUpdate.gender.value = '1';
          document.querySelector('[data-form-title]').textContent = '';
       });
 
@@ -93,11 +93,11 @@ class ViewModel extends BaseViewModel {
                PatientsService.get(id, (patient) => {
                   if (patient != null) {
                      this.#id = patient.id;
-                     document.forms.createUpdate.documentId.value = patient.documentId;
-                     document.forms.createUpdate.firstName.value = patient.firstName;
-                     document.forms.createUpdate.lastName.value = patient.lastName;
-                     document.forms.createUpdate.birthDate.value = DateService.toInputDateString(patient.birthDate);
-                     document.forms.createUpdate.gender.value = patient.genderId;
+                     document.forms.insertUpdate.documentId.value = patient.documentId;
+                     document.forms.insertUpdate.firstName.value = patient.firstName;
+                     document.forms.insertUpdate.lastName.value = patient.lastName;
+                     document.forms.insertUpdate.birthDate.value = DateService.toInputDateString(patient.birthDate);
+                     document.forms.insertUpdate.gender.value = patient.genderId;
                      document.querySelector('[data-form-title]').textContent = 'Editar Paciente';
                      this.#modal.open();
                   } else {
@@ -123,11 +123,11 @@ class ViewModel extends BaseViewModel {
 
    #save() {
       const data = {
-         documentId: document.forms.createUpdate.documentId.value,
-         firstName: document.forms.createUpdate.firstName.value,
-         lastName: document.forms.createUpdate.lastName.value,
-         birthDate: new Date(document.forms.createUpdate.birthDate.value),
-         genderId: document.forms.createUpdate.gender.value
+         documentId: document.forms.insertUpdate.documentId.value,
+         firstName: document.forms.insertUpdate.firstName.value,
+         lastName: document.forms.insertUpdate.lastName.value,
+         birthDate: new Date(document.forms.insertUpdate.birthDate.value),
+         genderId: document.forms.insertUpdate.gender.value
       };
 
       if (this.#id == null) {

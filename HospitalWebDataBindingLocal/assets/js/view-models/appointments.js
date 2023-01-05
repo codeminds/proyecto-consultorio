@@ -63,7 +63,7 @@ class ViewModel extends BaseViewModel {
          }
       });
 
-      this.#doctors.subscribe(document.forms.createUpdate.doctor);
+      this.#doctors.subscribe(document.forms.insertUpdate.doctor);
 
       DoctorService.list(null, (doctors) => {
          this.#doctors.value = doctors;
@@ -77,7 +77,7 @@ class ViewModel extends BaseViewModel {
          }
       })
 
-      this.#patients.subscribe(document.forms.createUpdate.patient);
+      this.#patients.subscribe(document.forms.insertUpdate.patient);
 
       PatientsService.list(null, (patients) => {
          this.#patients.value = patients;
@@ -141,9 +141,9 @@ class ViewModel extends BaseViewModel {
          patientId: new TwoWayProp(this.#patients.value[0].id, 'number')
       };
 
-      this.#appointment.date.subscribe(document.forms.createUpdate.date);
-      this.#appointment.doctorId.subscribe(document.forms.createUpdate.doctor);
-      this.#appointment.patientId.subscribe(document.forms.createUpdate.patient);
+      this.#appointment.date.subscribe(document.forms.insertUpdate.date);
+      this.#appointment.doctorId.subscribe(document.forms.insertUpdate.doctor);
+      this.#appointment.patientId.subscribe(document.forms.insertUpdate.patient);
    }
 
    #initModal() {

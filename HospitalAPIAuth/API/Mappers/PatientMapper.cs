@@ -10,7 +10,7 @@ namespace API.Mappers
         public PatientMapper()
         {
             CreateMap<Patient, GetPatientDTO>();
-            CreateMap<CreateUpdatePatientDTO, Patient>();
+            CreateMap<InsertUpdatePatientDTO, Patient>();
             CreateMap<FilterPatientDTO, PatientListFilter>();
         }
     }

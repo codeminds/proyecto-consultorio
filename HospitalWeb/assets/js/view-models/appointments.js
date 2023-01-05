@@ -117,9 +117,9 @@ class ViewModel extends BaseViewModel {
    #initModal() {
       this.#modal = new Modal(document.querySelector('[data-modal]'), 'medium', () => {
          this.#id = null;
-         document.forms.createUpdate.date.value = '';
-         document.forms.createUpdate.doctor.selectedIndex = 0;
-         document.forms.createUpdate.patient.selectedIndex = 0;
+         document.forms.insertUpdate.date.value = '';
+         document.forms.insertUpdate.doctor.selectedIndex = 0;
+         document.forms.insertUpdate.patient.selectedIndex = 0;
          document.querySelector('[data-form-title]').textContent = '';
       });
 
@@ -146,9 +146,9 @@ class ViewModel extends BaseViewModel {
                AppointmentsService.get(id, (appointment) => {
                   if (appointment != null) {
                      this.#id = appointment.id;
-                     document.forms.createUpdate.date.value = DateService.toInputDateString(appointment.date);
-                     document.forms.createUpdate.doctor.value = appointment.doctorId;
-                     document.forms.createUpdate.patient.value = appointment.patientId;
+                     document.forms.insertUpdate.date.value = DateService.toInputDateString(appointment.date);
+                     document.forms.insertUpdate.doctor.value = appointment.doctorId;
+                     document.forms.insertUpdate.patient.value = appointment.patientId;
                      document.querySelector('[data-form-title]').textContent = 'Editar Cita';
                      this.#modal.open();
                   } else {
@@ -174,9 +174,9 @@ class ViewModel extends BaseViewModel {
 
    #save() {
       const data = {
-         date: new Date(document.forms.createUpdate.date.value),
-         doctorId: document.forms.createUpdate.doctor.value,
-         patientId: document.forms.createUpdate.patient.value
+         date: new Date(document.forms.insertUpdate.date.value),
+         doctorId: document.forms.insertUpdate.doctor.value,
+         patientId: document.forms.insertUpdate.patient.value
       };
 
       if (this.#id == null) {

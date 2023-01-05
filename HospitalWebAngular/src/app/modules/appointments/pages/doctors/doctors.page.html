@@ -1,6 +1,6 @@
 <!-- Controles de página -->
 <div class="page-controls">
-    <button class="button success" (click)="createUpdate()">
+    <button class="button success" (click)="insertUpdate()">
         <i class="material-symbols-sharp">add_circle</i>
         <span>Agregar</span>
     </button>
@@ -70,7 +70,7 @@
             <td>{{doctor.documentId}}</td>
             <td>{{doctor.firstName}} {{doctor.lastName}}</td>    
             <td class="buttons">
-                <button class="button success" (click)="createUpdate(doctor)">
+                <button class="button success" (click)="insertUpdate(doctor)">
                     <i class="material-symbols-sharp">edit</i>
                     <span>Editar</span>
                 </button>
@@ -92,7 +92,7 @@
                     <span>{{doctor.firstName}} {{doctor.lastName}}</span>
                 </p>
                 <div class="buttons">
-                    <button class="button success" (click)="createUpdate(doctor)">
+                    <button class="button success" (click)="insertUpdate(doctor)">
                         <i class="material-symbols-sharp">edit</i>
                         <span>Editar</span>
                     </button>
@@ -119,7 +119,7 @@
         </ul>
         <app-select
             name="field"
-            form="createUpdate"
+            form="insertUpdate"
             label="Especialidad"
             [(model)]="doctor.field"
             [options]="fields"
@@ -127,7 +127,7 @@
         </app-select>
         <app-input 
             name="documentId" 
-            form="createUpdate" 
+            form="insertUpdate" 
             label="Cédula"
             [type]="InputType.Text" 
             [(model)]="doctor.documentId"
@@ -135,7 +135,7 @@
         </app-input>
         <app-input 
             name="firstName" 
-            form="createUpdate" 
+            form="insertUpdate" 
             label="Nombre"
             [type]="InputType.Text" 
             [(model)]="doctor.firstName"
@@ -143,7 +143,7 @@
         </app-input>
         <app-input 
             name="lastName" 
-            form="createUpdate" 
+            form="insertUpdate" 
             label="Apellido"
             [type]="InputType.Text" 
             [(model)]="doctor.lastName"

@@ -80,7 +80,7 @@ export class DoctorsPage implements OnInit{
     }
   }
 
-  public createUpdate(data: unknown = null): void {
+  public insertUpdate(data: unknown = null): void {
     this.doctor = new Doctor(data);
     this.modalOpen = true;
   }

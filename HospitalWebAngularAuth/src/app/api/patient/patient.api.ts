@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { APIResponse, QueryParams } from '@services/http/http.types';
 import { HttpService } from '@services/http/http.service';
 import { Observable } from 'rxjs';
-import { CreateUpdatePatientDTO } from './patient.dto';
+import { InsertUpdatePatientDTO } from './patient.dto';
 import { Patient } from './patient.model';
 
 @Injectable({
@@ -30,11 +30,11 @@ export class PatientApi{
   }
 
   public post(data: Patient): Observable<APIResponse<Patient>> {
-    return this.httpService.post(this._api, new CreateUpdatePatientDTO(data), { accessToken: true }).mapObjectResponse((item: object) => new Patient(item));
+    return this.httpService.post(this._api, new InsertUpdatePatientDTO(data), { accessToken: true }).mapObjectResponse((item: object) => new Patient(item));
   }
 
   public put(id: number, data: Patient): Observable<APIResponse<Patient>> {
-    return this.httpService.put(`${this._api}/${id}`, new CreateUpdatePatientDTO(data), { accessToken: true }).mapObjectResponse((item: object) => new Patient(item));
+    return this.httpService.put(`${this._api}/${id}`, new InsertUpdatePatientDTO(data), { accessToken: true }).mapObjectResponse((item: object) => new Patient(item));
   }
 
   public delete(id: number): Observable<APIResponse<Patient>> {

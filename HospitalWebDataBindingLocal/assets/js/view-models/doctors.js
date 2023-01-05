@@ -32,7 +32,7 @@ class ViewModel extends BaseViewModel {
       };
 
       this.#fields.filter.subscribe(document.forms.filter.field);
-      this.#fields.form.subscribe(document.forms.createUpdate.field);
+      this.#fields.form.subscribe(document.forms.insertUpdate.field);
 
       FieldService.list((fields) => {
          this.#fields.filter.value = [{ id: '', name: 'Todos' }, ...fields];
@@ -68,10 +68,10 @@ class ViewModel extends BaseViewModel {
          fieldId: new TwoWayProp(this.#fields.form.value[0].id, 'number')
       };
 
-      this.#doctor.documentId.subscribe(document.forms.createUpdate.documentId);
-      this.#doctor.firstName.subscribe(document.forms.createUpdate.firstName);
-      this.#doctor.lastName.subscribe(document.forms.createUpdate.lastName);
-      this.#doctor.fieldId.subscribe(document.forms.createUpdate.field);
+      this.#doctor.documentId.subscribe(document.forms.insertUpdate.documentId);
+      this.#doctor.firstName.subscribe(document.forms.insertUpdate.firstName);
+      this.#doctor.lastName.subscribe(document.forms.insertUpdate.lastName);
+      this.#doctor.fieldId.subscribe(document.forms.insertUpdate.field);
    }
 
    #initModal() {

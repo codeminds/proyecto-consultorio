@@ -100,7 +100,7 @@ export class AppointmentsPage implements OnInit {
     }
   }
 
-  public createUpdate(data: unknown = null): void {
+  public insertUpdate(data: unknown = null): void {
     this.appointment = new Appointment(data);
     this.modalOpen = true;
   }

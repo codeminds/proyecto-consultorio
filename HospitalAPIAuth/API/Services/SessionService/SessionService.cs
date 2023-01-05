@@ -86,9 +86,9 @@ namespace API.Services
             await this._database.SaveChangesAsync();
         }
 
-        public async Task DeleteSession(Session session)
+        public async Task DeleteSession(Session entity)
         {
-            this._database.Session.Remove(session);
+            this._database.Session.Remove(entity);
             await this._database.SaveChangesAsync();;
         }
     }

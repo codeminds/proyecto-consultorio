@@ -1,7 +1,7 @@
 <!-- Controles de página -->
 <!-- Sintaxis para obsevables con async pipes -->
 <div *ngIf="($user | async) as user" class="page-controls">
-    <button *ngIf="canEdit(user)" class="button success" (click)="createUpdate()">
+    <button *ngIf="canEdit(user)" class="button success" (click)="insertUpdate()">
         <i class="material-symbols-sharp">add_circle</i>
         <span>Agregar</span>
     </button>
@@ -94,7 +94,7 @@
             <td>{{patient.gender.name}}</td>    
             <td class="buttons">
                 <ng-container *ngIf="canEdit(user)">
-                    <button class="button success" (click)="createUpdate(patient)">
+                    <button class="button success" (click)="insertUpdate(patient)">
                         <i class="material-symbols-sharp">edit</i>
                         <span>Editar</span>
                     </button>
@@ -121,7 +121,7 @@
                     <span>{{patient.gender.name}}</span>
                 </p>
                 <div class="buttons"  *ngIf="canEdit(user)">
-                    <button class="button success" (click)="createUpdate(patient)">
+                    <button class="button success" (click)="insertUpdate(patient)">
                         <i class="material-symbols-sharp">edit</i>
                         <span>Editar</span>
                     </button>
@@ -148,7 +148,7 @@
         </ul>
         <app-input 
             name="documentId" 
-            form="createUpdate" 
+            form="insertUpdate" 
             label="Cédula"
             [type]="InputType.Text" 
             [(model)]="patient.documentId"
@@ -156,7 +156,7 @@
         </app-input>
         <app-input 
             name="firstName" 
-            form="createUpdate" 
+            form="insertUpdate" 
             label="Nombre"
             [type]="InputType.Text" 
             [(model)]="patient.firstName"
@@ -164,7 +164,7 @@
         </app-input>
         <app-input 
             name="lastName" 
-            form="createUpdate" 
+            form="insertUpdate" 
             label="Apellido"
             [type]="InputType.Text" 
             [(model)]="patient.lastName"
@@ -172,14 +172,14 @@
         </app-input>
         <app-date 
             name="birthDate" 
-            form="createUpdate" 
+            form="insertUpdate" 
             label="Nacimiento"
             [type]="DateType.DateTime"
             [(model)]="patient.birthDate">
         </app-date>
         <app-select
             name="gender"
-            form="createUpdate"
+            form="insertUpdate"
             label="Género"
             [(model)]="patient.gender"
             [options]="genders"

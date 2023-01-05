@@ -47,10 +47,10 @@ class ViewModel extends BaseViewModel {
    #initModal() {
       this.#modal = new Modal(document.querySelector('[data-modal]'), 'medium', () => {
          this.#id = null;
-         document.forms.createUpdate.documentId.value = '';
-         document.forms.createUpdate.firstName.value = '';
-         document.forms.createUpdate.lastName.value = '';
-         document.forms.createUpdate.field.selectedIndex = 0;
+         document.forms.insertUpdate.documentId.value = '';
+         document.forms.insertUpdate.firstName.value = '';
+         document.forms.insertUpdate.lastName.value = '';
+         document.forms.insertUpdate.field.selectedIndex = 0;
          document.querySelector('[data-form-title]').textContent = '';
       });
 
@@ -77,10 +77,10 @@ class ViewModel extends BaseViewModel {
                DoctorService.get(id, (doctor) => {
                   if (doctor != null) {
                      this.#id = doctor.id;
-                     document.forms.createUpdate.documentId.value = doctor.documentId;
-                     document.forms.createUpdate.firstName.value = doctor.firstName;
-                     document.forms.createUpdate.lastName.value = doctor.lastName;
-                     document.forms.createUpdate.field.value = doctor.fieldId;
+                     document.forms.insertUpdate.documentId.value = doctor.documentId;
+                     document.forms.insertUpdate.firstName.value = doctor.firstName;
+                     document.forms.insertUpdate.lastName.value = doctor.lastName;
+                     document.forms.insertUpdate.field.value = doctor.fieldId;
                      document.querySelector('[data-form-title]').textContent = 'Editar Doctor';
                      this.#modal.open();
                   } else {
@@ -106,10 +106,10 @@ class ViewModel extends BaseViewModel {
 
    #save() {
       const data = {
-         documentId: document.forms.createUpdate.documentId.value,
-         firstName: document.forms.createUpdate.firstName.value,
-         lastName: document.forms.createUpdate.lastName.value,
-         fieldId: document.forms.createUpdate.field.value
+         documentId: document.forms.insertUpdate.documentId.value,
+         firstName: document.forms.insertUpdate.firstName.value,
+         lastName: document.forms.insertUpdate.lastName.value,
+         fieldId: document.forms.insertUpdate.field.value
       };
 
       if (this.#id == null) {

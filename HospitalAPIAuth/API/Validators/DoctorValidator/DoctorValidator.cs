@@ -7,17 +7,13 @@ namespace API.Validators
     public class DoctorValidator : IDoctorValidator
     {
         private readonly HospitalDB _database;
-        private readonly IDoctorService _doctorService;
-        private readonly IFieldService _fieldService;
 
-        public DoctorValidator(HospitalDB database, IDoctorService doctorService, IFieldService fieldService)
+        public DoctorValidator(HospitalDB database)
         {
             this._database = database;
-            this._doctorService = doctorService;
-            this._fieldService = fieldService;
         }
 
-        public bool ValidateInsert(CreateUpdateDoctorDTO data, List<string> messages)
+        public bool ValidateInsert(InsertUpdateDoctorDTO data, List<string> messages)
         {
             List<string> innerMessages = new();
 
@@ -75,7 +71,7 @@ namespace API.Validators
             return !innerMessages.Any();
         }
 
-        public bool ValidateUpdate(int id, CreateUpdateDoctorDTO data, List<string> messages)
+        public bool ValidateUpdate(int id, InsertUpdateDoctorDTO data, List<string> messages)
         {
             List<string> innerMessages = new();
 

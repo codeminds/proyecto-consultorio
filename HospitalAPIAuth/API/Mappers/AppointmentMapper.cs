@@ -10,7 +10,7 @@ namespace API.Mappers
         public AppointmentMapper()
         {
             CreateMap<Appointment, GetAppointmentDTO>();
-            CreateMap<CreateUpdateAppointmentDTO, Appointment>();
+            CreateMap<InsertUpdateAppointmentDTO, Appointment>();
             CreateMap<FilterAppointmentDTO, AppointmentListFilter>();    
         }
     }

@@ -9,7 +9,7 @@
         public GetFieldDTO Field { get; set; } = null!;
     }
 
-    public class CreateUpdateDoctorDTO
+    public class InsertUpdateDoctorDTO
     { 
         public string? DocumentId { get; set; }
         public string? FirstName { get; set; }

@@ -12,7 +12,7 @@ namespace API.Validators
             this._database = database;
         }
 
-        public bool ValidateInsert(CreateUpdateAppointmentDTO data, List<string> messages)
+        public bool ValidateInsert(InsertUpdateAppointmentDTO data, List<string> messages)
         {
             List<string> innerMessages = new();
 
@@ -74,7 +74,7 @@ namespace API.Validators
             return !innerMessages.Any();
         }
 
-        public bool ValidateUpdate(int id, CreateUpdateAppointmentDTO data, List<string> messages)
+        public bool ValidateUpdate(int id, InsertUpdateAppointmentDTO data, List<string> messages)
         {
             List<string> innerMessages = new();
 

@@ -68,14 +68,14 @@ namespace API.Controllers
 
         [HttpPost]
         [Authorize(UserRole.Administrator, UserRole.Editor)]
-        public async Task<ActionResult<APIResponse>> CreateAppointment(CreateUpdateAppointmentDTO data)
+        public async Task<ActionResult<APIResponse>> InsertAppointment(InsertUpdateAppointmentDTO data)
         {
             APIResponse response = new();
             response.Success = this._appointmentValidator.ValidateInsert(data, response.Messages);
 
             if (response.Success)
             {
-                Appointment appointment = this._mapper.Map<CreateUpdateAppointmentDTO, Appointment>(data);
+                Appointment appointment = this._mapper.Map<InsertUpdateAppointmentDTO, Appointment>(data);
                 await this._appointmentService.InsertAppointment(appointment);
 
                 response.Data = this._mapper.Map<Appointment, GetAppointmentDTO>(appointment);
@@ -88,7 +88,7 @@ namespace API.Controllers
         [HttpPut]
         [Route("{id}")]
         [Authorize(UserRole.Administrator, UserRole.Editor)]
-        public async Task<ActionResult<APIResponse>> UpdateAppointment(int id, CreateUpdateAppointmentDTO data)
+        public async Task<ActionResult<APIResponse>> UpdateAppointment(int id, InsertUpdateAppointmentDTO data)
         {
 
             Appointment? appointment = await this._appointmentService.FindAppointment(id);

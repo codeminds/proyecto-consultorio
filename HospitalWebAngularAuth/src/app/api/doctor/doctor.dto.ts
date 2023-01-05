@@ -1,6 +1,6 @@
 import { Doctor } from "./doctor.model";
 
-export class CreateUpdateDoctorDTO {
+export class InsertUpdateDoctorDTO {
     public readonly documentId: string;
     public readonly firstName: string;
     public readonly lastName: string;

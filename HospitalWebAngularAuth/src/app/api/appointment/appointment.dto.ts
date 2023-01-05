@@ -2,7 +2,7 @@ import { FilterDoctorDTO } from "@api/doctor/doctor.dto";
 import { FilterPatientDTO } from "@api/patient/patient.dto";
 import { Appointment } from "./appointment.model";
 
-export class CreateUpdateAppointmentDTO {
+export class InsertUpdateAppointmentDTO {
     public readonly date: string;
     public readonly doctorId: number;
     public readonly patientId: number;

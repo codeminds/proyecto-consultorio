@@ -48,7 +48,7 @@ namespace API.Middlewares
                     Session? session = await sessionService.FindSession(sessionId);
                     if (session == null)
                     {
-                        SendResponse(context, HttpStatusCode.Unauthorized, "Su sesión ha expirado");
+                        SendResponse(context, HttpStatusCode.Unauthorized, "Su sesión no es válida. Debe reingresar al sistema");
                         return;
                     }
 
@@ -76,6 +76,12 @@ namespace API.Middlewares
                         SendResponse(context, HttpStatusCode.Unauthorized, "Su sesión ha expirado");
                         return;
                     }
+
+                    //Se guarda en la propiedad Items que es única por cada petición de HTTP
+                    //ciertos valores que requests con autorización podrían utilizar luego
+                    context.Items.Add(Claims.User, session.User.Id);
+                    context.Items.Add(Claims.Role, session.User.RoleId);
+                    context.Items.Add(Claims.Session, session.SessionId);
                 }
                 catch (SecurityTokenExpiredException)
                 {
@@ -85,7 +91,7 @@ namespace API.Middlewares
                 }
                 catch (SecurityTokenException)
                 {
-                    SendResponse(context, HttpStatusCode.Unauthorized, "Su sesión ha expirado", "Token de acceso no es válido");
+                    SendResponse(context, HttpStatusCode.Unauthorized, "Su sesión no es válida. Debe reingresar al sistema", "Token de acceso no es válido");
                     return;
                 }
             }
