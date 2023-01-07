@@ -16,8 +16,10 @@ namespace API.Utils
             List<Claim> claims = new()
             {
                 new Claim(Claims.IssueDate, DateTimeOffset.Now.ToUnixTimeSeconds().ToString()),
-                new Claim(Claims.User, user.Id.ToString(), ClaimValueTypes.Integer),
+                new Claim(Claims.UserId, user.Id.ToString(), ClaimValueTypes.Integer),
+                new Claim(Claims.User, user.Email, ClaimValueTypes.String),
                 new Claim(Claims.Session, session.ToString(), ClaimValueTypes.String),
+                new Claim(Claims.RoleId, user.RoleId.ToString(), ClaimValueTypes.Integer),
                 new Claim(Claims.Role, user.Role.Name, ClaimValueTypes.String),
                 new Claim(Claims.SuperAdmin, user.IsSuperAdmin.ToString(), ClaimValueTypes.Boolean)
             };
@@ -44,7 +46,8 @@ namespace API.Utils
             List<Claim> claims = new()
             {
                 new Claim(Claims.IssueDate, DateTimeOffset.Now.ToUnixTimeSeconds().ToString()),
-                new Claim(Claims.User, user.Id.ToString(), ClaimValueTypes.Integer),
+                new Claim(Claims.UserId, user.Id.ToString(), ClaimValueTypes.Integer),
+                new Claim(Claims.User, user.Email, ClaimValueTypes.String),
                 new Claim(Claims.Session, session.ToString(), ClaimValueTypes.String)
             };
 

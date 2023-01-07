@@ -22,6 +22,12 @@ table {
     padding: 0.5rem;
 }
 
+::ng-deep td:not(.mobile) {
+    vertical-align: middle;
+    line-height: 1;
+    height: 4rem;
+}
+
 th {
     text-align: left;
     font-weight: 700;

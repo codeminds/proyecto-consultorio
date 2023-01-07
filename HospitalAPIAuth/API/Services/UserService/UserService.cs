@@ -52,27 +52,9 @@ namespace API.Services
             await this._database.Entry(entity).Reference(u => u.Role).LoadAsync();
         }
 
-        public async Task UpdateUserInfo(User entity)
+        public async Task UpdateUser(User entity)
         {
-            this._database.Entry(entity).Property(u => u.FirstName).IsModified = true;
-            this._database.Entry(entity).Property(u => u.LastName).IsModified = true;
-            await this._database.SaveChangesAsync();
-        }
-
-        public async Task UpdateUserEmail(User entity)
-        {
-            this._database.Attach(entity);
-            this._database.Entry(entity).Property(u => u.Email).IsModified = true;
-            await this.ExpireSessions(entity);
-            await this._database.SaveChangesAsync();
-        }
-
-        public async Task UpdateUserPassword(User entity)
-        {
-            this._database.Attach(entity);
-            this._database.Entry(entity).Property(u => u.Password).IsModified = true;
-            this._database.Entry(entity).Property(u => u.PasswordSalt).IsModified = true;
-            await this.ExpireSessions(entity);
+            this._database.User.Update(entity);
             await this._database.SaveChangesAsync();
         }
 
@@ -90,20 +72,6 @@ namespace API.Services
 
             this._database.User.Remove(entity);
             await this._database.SaveChangesAsync();;
-        }
-
-        private async Task ExpireSessions(User user)
-        { 
-            List<Session> sessions = await this._database
-                                            .Session
-                                            .Where(s => s.UserId == user.Id)
-                                            .ToListAsync();
-
-            foreach (Session session in sessions)
-            {
-                session.DateExpiry = DateTime.Now;
-                this._database.Update(session);
-            }
         }
     }
 }

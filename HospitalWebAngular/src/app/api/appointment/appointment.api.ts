@@ -29,8 +29,8 @@ export class AppointmentApi {
     return this.httpService.post(this._api, new CreateUpdateAppointmentDTO(data)).mapObjectResponse((item: object) => new Appointment(item));
   }
 
-  public put(id: number, data: Appointment): Observable<APIResponse<Appointment>> {
-    return this.httpService.put(`${this._api}/${id}`, new CreateUpdateAppointmentDTO(data)).mapObjectResponse((item: object) => new Appointment(item));;
+  public put(data: Appointment): Observable<APIResponse<Appointment>> {
+    return this.httpService.put(`${this._api}/${data.id}`, new CreateUpdateAppointmentDTO(data)).mapObjectResponse((item: object) => new Appointment(item));;
   }
 
   public delete(id: number): Observable<APIResponse<Appointment>> {

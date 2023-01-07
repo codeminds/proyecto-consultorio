@@ -1,6 +1,6 @@
 <!-- Formulario de actualización -->
 <app-panel *ngIf="user" panelTitle="Actualizar Información">
-   <form (keyup.enter)="confirmSave()">
+   <form (keyup.enter)="saveUser()">
       <ul>
          <li class="validation-message" *ngFor="let message of messages">{{message}}</li>
       </ul>
@@ -55,30 +55,9 @@
       <app-button 
          [type]="ButtonType.Success"
          [disabled]="saving || !passwordConfirmed"
-         (clicked)="confirmSave()">
+         (clicked)="saveUser()">
          Guardar 
       </app-button>
    </form>
 </app-panel>
-
-<!-- Modal de confirmación de cambios de credenciales -->
-<app-modal
-   [open]="confirmOpen"
-   [transparent]="true"
-   [position]="ModalPosition.Top"
-   [size]="ModalSize.Medium"
-   [closeOnClickOutside]="false">
-   <p class="prompt-text">Cambiar el correo y/o contraseña cerrará todas las sesiones activas y deberá volver a ingresar. Desea continuar?</p>
-   <div class="prompt-buttons">
-      <button
-            class="button success"
-            [disabled]="saving || !confirmOpen"
-            [ngClass]="{'loading': saving || !confirmOpen}"
-            (click)="saveChanges()">
-            Guardar
-            <i *ngIf="saving" class="material-symbols-sharp rotate">data_saver_off</i>
-      </button>
-      <button class="button neutral" (click)="confirmOpen = false">Cancelar</button>
-   </div>
-</app-modal>
 

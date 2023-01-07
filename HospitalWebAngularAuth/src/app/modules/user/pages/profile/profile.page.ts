@@ -1,11 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UserApi } from '@api/user/user.api';
 import { User } from '@api/user/user.model';
-import { APIResponse, MessageType } from '@services/http/http.types';
+import { MessageType } from '@services/http/http.types';
 import { InputType, ButtonType } from '@shared/components/form-field/form-field.types';
 import { ModalSize, ModalPosition } from '@shared/components/modal/modal.types';
 import { Store } from '@store';
-import { filter, forkJoin, Observable, of, Subject, takeUntil } from 'rxjs';
+import { filter, firstValueFrom, Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-profile',
@@ -21,7 +21,6 @@ export class ProfilePage implements OnInit, OnDestroy {
   public password: string;
   public confirmPassword: string;
   public saving: boolean;
-  public confirmOpen: boolean;
   public messages: string[];
 
   public InputType = InputType;
@@ -39,7 +38,6 @@ export class ProfilePage implements OnInit, OnDestroy {
     this.password = '';
     this.confirmPassword = '';
     this.saving = false;
-    this.confirmOpen = false;
     this.messages = [];
     this.unsubcribe = new Subject();
   }
@@ -68,88 +66,23 @@ export class ProfilePage implements OnInit, OnDestroy {
     this.unsubcribe.complete();
   }
 
-  public confirmSave(): void {
-    if(this.password || this.user.email != this.store.user.email) {
-      this.confirmOpen = true;
-    } else {
-      this.saveChanges();
-    }
-  }
-
-  public async saveChanges(): Promise<void> {
+  public async saveUser(): Promise<void> {
     if(!this.saving) {
-      const actions: Observable<APIResponse<User>>[] = [];
       this.saving = true;
 
-      if(this.user.firstName != this.store.user.firstName || this.user.lastName != this.store.user.lastName) {
-        actions.push(this.userApi.patchInfo(this.user));
-      } else {
-        actions.push(of(null));
-      }
-  
-      if(this.user.email != this.store.user.email) {
-        actions.push(this.userApi.patchEmail(this.user));
-      } else {
-        actions.push(of(null));
-      }
-  
-      if(this.password && this.password == this.confirmPassword) {
-        actions.push(this.userApi.patchPassword(this.password));
-      } else {
-        actions.push(of(null));
+      const response = await firstValueFrom(this.userApi.putSelf(this.user, this.password));  
+      this.messages = [];
+      
+      if(response.success) {
+        this.store.siteMessage = { type: MessageType.Success, text: response.messages[0] };
+        this.store.user = response.data;
+        this.password = '';
+        this.confirmPassword = '';
+      }else if(response.messages.length > 0) {
+        this.messages = response.messages;
       }
 
-      forkJoin(actions).subscribe(([info, email, password]) => {
-        console.log(info, email, password);
-        this.messages = [];
-        const messages = [];
-        const user = new User(this.store.user);
-        let success = true;
-        let logout = false;
-
-        if(info?.success) {
-          user.firstName = info.data.firstName;
-          user.lastName = info.data.lastName;
-        } else if(info) {
-          success = false;
-          messages.push(...info.messages);
-        }
-
-        if(email?.success) {
-          logout = true;
-          user.email = email.data.email;
-        } else if(email) {
-          success = false;
-          messages.push(...email.messages);
-        }
-
-        if(password?.success) {
-          logout = true;
-          this.password = '';
-          this.confirmPassword = '';
-        } else if(password) {
-          success = false;
-          messages.push(...password.messages);
-        }
-
-        if(success) {
-          this.store.siteMessage = { type: MessageType.Success, text: 'Usuario actualizado' };
-
-          if(logout) {
-            setTimeout(() => {
-              this.store.siteMessage = { type: MessageType.Info, text: 'Por favor reingrese con su nuevos credenciales' };
-              this.store.closeSession();
-            }, 2500);
-          }
-        }else {
-          this.store.siteMessage = { type: MessageType.Warning, text: 'Algunos cambios no fueron guardados' };
-        }
-
-        this.messages = messages;
-        this.store.user = user;
-        this.saving = false;
-        this.confirmOpen = false;
-      })
+      this.saving = false;
     }
   }
 }

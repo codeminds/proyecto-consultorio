@@ -33,8 +33,8 @@ export class PatientApi{
     return this.httpService.post(this._api, new CreateUpdatePatientDTO(data)).mapObjectResponse((item: object) => new Patient(item));
   }
 
-  public put(id: number, data: Patient): Observable<APIResponse<Patient>> {
-    return this.httpService.put(`${this._api}/${id}`, new CreateUpdatePatientDTO(data)).mapObjectResponse((item: object) => new Patient(item));
+  public put(data: Patient): Observable<APIResponse<Patient>> {
+    return this.httpService.put(`${this._api}/${data.id}`, new CreateUpdatePatientDTO(data)).mapObjectResponse((item: object) => new Patient(item));
   }
 
   public delete(id: number): Observable<APIResponse<Patient>> {

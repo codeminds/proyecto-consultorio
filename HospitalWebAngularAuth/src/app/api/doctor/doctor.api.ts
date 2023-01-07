@@ -33,8 +33,8 @@ export class DoctorApi{
     return this.httpService.post(this._api, new InsertUpdateDoctorDTO(data), { accessToken: true }).mapObjectResponse((item: object) => new Doctor(item));
   }
 
-  public put(id: number, data: Doctor): Observable<APIResponse<Doctor>> {
-    return this.httpService.put(`${this._api}/${id}`, new InsertUpdateDoctorDTO(data), { accessToken: true }).mapObjectResponse((item: object) => new Doctor(item));
+  public put(data: Doctor): Observable<APIResponse<Doctor>> {
+    return this.httpService.put(`${this._api}/${data.id}`, new InsertUpdateDoctorDTO(data), { accessToken: true }).mapObjectResponse((item: object) => new Doctor(item));
   }
 
   public delete(id: number): Observable<APIResponse<Doctor>> {

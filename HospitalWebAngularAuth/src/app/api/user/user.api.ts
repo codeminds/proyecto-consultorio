@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpService } from '@services/http/http.service';
-import { APIResponse } from '@services/http/http.types';
+import { APIResponse, QueryParams } from '@services/http/http.types';
 import { Store } from '@store';
 import { firstValueFrom, Observable } from 'rxjs';
-import { UpdateUserEmail, UpdateUserInfo, UpdateUserPassword } from './user.dto';
+import { InsertUpdateUserDTO } from './user.dto';
 import { User } from './user.model';
 
 @Injectable({
@@ -26,15 +26,23 @@ export class UserApi {
     }
   }
 
-  public patchInfo(data: User): Observable<APIResponse<User>> {
-    return this.httpService.patch(`${this._api}/info`, new UpdateUserInfo(data), { accessToken: true }).mapObjectResponse((item: object) => new User(item));
+  public list(filter: QueryParams): Observable<APIResponse<User[]>> {
+    return this.httpService.get(this._api, { params: filter, accessToken: true }).mapArrayResponse((item: object) => new User(item));
   }
 
-  public patchEmail(data: User): Observable<APIResponse<User>> {
-    return this.httpService.patch(`${this._api}/email`, new UpdateUserEmail(data), { accessToken: true }).mapObjectResponse((item: object) => new User(item));
+  public post(data: User, password: string): Observable<APIResponse<User>> {
+    return this.httpService.post(this._api, new InsertUpdateUserDTO(data, password), { accessToken: true }).mapObjectResponse((item: object) => new User(item));
   }
 
-  public patchPassword(data: string): Observable<APIResponse<User>> {
-    return this.httpService.patch(`${this._api}/password`, new UpdateUserPassword(data), { accessToken: true }).mapObjectResponse((item: object) => new User(item));
+  public put(data: User, password: string): Observable<APIResponse<User>> {
+    return this.httpService.put(`${this._api}/${data.id}`, new InsertUpdateUserDTO(data, password), { accessToken: true }).mapObjectResponse((item: object) => new User(item));
+  }
+
+  public putSelf(data: User, password: string): Observable<APIResponse<User>> {
+    return this.httpService.put(`${this._api}/me`, new InsertUpdateUserDTO(data, password), { accessToken: true }).mapObjectResponse((item: object) => new User(item));
+  }
+
+  public delete(id: number): Observable<APIResponse<User>> {
+    return this.httpService.delete(`${this._api}/${id}`, { accessToken: true }).mapObjectResponse((item: object) => new User(item));
   }
 }

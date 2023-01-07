@@ -38,7 +38,7 @@ namespace API.Controllers
         {
             SessionFilters filter = this._mapper.Map<FilterSessionDTO, SessionFilters>(data);
             List<Session> list = await this._sessionService
-                                        .ListSessions(Convert.ToInt32(HttpContext.Items[Claims.User]), filter)
+                                        .ListSessions(Convert.ToInt32(HttpContext.Items[Claims.UserId]), filter)
                                         .ToListAsync();
 
             APIResponse response = new()
@@ -145,7 +145,7 @@ namespace API.Controllers
             //La función permite eliminar la sesión que estamos utilizando u otras sesiones por medio de su id,
             //por esta razón debemos validar que la sesión que se intenta eliminar no sea de otro usuario
             Session? session = await this._sessionService.FindSession(sessionId ?? Guid.Parse(Convert.ToString(HttpContext.Items[Claims.Session])!));
-            if (session == null || session.UserId != Convert.ToInt32(HttpContext.Items[Claims.User]))
+            if (session == null || session.UserId != Convert.ToInt32(HttpContext.Items[Claims.UserId]))
             {
                 return HttpErrors.NotFound("Sesión no existe en el sistema");
             }

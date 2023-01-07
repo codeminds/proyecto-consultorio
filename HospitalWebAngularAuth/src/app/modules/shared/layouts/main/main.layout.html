@@ -7,15 +7,16 @@
     </div>
     <!-- Sintaxis para obsevables con async pipes -->
     <!-- El evitar el event bubbling en el sidenav evita que este se cierre por el host listener de body  -->
-    <nav (click)="$event.stopPropagation()" class="account-menu" *ngIf="($user | async) as user">
+    <nav class="account-menu" *ngIf="($user | async) as user">
         <button
+            #menuButton
             class="account-menu-toggle material-symbols-sharp"
             [ngClass]="{'open': accountMenuOpen}"
             (click)="toggleAccountMenu()">
             account_circle
         </button>
-        <ul *ngIf="accountMenuOpen" (click)="toggleAccountMenu()">
-            <li class="user" (click)="$event.stopPropagation()">{{user.firstName}} {{user.lastName}}</li>
+        <ul #menu [hidden]="!accountMenuOpen">
+            <li class="user">{{user.firstName}} {{user.lastName}}</li>
             <li>
                <a routerLink="/user/profile">Perfil</a> 
             </li>
@@ -55,6 +56,17 @@
                 </a>
             </li>
         </ul>
+
+        <ng-container *ngIf="($user | async)?.hasRoles([UserRole.Administrator])">
+            <h3 class="category main">Administración</h3>
+            <ul class="menu" (click)="handleMenuNavigate()">
+                <li routerLinkActive="active">
+                    <a routerLink="/admin/users">
+                        <span>Usuarios</span> 
+                    </a>
+                </li>
+            </ul>
+        </ng-container>
     </nav>
     <main class="page">
         <!-- Sintaxis para obsevables con async pipes -->

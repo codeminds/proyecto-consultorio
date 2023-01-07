@@ -79,7 +79,7 @@ namespace API.Middlewares
 
                     //Se guarda en la propiedad Items que es única por cada petición de HTTP
                     //ciertos valores que requests con autorización podrían utilizar luego
-                    context.Items.Add(Claims.User, session.User.Id);
+                    context.Items.Add(Claims.UserId, session.User.Id);
                     context.Items.Add(Claims.Role, session.User.RoleId);
                     context.Items.Add(Claims.Session, session.SessionId);
                 }

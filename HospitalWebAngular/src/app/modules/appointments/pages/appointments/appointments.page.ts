@@ -110,7 +110,7 @@ export class AppointmentsPage implements OnInit {
       this.saving = true;
         
       const isNew = this.appointment.id == null
-      const response = await firstValueFrom(isNew ? this.appointmentApi.post(this.appointment) : this.appointmentApi.put(this.appointment.id, this.appointment));  
+      const response = await firstValueFrom(isNew ? this.appointmentApi.post(this.appointment) : this.appointmentApi.put(this.appointment));  
       this.messages = [];
       
       if(response.success) {

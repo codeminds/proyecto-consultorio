@@ -44,7 +44,7 @@ h2 {
 
 .page-controls {
     position: absolute;
-    top: 3rem;
+    top: 2rem;
     right: 2rem;
 }
 
@@ -63,6 +63,16 @@ h2 {
     padding: 0.5rem;
     background: var(--color-danger-primary);
     border: var(--color-danger-secondary) 0.1rem solid;
+    border-radius: 0.2rem;
+    color: #fff;
+    animation: fade-in 0.2s ease-out forwards ;
+}
+
+.alert-message {
+    margin-bottom: 0.2rem;
+    padding: 0.5rem;
+    background: var(--color-warning-primary);
+    border: var(--color-warning-secondary) 0.1rem solid;
     border-radius: 0.2rem;
     color: #fff;
     animation: fade-in 0.2s ease-out forwards ;

@@ -1,9 +1,11 @@
-import { Component, HostListener, OnInit } from '@angular/core';
-import { firstValueFrom, Observable } from 'rxjs';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { firstValueFrom, fromEvent, Observable, Subject, takeUntil } from 'rxjs';
 import { UserApi } from '@api/user/user.api';
 import { User } from '@api/user/user.model';
 import { Store } from '@store';
 import { SessionApi } from '@api/session/session.api';
+import { UserRole } from '@utils/enums';
+import { MessageType } from '@services/http/http.types';
 
 @Component({
   selector: 'app-main',
@@ -11,18 +13,20 @@ import { SessionApi } from '@api/session/session.api';
   styleUrls: ['./main.layout.css']
 })
 export class MainLayout implements OnInit {
+  @ViewChild('menu')
+  private menuRef: ElementRef;
+
+  @ViewChild('menuButton')
+  private menuButtonRef: ElementRef;
+
   public menuOpen: boolean;
   public accountMenuOpen: boolean;
   public $siteTitle: Observable<string>;
-  public $user: Observable<User>; 
+  public $user: Observable<User>;
+  
+  public UserRole = UserRole;
 
-  //Si se hace click en cualquier lugar del body
-  //el menu se cierra
-  @HostListener('body: click')
-  public onBodyClick(): void {
-    this.menuOpen = false;
-    this.accountMenuOpen = false;
-  }
+  private unsubscribe: Subject<void>;
 
   constructor(
     private store: Store,
@@ -31,6 +35,7 @@ export class MainLayout implements OnInit {
   ) {
     this.menuOpen = false;
     this.accountMenuOpen = false;
+    this.unsubscribe = new Subject();
   }
 
   public ngOnInit(): void {
@@ -45,6 +50,27 @@ export class MainLayout implements OnInit {
     if(this.store.user == null) {
       this.userApi.load();
     }
+
+    //Si se hace click en cualquier lugar del body
+    //el menu se cierra con la excepción de dos elementos
+    //que queremos ignorar para su propio funcionamiento
+    fromEvent(document.body, 'click', { capture: true })
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe((e: any) => {
+        if(e.target != this.menuButtonRef.nativeElement && e.target.parentElement != this.menuRef.nativeElement) {
+          this.menuOpen = false;
+          this.accountMenuOpen = false;
+        }
+      });
+  }
+
+  //Técnica de unsubscribe de observables en componentes para evitar
+  //filtrado de memoria. Al destruir el componente enviamos un notificación
+  //al Subject unsubscribe y todos los observables con un pipe "takeUntil(this.unsubscribe)"
+  //en el componente se desuscriben y liberan esa memoria
+  public ngOnDestroy(): void {
+    this.unsubscribe.next();
+    this.unsubscribe.complete();
   }
 
   //El evento para abrir o cerrar cancela el event bubbling para evitar
@@ -59,11 +85,12 @@ export class MainLayout implements OnInit {
   }
 
   public handleMenuNavigate(): void {
-    console.log('clicked');
     this.menuOpen = false;
   }
 
   public async logout(): Promise<void> {
+    this.store.siteMessage = { type: MessageType.Info, text: 'Saliendo del sistema...' }; 
+
     const response = await firstValueFrom(this.sessionApi.logout());
     if(response.success) {
       this.store.closeSession();

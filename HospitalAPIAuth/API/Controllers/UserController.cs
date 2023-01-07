@@ -49,7 +49,7 @@ namespace API.Controllers
         [Authorize]
         public async Task<ActionResult<APIResponse>> GetCurrentUser()
         {
-            User? user = await this._userService.FindUser(Convert.ToInt32(HttpContext.Items[Claims.User]));
+            User? user = await this._userService.FindUser(Convert.ToInt32(HttpContext.Items[Claims.UserId]));
             if (user == null)
             {
                 return HttpErrors.NotFound("Usuario no existe en el sistema");
@@ -65,14 +65,17 @@ namespace API.Controllers
 
         [HttpPost]
         [Authorize(UserRole.Administrator)]
-        public async Task<ActionResult<APIResponse>> InsertUser(InsertUserDTO data)
+        public async Task<ActionResult<APIResponse>> InsertUser(InsertUpdateUserDTO data)
         {
             APIResponse response = new();
             response.Success = this._userValidator.ValidateInsert(data, response.Messages);
 
             if (response.Success)
             {
-                User user = this._mapper.Map<InsertUserDTO, User>(data);
+                User user = this._mapper.Map<InsertUpdateUserDTO, User>(data);
+                user.PasswordSalt = Crypter.GetRandomSalt();
+                user.Password = Crypter.Hash(data.NewPassword!, user.PasswordSalt);
+                
                 await this._userService.InsertUser(user);
                 response.Data = this._mapper.Map<User, GetUserDTO>(user);
                 response.Messages.Add("Usuario ha sido insertado");
@@ -81,10 +84,40 @@ namespace API.Controllers
             return response;
         }
 
-        [HttpPatch]
-        [Route("info/{id}")]
+        [HttpPut]
+        [Route("me")]
+        [Authorize]
+        public async Task<ActionResult<APIResponse>> UpdateUser(UpdateSelfUserDTO data)
+        {
+            int id = Convert.ToInt32(HttpContext.Items[Claims.UserId]);
+            User? user = await this._userService.FindUser(id);
+            if (user == null)
+            {
+                return HttpErrors.NotFound("Usuario no existe en el sistema");
+            }
+
+            APIResponse response = new();
+            response.Success = this._userValidator.ValidateUpdateSelf(id, data, response.Messages);
+
+            if (response.Success)
+            {
+                if(!string.IsNullOrWhiteSpace(data.NewPassword))
+                { 
+                    user.Password = Crypter.Hash(data.NewPassword, user.PasswordSalt);
+                }
+
+                await this._userService.UpdateUser(this._mapper.Map(data, user));
+                response.Data = this._mapper.Map<User, GetUserDTO>(user);
+                response.Messages.Add("Usuario ha sido actualizado");
+            }
+
+            return response;
+        }
+
+        [HttpPut]
+        [Route("{id}")]
         [Authorize(UserRole.Administrator)]
-        public async Task<ActionResult<APIResponse>> UpdateUserInfo(int id, UpdateUserInfoDTO data)
+        public async Task<ActionResult<APIResponse>> UpdateUser(int id, InsertUpdateUserDTO data)
         {
             User? user = await this._userService.FindUser(id);
             if (user == null)
@@ -93,109 +126,18 @@ namespace API.Controllers
             }
 
             APIResponse response = new();
-            response.Success = this._userValidator.ValidateUpdateInfo(user.Id, data, response.Messages, !Convert.ToBoolean(HttpContext.Items[Claims.SuperAdmin]));
+            response.Success = this._userValidator.ValidateUpdate(id, data, Convert.ToBoolean(HttpContext.Items[Claims.SuperAdmin]), response.Messages);
 
             if (response.Success)
             {
-                await this._userService.UpdateUserInfo(this._mapper.Map(data, user));
+                if(!string.IsNullOrWhiteSpace(data.NewPassword))
+                { 
+                    user.Password = Crypter.Hash(data.NewPassword, user.PasswordSalt);
+                }
+
+                await this._userService.UpdateUser(this._mapper.Map(data, user));
                 response.Data = this._mapper.Map<User, GetUserDTO>(user);
                 response.Messages.Add("Usuario ha sido actualizado");
-            }
-
-            return response;
-        }
-
-        [HttpPatch]
-        [Route("info")]
-        [Authorize]
-        public async Task<ActionResult<APIResponse>> UpdateUserInfo(UpdateUserInfoDTO data)
-        {
-            User? user = await this._userService.FindUser(Convert.ToInt32(HttpContext.Items[Claims.User]));
-            if (user == null)
-            {
-                return HttpErrors.NotFound("Usuario no existe en el sistema");
-            }
-
-            APIResponse response = new();
-            response.Success = this._userValidator.ValidateUpdateInfo(user.Id, data, response.Messages);
-
-            if (response.Success)
-            {
-                await this._userService.UpdateUserInfo(this._mapper.Map(data, user));
-                response.Data = this._mapper.Map<User, GetUserDTO>(user);
-                response.Messages.Add("Usuario ha sido actualizado");
-            }
-
-            return response;
-        }
-
-        [HttpPatch]
-        [Route("email/{id}")]
-        [Authorize]
-        public async Task<ActionResult<APIResponse>> UpdateUserEmail(int id, UpdateUserEmailDTO data)
-        {
-            User? user = await this._userService.FindUser(id);
-            if (user == null)
-            {
-                return HttpErrors.NotFound("Usuario no existe en el sistema");
-            }
-
-            APIResponse response = new();
-            response.Success = this._userValidator.ValidateUpdateEmail(user.Id, data, response.Messages, !Convert.ToBoolean(HttpContext.Items[Claims.SuperAdmin]));
-
-            if (response.Success)
-            {
-                await this._userService.UpdateUserEmail(this._mapper.Map(data, user));
-                response.Data = this._mapper.Map<User, GetUserDTO>(this._mapper.Map(data, user));
-                response.Messages.Add("Correo ha sido actualizado");
-            }
-
-            return response;
-        }
-
-        [HttpPatch]
-        [Route("email")]
-        [Authorize]
-        public async Task<ActionResult<APIResponse>> UpdateUserEmail(UpdateUserEmailDTO data)
-        {
-            User? user = await this._userService.FindUser(Convert.ToInt32(HttpContext.Items[Claims.User]));
-            if (user == null)
-            {
-                return HttpErrors.NotFound("Usuario no existe en el sistema");
-            }
-
-            APIResponse response = new();
-            response.Success = this._userValidator.ValidateUpdateEmail(user.Id, data, response.Messages);
-
-            if (response.Success)
-            {
-                await this._userService.UpdateUserEmail(this._mapper.Map(data, user));
-                response.Data = this._mapper.Map<User, GetUserDTO>(this._mapper.Map(data, user));
-                response.Messages.Add("Correo ha sido actualizado");
-            }
-
-            return response;
-        }
-
-        [HttpPatch]
-        [Route("password")]
-        [Authorize]
-        public async Task<ActionResult<APIResponse>> UpdateUserPassword(UpdateUserPasswordDTO data)
-        {
-            User? user = await this._userService.FindUser(Convert.ToInt32(HttpContext.Items[Claims.User]));
-            if (user == null)
-            {
-                return HttpErrors.NotFound("Usuario no existe en el sistema");
-            }
-
-            APIResponse response = new();
-            response.Success = this._userValidator.ValidateUpdatePassword(data, response.Messages);
-
-            if (response.Success)
-            {
-                await this._userService.UpdateUserPassword(this._mapper.Map(data, user));
-                response.Data = this._mapper.Map<User, GetUserDTO>(user);
-                response.Messages.Add("Contraseña ha sido actualizada");
             }
 
             return response;

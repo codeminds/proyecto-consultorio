@@ -4,6 +4,7 @@ import { MainLayout } from '@shared/layouts/main/main.layout';
 import { AuthGuard } from '@guards/auth/auth.guard';
 import { LoginGuard } from '@guards/login/login.guard';
 import { LoginPage } from './login/login.page';
+import { UserRole } from '@utils/enums';
 
 const routes: Routes = [
   {
@@ -17,6 +18,7 @@ const routes: Routes = [
       },
       {
         path: 'admin',
+        data: { roles: [UserRole.Administrator] },
         loadChildren: () => import('@administration/administration.module').then((m) => m.AdministrationModule),
       },
       {

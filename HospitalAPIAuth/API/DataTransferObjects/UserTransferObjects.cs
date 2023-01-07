@@ -10,29 +10,21 @@
         public bool IsSuperAdmin { get; set; }
     }
 
-    public class InsertUserDTO
+    public class InsertUpdateUserDTO
     { 
         public string? Email { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
-        public string? Password { get; set; }
+        public string? NewPassword { get; set; }
         public int? RoleId { get; set; }
     }
 
-    public class UpdateUserInfoDTO
+    public class UpdateSelfUserDTO
     { 
+        public string? Email { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
-    }
-
-    public class UpdateUserEmailDTO
-    {
-        public string? Email { get; set; }
-    }
-
-    public class UpdateUserPasswordDTO
-    {
-        public string? Password { get; set; }
+        public string? NewPassword { get; set; }
     }
 
     public class FilterUserDTO

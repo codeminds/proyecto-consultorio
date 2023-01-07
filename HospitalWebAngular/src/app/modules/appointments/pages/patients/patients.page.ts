@@ -91,7 +91,7 @@ export class PatientsPage implements OnInit{
       this.saving = true;
       
       const isNew = this.patient.id == null
-      const response = await firstValueFrom(isNew ? this.patientApi.post(this.patient) : this.patientApi.put(this.patient.id, this.patient));  
+      const response = await firstValueFrom(isNew ? this.patientApi.post(this.patient) : this.patientApi.put(this.patient));  
       this.messages = [];
       
       if(response.success) {

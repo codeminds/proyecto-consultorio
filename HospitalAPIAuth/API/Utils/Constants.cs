@@ -3,7 +3,9 @@
     public static class Claims
     {
         public const string IssueDate = "issue_date";
+        public const string UserId = "user_id";
         public const string User = "user";
+        public const string RoleId = "role_id";
         public const string Role = "role";
         public const string Session = "session";
         public const string SuperAdmin = "super_admin";

@@ -94,14 +94,12 @@ export class DoctorsPage implements OnInit{
       this.saving = true;
       
       const isNew = this.doctor.id == null
-      const response = await firstValueFrom(isNew ? this.doctorApi.post(this.doctor) : this.doctorApi.put(this.doctor.id, this.doctor));  
+      const response = await firstValueFrom(isNew ? this.doctorApi.post(this.doctor) : this.doctorApi.put(this.doctor));  
       this.messages = [];
       
       if(response.success) {
-        if(isNew) {
-          this.panelOpen = true;
-          this.filter = new FilterDoctorDTO({ documentId: response.data.documentId });
-        }
+        this.panelOpen = true;
+        this.filter = new FilterDoctorDTO({ documentId: response.data.documentId });
 
         this.modalOpen = false;
         this.store.siteMessage = { type: MessageType.Success, text: response.messages[0] };
