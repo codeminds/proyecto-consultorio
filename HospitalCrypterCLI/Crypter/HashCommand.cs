@@ -1,6 +1,5 @@
 ﻿using System.CommandLine;
 using System.CommandLine.NamingConventionBinder;
-using System.ComponentModel;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -32,7 +31,7 @@ namespace Crypter
                 IsRequired = false,
             };
 
-            //Agregamos alias para poder definir el valor de este parámetro con --salt y -s
+            //Agregamos alias para poder definir el valor de este parámetro con --salt-format y -f
             saltFormatOption.AddAlias("-f");
             //Al ser opcional debemos proporcionar un valor por defecto en caso de no ser especificado
             saltFormatOption.SetDefaultValue(SaltFormat.text);

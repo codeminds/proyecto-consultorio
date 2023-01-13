@@ -1,13 +1,15 @@
 ﻿using System.CommandLine;
 using Crypter;
 
-//Creamos el comando para que la consola pueda responder al mismo
-//si el usuario ejecuta la aplicación por su nombre en la consola
-//seguido del nombre del comando
-Command hashCommand = HashCommand.CreateCommand();
+
 
 RootCommand rootCommand = new RootCommand();
-rootCommand.AddCommand(hashCommand);
+
+//Creamos los comandos para que la consola pueda responder al mismo
+//si el usuario ejecuta la aplicación por su nombre en la consola
+//seguido del nombre del comando
+rootCommand.AddCommand(HashCommand.CreateCommand());
+rootCommand.AddCommand(RSACommand.CreateCommand());
 
 /* Comentar esta línea para probar comandos específicos */
 rootCommand.Invoke(args);
