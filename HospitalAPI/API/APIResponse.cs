@@ -11,8 +11,8 @@ namespace API
 
         public APIResponse()
         {
-            this.Success = true;
             this.StatusCode = HttpStatusCode.OK;
+            this.Success = true;
             this.Messages = new List<string>();
         }
     }
