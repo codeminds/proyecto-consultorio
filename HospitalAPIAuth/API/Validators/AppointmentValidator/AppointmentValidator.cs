@@ -134,10 +134,5 @@ namespace API.Validators
 
             return !innerMessages.Any();
         }
-
-        public bool ValidateDelete(int id, List<string> messages)
-        {
-            return true;
-        }
     }
 }

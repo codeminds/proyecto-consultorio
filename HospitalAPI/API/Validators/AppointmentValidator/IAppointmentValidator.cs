@@ -6,6 +6,5 @@ namespace API.Validators
     {
         bool ValidateInsert(InsertUpdateAppointmentDTO data, List<string> messages);
         bool ValidateUpdate(int id, InsertUpdateAppointmentDTO data, List<string> messages);
-        bool ValidateDelete(int id, List<string> messages);
     }
 }

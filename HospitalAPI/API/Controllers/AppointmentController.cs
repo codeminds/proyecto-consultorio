@@ -116,14 +116,11 @@ namespace API.Controllers
             }
 
             APIResponse response = new();
-            response.Success = this._appointmentValidator.ValidateDelete(id, response.Messages);
+ 
+            await this._appointmentService.DeleteAppointment(appointment);
+            response.Data = this._mapper.Map<Appointment, GetAppointmentDTO>(appointment);
+            response.Messages.Add("Cita ha sido borrada");
 
-            if (response.Success)
-            {
-                await this._appointmentService.DeleteAppointment(appointment);
-                response.Data = this._mapper.Map<Appointment, GetAppointmentDTO>(appointment);
-                response.Messages.Add("Cita ha sido borrada");
-            }
             return response;
         }
     }
