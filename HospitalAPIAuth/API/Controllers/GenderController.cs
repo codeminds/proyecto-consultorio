@@ -25,9 +25,7 @@ namespace API.Controllers
         [HttpGet]
         public async Task<ActionResult<APIResponse>> ListGenders()
         {
-            List<Gender> list = await this._genderService
-                                        .ListGenders()
-                                        .ToListAsync();
+            List<Gender> list = await this._genderService.ListGenders().ToListAsync();
 
             APIResponse response = new()
             {

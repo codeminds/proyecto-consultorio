@@ -35,8 +35,8 @@ namespace API
         { 
             APIResponse response = new()
             {
-                Success = false,
                 StatusCode = statusCode,
+                Success = false,
                 Data = data,
             };
 

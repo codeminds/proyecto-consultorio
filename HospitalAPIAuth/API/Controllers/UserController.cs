@@ -31,10 +31,7 @@ namespace API.Controllers
         public async Task<ActionResult<APIResponse>> ListUsers([FromQuery] FilterUserDTO data)
         {
             UserListFilter filter = this._mapper.Map<FilterUserDTO, UserListFilter>(data);
-            List<User> list = await this._userService
-                                        .ListUsers(filter)
-                                        .Include(u => u.Role)
-                                        .ToListAsync();
+            List<User> list = await this._userService.ListUsers(filter).ToListAsync();
 
             APIResponse response = new()
             {

@@ -25,9 +25,7 @@ namespace API.Controllers
         [HttpGet]
         public async Task<ActionResult<APIResponse>> ListFields()
         {
-            List<Field> list = await this._fieldService
-                                        .ListFields()
-                                        .ToListAsync();
+            List<Field> list = await this._fieldService.ListFields().ToListAsync();
 
             APIResponse response = new()
             {

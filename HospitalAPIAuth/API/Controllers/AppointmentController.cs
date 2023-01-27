@@ -31,14 +31,7 @@ namespace API.Controllers
         public async Task<ActionResult<APIResponse>> ListAppointments([FromQuery] FilterAppointmentDTO data)
         { 
             AppointmentListFilter filter = this._mapper.Map<FilterAppointmentDTO, AppointmentListFilter>(data);
-
-            List<Appointment> list = await this._appointmentService
-                                        .ListAppointments(filter)
-                                        .Include(a => a.Doctor)
-                                        .Include(a => a.Doctor.Field)
-                                        .Include(a => a.Patient)
-                                        .Include(a => a.Patient.Gender)
-                                        .ToListAsync();
+            List<Appointment> list = await this._appointmentService.ListAppointments(filter).ToListAsync();
 
             APIResponse response = new()
             {

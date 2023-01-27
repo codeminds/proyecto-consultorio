@@ -28,10 +28,7 @@ namespace API.Controllers
         public async Task<ActionResult<APIResponse>> ListDoctors([FromQuery] FilterDoctorDTO data)
         {
             DoctorListFilter filter = this._mapper.Map<FilterDoctorDTO, DoctorListFilter>(data);
-            List<Doctor> list = await this._doctorService
-                                        .ListDoctors(filter)
-                                        .Include(d => d.Field)
-                                        .ToListAsync();
+            List<Doctor> list = await this._doctorService.ListDoctors(filter).ToListAsync();
 
             APIResponse response = new()
             {
@@ -46,10 +43,7 @@ namespace API.Controllers
         [Route("search")]
         public async Task<ActionResult<APIResponse>> SearchDoctors([FromQuery] string[] s)
         {
-
-            List<Doctor> list = await this._doctorService
-                                        .SearchDoctors(s)
-                                        .ToListAsync();
+            List<Doctor> list = await this._doctorService.SearchDoctors(s).ToListAsync();
 
             APIResponse response = new()
             {

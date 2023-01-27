@@ -22,6 +22,7 @@ namespace API.Services
 
             return this._database
                     .Doctor
+                    .Include(p => p.Field)
                     .Where(d => (string.IsNullOrWhiteSpace(filter.DocumentId) || d.DocumentId.Contains(filter.DocumentId))
                         && (string.IsNullOrWhiteSpace(filter.FirstName) || d.FirstName.Contains(filter.FirstName))
                         && (string.IsNullOrWhiteSpace(filter.LastName) || d.LastName.Contains(filter.LastName))
@@ -71,6 +72,7 @@ namespace API.Services
         {
             this._database.Doctor.Update(entity);
             await this._database.SaveChangesAsync();
+            await this._database.Entry(entity).Reference(d => d.Field).LoadAsync();
         }
 
         public async Task DeleteDoctor(Doctor entity)

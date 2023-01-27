@@ -28,14 +28,11 @@ namespace API.Controllers
         public async Task<ActionResult<APIResponse>> ListPatients([FromQuery] FilterPatientDTO data)
         {
             PatientListFilter filter = this._mapper.Map<FilterPatientDTO, PatientListFilter>(data);
-            List<Patient> list = await this._patientService
-                                        .ListPatients(filter)
-                                        .Include(p => p.Gender)
-                                        .ToListAsync();
+            List<Patient> list = await this._patientService.ListPatients(filter).ToListAsync();
 
             APIResponse response = new()
             {
-            Data = list.Select(p => this._mapper.Map<Patient, GetPatientDTO>(p))
+                Data = list.Select(p => this._mapper.Map<Patient, GetPatientDTO>(p))
             };
 
             return response;
@@ -46,10 +43,7 @@ namespace API.Controllers
         [Route("search")]
         public async Task<ActionResult<APIResponse>> SearchPatients([FromQuery] string[] s)
         {
-
-            List<Patient> list = await this._patientService
-                                        .SearchPatients(s)
-                                        .ToListAsync();
+            List<Patient> list = await this._patientService.SearchPatients(s).ToListAsync();
 
             APIResponse response = new()
             {

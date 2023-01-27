@@ -20,6 +20,7 @@ namespace API.Services
 
             return this._database
                     .User
+                    .Include(u => u.Role)
                     .Where(u => (string.IsNullOrWhiteSpace(filter.Email) || u.Email.Contains(filter.Email))
                         && (string.IsNullOrWhiteSpace(filter.FirstName) || u.FirstName.Contains(filter.FirstName))
                         && (string.IsNullOrWhiteSpace(filter.LastName) || u.LastName.Contains(filter.LastName))
@@ -56,6 +57,7 @@ namespace API.Services
         {
             this._database.User.Update(entity);
             await this._database.SaveChangesAsync();
+            await this._database.Entry(entity).Reference(u => u.Role).LoadAsync();
         }
 
         public async Task DeleteUser(User entity)

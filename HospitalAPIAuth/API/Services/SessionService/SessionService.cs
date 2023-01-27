@@ -21,6 +21,8 @@ namespace API.Services
         {
             return this._database
                     .Session
+                    .Include(s => s.User)
+                    .Include(s => s.User.Role)
                     .Where(s => s.UserId == userId
                         && (string.IsNullOrWhiteSpace(filter.AddressRefreshed) || s.AddressRefreshed!.Contains(filter.AddressRefreshed))
                         && (string.IsNullOrWhiteSpace(filter.AddressIssued) || s.AddressIssued.Contains(filter.AddressIssued))

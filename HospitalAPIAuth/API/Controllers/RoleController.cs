@@ -25,9 +25,7 @@ namespace API.Controllers
         [HttpGet]
         public async Task<ActionResult<APIResponse>> List()
         {
-            List<Role> list = await this._roleService
-                                        .ListRoles()
-                                        .ToListAsync();
+            List<Role> list = await this._roleService.ListRoles().ToListAsync();
 
             APIResponse response = new()
             {

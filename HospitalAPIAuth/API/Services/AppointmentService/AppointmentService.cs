@@ -27,6 +27,10 @@ namespace API.Services
 
             return this._database
                     .Appointment
+                    .Include(a => a.Doctor)
+                    .Include(a => a.Doctor.Field)
+                    .Include(a => a.Patient)
+                    .Include(a => a.Patient.Gender)
                     .Where(a => (!filter.DateFrom.HasValue || a.Date >= filter.DateFrom)
                                     && (!filter.DateTo.HasValue || a.Date <= filter.DateTo)
                                     && doctors.Contains(a.Doctor)
@@ -49,16 +53,16 @@ namespace API.Services
         {
             this._database.Appointment.Add(entity);
             await this._database.SaveChangesAsync();
-            await this._database.Entry(entity).Reference(a => a.Doctor).LoadAsync();
-            await this._database.Entry(entity).Reference(a => a.Doctor.Field).LoadAsync();
-            await this._database.Entry(entity).Reference(a => a.Patient).LoadAsync();
-            await this._database.Entry(entity).Reference(a => a.Patient.Gender).LoadAsync();
+            await this._database.Entry(entity).Reference(a => a.Doctor).Query().Include(d => d.Field).LoadAsync();
+            await this._database.Entry(entity).Reference(a => a.Patient).Query().Include(p => p.Gender).LoadAsync();
         }
 
         public async Task UpdateAppointment(Appointment entity)
         {
             this._database.Appointment.Update(entity);
             await this._database.SaveChangesAsync();
+            await this._database.Entry(entity).Reference(a => a.Doctor).Query().Include(d => d.Field).LoadAsync();
+            await this._database.Entry(entity).Reference(a => a.Patient).Query().Include(p => p.Gender).LoadAsync();
         }
 
         public async Task DeleteAppointment(Appointment entity)
