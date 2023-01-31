@@ -25,6 +25,7 @@ namespace API.Validators
             {
                 innerMessages.Add("Cita no puede tener una fecha anterior a la fecha actual");
             }
+            //IMPORTANTE: Sólo para proyecto Angular
             else
             {
                 bool doctorHasConflict = this._database
@@ -83,6 +84,11 @@ namespace API.Validators
             {
                 innerMessages.Add("Fecha es requerida");
             }
+            else if (data.Date <= DateTime.Now)
+            {
+                innerMessages.Add("Cita no puede tener una fecha anterior a la fecha actual");
+            }
+            //IMPORTANTE: Sólo para proyecto Angular
             else
             {
                 bool doctorHasConflict = this._database
