@@ -1,18 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace API.Data.Models
+namespace API.Data.Models;
+
+public partial class Role
 {
-    public partial class Role
-    {
-        public Role()
-        {
-            User = new HashSet<User>();
-        }
+    public int Id { get; set; }
 
-        public int Id { get; set; }
-        public string Name { get; set; } = null!;
+    public string Name { get; set; } = null!;
 
-        public virtual ICollection<User> User { get; set; }
-    }
+    public virtual ICollection<User> User { get; } = new List<User>();
 }

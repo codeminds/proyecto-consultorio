@@ -7,7 +7,7 @@
     </div>
     <!-- Sintaxis para obsevables con async pipes -->
     <!-- El evitar el event bubbling en el sidenav evita que este se cierre por el host listener de body  -->
-    <nav class="account-menu" *ngIf="($user | async) as user">
+    <nav class="account-menu" *ngIf="(user$ | async) as user">
         <button
             #menuButton
             class="account-menu-toggle material-symbols-sharp"
@@ -57,7 +57,7 @@
             </li>
         </ul>
 
-        <ng-container *ngIf="($user | async)?.hasRoles([UserRole.Administrator])">
+        <ng-container *ngIf="(user$ | async)?.hasRoles([UserRole.Administrator])">
             <h3 class="category main">Administración</h3>
             <ul class="menu" (click)="handleMenuNavigate()">
                 <li routerLinkActive="active">
@@ -70,7 +70,7 @@
     </nav>
     <main class="page">
         <!-- Sintaxis para obsevables con async pipes -->
-        <h1 *ngIf="($siteTitle | async) as siteTitle">{{siteTitle}}</h1>
+        <h1 *ngIf="(siteTitle$ | async) as siteTitle">{{siteTitle}}</h1>
         <!-- 
         Cuando usamos este layout como component de una ruta padre, la ruta hija inyecta su propio
         component justo después de este tag especial "router-outlet".

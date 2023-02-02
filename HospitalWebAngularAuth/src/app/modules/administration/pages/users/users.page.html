@@ -70,7 +70,7 @@
          <td>{{user.firstName}} {{user.lastName}}</td>
          <td>{{user.role.name}}</td>    
          <td class="buttons">
-            <ng-container *ngIf="canEdit(($user | async)?.isSuperAdmin, user)">
+            <ng-container *ngIf="canEdit((user$ | async)?.isSuperAdmin, user)">
                <button class="button success" (click)="insertUpdate(user)">
                   <i class="material-symbols-sharp">edit</i>
                   <span>Editar</span>
@@ -80,7 +80,7 @@
                   <span>Borrar</span>
                </button>
             </ng-container>
-            <ng-container *ngIf="!canEdit(($user | async)?.isSuperAdmin, user)">
+            <ng-container *ngIf="!canEdit((user$ | async)?.isSuperAdmin, user)">
                <button class="button neutral" disabled title="No puede modificar otros administradores">
                   <i class="material-symbols-sharp">edit</i>
                   <span>Editar</span>
@@ -103,7 +103,7 @@
                   <span class="label">Rol:</span>
                   <span>{{user.role.name}}</span>
             </p>
-            <div *ngIf="canEdit(($user | async)?.isSuperAdmin, user)" class="buttons">
+            <div *ngIf="canEdit((user$ | async)?.isSuperAdmin, user)" class="buttons">
                   <button class="button success" (click)="insertUpdate(user)">
                      <i class="material-symbols-sharp">edit</i>
                      <span>Editar</span>
@@ -113,7 +113,7 @@
                      <span>Borrar</span>
                   </button>
             </div>
-            <div *ngIf="!canEdit(($user | async)?.isSuperAdmin, user)" class="buttons">
+            <div *ngIf="!canEdit((user$ | async)?.isSuperAdmin, user)" class="buttons">
                <button class="button neutral" disabled title="No puede modificar administradores">
                   <i class="material-symbols-sharp">edit</i>
                   <span>Editar</span>

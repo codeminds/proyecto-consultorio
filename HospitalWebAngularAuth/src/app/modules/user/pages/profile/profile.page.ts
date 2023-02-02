@@ -43,7 +43,7 @@ export class ProfilePage implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    this.store.$user
+    this.store.user$
       .pipe(
         takeUntil(this.unsubcribe),
         //Con este pipe de RxJS ignoramos en la suscripción la emisión de valores

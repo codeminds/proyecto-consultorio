@@ -35,7 +35,7 @@ export class PatientsPage implements OnInit{
   public filter: QueryParams;
   public deleteId: number;
   public messages: string[];
-  public $user: Observable<User>;
+  public user$: Observable<User>;
 
   public InputType = InputType;
   public DateType = DateType;
@@ -60,7 +60,7 @@ export class PatientsPage implements OnInit{
   }
 
   public ngOnInit(): void {
-    this.$user = this.store.$user;
+    this.user$ = this.store.user$;
     this.loadGenders();
     this.list();
   }

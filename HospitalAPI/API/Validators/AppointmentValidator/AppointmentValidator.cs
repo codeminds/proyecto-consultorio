@@ -65,7 +65,7 @@ namespace API.Validators
             {
                 innerMessages.Add("Paciente es requerido");
             }
-            else if (!this._database.Patient.Any(d => d.Id == data.PatientId))
+            else if (!this._database.Patient.Any(p => p.Id == data.PatientId))
             {
                 innerMessages.Add("Debe seleccionar un paciente que esté registrado en el sistema");
             }
@@ -131,7 +131,7 @@ namespace API.Validators
             {
                 innerMessages.Add("Paciente es requerido");
             }
-            else if (!this._database.Patient.Any(d => d.Id == data.PatientId))
+            else if (!this._database.Patient.Any(p => p.Id == data.PatientId))
             {
                 innerMessages.Add("Debe seleccionar un paciente que esté registrado en el sistema");
             }

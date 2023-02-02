@@ -37,7 +37,7 @@
     </nav>
     <main class="page">
         <!-- Sintaxis para obsevables con async pipes -->
-        <h1 *ngIf="($siteTitle | async) as siteTitle">{{siteTitle}}</h1>
+        <h1 *ngIf="(siteTitle$ | async) as siteTitle">{{siteTitle}}</h1>
         <!-- 
         Cuando usamos este layout como component de una ruta padre, la ruta hija inyecta su propio
         component justo después de este tag especial "router-outlet".

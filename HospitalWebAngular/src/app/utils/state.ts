@@ -3,7 +3,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class State<T> {
   private _state: BehaviorSubject<T>;
 
-  public get $value(): Observable<T> {
+  public get value$(): Observable<T> {
     return this._state.asObservable();
   }
 

@@ -1,6 +1,6 @@
 <!-- Controles de página -->
 <!-- Sintaxis para obsevables con async pipes -->
-<div *ngIf="($user | async) as user" class="page-controls">
+<div *ngIf="(user$ | async) as user" class="page-controls">
     <button *ngIf="canEdit(user)" class="button success" (click)="insertUpdate()">
         <i class="material-symbols-sharp">add_circle</i>
         <span>Agregar</span>
@@ -135,7 +135,7 @@
 
 <!--- Tabla de resultados -->
 <!-- Sintaxis para obsevables con async pipes -->
-<app-panel *ngIf="($user | async) as user" class="slim">
+<app-panel *ngIf="(user$ | async) as user" class="slim">
     <app-table 
         [headers]="[{ label: 'Fecha', size: 2 },
                     { label: 'Doctor', size: 1.5 },

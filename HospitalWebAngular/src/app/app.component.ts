@@ -12,7 +12,7 @@ import { Store } from '@store';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  public $message: Observable<Message>;
+  public message$: Observable<Message>;
 
   constructor(
     private store: Store,
@@ -22,10 +22,10 @@ export class AppComponent implements OnInit {
   ){}
 
   public ngOnInit(): void {
-    this.$message = this.store.$siteMessage;
+    this.message$ = this.store.siteMessage$;
 
     //Cuando el state de App cambia se modifica el título de la pestaña
-    this.store.$siteTitle.subscribe((title) => {
+    this.store.siteTitle$.subscribe((title) => {
       this.title.setTitle(`Hospital Angular${title ? ' | ' + title : ''}`);
     });
 

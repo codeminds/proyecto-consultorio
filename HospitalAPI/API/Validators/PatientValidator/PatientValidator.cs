@@ -30,7 +30,7 @@ namespace API.Validators
             {
                 innerMessages.Add("Cédula sólo puede contener números");
             }
-            else if (this._database.Patient.Any(d => d.DocumentId == data.DocumentId))
+            else if (this._database.Patient.Any(p => p.DocumentId == data.DocumentId))
             {
                 innerMessages.Add("Cédula ya está registrada en el sistema");
             }
@@ -61,7 +61,7 @@ namespace API.Validators
             {
                 innerMessages.Add("Género es requerido");
             }
-            else if (!this._database.Gender.Any(f => f.Id == data.GenderId))
+            else if (!this._database.Gender.Any(g => g.Id == data.GenderId))
             {
                 innerMessages.Add("Debe seleccionar un género que exista en el sistema");
             }
@@ -98,7 +98,7 @@ namespace API.Validators
             {
                 innerMessages.Add("Cédula sólo puede contener números");
             }
-            else if (this._database.Patient.Any(d => d.DocumentId == data.DocumentId && d.Id != id))
+            else if (this._database.Patient.Any(p => p.DocumentId == data.DocumentId && p.Id != id))
             {
                 innerMessages.Add("Cédula ya está registrada en el sistema");
             }
@@ -129,7 +129,7 @@ namespace API.Validators
             {
                 innerMessages.Add("Género es requerido");
             }
-            else if (!this._database.Gender.Any(f => f.Id == data.GenderId))
+            else if (!this._database.Gender.Any(g => g.Id == data.GenderId))
             {
                 innerMessages.Add("Debe seleccionar un género que exista en el sistema");
             }

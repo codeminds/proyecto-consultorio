@@ -56,6 +56,7 @@ BEGIN
 		BirthDate DATETIME2(7) NOT NULL,
 		GenderId INT NOT NULL
 		CONSTRAINT PKPatient PRIMARY KEY (Id),
+		CONSTRAINT UXPatientDocumentId UNIQUE (DocumentId),
 		CONSTRAINT FKGenderPatientGenderId FOREIGN KEY (GenderId) REFERENCES Gender (Id)
 	)
 END
