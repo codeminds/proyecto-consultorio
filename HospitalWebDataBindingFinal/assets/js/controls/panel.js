@@ -1,20 +1,13 @@
 export class Panel {
-    #toggle;
-    #toggleSection;
+   static init(toggle, toggleSection) {
+      //Se valida si los parámetros son elementos de HTML
+      if(!toggle instanceof HTMLElement || !toggleSection instanceof HTMLElement) {
+         throw new Error('Panel does not have toggle or toggleSection elements');
+      }
 
-    constructor(toggle, toggleSection) {
-        this.#toggle = toggle;
-        this.#toggleSection = toggleSection;
-
-        if(this.#toggle == null || this.#toggleSection == null) {
-            throw new Error('Panel does not have toggle or toggleSection elements');
-        }
-
-        this.#toggle.addEventListener('click', () => { this.togglePanel() });
-    }
-
-    togglePanel() {
-        this.#toggle.classList.toggle('open');
-        this.#toggleSection.classList.toggle('open');
-    }
+      toggle.addEventListener('click', () => {
+         toggle.classList.toggle('open');
+         toggleSection.classList.toggle('open');
+      });
+   }
 }

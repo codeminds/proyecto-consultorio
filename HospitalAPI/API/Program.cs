@@ -15,7 +15,7 @@ builder.Services.AddControllers()
                 .ConfigureApiBehaviorOptions(options => {
                     options.InvalidModelStateResponseFactory = context =>
                     {
-                        return HttpErrors.BadRequest(data: "Modelo de datos inválido");
+                        return HttpErrors.BadRequest(data: "Invalid data model");
                     }; 
                 });
 

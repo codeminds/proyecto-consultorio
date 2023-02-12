@@ -1,89 +1,105 @@
 .form-field {
-    padding: 0.7rem;
+   padding: 0.7rem;
 }
 
-.form-field ::placeholder{
-    color: var(--color-placeholder);
-    font-size: inherit;
+.form-field>label {
+   display: inline-block;
+   font-weight: 700;
+   cursor: pointer;
+   margin-bottom: 0.5rem;
+   font-size: inherit;
 }
 
-.form-field label {
-    display: inline-block;
-    font-weight: 700;
-    cursor: pointer;
-    margin-bottom: 0.5rem;
-    font-size: 1.4rem;
+.form-field ::placeholder {
+   color: var(--color-placeholder);
 }
 
-.form-field input:not([type="radio"]):not([type="checkbox"]), .form-field textarea, .form-field select {
-    display: inline-block;
-    width: 100%;
-    padding: 0.5rem;
-    height: 2.8rem;
-    font-size: inherit;
-    background: rgba(255, 255, 255, 0.2);
-    color: inherit;
-    border: solid 0.1rem var(--color-form-field-input);
-    border-radius: 0.2rem;
-    outline: 0;
+.form-field input:not([type="checkbox"]):not([type="radio"]),
+.form-field select,
+.form-field textarea {
+   display: inline-block;
+   width: 100%;
+   padding: 0.5rem;
+   font-size: inherit;
+   color: inherit;
+   border: 0.1rem solid var(--color-form-field-border);
+   border-radius: 0.2rem;
+   outline: 0;
+   background: rgba(255, 255, 255, 0.4);
+}
+
+.form-field input:not([type="checkbox"]):not([type="radio"]):focus,
+.form-field select:focus,
+.form-field textarea:focus {
+   border-color: var(--color-form-field-focus);
 }
 
 .form-field select option {
-    background: var(--color-form-field-select);
-}
-
-.form-field input:not([type="radio"]):not([type="checkbox"]):focus, .form-field textarea:focus, .form-field select:focus {
-    border-color: var(--color-form-field-focus);
+   background: var(--color-form-field-option);
 }
 
 .form-field textarea {
-    min-height: 15rem;
-    resize: none;
+   min-height: 15rem;
+   resize: none;
+   /* Scroll para Firefox */
+   scrollbar-color: var(--color-scrollbar-light) var(--color-scrollbar-light);
+   scrollbar-width: thin;
 }
 
-.form-field textarea {
-    resize: vertical;
+/* Scroll para Chromium */
+.form-field textarea::-webkit-scrollbar-thumb {
+   background: var(--color-scrollbar-light);
+}
+
+.form-field textarea::-webkit-scrollbar {
+   width: 0.7rem;
+   background: var(--color-scrollbar-light);
 }
 
 .form-field label.check {
-    display: block;
+   display: block;
+   cursor: pointer;
 }
 
-.form-field label.check:last-of-type {
-    margin-bottom: 0;
+.form-field label.check:not(.inline):not(:last-child) {
+   margin-bottom: 0.4rem;
 }
 
 .form-field label.check.inline {
-    display: inline-block;
-    margin-right: 1.2rem;
+   display: inline-block;
+   margin-right: 1.2rem;
 }
 
 .form-field label.check span {
-    vertical-align: text-bottom;
+   vertical-align: text-bottom;
 }
 
 .form-field label.check i {
-    display: inline-block;
-    width: 2rem;
-    height: 2rem;
-    border: solid 0.1rem #ccc;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 0.2rem;
-    margin-right: 0.4rem;
-    vertical-align: middle;
+   display: inline-block;
+   width: 1.8rem;
+   height: 1.8rem;
+   border: 0.1rem solid var(--color-form-field-border);
+   border-radius: 0.2rem;
+   margin-right: 0.4rem;
+   vertical-align: middle;
+   transition: background-color 0.1s linear;
+   background: rgba(255, 255, 255, 0.3);
 }
 
-.form-field label.check :checked + i {
-    background-color: var(--color-main);
+.form-field label.check :checked+i {
+   background: var(--color-main);
 }
 
 .form-field label.check input {
-    display: none;
+   display: none;
 }
 
 @media screen and (max-width: 1024px) {
-    .form-field label.check.inline {
-        display: block;
-        margin-right: 0;
-    }
+   .form-field label.check.inline {
+      display: block;
+   }
+
+   .form-field label.check:not(:last-child) {
+      margin-bottom: 0.4rem;
+   }
 }

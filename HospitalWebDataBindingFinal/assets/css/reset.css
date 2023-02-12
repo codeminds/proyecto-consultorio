@@ -60,19 +60,19 @@ a:hover {
     text-decoration: none;
 }
 
-button {
+button, select {
 	cursor: pointer;
 }
 
 input {
-	padding: 0;
 	margin: 0;
+	padding: 0;
 }
 
-select, button {
-	cursor: pointer;
-}
-
+/* 
+Asegurar que todos los elementos basen su 
+ancho incluyendo el padding 
+*/
 * {
     box-sizing: border-box;
 }

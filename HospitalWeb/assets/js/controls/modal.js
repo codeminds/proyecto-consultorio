@@ -3,11 +3,13 @@ export class Modal {
    #onClose;
 
    constructor(modal, size = 'medium', onClose = null) {
-      if (modal == null) {
-         throw new Error('Modal does not have a valid element');
+      //Se valida si el parámetro es un elemento de HTML
+      if(modal instanceof HTMLElement) {
+         throw new Error('modal parameter must be an HTML element');
       }
 
-      if (onClose != null && typeof onClose != 'function') {
+      //El callback es opcional, pero de ser proporcionado debe ser una función
+      if(onClose != null && typeof onClose != 'function') {
          throw new Error('onClose parameter must be a function');
       }
 
@@ -25,7 +27,7 @@ export class Modal {
    }
 
    close() {
-      if (this.#onClose != null) {
+      if(this.#onClose != null) {
          this.#onClose();
       }
 

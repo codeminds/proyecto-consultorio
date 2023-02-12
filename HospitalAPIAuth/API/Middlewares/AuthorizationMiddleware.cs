@@ -31,7 +31,7 @@ namespace API.Middlewares
 
                 if (!context.Request.Headers.TryGetValue("Authorization", out StringValues token))
                 {
-                    SendResponse(context, HttpStatusCode.BadRequest, data: "Encabezado de autorización no está presente");
+                    SendResponse(context, HttpStatusCode.BadRequest, data: "Authorization header not present");
                     return;
                 }
 
@@ -91,7 +91,7 @@ namespace API.Middlewares
                 }
                 catch (SecurityTokenException)
                 {
-                    SendResponse(context, HttpStatusCode.Unauthorized, "Su sesión no es válida. Debe reingresar al sistema", "Token de acceso no es válido");
+                    SendResponse(context, HttpStatusCode.Unauthorized, "Su sesión no es válida. Debe reingresar al sistema", "Invalid access token");
                     return;
                 }
             }

@@ -1,3 +1,7 @@
+/* 
+Pantalla transparente que se posa encima del sitio web para
+dar una ventana alternativa para mostrar funcionalidades
+*/
 .modal {
    position: fixed;
    top: 0;
@@ -10,13 +14,16 @@
    overflow: auto;
    z-index: 100;
    display: none;
+   /* Estilos de computación de orden de elementos de FlexBox */
    align-items: center;
    justify-content: center;
    flex-wrap: wrap;
+   /* Scroll para Firefox */
    scrollbar-color: var(--color-scrollbar-dark) var(--color-scrollbar-dark);
    scrollbar-width: thin;
 }
 
+/* Scroll para Chromium */
 .modal::-webkit-scrollbar-thumb {
    background: var(--color-scrollbar-dark);
 }
@@ -26,6 +33,7 @@
    background: var(--color-scrollbar-dark);
 }
 
+/* El modal se mantiene escondido hasta que se activa el contenido alternativo */
 .modal.open {
    display: flex;
 }

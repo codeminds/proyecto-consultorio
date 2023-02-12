@@ -1,73 +1,78 @@
 .table table {
-    width: 100%;
-    table-layout: fixed;
-}
-
-.table.with-controls {
-    margin-top: 7rem;
-    position: relative;
-}
-
-.table .controls {
-    position: absolute;
-    left: 0;
-    top: -4rem;
-}
-
-.table td {
-    padding: 0.5rem;
-}
-
-.table td.buttons {
-    text-align: right;
-    letter-spacing: 0;
-}
-
-.table td button:not(:last-child) {
-    margin-right: 0.2rem;
+   width: 100%;
+   table-layout: fixed;
 }
 
 .table th {
-    text-align: left;
-    font-weight: 700;
-    padding: 0.8rem 0.5rem;
+   text-align: left;
+   font-weight: 700;
+   padding: 0.8rem 0.5rem;
+}
+
+.table td {
+   padding: 0.5rem;
+   vertical-align: middle;
+}
+
+/* 
+Controles para acciones sobre los récords en la tabla
+con un efecto de flotado para poder mantener la estructura
+de HTML perteneciendo a la jerarquía correcta pero lograr
+un efecto visual que no le afecta
+*/
+.table.with-controls {
+   position: relative;
+   margin-top: 7rem;
+}
+
+.table .controls {
+   position: absolute;
+   left: 0;
+   top: -4rem;
 }
 
 .table tbody tr:nth-child(odd) {
-    background: var(--color-alternate-item-background);
+   background: var(--color-alternate-item-background);
+}
+
+.table td.buttons {
+   text-align: right;
 }
 
 .table td.mobile {
-    display: none;
+   display: none;
+   position: relative;
 }
 
-.table .label {
-    font-weight: 700;
-    margin-right: 0.5rem;
+.table td.mobile .heading {
+   font-size: 1.7rem;
+   font-weight: 500;
+   margin-bottom: 0.9rem;
 }
 
-.table td.mobile div {
-    margin-top: 1rem;
+
+.table td.mobile .label {
+   font-weight: 700;
+   margin-right: 0.5rem;
 }
 
-.table td.mobile h3 {
-    margin-bottom: 1rem;
+.table td.mobile .data {
+   margin-bottom: 0.5rem;
 }
 
-.table td.mobile p {
-    margin-bottom: 0.5rem;
+.table td.mobile .buttons {
+   position: absolute;
+   top: 0.5rem;
+   right: 0.5rem;
 }
 
 @media screen and (max-width: 1024px) {
-    .table table thead {
-        display: none;
-    }
+   .table thead,
+   .table td {
+      display: none;
+   }
 
-    .table td {
-        display: none;
-    }
-
-    .table td.mobile {
-        display: block;
-    }
+   .table td.mobile {
+      display: block;
+   }
 }

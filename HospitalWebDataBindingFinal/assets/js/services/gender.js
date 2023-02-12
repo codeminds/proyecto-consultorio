@@ -1,9 +1,9 @@
 import { BaseService } from "./base.js";
 
 
-export class FieldService extends BaseService {
+export class GenderService extends BaseService{
    static list(callback) {
-      fetch('https://localhost:7143/api/fields', {
+      fetch('https://localhost:7143/api/genders', {
          method: 'GET',
          headers: {
             'Content-Type': 'application/json'

@@ -62,7 +62,10 @@
 }
 
 @media screen and (max-width: 1024px) {
-
+   /* 
+   Se extienden todas las columnas al 100% en el diseño móvil
+   para mantener una buena experiencia de usuario
+   */
    .col.col-1,
    .col.col-2,
    .col.col-3,

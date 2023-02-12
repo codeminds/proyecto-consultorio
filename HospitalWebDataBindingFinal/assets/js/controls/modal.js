@@ -1,36 +1,36 @@
 export class Modal {
-    #modal;
-    #onClose;
+   #modal;
+   #onClose;
 
-    constructor(modal, size, onClose) {
-        this.#modal = modal;
-        this.#onClose = onClose;
+   constructor(modal, size = 'medium', onClose = null) {
+      //Se valida si el parámetro es un elemento de HTML
+      if(!modal instanceof HTMLElement) {
+         throw new Error('modal parameter must be an HTML element');
+      }
 
-        if(this.#modal == null) {
-            throw new Error('Modal does not have modal element');
-        }
+      //El callback es opcional, pero de ser proporcionado debe ser una función
+      if(onClose != null && typeof onClose != 'function') {
+         throw new Error('onClose parameter must be a function');
+      }
 
-        if(this.#onClose != null && typeof this.#onClose != 'function') {
-            throw new Error('onClose parameter must be a callback');
-        }
+      this.#modal = modal;
+      this.#onClose = onClose;
+      this.#modal.classList.add(size);
+      this.#modal.addEventListener('click', () => { this.close() });
+      this.#modal.children[0].addEventListener('click', (e) => {
+         e.stopPropagation();
+      });
+   }
 
-        if(size == null) {
-            size = 'medium';
-        }
+   open() {
+      this.#modal.classList.add('open');
+   }
 
-        this.#modal.classList.add(size);
-        this.#modal.addEventListener('click', () => { this.close() });
-        this.#modal.children[0].addEventListener('click', (e) => { e.stopPropagation() });
-    }
+   close() {
+      if(this.#onClose != null) {
+         this.#onClose();
+      }
 
-    open() {
-        this.#modal.classList.add('open');
-    }
-
-    close() {
-        if(this.#onClose != null) {
-            this.#onClose();
-        }
-        this.#modal.classList.remove('open');
-    }
+      this.#modal.classList.remove('open');
+   }
 }

@@ -1,23 +1,27 @@
+import { Panel } from '../controls/panel.js';
+
 export class BaseViewModel {
-    #menu;
-    #menuButton;
+   constructor() {
+      this.#initMenu();
+      this.#initPanels();
+   }
 
-    constructor(menu, menuButton) {
-        this.#initMenu(menu, menuButton);
-    }
+   #initMenu() {
+      const button = document.querySelector('[data-menu-button]');
+      const menu = document.querySelector('[data-menu]');
 
-    openMenu() {
-        this.#menu.classList.toggle('open');
-    }
+      if(button && menu) {
+         button.addEventListener('click', () => {
+            menu.classList.toggle('open');
+         });
+      }
+   }
 
-    #initMenu(menu, menuButton) {
-        this.#menu = menu;
-        this.#menuButton = menuButton;
+   #initPanels() {
+      const panels = document.querySelectorAll('[data-panel]');
 
-        if(this.#menu == null || this.#menuButton == null) {
-            throw new Error('View Model does not have menu or menuButton elements');
-        }
-
-        this.#menuButton.addEventListener('click', () => { this.openMenu() });
-    }
+      for(const panel of panels) {
+         Panel.init(panel.querySelector('[data-toggle]'), panel.querySelector('[data-toggle-section]'));
+      }
+   }
 }
