@@ -2,8 +2,8 @@
 
 namespace API.Services
 {
-    public interface IFieldService
-    {
-        IQueryable<Field> ListFields();
-    }
+   public interface IFieldService
+   {
+      IQueryable<Field> ListFields();
+   }
 }

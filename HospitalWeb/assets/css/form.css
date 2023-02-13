@@ -41,10 +41,12 @@
 .form-field textarea {
    min-height: 15rem;
    resize: none;
+   /* Scroll para Firefox */
    scrollbar-color: var(--color-scrollbar-light) var(--color-scrollbar-light);
    scrollbar-width: thin;
 }
 
+/* Scroll para Chromium */
 .form-field textarea::-webkit-scrollbar-thumb {
    background: var(--color-scrollbar-light);
 }

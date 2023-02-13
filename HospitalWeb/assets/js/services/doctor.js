@@ -2,37 +2,42 @@ import { doctorTestData, fieldTestData, getNextId } from "../test-data.js";
 
 export class DoctorService {
    static list(filter, callback) {
+      /* Si se recibe un filtro nulo se asigna a la variable un objeto vacío que funcionará 
+      igual que un objeto de filtro con valores vacíos */
       filter = filter ?? {};
 
-      const result = doctorTestData.filter((item) => {
+      const doctors = doctorTestData.filter((item) => {
          return ((!filter.documentId || item.documentId.toLowerCase().includes(filter.documentId.toLowerCase()))
             && (!filter.firstName || item.firstName.toLowerCase().includes(filter.firstName.toLowerCase()))
             && (!filter.lastName || item.lastName.toLowerCase().includes(filter.lastName.toLowerCase()))
             && (!filter.fieldId || item.fieldId == filter.fieldId));
       });
 
-      callback(result);
+      callback(doctors);
    }
 
    static get(id, callback) {
-      const result = doctorTestData.find((item) => {
+      const doctor = doctorTestData.find((item) => {
          return item.id == id;
       });
 
-      callback(result);
+      callback(doctor);
    }
 
    static insert(data, callback) {
-      data.id = getNextId(doctorTestData);
+      const doctor = { ...data };
+      doctor.id = getNextId(doctorTestData);
 
+      /* Para llenar la información de la especialidad que se utiliza en el objeto doctor cargamos 
+      una especialidad por medio de su id para utilizar y utilizamos los datos necesarios */
       const field = fieldTestData.find((item) => {
-         return item.id == data.fieldId;
+         return item.id == doctor.fieldId;
       });
 
-      data.field = field.name;
+      doctor.field = field.name;
 
-      doctorTestData.push(data);
-      callback(data);
+      doctorTestData.push(doctor);
+      callback(doctor);
    }
 
    static update(id, data, callback) {
@@ -40,22 +45,20 @@ export class DoctorService {
          return item.id == id;
       });
 
-      if (doctor != null) {
-         doctor.documentId = data.documentId;
-         doctor.firstName = data.firstName;
-         doctor.lastName = data.lastName;
-         doctor.fieldId = data.fieldId;
+      doctor.documentId = data.documentId;
+      doctor.firstName = data.firstName;
+      doctor.lastName = data.lastName;
+      doctor.fieldId = data.fieldId;
 
-         const field = fieldTestData.find((item) => {
-            return item.id == data.fieldId;
-         });
+      /* Para llenar la información de la especialidad que se utiliza en el objeto doctor cargamos 
+      una especialidad por medio de su id para utilizar y utilizamos los datos necesarios */
+      const field = fieldTestData.find((item) => {
+         return item.id == data.fieldId;
+      });
 
-         doctor.field = field.name;
+      doctor.field = field.name;
 
-         callback(doctor);
-      } else {
-         callback(null);
-      }
+      callback(doctor);
    }
 
    static delete(id, callback) {
@@ -63,11 +66,7 @@ export class DoctorService {
          return item.id == id;
       });
 
-      if (index >= 0) {
-         doctorTestData.splice(index, 1);
-         callback(true);
-      } else {
-         callback(false);
-      }
+      const doctor = doctorTestData.splice(index, 1)[0];
+      callback(doctor);
    }
 }

@@ -4,7 +4,7 @@ export class Modal {
 
    constructor(modal, size = 'medium', onClose = null) {
       //Se valida si el parámetro es un elemento de HTML
-      if(modal instanceof HTMLElement) {
+      if(!modal instanceof HTMLElement) {
          throw new Error('modal parameter must be an HTML element');
       }
 

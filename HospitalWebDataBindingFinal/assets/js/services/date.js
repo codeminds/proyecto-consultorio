@@ -5,8 +5,8 @@ export class DateService {
       return s;
    }
 
-   //Función para obtener un "string date", el tipo de texto de fecha con el formato requerido para los input datetime-local,
-   //a partir de un objeto fecha
+   /* Función para obtener un "string date", el tipo de texto de fecha con el formato requerido para los input datetime-local,
+   a partir de un objeto fecha */
    static toInputDateString(date) {
       if(date == null) {
          return '';
@@ -15,8 +15,8 @@ export class DateService {
       return `${date.getFullYear()}-${DateService.#pad(date.getMonth() + 1, 2)}-${DateService.#pad(date.getDate(), 2)}T${DateService.#pad(date.getHours(), 2)}:${DateService.#pad(date.getMinutes(), 2)}`;
    }
    
-   //Función para obtener una versión amigable para el UI de la fecha
-   //a partir de un objeto fecha
+   /* Función para obtener una versión amigable para el UI de la fecha
+   a partir de un objeto fecha */
    static toDisplayLocaleString(date, locale) {
       if(date == null) {
          return '';

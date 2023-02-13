@@ -18,19 +18,10 @@ class ViewModel extends BaseViewModel {
    constructor() {
       super();
 
-      Promise.all([
-         this.#initGenders()
-      ]).then(() => {
-         this.#initFilter();
-         this.#initPatient();
-         this.#initModal();
-         this.#initResults();
-
-         this.#searchPatients();
-      });
+      this.#id = null;
    }
 
-   #initGenders() {
+   initGenders() {
       return new Promise((resolve) => {
          this.#genders = {
             filter: new OneWayCollectionProp([]),
@@ -48,7 +39,7 @@ class ViewModel extends BaseViewModel {
       });
    }
 
-   #initFilter() {
+   initFilter() {
       this.#filter = {
          documentId: new TwoWayProp(null, 'string'),
          firstName: new TwoWayProp(null, 'string'),
@@ -70,13 +61,11 @@ class ViewModel extends BaseViewModel {
       this.#filter.genderId.subscribe(document.forms.filter.gender);
 
       document.querySelector('[data-search]').addEventListener('click', () => {
-         this.#searchPatients();
+         this.searchPatients();
       });
    }
 
-   #initPatient() {
-      this.#id = null;
-
+   initPatient() {
       this.#patient = {
          documentId: new TwoWayProp(null, 'string'),
          firstName: new TwoWayProp(null, 'string'),
@@ -94,7 +83,7 @@ class ViewModel extends BaseViewModel {
       this.#patient.genderId.subscribe(document.forms.createUpdate.gender);
    }
 
-   #initModal() {
+   initModal() {
       this.#formTitle = new OneWayProp(null, 'string');
       this.#formTitle.subscribe(document.querySelector('[data-form-title]'));
 
@@ -126,7 +115,7 @@ class ViewModel extends BaseViewModel {
       });
    }
 
-   #initResults() {
+   initResults() {
       const results = document.querySelector('[data-results]');
       results.addEventListener('click', (e) => {
          switch (e.target.getAttribute('data-click')) {
@@ -149,7 +138,7 @@ class ViewModel extends BaseViewModel {
                   const id = e.target.getAttribute('data-id');
                   PatientsService.delete(id, (result) => {
                      if (result.success) {
-                        this.#searchPatients();
+                        this.searchPatients();
                      } else {
                         let errors = '';
 
@@ -184,43 +173,31 @@ class ViewModel extends BaseViewModel {
          genderId: this.#patient.genderId.value
       };
 
-      if (this.#id == null) {
-         PatientsService.insert(data, (result) => {
-            if(result.success) {
-               const patient = result.data;
-               this.#modal.close();
-               this.#filter.documentId.value = patient.documentId;
-               this.#filter.firstName.value = null;
-               this.#filter.lastName.value = null;
-               this.#filter.birthDateFrom.value = null;
-               this.#filter.birthDateTo.value = null;
-               this.#filter.genderId.value = null;
-               this.#searchPatients();
-            } else {
-               this.#formErrors.value = result.messages;
-            }
-         });
-      } else {
-         PatientsService.update(this.#id, data, (result) => {
-            if(result.success) {
-               const patient = result.data;
-               this.#modal.close();
-               this.#filter.documentId.value = patient.documentId;
-               this.#filter.firstName.value = null;
-               this.#filter.lastName.value = null;
-               this.#filter.birthDateFrom.value = null;
-               this.#filter.birthDateTo.value = null;
-               this.#filter.genderId.value = null;
-               this.#searchPatients();
-            } else {
-               this.#formErrors.value = result.messages;
-            }
-         });
-      }
+      const afterSave = (result) => {
+         if(result.success) {
+            const patient = result.data;
+            this.#modal.close();
+            this.#filter.documentId.value = patient.documentId;
+            this.#filter.firstName.value = null;
+            this.#filter.lastName.value = null;
+            this.#filter.birthDateFrom.value = null;
+            this.#filter.birthDateTo.value = null;
+            this.#filter.genderId.value = null;
+            this.#searchPatients();
+         } else {
+            this.#formErrors.value = result.messages;
+         }
+      };
 
+      this.#formErrors.value = [];
+      if (this.#id == null) {
+         PatientsService.insert(data, afterSave);
+      } else {
+         PatientsService.update(this.#id, data, afterSave);
+      }
    }
 
-   #searchPatients() {
+   searchPatients() {
       const filter = {
          documentId: this.#filter.documentId.value,
          firstName: this.#filter.firstName.value,
@@ -237,3 +214,15 @@ class ViewModel extends BaseViewModel {
 }
 
 const viewModel = new ViewModel();
+
+/* Para inicializar ciertos valores se necesitan cargar la lista de datos de géneros */
+Promise.all([
+   this.initGenders()
+]).then(() => {
+   this.initFilter();
+   this.initPatient();
+   this.initModal();
+   this.initResults();
+
+   this.searchPatients();
+});

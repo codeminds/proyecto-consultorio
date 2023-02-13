@@ -1,8 +1,8 @@
-import { doctorTestData, fieldTestData, getNextId } from "../test-data.js";
 import { BaseService } from "./base.js";
 
 export class DoctorService extends BaseService {
    static list(filter, callback) {
+      /* Se crea el filtro de la lista en query params para enviar al API */
       const filterString = `documentId=${filter?.documentId ?? ''}`
                             + `&firstName=${filter?.firstName ?? ''}`
                             + `&lastName=${filter?.lastName ?? ''}`
@@ -13,14 +13,7 @@ export class DoctorService extends BaseService {
          headers: {
             'Content-Type': 'application/json'
          }
-      }).then((response) => response.json())
-      .then((data) => {
-         if(data.statusCode == 200) {
-               callback(data);
-         } else {
-               this.handleError(data);
-         }
-      });
+      }).then((response) => this.handleResponse(response, callback));
    }
 
    static get(id, callback) {
@@ -29,14 +22,7 @@ export class DoctorService extends BaseService {
          headers: {
             'Content-Type': 'application/json'
          }
-      }).then((response) => response.json())
-      .then((data) => {
-         if(data.statusCode == 200) {
-               callback(data);
-         } else {
-               this.handleError(data);
-         }
-      });
+      }).then((response) => this.handleResponse(response, callback));
    }
 
    static insert(data, callback) {
@@ -46,14 +32,7 @@ export class DoctorService extends BaseService {
             'Content-Type': 'application/json'
          },
          body: JSON.stringify(data)
-      }).then((response) => response.json())
-      .then((data) => {
-         if(data.statusCode == 200) {
-               callback(data);
-         } else {
-               this.handleError(data);
-         }
-      });
+      }).then((response) => this.handleError(response, callback));
    }
 
    static update(id, data, callback) {
@@ -63,14 +42,7 @@ export class DoctorService extends BaseService {
             'Content-Type': 'application/json'
          },
          body: JSON.stringify(data)
-      }).then((response) => response.json())
-      .then((data) => {
-         if(data.statusCode == 200) {
-               callback(data);
-         } else {
-               this.handleError(data);
-         }
-      });
+      }).then((response) => this.handleResponse(response, callback));
    }
 
    static delete(id, callback) {
@@ -79,13 +51,6 @@ export class DoctorService extends BaseService {
          headers: {
             'Content-Type': 'application/json'
          }
-      }).then((response) => response.json())
-      .then((data) => {
-         if(data.statusCode == 200) {
-               callback(data);
-         } else {
-               this.handleError(data);
-         }
-      });
+      }).then((response) => this.handleResponse(response, callback));
    }
 }

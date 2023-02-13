@@ -4,11 +4,11 @@ using AutoMapper;
 
 namespace API.Mappers
 {
-    public class GenderMapper : Profile
-    {
-        public GenderMapper()
-        {
-            CreateMap<Gender, GetGenderDTO>();
-        }
-    }
+   public class GenderMapper : Profile
+   {
+      public GenderMapper()
+      {
+         CreateMap<Gender, GetGenderDTO>();
+      }                                       
+   }
 }

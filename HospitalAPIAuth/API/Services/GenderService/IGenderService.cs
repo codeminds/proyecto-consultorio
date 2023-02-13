@@ -2,8 +2,8 @@
 
 namespace API.Services
 {
-    public interface IGenderService
-    {
-        IQueryable<Gender> ListGenders();
-    }
+   public interface IGenderService
+   {
+      IQueryable<Gender> ListGenders();
+   }
 }

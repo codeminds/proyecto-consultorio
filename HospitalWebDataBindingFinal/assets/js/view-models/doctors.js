@@ -16,20 +16,11 @@ class ViewModel extends BaseViewModel {
 
    constructor() {
       super();
-
-      Promise.all([
-         this.#initFields()
-      ]).then(() => {
-         this.#initFilter();
-         this.#initDoctor();
-         this.#initModal();
-         this.#initResults();
-
-         this.#searchDoctors();
-      });      
+      
+      this.#id = null;     
    }
 
-   #initFields() {
+   initFields() {
       return new Promise((resolve) => {
          this.#fields = {
             filter: new OneWayCollectionProp([]),
@@ -47,7 +38,7 @@ class ViewModel extends BaseViewModel {
       });
    }
 
-   #initFilter() {
+   initFilter() {
       this.#filter = {
          documentId: new TwoWayProp(null, 'string'),
          firstName: new TwoWayProp(null, 'string'),
@@ -61,13 +52,11 @@ class ViewModel extends BaseViewModel {
       this.#filter.fieldId.subscribe(document.forms.filter.field);
 
       document.querySelector('[data-search]').addEventListener('click', () => {
-         this.#searchDoctors();
+         this.searchDoctors();
       });
    }
 
-   #initDoctor() {
-      this.#id = null;
-
+   initDoctor() {
       this.#doctor = {
          documentId: new TwoWayProp(null, 'string'),
          firstName: new TwoWayProp(null, 'string'),
@@ -81,7 +70,7 @@ class ViewModel extends BaseViewModel {
       this.#doctor.fieldId.subscribe(document.forms.createUpdate.field);
    }
 
-   #initModal() {
+   initModal() {
       this.#formTitle = new OneWayProp(null, 'string');
       this.#formTitle.subscribe(document.querySelector('[data-form-title]'));
 
@@ -112,7 +101,7 @@ class ViewModel extends BaseViewModel {
       });
    }
 
-   #initResults() {
+   initResults() {
       const results = document.querySelector('[data-results]');
       results.addEventListener('click', (e) => {
          switch (e.target.getAttribute('data-click')) {
@@ -134,7 +123,7 @@ class ViewModel extends BaseViewModel {
                   const id = e.target.getAttribute('data-id');
                   DoctorService.delete(id, (result) => {
                      if (result.success) {
-                        this.#searchDoctors();
+                        this.searchDoctors();
                      } else {
                         let errors = '';
 
@@ -164,39 +153,29 @@ class ViewModel extends BaseViewModel {
          fieldId: this.#doctor.fieldId.value
       };
 
+      const afterSave = (result) => {
+         if(result.success) {
+            const doctor = result.data;
+            this.#modal.close();
+            this.#filter.documentId.value = doctor.documentId;
+            this.#filter.firstName.value = null;
+            this.#filter.lastName.value = null;
+            this.#filter.fieldId.value = null;
+            this.searchDoctors();
+         } else {
+            this.#formErrors.value = result.messages;
+         }
+      };
+
       this.#formErrors.value = [];
       if (this.#id == null) {
-         DoctorService.insert(data, (result) => {
-            if(result.success) {
-               const doctor = result.data;
-               this.#modal.close();
-               this.#filter.documentId.value = doctor.documentId;
-               this.#filter.firstName.value = null;
-               this.#filter.lastName.value = null;
-               this.#filter.fieldId.value = null;
-               this.#searchDoctors();
-            } else {
-               this.#formErrors.value = result.messages;
-            }
-         });
+         DoctorService.insert(data, afterSave);
       } else {
-         DoctorService.update(this.#id, data, (result) => {
-            if(result.success) {
-               const doctor = result.data;
-               this.#modal.close();
-               this.#filter.documentId.value = doctor.documentId;
-               this.#filter.firstName.value = null;
-               this.#filter.lastName.value = null;
-               this.#filter.fieldId.value = null;
-               this.#searchDoctors();
-            } else {
-               this.#formErrors.value = result.messages;
-            }
-         });
+         DoctorService.update(this.#id, data, afterSave);
       }
    }
 
-   #searchDoctors() {
+   searchDoctors() {
       const filter = {
          documentId: this.#filter.documentId.value,
          firstName: this.#filter.firstName.value,
@@ -211,3 +190,15 @@ class ViewModel extends BaseViewModel {
 }
 
 const viewModel = new ViewModel();
+
+/* Para inicializar ciertos valores se necesitan cargar la lista de datos de especialidades */
+Promise.all([
+   viewModel.initFields()
+]).then(() => {
+   viewModel.initFilter();
+   viewModel.initDoctor();
+   viewModel.initModal();
+   viewModel.initResults();
+
+   viewModel.searchDoctors();
+}); 

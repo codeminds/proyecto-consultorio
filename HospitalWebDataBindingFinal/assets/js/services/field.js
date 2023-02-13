@@ -8,13 +8,6 @@ export class FieldService extends BaseService {
          headers: {
             'Content-Type': 'application/json'
          }
-      }).then((response) => response.json())
-      .then((data) => {
-         if(data.statusCode == 200) {
-            callback(data);
-         } else {
-            this.handleError(data);
-         }
-      });
+      }).then((response) => this.handleResponse(response, callback));
    }
 }

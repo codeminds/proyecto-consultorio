@@ -1,7 +1,5 @@
-/* 
-Pantalla transparente que se posa encima del sitio web para
-dar una ventana alternativa para mostrar funcionalidades
-*/
+/* Pantalla transparente que se posa encima del sitio web para
+dar una ventana alternativa para mostrar funcionalidades */
 .modal {
    position: fixed;
    top: 0;

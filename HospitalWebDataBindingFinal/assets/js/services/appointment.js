@@ -22,14 +22,7 @@ export class AppointmentsService extends BaseService {
          headers: {
             'Content-Type': 'application/json'
          }
-      }).then((response) => response.json())
-         .then((data) => {
-            if (data.statusCode == 200) {
-               callback(data);
-            } else {
-               this.handleError(data);
-            }
-         });
+      }).then((response) => this.handleResponse(response, callback));
    }
 
    static get(id, callback) {
@@ -38,14 +31,7 @@ export class AppointmentsService extends BaseService {
          headers: {
             'Content-Type': 'application/json'
          }
-      }).then((response) => response.json())
-         .then((data) => {
-            if (data.statusCode == 200) {
-               callback(data);
-            } else {
-               this.handleError(data);
-            }
-         });
+      }).then((response) => this.handleResponse(response, callback));
    }
 
    static insert(data, callback) {
@@ -55,14 +41,7 @@ export class AppointmentsService extends BaseService {
             'Content-Type': 'application/json'
          },
          body: JSON.stringify(data)
-      }).then((response) => response.json())
-         .then((data) => {
-            if (data.statusCode == 200) {
-               callback(data);
-            } else {
-               this.handleError(data);
-            }
-         });
+      }).then((response) => this.handleError(response, callback));
    }
 
    static update(id, data, callback) {
@@ -72,14 +51,7 @@ export class AppointmentsService extends BaseService {
             'Content-Type': 'application/json'
          },
          body: JSON.stringify(data)
-      }).then((response) => response.json())
-         .then((data) => {
-            if (data.statusCode == 200) {
-               callback(data);
-            } else {
-               this.handleError(data);
-            }
-         });
+      }).then((response) => this.handleResponse(response, callback));
    }
 
    static delete(id, callback) {
@@ -88,13 +60,6 @@ export class AppointmentsService extends BaseService {
          headers: {
             'Content-Type': 'application/json'
          }
-      }).then((response) => response.json())
-         .then((data) => {
-            if (data.statusCode == 200) {
-               callback(data);
-            } else {
-               this.handleError(data);
-            }
-         });
+      }).then((response) => this.handleResponse(response, callback));
    }
 }

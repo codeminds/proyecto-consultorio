@@ -12,16 +12,10 @@ class ViewModel extends BaseViewModel {
       super();
 
       this.#id = null;
-
-      this.#initFields();
-      this.#initFilter();
-      this.#initModal();
-      this.#initResults();
-
-      this.#searchDoctors();
    }
 
-   #initFields() {
+   //Funciones para poblar la lista de especialidades dinámicamente
+   initFields() {
       FieldService.list((fields) => {
          this.#populateFields(document.querySelector('[data-form="fields"]'), fields);
          this.#populateFields(document.querySelector('[data-filter="fields"]'), [{ id: '', name: 'Todos' }, ...fields]);
@@ -38,13 +32,13 @@ class ViewModel extends BaseViewModel {
       }
    }
 
-   #initFilter() {
+   initFilter() {
       document.querySelector('[data-search]').addEventListener('click', () => {
-         this.#searchDoctors();
+         this.searchDoctors();
       });
    }
 
-   #initModal() {
+   initModal() {
       this.#modal = new Modal(document.querySelector('[data-modal]'), 'medium', () => {
          this.#id = null;
          document.forms.insertUpdate.documentId.value = '';
@@ -68,35 +62,27 @@ class ViewModel extends BaseViewModel {
       });
    }
 
-   #initResults() {
+   initResults() {
       this.#results = document.querySelector('[data-results]');
       this.#results.addEventListener('click', (e) => {
          switch (e.target.getAttribute('data-click')) {
             case 'edit':
                const id = e.target.getAttribute('data-id');
                DoctorService.get(id, (doctor) => {
-                  if (doctor != null) {
-                     this.#id = doctor.id;
-                     document.forms.insertUpdate.documentId.value = doctor.documentId;
-                     document.forms.insertUpdate.firstName.value = doctor.firstName;
-                     document.forms.insertUpdate.lastName.value = doctor.lastName;
-                     document.forms.insertUpdate.field.value = doctor.fieldId;
-                     document.querySelector('[data-form-title]').textContent = 'Editar Doctor';
-                     this.#modal.open();
-                  } else {
-                     alert('No se pudo cargar el registro seleccionado');
-                  }
+                  this.#id = doctor.id;
+                  document.forms.insertUpdate.documentId.value = doctor.documentId;
+                  document.forms.insertUpdate.firstName.value = doctor.firstName;
+                  document.forms.insertUpdate.lastName.value = doctor.lastName;
+                  document.forms.insertUpdate.field.value = doctor.fieldId;
+                  document.querySelector('[data-form-title]').textContent = 'Editar Doctor';
+                  this.#modal.open();
                });
                break;
             case 'delete':
                if (confirm('Desea borrar esta entrada?')) {
                   const id = e.target.getAttribute('data-id');
-                  DoctorService.delete(id, (deleted) => {
-                     if (deleted) {
-                        this.#searchDoctors();
-                     } else {
-                        alert('No se pudo borrar la entrada');
-                     }
+                  DoctorService.delete(id, (doctor) => {
+                     this.searchDoctors();
                   })
                }
                break;
@@ -112,32 +98,24 @@ class ViewModel extends BaseViewModel {
          fieldId: document.forms.insertUpdate.field.value
       };
 
-      if (this.#id == null) {
-         DoctorService.insert(data, (doctor) => {
-            this.#modal.close();
-            document.forms.filter.documentId.value = doctor.documentId;
-            document.forms.filter.firstName.value = '';
-            document.forms.filter.lastName.value = '';
-            document.forms.filter.field.value = '';
-            this.#searchDoctors();
-         });
-      } else {
-         DoctorService.update(this.#id, data, (doctor) => {
-            if (doctor != null) {
-               this.#modal.close();
-               document.forms.filter.documentId.value = doctor.documentId;
-               document.forms.filter.firstName.value = '';
-               document.forms.filter.lastName.value = '';
-               document.forms.filter.field.value = '';
-               this.#searchDoctors();
-            } else {
-               alert('No se pudo actualizar el registro');
-            }
-         });
+      //Se guarda la referencia al callback a utilizar después de la operación de salvado
+      const afterSave = (doctor) => {
+         this.#modal.close();
+         document.forms.filter.documentId.value = doctor.documentId;
+         document.forms.filter.firstName.value = '';
+         document.forms.filter.lastName.value = '';
+         document.forms.filter.field.value = '';
+         this.searchDoctors();
+      }
+
+      if(this.#id == null) {
+         DoctorService.insert(data, afterSave);
+      }else {
+         DoctorService.update(this.#id, data, afterSave);
       }
    }
 
-   #searchDoctors() {
+   searchDoctors() {
       const filter = {
          documentId: document.forms.filter.documentId.value,
          firstName: document.forms.filter.firstName.value,
@@ -237,4 +215,12 @@ class ViewModel extends BaseViewModel {
    }
 }
 
+//Inicialización
 const viewModel = new ViewModel();
+viewModel.initFields();
+viewModel.initFilter();
+viewModel.initModal();
+viewModel.initResults();
+
+//Búsqueda inicial
+viewModel.searchDoctors();

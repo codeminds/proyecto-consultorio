@@ -2,12 +2,16 @@
 
 namespace API.Data.Models
 {
-    public partial class Session
-    {
-        [NotMapped]
-        public string? AccessTokenString { get; set; }
+   public partial class Session
+   {
+      /* Este atributo informa a Entity Framework que para efectos de SQL
+      se debe ignorar esta propiedad */
+      [NotMapped]
+      public string? AccessTokenString { get; set; }
 
-        [NotMapped]
-        public string? RefreshTokenString { get; set; }
-    }
+      /* Este atributo informa a Entity Framework que para efectos de SQL
+      se debe ignorar esta propiedad */
+      [NotMapped]
+      public string? RefreshTokenString { get; set; }
+   }
 }

@@ -5,13 +5,13 @@ using AutoMapper;
 
 namespace API.Mappers
 {
-    public class DoctorMapper : Profile
-    {
-        public DoctorMapper()
-        {
-            CreateMap<Doctor, GetDoctorDTO>();
-            CreateMap<InsertUpdateDoctorDTO, Doctor>();
-            CreateMap<FilterDoctorDTO, DoctorListFilter>();
-        }
-    }
+   public class DoctorMapper : Profile
+   {
+      public DoctorMapper()
+      {
+         CreateMap<Doctor, GetDoctorDTO>();
+         CreateMap<InsertUpdateDoctorDTO, Doctor>();
+         CreateMap<FilterDoctorDTO, DoctorListFilter>();
+      }
+   }
 }

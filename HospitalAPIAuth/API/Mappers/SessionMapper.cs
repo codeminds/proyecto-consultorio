@@ -5,15 +5,16 @@ using AutoMapper;
 
 namespace API.Mappers
 {
-    public class SessionMapper : Profile
-    {
-        public SessionMapper()
-        { 
-            CreateMap<Session, GetSessionDTO>();
-            CreateMap<Session, GetSessionTokensDTO>()
-                .ForMember(t => t.AccessToken, opt => opt.MapFrom(s => s.AccessTokenString))
-                .ForMember(t => t.RefreshToken, opt => opt.MapFrom(a => a.RefreshTokenString));
-            CreateMap<FilterSessionDTO, SessionFilters>();
-        }
-    }
+   public class SessionMapper : Profile
+   {
+      public SessionMapper()
+      {
+         CreateMap<Session, GetSessionDTO>();
+         /* Para mapeo de propiedades que varían en valores, se puede configurar manualmente */
+         CreateMap<Session, GetSessionTokensDTO>()
+             .ForMember(dest => dest.AccessToken, opt => opt.MapFrom(source => source.AccessTokenString))
+             .ForMember(dest => dest.RefreshToken, opt => opt.MapFrom(source => source.RefreshTokenString));
+         CreateMap<FilterSessionDTO, SessionFilters>();
+      }
+   }
 }

@@ -13,17 +13,10 @@ class ViewModel extends BaseViewModel {
       super();
 
       this.#id = null;
-
-      this.#initGenders();
-      this.#initFilter();
-      this.#initModal();
-      this.#initResults();
-
-      this.#searchPatients();
    }
 
 
-   #initGenders() {
+   initGenders() {
       GenderService.list((genders) => {
          this.#populateGenders(document.querySelector('[data-form="genders"]'), genders);
          this.#populateGenders(document.querySelector('[data-filter="genders"]'), [{ id: '', name: 'Todos' }, ...genders]);
@@ -53,13 +46,13 @@ class ViewModel extends BaseViewModel {
       checks.querySelector('label.check:first-child input').checked = true;
    }
 
-   #initFilter() {
+   initFilter() {
       document.querySelector('[data-search]').addEventListener('click', () => {
-         this.#searchPatients();
+         this.searchPatients();
       });
    }
 
-   #initModal() {
+   initModal() {
       this.#modal = new Modal(document.querySelector('[data-modal]'), 'medium', () => {
          this.#id = null;
          document.forms.insertUpdate.documentId.value = '';
@@ -84,36 +77,28 @@ class ViewModel extends BaseViewModel {
       });
    }
 
-   #initResults() {
+   initResults() {
       this.#results = document.querySelector('[data-results]');
       this.#results.addEventListener('click', (e) => {
          switch (e.target.getAttribute('data-click')) {
             case 'edit':
                const id = e.target.getAttribute('data-id');
                PatientsService.get(id, (patient) => {
-                  if (patient != null) {
-                     this.#id = patient.id;
-                     document.forms.insertUpdate.documentId.value = patient.documentId;
-                     document.forms.insertUpdate.firstName.value = patient.firstName;
-                     document.forms.insertUpdate.lastName.value = patient.lastName;
-                     document.forms.insertUpdate.birthDate.value = DateService.toInputDateString(patient.birthDate);
-                     document.forms.insertUpdate.gender.value = patient.genderId;
-                     document.querySelector('[data-form-title]').textContent = 'Editar Paciente';
-                     this.#modal.open();
-                  } else {
-                     alert('No se pudo cargar el registro seleccionado');
-                  }
+                  this.#id = patient.id;
+                  document.forms.insertUpdate.documentId.value = patient.documentId;
+                  document.forms.insertUpdate.firstName.value = patient.firstName;
+                  document.forms.insertUpdate.lastName.value = patient.lastName;
+                  document.forms.insertUpdate.birthDate.value = DateService.toInputDateString(patient.birthDate);
+                  document.forms.insertUpdate.gender.value = patient.genderId;
+                  document.querySelector('[data-form-title]').textContent = 'Editar Paciente';
+                  this.#modal.open();
                });
                break;
             case 'delete':
                if (confirm('Desea borrar esta entrada?')) {
                   const id = e.target.getAttribute('data-id');
-                  PatientsService.delete(id, (deleted) => {
-                     if (deleted) {
-                        this.#searchPatients();
-                     } else {
-                        alert('No se pudo borrar la entrada');
-                     }
+                  PatientsService.delete(id, (patient) => {
+                     this.searchPatients();
                   });
                }
                break;
@@ -130,36 +115,26 @@ class ViewModel extends BaseViewModel {
          genderId: document.forms.insertUpdate.gender.value
       };
 
-      if (this.#id == null) {
-         PatientsService.insert(data, (patient) => {
-            this.#modal.close();
-            document.forms.filter.documentId.value = patient.documentId;
-            document.forms.filter.firstName.value = '';
-            document.forms.filter.lastName.value = '';
-            document.forms.filter.birthDateFrom.value = '';
-            document.forms.filter.birthDateTo.value = '';
-            document.forms.filter.gender.value = '';
-            this.#searchPatients();
-         });
-      } else {
-         PatientsService.update(this.#id, data, (patient) => {
-            if (patient != null) {
-               this.#modal.close();
-               document.forms.filter.documentId.value = patient.documentId;
-               document.forms.filter.firstName.value = '';
-               document.forms.filter.lastName.value = '';
-               document.forms.filter.birthDateFrom.value = '';
-               document.forms.filter.birthDateTo.value = '';
-               document.forms.filter.gender.value = '';
-               this.#searchPatients();
-            } else {
-               alert('No se pudo actualizar el registro');
-            }
-         });
-      }
+      //Se guarda la referencia al callback a utilizar después de la operación de salvado
+      const afterSave = (patient) => {
+         this.#modal.close();
+         document.forms.filter.documentId.value = patient.documentId;
+         document.forms.filter.firstName.value = '';
+         document.forms.filter.lastName.value = '';
+         document.forms.filter.birthDateFrom.value = '';
+         document.forms.filter.birthDateTo.value = '';
+         document.forms.filter.gender.value = '';
+         this.searchPatients();
+      };
 
+      if(this.#id == null) {
+         PatientsService.insert(data, afterSave);
+      } else {
+         PatientsService.update(this.#id, data, afterSave);
+      }
    }
-   #searchPatients() {
+
+   searchPatients() {
       const birthDateFrom = document.forms.filter.birthDateFrom.value;
       const birthDateTo = document.forms.filter.birthDateTo.value;
 
@@ -280,3 +255,12 @@ class ViewModel extends BaseViewModel {
 }
 
 const viewModel = new ViewModel();
+
+//Inicialización
+viewModel.initGenders();
+viewModel.initFilter();
+viewModel.initModal();
+viewModel.initResults();
+
+//Búsqueda inicial
+viewModel.searchPatients();

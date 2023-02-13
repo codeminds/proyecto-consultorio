@@ -2,9 +2,11 @@ import { patientTestData, getNextId, genderTestData } from "../test-data.js";
 
 export class PatientsService {
    static list(filter, callback) {
+      /* Si se recibe un filtro nulo se asigna a la variable un objeto vacío que funcionará 
+      igual que un objeto de filtro con valores vacíos */
       filter = filter ?? {};
 
-      const result = patientTestData.filter((item) => {
+      const patients = patientTestData.filter((item) => {
          return ((!filter.documentId || item.documentId.toLowerCase().includes(filter.documentId.toLowerCase()))
             && (!filter.firstName || item.firstName.toLowerCase().includes(filter.firstName.toLowerCase()))
             && (!filter.lastName || item.lastName.toLowerCase().includes(filter.lastName.toLowerCase()))
@@ -13,27 +15,30 @@ export class PatientsService {
             && (!filter.genderId || item.genderId == filter.genderId));
       });
 
-      callback(result);
+      callback(patients);
    }
 
    static get(id, callback) {
-      const result = patientTestData.find((item) => {
+      const patient = patientTestData.find((item) => {
          return item.id == id;
       });
-      callback(result);
+      callback(patient);
    }
 
    static insert(data, callback) {
-      data.id = getNextId(patientTestData);
+      const patient = { ...data };
+      patient.id = getNextId(patientTestData);
 
+      /* Para llenar la información del género que se utiliza en el objeto paciente cargamos 
+      un género por medio de su id para utilizar y utilizamos los datos necesarios */
       const gender = genderTestData.find((item) => {
-         return item.id == data.genderId;
+         return item.id == patient.genderId;
       })
 
-      data.gender = gender.name;
+      patient.gender = gender.name;
 
-      patientTestData.push(data);
-      callback(data);
+      patientTestData.push(patient);
+      callback(patient);
    }
 
    static update(id, data, callback) {
@@ -41,22 +46,20 @@ export class PatientsService {
          return item.id == id;
       });
 
-      if (patient != null) {
-         patient.documentId = data.documentId;
-         patient.firstName = data.firstName;
-         patient.lastName = data.lastName;
-         patient.birthDate = data.birthDate;
+      patient.documentId = data.documentId;
+      patient.firstName = data.firstName;
+      patient.lastName = data.lastName;
+      patient.birthDate = data.birthDate;
 
-         const gender = genderTestData.find((item) => {
-            return item.id == data.genderId;
-         })
+      /* Para llenar la información del género que se utiliza en el objeto paciente cargamos 
+      un género por medio de su id para utilizar y utilizamos los datos necesarios */
+      const gender = genderTestData.find((item) => {
+         return item.id == data.genderId;
+      })
 
-         patient.gender = gender.name;
+      patient.gender = gender.name;
 
-         callback(patient);
-      } else {
-         callback(null);
-      }
+      callback(patient);
    }
 
    static delete(id, callback) {
@@ -64,12 +67,7 @@ export class PatientsService {
          return item.id == id;
       });
 
-      if (index >= 0) {
-         patientTestData.splice(index, 1);
-         callback(true);
-      } else {
-         callback(false);
-      }
+      const patient = patientTestData.splice(index, 1)[0];
+      callback(patient);
    }
 }
-

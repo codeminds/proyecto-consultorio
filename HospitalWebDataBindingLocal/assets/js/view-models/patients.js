@@ -17,16 +17,10 @@ class ViewModel extends BaseViewModel {
    constructor() {
       super();
 
-      this.#initGenders();
-      this.#initFilter();
-      this.#initPatient();
-      this.#initModal();
-      this.#initResults();
-
-      this.#searchPatients();
+      this.#id = null;
    }
 
-   #initGenders() {
+   initGenders() {
       this.#genders = {
          filter: new OneWayCollectionProp([]),
          form: new OneWayCollectionProp([])
@@ -41,15 +35,17 @@ class ViewModel extends BaseViewModel {
       });
    }
 
-   #initFilter() {
+   initFilter() {
       this.#filter = {
          documentId: new TwoWayProp(null, 'string'),
          firstName: new TwoWayProp(null, 'string'),
          lastName: new TwoWayProp(null, 'string'),
          birthDateFrom: new TwoWayProp(null, 'date', {
+            //Función para dar formato correcto a inputs de fecha
             toInputString: DateService.toInputDateString
          }),
          birthDateTo: new TwoWayProp(null, 'date', {
+            //Función para dar formato correcto a inputs de fecha
             toInputString: DateService.toInputDateString
          }),
          genderId: new TwoWayProp(null, 'number')
@@ -63,18 +59,17 @@ class ViewModel extends BaseViewModel {
       this.#filter.genderId.subscribe(document.forms.filter.gender);
 
       document.querySelector('[data-search]').addEventListener('click', () => {
-         this.#searchPatients();
+         this.searchPatients();
       });
    }
 
-   #initPatient() {
-      this.#id = null;
-
+   initPatient() {
       this.#patient = {
          documentId: new TwoWayProp(null, 'string'),
          firstName: new TwoWayProp(null, 'string'),
          lastName: new TwoWayProp(null, 'string'),
          birthDate: new TwoWayProp(null, 'date', {
+            //Función para dar formato correcto a inputs de fecha
             toInputString: DateService.toInputDateString
          }),
          genderId: new TwoWayProp(this.#genders.form.value[0].id, 'number')
@@ -87,7 +82,7 @@ class ViewModel extends BaseViewModel {
       this.#patient.genderId.subscribe(document.forms.insertUpdate.gender);
    }
 
-   #initModal() {
+   initModal() {
       this.#formTitle = new OneWayProp(null, 'string');
       this.#formTitle.subscribe(document.querySelector('[data-form-title]'));
 
@@ -115,36 +110,28 @@ class ViewModel extends BaseViewModel {
       });
    }
 
-   #initResults() {
+   initResults() {
       const results = document.querySelector('[data-results]');
       results.addEventListener('click', (e) => {
          switch (e.target.getAttribute('data-click')) {
             case 'edit':
                const id = e.target.getAttribute('data-id');
                PatientsService.get(id, (patient) => {
-                  if (patient != null) {
-                     this.#id = patient.id;
-                     this.#patient.documentId.value = patient.documentId;
-                     this.#patient.firstName.value = patient.firstName;
-                     this.#patient.lastName.value = patient.lastName;
-                     this.#patient.birthDate.value = DateService.toInputDateString(patient.birthDate);
-                     this.#patient.genderId.value = patient.genderId;
-                     this.#formTitle.value = 'Editar Paciente';
-                     this.#modal.open();
-                  } else {
-                     alert('No se pudo cargar el registro seleccionado');
-                  }
+                  this.#id = patient.id;
+                  this.#patient.documentId.value = patient.documentId;
+                  this.#patient.firstName.value = patient.firstName;
+                  this.#patient.lastName.value = patient.lastName;
+                  this.#patient.birthDate.value = DateService.toInputDateString(patient.birthDate);
+                  this.#patient.genderId.value = patient.genderId;
+                  this.#formTitle.value = 'Editar Paciente';
+                  this.#modal.open();
                });
                break;
             case 'delete':
                if (confirm('Desea borrar esta entrada?')) {
                   const id = e.target.getAttribute('data-id');
-                  PatientsService.delete(id, (deleted) => {
-                     if (deleted) {
-                        this.#searchPatients();
-                     } else {
-                        alert('No se pudo borrar la entrada');
-                     }
+                  PatientsService.delete(id, (patient) => {
+                     this.searchPatients();
                   });
                }
                break;
@@ -152,6 +139,7 @@ class ViewModel extends BaseViewModel {
       });
 
       this.#results = new OneWayCollectionProp([], {
+         //Función para dar formato legible de text de fecha
          toDisplayDate: (value) => {
             return DateService.toDisplayLocaleString(value, 'es-US')
          }
@@ -168,37 +156,25 @@ class ViewModel extends BaseViewModel {
          genderId: this.#patient.genderId.value
       };
 
-      if (this.#id == null) {
-         PatientsService.insert(data, (patient) => {
-            this.#modal.close();
-            this.#filter.documentId.value = patient.documentId;
-            this.#filter.firstName.value = null;
-            this.#filter.lastName.value = null;
-            this.#filter.birthDateFrom.value = null;
-            this.#filter.birthDateTo.value = null;
-            this.#filter.genderId.value = null;
-            this.#searchPatients();
-         });
-      } else {
-         PatientsService.update(this.#id, data, (patient) => {
-            if (patient != null) {
-               this.#modal.close();
-               this.#filter.documentId.value = patient.documentId;
-               this.#filter.firstName.value = null;
-               this.#filter.lastName.value = null;
-               this.#filter.birthDateFrom.value = null;
-               this.#filter.birthDateTo.value = null;
-               this.#filter.genderId.value = null;
-               this.#searchPatients();
-            } else {
-               alert('No se pudo actualizar el registro');
-            }
-         });
-      }
+      const afterSave = (patient) => {
+         this.#modal.close();
+         this.#filter.documentId.value = patient.documentId;
+         this.#filter.firstName.value = null;
+         this.#filter.lastName.value = null;
+         this.#filter.birthDateFrom.value = null;
+         this.#filter.birthDateTo.value = null;
+         this.#filter.genderId.value = null;
+         this.searchPatients();
+      };
 
+      if(this.#id == null) {
+         PatientsService.insert(data, afterSave);
+      } else {
+         PatientsService.update(this.#id, data, afterSave);
+      }
    }
 
-   #searchPatients() {
+   searchPatients() {
       const filter = {
          documentId: this.#filter.documentId.value,
          firstName: this.#filter.firstName.value,
@@ -215,3 +191,13 @@ class ViewModel extends BaseViewModel {
 }
 
 const viewModel = new ViewModel();
+
+//Inicialización
+viewModel.initGenders();
+viewModel.initFilter();
+viewModel.initPatient();
+viewModel.initModal();
+viewModel.initResults();
+
+//Búsqueda inicial
+viewModel.searchPatients();

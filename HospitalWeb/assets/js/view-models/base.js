@@ -10,11 +10,13 @@ export class BaseViewModel {
       const button = document.querySelector('[data-menu-button]');
       const menu = document.querySelector('[data-menu]');
 
-      if (button && menu) {
-         button.addEventListener('click', () => {
-            menu.classList.toggle('open');
-         });
+      if (!button || !menu) {
+         throw new Error('Menu elements not present')
       }
+
+      button.addEventListener('click', () => {
+         menu.classList.toggle('open');
+      });
    }
 
    #initPanels() {
