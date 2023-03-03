@@ -1,0 +1,47 @@
+.panel {
+   margin: 1rem 0;
+   padding: 1rem;
+   box-shadow: 0.1rem 0.1rem 0 0 var(--color-shadow-light);
+   border-radius: 0.2rem;
+   border: 0.1rem solid var(--color-border);
+}
+
+.panel.slim {
+   padding: 0;
+}
+
+.panel:first-child {
+   margin-top: 0;
+}
+
+.panel:last-child {
+   margin-bottom: 0;
+}
+
+.panel .title {
+   border-bottom: 0.1rem solid var(--color-border);
+   margin-bottom: 1rem;
+   font-size: 2rem;
+}
+
+.panel .title.toggle {
+   cursor: pointer;
+}
+
+.panel .title.toggle::after {
+   /* Caracter: ► */
+   content: '\025B8';
+}
+
+.panel .title.toggle.open::after {
+   /* Caracter: ▼ */
+   content: '\025BE';
+}
+
+.panel .toggle-section {
+   display: none;
+}
+
+.panel .toggle-section.open {
+   display: block;
+}

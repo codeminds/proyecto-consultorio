@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8" />
+   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   <link rel="shortcut icon" href="/assets/img/favicon.ico" type="image/x-icon" />
+   <link rel="stylesheet" href="/assets/css/site.css" />
+   <script src="/assets/js/view-models/appointments.js" type="module"></script>
+   <title>Hospital Web</title>
+</head>
+
+<body>
+   <header class="navbar">
+      <button class="menu" data-menu-button>&equiv;</button>
+      <figure>
+         <img src="/assets/img/code-minds.png" alt="Code Minds" />
+      </figure>
+   </header>
+   <section class="wrapper">
+      <nav class="sidenav" data-menu>
+         <h3 class="category">Men&uacute; Principal</h3>
+         <ul class="menu">
+            <li class="active">
+               <a href="/">
+                  <span>Citas</span>
+               </a>
+            </li>
+            <li>
+               <a href="/doctors.html">
+                  <span>Doctores</span>
+               </a>
+            </li>
+            <li>
+               <a href="/patients.html">
+                  <span>Pacientes</span>
+               </a>
+            </li>
+         </ul>
+      </nav>
+      <main>
+         <h1>Citas</h1>
+         <section data-panel class="panel">
+            <h3 data-toggle class="title toggle open">Doctor</h3>
+            <form name="doctorFilter" data-toggle-section class="toggle-section open row">
+               <div class="form-field col col-4">
+                  <label for="doctor-filter-document-id">C&eacute;dula</label>
+                  <input type="text" id="doctor-filter-document-id" name="documentId" placeholder="123456789" />
+               </div>
+               <div class="form-field col col-4">
+                  <label for="doctor-filter-first-name">Nombre</label>
+                  <input type="text" id="doctor-filter-first-name" name="firstName" placeholder="John" />
+               </div>
+               <div class="form-field col col-4">
+                  <label for="doctor-filter-last-name">Apellido</label>
+                  <input type="text" id="doctor-filter-last-name" name="lastName" placeholder="Smith" />
+               </div>
+               <div class="form-field col col-4">
+                  <label for="doctor-filter-field">Especialidad</label>
+                  <select id="doctor-filter-field" name="field" data-filter="fields"></select>
+               </div>
+            </form>
+         </section>
+         <section data-panel class="panel">
+            <h3 data-toggle class="title toggle open">Paciente</h3>
+            <form name="patientFilter" data-toggle-section class="toggle-section open row">
+               <div class="form-field col col-3">
+                  <label for="patient-filter-document-id">C&eacute;dula</label>
+                  <input type="text" id="patient-filter-document-id" name="documentId" placeholder="123456789" />
+               </div>
+               <div class="form-field col col-3">
+                  <label for="patient-filter-first-name">Nombre</label>
+                  <input type="text" id="patient-filter-first-name" name="firstName" placeholder="John" />
+               </div>
+               <div class="form-field col col-3">
+                  <label for="patient-filter-last-name">Apellido</label>
+                  <input type="text" id="patient-filter-last-name" name="lastName" placeholder="Smith" />
+               </div>
+               <div class="form-field col col-3">
+                  <label for="patient-filter-birth-date-from">Fecha Desde</label>
+                  <input type="datetime-local" id="patient-filter-birth-date-from" name="birthDateFrom" />
+               </div>
+               <div class="form-field col col-3">
+                  <label for="patient-filter-birth-date-to">Fecha Hasta</label>
+                  <input type="datetime-local" id="patient-filter-birth-date-to" name="birthDateTo" />
+               </div>
+               <div class="form-field col col-3">
+                  <label>G&eacute;nero</label>
+                  <div data-filter="genders"></div>
+               </div>
+            </form>
+         </section>
+         <section data-panel class="panel">
+            <h3 data-toggle class="title toggle open">Cita</h3>
+            <form name="filter" data-toggle-section class="toggle-section open row">
+               <div class="form-field col col-2">
+                  <label for="filter-date-from">Fecha Desde</label>
+                  <input type="datetime-local" id="filter-date-from" name="dateFrom" />
+               </div>
+               <div class="form-field col col-2">
+                  <label for="filter-date-to">Fecha Hasta</label>
+                  <input type="datetime-local" id="filter-date-to" name="dateTo" />
+               </div>
+               <div class="form-field col col-1">
+                  <button class="button success" type="button" data-search>Buscar</button>
+               </div>
+            </form>
+         </section>
+         <section class="panel slim table with-controls">
+            <div class="controls">
+               <button class="button success" data-new>Nueva Cita</button>
+            </div>
+            <table>
+               <thead>
+                  <th style="width: 175%;">Fecha</th>
+                  <th style="width: 150%;">Doctor</th>
+                  <th style="width: 150%;">Paciente</th>
+                  <th style="width: 100%;">Especialidad</th>
+                  <th style="width: 200%;"></th>
+               </thead>
+               <tbody data-results></tbody>
+            </table>
+         </section>
+      </main>
+   </section>
+   <div data-modal class="modal medium">
+      <div class="content">
+         <h2 data-form-title></h2>
+         <form name="insertUpdate">
+            <div class="form-field">
+               <label for="form-date">Fecha</label>
+               <input type="datetime-local" id="form-date" name="date" />
+            </div>
+            <div class="form-field">
+               <label for="form-doctor">Doctor</label>
+               <select id="form-doctor" name="doctor" data-form="doctors"></select>
+            </div>
+            <div class="form-field">
+               <label for="form-patient">Paciente</label>
+               <select id="form-patient" name="patient" data-form="patients"></select>
+            </div>
+            <div class="form-field">
+               <button type="button" class="button success" data-save>Guardar</button>
+               <button type="button" class="button neutral" data-cancel>Cancelar</button>
+            </div>
+         </form>
+      </div>
+   </div>
+</body>
+
+</html>
