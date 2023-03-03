@@ -9,13 +9,23 @@ import { PatientsService } from '../services/patient.js';
 
 class ViewModel extends BaseViewModel {
    #id;
-   #modal;
+   #formTitle;
    #results;
+   #modal;
 
    constructor() {
       super();
 
       this.#id = null;
+      this.#formTitle = document.querySelector('[data-form-title]');
+      this.#results = document.querySelector('[data-results]');
+      this.#modal = new Modal(document.querySelector('[data-modal]'), 'medium', () => {
+         this.#id = null;
+         document.forms.insertUpdate.date.value = '';
+         document.forms.insertUpdate.doctor.selectedIndex = 0;
+         document.forms.insertUpdate.patient.selectedIndex = 0;
+         this.#formTitle.textContent = '';
+      });
    }
 
    initFields() {
@@ -104,16 +114,8 @@ class ViewModel extends BaseViewModel {
    }
 
    initModal() {
-      this.#modal = new Modal(document.querySelector('[data-modal]'), 'medium', () => {
-         this.#id = null;
-         document.forms.insertUpdate.date.value = '';
-         document.forms.insertUpdate.doctor.selectedIndex = 0;
-         document.forms.insertUpdate.patient.selectedIndex = 0;
-         document.querySelector('[data-form-title]').textContent = '';
-      });
-
       document.querySelector('[data-new]').addEventListener('click', () => {
-         document.querySelector('[data-form-title]').textContent = 'Nueva Cita';
+         this.#formTitle.textContent = 'Nueva Cita';
          this.#modal.open();
       });
 
@@ -127,7 +129,6 @@ class ViewModel extends BaseViewModel {
    }
 
    initResults() {
-      this.#results = document.querySelector('[data-results]');
       this.#results.addEventListener('click', (e) => {
          switch (e.target.getAttribute('data-click')) {
             case 'edit':
@@ -137,7 +138,7 @@ class ViewModel extends BaseViewModel {
                   document.forms.insertUpdate.date.value = DateService.toInputDateString(appointment.date);
                   document.forms.insertUpdate.doctor.value = appointment.doctorId;
                   document.forms.insertUpdate.patient.value = appointment.patientId;
-                  document.querySelector('[data-form-title]').textContent = 'Editar Cita';
+                  this.#formTitle.textContent = 'Editar Cita';
                   this.#modal.open();
                });
                break;
@@ -153,47 +154,46 @@ class ViewModel extends BaseViewModel {
       });
    }
 
-   save() {
+   #save() {
       const data = {
          date: new Date(document.forms.insertUpdate.date.value),
          doctorId: document.forms.insertUpdate.doctor.value,
          patientId: document.forms.insertUpdate.patient.value
       };
 
-      //Se guarda la referencia al callback a utilizar después de la operación de salvado
-      const afterSave = (appointment) => {
-         let doctorDocumentId;
-         let patientDocumentId;
-
-         DoctorService.get(appointment.doctorId, (doctor) => {
-            doctorDocumentId = doctor.documentId;
-         })
-
-         PatientsService.get(appointment.patientId, (patient) => {
-            patientDocumentId = patient.documentId;
-         });
-
-         this.#modal.close();
-         document.forms.doctorFilter.documentId.value = doctorDocumentId;
-         document.forms.doctorFilter.firstName.value = '';
-         document.forms.doctorFilter.lastName.value = '';
-         document.forms.doctorFilter.field.value = '';
-         document.forms.patientFilter.documentId.value = patientDocumentId;
-         document.forms.patientFilter.firstName.value = '';
-         document.forms.patientFilter.lastName.value = '';
-         document.forms.patientFilter.birthDateFrom.value = '';
-         document.forms.patientFilter.birthDateTo.value = '';
-         document.forms.patientFilter.gender.value = '';
-         document.forms.filter.dateFrom.value = DateService.toInputDateString(appointment.date);
-         document.forms.filter.dateTo.value = DateService.toInputDateString(appointment.date);
-         this.searchAppointments();
-      }
-
       if(this.#id == null) {
-         AppointmentsService.insert(data, afterSave);
+         AppointmentsService.insert(data, this.#onSaved.bind(this));
       } else {
-         AppointmentsService.update(this.#id, data, afterSave);
+         AppointmentsService.update(this.#id, data, this.#onSaved.bind(this));
       }
+   }
+
+   #onSaved(appointment) {
+      let doctorDocumentId;
+      let patientDocumentId;
+
+      DoctorService.get(appointment.doctorId, (doctor) => {
+         doctorDocumentId = doctor.documentId;
+      })
+
+      PatientsService.get(appointment.patientId, (patient) => {
+         patientDocumentId = patient.documentId;
+      });
+
+      this.#modal.close();
+      document.forms.doctorFilter.documentId.value = doctorDocumentId;
+      document.forms.doctorFilter.firstName.value = '';
+      document.forms.doctorFilter.lastName.value = '';
+      document.forms.doctorFilter.field.value = '';
+      document.forms.patientFilter.documentId.value = patientDocumentId;
+      document.forms.patientFilter.firstName.value = '';
+      document.forms.patientFilter.lastName.value = '';
+      document.forms.patientFilter.birthDateFrom.value = '';
+      document.forms.patientFilter.birthDateTo.value = '';
+      document.forms.patientFilter.gender.value = '';
+      document.forms.filter.dateFrom.value = DateService.toInputDateString(appointment.date);
+      document.forms.filter.dateTo.value = DateService.toInputDateString(appointment.date);
+      this.searchAppointments();
    }
 
    searchAppointments() {

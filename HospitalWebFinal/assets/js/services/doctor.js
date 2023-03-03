@@ -32,7 +32,7 @@ export class DoctorService extends BaseService {
             'Content-Type': 'application/json'
          },
          body: JSON.stringify(data)
-      }).then((response) => this.handleError(response, callback));
+      }).then((response) => this.handleResponse(response, callback));
    }
 
    static update(id, data, callback) {

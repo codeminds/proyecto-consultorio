@@ -7,8 +7,8 @@ export class PatientsService extends BaseService {
       const filterString = `&documentId=${filter?.documentId ?? ''}`
          + `&firstName=${filter?.firstName ?? ''}`
          + `&lastName=${filter?.lastName ?? ''}`
-         + `&birthDateFrom=${DateService.toInputDateString(filter?.birthDateFrom)}`
-         + `&birthDateTo=${DateService.toInputDateString(filter?.birthDateTo)}`
+         + `&birthDateFrom=${filter?.birthDateFrom ?? ''}`
+         + `&birthDateTo=${filter?.birthDateTo ?? ''}`
          + `&genderId=${filter?.genderId ?? ''}`;
 
       fetch(`https://localhost:7221/api/patients?${filterString}`, {

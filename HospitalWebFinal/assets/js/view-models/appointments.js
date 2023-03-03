@@ -9,18 +9,31 @@ import { PatientsService } from '../services/patient.js';
 
 class ViewModel extends BaseViewModel {
    #id;
-   #modal;
+   #formTitle;
+   #formErrors;
    #results;
+   #modal;
 
    constructor() {
       super();
 
       this.#id = null;
+      this.#formTitle = document.querySelector('[data-form-title]');
+      this.#formErrors = document.querySelector('[data-form-errors]');
+      this.#results = document.querySelector('[data-results]');
+      this.#modal = new Modal(document.querySelector('[data-modal]'), 'medium', () => {
+         this.#id = null;
+         document.forms.insertUpdate.date.value = '';
+         document.forms.insertUpdate.doctor.selectedIndex = 0;
+         document.forms.insertUpdate.patient.selectedIndex = 0;
+         this.#formTitle.textContent = '';
+         this.#formErrors.innerHTML = '';
+      });
    }
 
    initFields() {
-      FieldService.list((fields) => {
-         this.#populateFields(document.querySelector('[data-filter="fields"]'), [{ id: '', name: 'Todos' }, ...fields]);
+      FieldService.list((result) => {
+         this.#populateFields(document.querySelector('[data-filter="fields"]'), [{ id: '', name: 'Todos' }, ...result.data]);
       });
    }
 
@@ -35,8 +48,8 @@ class ViewModel extends BaseViewModel {
    }
 
    initGenders() {
-      GenderService.list((genders) => {
-         this.#populateGenders(document.querySelector('[data-filter="genders"]'), [{ id: '', name: 'Todos' }, ...genders]);
+      GenderService.list((result) => {
+         this.#populateGenders(document.querySelector('[data-filter="genders"]'), [{ id: '', name: 'Todos' }, ...result.data]);
       });
    }
 
@@ -64,8 +77,8 @@ class ViewModel extends BaseViewModel {
    }
 
    initDoctors() {
-      DoctorService.list(null, (doctors) => {
-         this.#populateDoctors(document.querySelector('[data-form="doctors"]'), doctors);
+      DoctorService.list(null, (result) => {
+         this.#populateDoctors(document.querySelector('[data-form="doctors"]'), result.data);
       });
    }
 
@@ -74,15 +87,15 @@ class ViewModel extends BaseViewModel {
          const option = document.createElement('option');
 
          option.value = doctor.id;
-         option.textContent = `(${doctor.field}) ${doctor.firstName} ${doctor.lastName}`;
+         option.textContent = `(${doctor.field.name}) ${doctor.firstName} ${doctor.lastName}`;
 
          select.appendChild(option);
       }
    }
 
    initPatients() {
-      PatientsService.list(null, (patients) => {
-         this.#populatePatients(document.querySelector('[data-form="patients"]'), patients);
+      PatientsService.list(null, (result) => {
+         this.#populatePatients(document.querySelector('[data-form="patients"]'), result.data);
       });
    }
 
@@ -104,16 +117,8 @@ class ViewModel extends BaseViewModel {
    }
 
    initModal() {
-      this.#modal = new Modal(document.querySelector('[data-modal]'), 'medium', () => {
-         this.#id = null;
-         document.forms.insertUpdate.date.value = '';
-         document.forms.insertUpdate.doctor.selectedIndex = 0;
-         document.forms.insertUpdate.patient.selectedIndex = 0;
-         document.querySelector('[data-form-title]').textContent = '';
-      });
-
       document.querySelector('[data-new]').addEventListener('click', () => {
-         document.querySelector('[data-form-title]').textContent = 'Nueva Cita';
+         this.#formTitle.textContent = 'Nueva Cita';
          this.#modal.open();
       });
 
@@ -127,25 +132,37 @@ class ViewModel extends BaseViewModel {
    }
 
    initResults() {
-      this.#results = document.querySelector('[data-results]');
       this.#results.addEventListener('click', (e) => {
          switch (e.target.getAttribute('data-click')) {
             case 'edit':
                const id = e.target.getAttribute('data-id');
-               AppointmentsService.get(id, (appointment) => {
+               AppointmentsService.get(id, (result) => {
+                  const appointment = result.data;
                   this.#id = appointment.id;
-                  document.forms.insertUpdate.date.value = DateService.toInputDateString(appointment.date);
-                  document.forms.insertUpdate.doctor.value = appointment.doctorId;
-                  document.forms.insertUpdate.patient.value = appointment.patientId;
-                  document.querySelector('[data-form-title]').textContent = 'Editar Cita';
+                  document.forms.insertUpdate.date.value = appointment.date;
+                  document.forms.insertUpdate.doctor.value = appointment.doctor.id;
+                  document.forms.insertUpdate.patient.value = appointment.patient.id;
+                  this.#formTitle.textContent = 'Editar Cita';
                   this.#modal.open();
                });
                break;
             case 'delete':
                if (confirm('Desea borrar esta entrada?')) {
                   const id = e.target.getAttribute('data-id');
-                  AppointmentsService.delete(id, (appointment) => {
-                     this.searchAppointments();
+                  AppointmentsService.delete(id, (result) => {
+                     if(result.success) {
+                        this.searchAppointments();
+                     } else {
+                        let errors = '';
+
+                        for(const error of result.messages) {
+                           errors += `${error}\n`;
+                        }
+
+                        if(errors != '') {
+                           alert(errors);
+                        }
+                     }
                   });
                }
                break;
@@ -153,58 +170,52 @@ class ViewModel extends BaseViewModel {
       });
    }
 
-   save() {
+   #save() {
       const data = {
-         date: new Date(document.forms.insertUpdate.date.value),
+         date: document.forms.insertUpdate.date.value || null,
          doctorId: document.forms.insertUpdate.doctor.value,
          patientId: document.forms.insertUpdate.patient.value
       };
 
-      //Se guarda la referencia al callback a utilizar después de la operación de salvado
-      const afterSave = (appointment) => {
-         let doctorDocumentId;
-         let patientDocumentId;
+      this.#formErrors.innerHTML = '';
+      if(this.#id == null) {
+         AppointmentsService.insert(data, this.#onSaved.bind(this));
+      } else {
+         AppointmentsService.update(this.#id, data, this.#onSaved.bind(this));
+      }
+   }
 
-         DoctorService.get(appointment.doctorId, (doctor) => {
-            doctorDocumentId = doctor.documentId;
-         })
-
-         PatientsService.get(appointment.patientId, (patient) => {
-            patientDocumentId = patient.documentId;
-         });
-
+   #onSaved(result) {
+      if(result.success) {
+         const appointment = result.data;
          this.#modal.close();
-         document.forms.doctorFilter.documentId.value = doctorDocumentId;
+         document.forms.doctorFilter.documentId.value = appointment.doctor.documentId;
          document.forms.doctorFilter.firstName.value = '';
          document.forms.doctorFilter.lastName.value = '';
          document.forms.doctorFilter.field.value = '';
-         document.forms.patientFilter.documentId.value = patientDocumentId;
+         document.forms.patientFilter.documentId.value = appointment.patient.documentId;
          document.forms.patientFilter.firstName.value = '';
          document.forms.patientFilter.lastName.value = '';
          document.forms.patientFilter.birthDateFrom.value = '';
          document.forms.patientFilter.birthDateTo.value = '';
          document.forms.patientFilter.gender.value = '';
-         document.forms.filter.dateFrom.value = DateService.toInputDateString(appointment.date);
-         document.forms.filter.dateTo.value = DateService.toInputDateString(appointment.date);
+         document.forms.filter.dateFrom.value = appointment.date;
+         document.forms.filter.dateTo.value = appointment.date;
          this.searchAppointments();
-      }
-
-      if(this.#id == null) {
-         AppointmentsService.insert(data, afterSave);
       } else {
-         AppointmentsService.update(this.#id, data, afterSave);
+         for(const message of result.messages) {
+            const li = document.createElement('li');
+            li.textContent = message;
+
+            this.#formErrors.appendChild(li);
+         }
       }
    }
 
    searchAppointments() {
-      const dateFrom = document.forms.filter.dateFrom.value;
-      const dateTo = document.forms.filter.dateTo.value;
-      const birthDateFrom = document.forms.patientFilter.birthDateFrom.value;
-      const birthDateTo = document.forms.patientFilter.birthDateTo.value;
-
       const filter = {
-         dateFrom: dateFrom ? new Date(dateFrom) : null,
-         dateTo: dateTo ? new Date(dateTo) : null,
+         dateFrom: document.forms.filter.dateFrom.value,
+         dateTo: document.forms.filter.dateTo.value,
          doctor: {
             documentId: document.forms.doctorFilter.documentId.value,
             firstName: document.forms.doctorFilter.firstName.value,
@@ -215,31 +226,32 @@ class ViewModel extends BaseViewModel {
             documentId: document.forms.patientFilter.documentId.value,
             firstName: document.forms.patientFilter.firstName.value,
             lastName: document.forms.patientFilter.lastName.value,
-            birthDateFrom: birthDateFrom ? new Date(birthDateFrom) : null,
-            birthDateTo: birthDateTo ? new Date(birthDateTo) : null,
-            genderId: document.forms.patientFilter.gender.value
+            birthDateFrom: document.forms.patientFilter.birthDateFrom.value,
+            birthDateTo: document.forms.patientFilter.birthDateTo.value,
+            genderId: document.forms.patientFilter.gender?.value
          }
       };
 
-      AppointmentsService.list(filter, (appointments) => {
+      AppointmentsService.list(filter, (result) => {
+         const appointments = result.data;
          this.#results.innerHTML = '';
          for (const appointment of appointments) {
             const row = document.createElement('tr');
 
             const birthDate = document.createElement('td');
-            birthDate.textContent = DateService.toDisplayLocaleString(appointment.date, 'es-US');
+            birthDate.textContent = DateService.toDisplayLocaleString(new Date(appointment.date), 'es-US');
             row.appendChild(birthDate);
 
             const name = document.createElement('td');
-            name.textContent = appointment.doctorName;
+            name.textContent = `${appointment.doctor.firstName} ${appointment.doctor.lastName}`;
             row.appendChild(name);
 
             const patients = document.createElement('td');
-            patients.textContent = appointment.patientName;
+            patients.textContent = `${appointment.patient.firstName} ${appointment.patient.lastName}`;
             row.appendChild(patients);
 
             const field = document.createElement('td');
-            field.textContent = appointment.doctorField;
+            field.textContent = appointment.doctor.field.name;
             row.appendChild(field);
 
             const buttons = document.createElement('td');
@@ -266,7 +278,7 @@ class ViewModel extends BaseViewModel {
 
             const mobileHeading = document.createElement('h3');
             mobileHeading.classList.add('heading');
-            mobileHeading.textContent = DateService.toDisplayLocaleString(appointment.date, 'es-US');
+            mobileHeading.textContent = DateService.toDisplayLocaleString(new Date(appointment.date), 'es-US');
             mobile.appendChild(mobileHeading);
 
             const mobileDoctor = document.createElement('p');
@@ -274,7 +286,7 @@ class ViewModel extends BaseViewModel {
             const mobileDoctorText = document.createElement('span');
             mobileDoctorLabel.classList.add('label');
             mobileDoctorLabel.textContent = 'Doctor:';
-            mobileDoctorText.textContent = appointment.doctorName;
+            mobileDoctorText.textContent = `${appointment.doctor.firstName} ${appointment.doctor.lastName}`;
             mobileDoctor.classList.add('data');
             mobileDoctor.appendChild(mobileDoctorLabel);
             mobileDoctor.appendChild(mobileDoctorText);
@@ -285,7 +297,7 @@ class ViewModel extends BaseViewModel {
             const mobilePatientText = document.createElement('span');
             mobilePatientLabel.classList.add('label');
             mobilePatientLabel.textContent = 'Paciente:';
-            mobilePatientText.textContent = appointment.patientName;
+            mobilePatientText.textContent = `${appointment.patient.firstName} ${appointment.patient.lastName}`;
             mobilePatient.classList.add('data');
             mobilePatient.appendChild(mobilePatientLabel);
             mobilePatient.appendChild(mobilePatientText);
@@ -296,7 +308,7 @@ class ViewModel extends BaseViewModel {
             const mobileFieldText = document.createElement('span');
             mobileFieldLabel.classList.add('label');
             mobileFieldLabel.textContent = 'Especialidad:';
-            mobileFieldText.textContent = appointment.doctorField;
+            mobileFieldText.textContent = appointment.doctor.field.name
             mobileField.classList.add('data');
             mobileField.appendChild(mobileFieldLabel);
             mobileField.appendChild(mobileFieldText);

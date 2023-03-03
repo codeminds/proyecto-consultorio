@@ -5,13 +5,24 @@ import { DoctorService } from '../services/doctor.js';
 
 class ViewModel extends BaseViewModel {
    #id;
-   #modal;
+   #formTitle;
    #results;
+   #modal;
 
    constructor() {
       super();
 
       this.#id = null;
+      this.#formTitle = document.querySelector('[data-form-title]');
+      this.#results = document.querySelector('[data-results]');
+      this.#modal = new Modal(document.querySelector('[data-modal]'), 'medium', () => {
+         this.#id = null;
+         document.forms.insertUpdate.documentId.value = '';
+         document.forms.insertUpdate.firstName.value = '';
+         document.forms.insertUpdate.lastName.value = '';
+         document.forms.insertUpdate.field.selectedIndex = 0;
+         this.#formTitle.textContent = '';
+      });
    }
 
    //Funciones para poblar la lista de especialidades dinámicamente
@@ -39,17 +50,8 @@ class ViewModel extends BaseViewModel {
    }
 
    initModal() {
-      this.#modal = new Modal(document.querySelector('[data-modal]'), 'medium', () => {
-         this.#id = null;
-         document.forms.insertUpdate.documentId.value = '';
-         document.forms.insertUpdate.firstName.value = '';
-         document.forms.insertUpdate.lastName.value = '';
-         document.forms.insertUpdate.field.selectedIndex = 0;
-         document.querySelector('[data-form-title]').textContent = '';
-      });
-
       document.querySelector('[data-new]').addEventListener('click', () => {
-         document.querySelector('[data-form-title]').textContent = 'Nuevo Doctor';
+         this.#formTitle.textContent = 'Nuevo Doctor';
          this.#modal.open();
       });
 
@@ -63,7 +65,6 @@ class ViewModel extends BaseViewModel {
    }
 
    initResults() {
-      this.#results = document.querySelector('[data-results]');
       this.#results.addEventListener('click', (e) => {
          switch (e.target.getAttribute('data-click')) {
             case 'edit':
@@ -74,7 +75,7 @@ class ViewModel extends BaseViewModel {
                   document.forms.insertUpdate.firstName.value = doctor.firstName;
                   document.forms.insertUpdate.lastName.value = doctor.lastName;
                   document.forms.insertUpdate.field.value = doctor.fieldId;
-                  document.querySelector('[data-form-title]').textContent = 'Editar Doctor';
+                  this.#formTitle.textContent = 'Editar Doctor';
                   this.#modal.open();
                });
                break;
@@ -98,21 +99,20 @@ class ViewModel extends BaseViewModel {
          fieldId: document.forms.insertUpdate.field.value
       };
 
-      //Se guarda la referencia al callback a utilizar después de la operación de salvado
-      const afterSave = (doctor) => {
-         this.#modal.close();
-         document.forms.filter.documentId.value = doctor.documentId;
-         document.forms.filter.firstName.value = '';
-         document.forms.filter.lastName.value = '';
-         document.forms.filter.field.value = '';
-         this.searchDoctors();
-      }
-
       if(this.#id == null) {
-         DoctorService.insert(data, afterSave);
+         DoctorService.insert(data, this.#onSaved.bind(this));
       }else {
-         DoctorService.update(this.#id, data, afterSave);
+         DoctorService.update(this.#id, data, this.#onSaved.bind(this));
       }
+   }
+
+   #onSaved(doctor) {
+      this.#modal.close();
+      document.forms.filter.documentId.value = doctor.documentId;
+      document.forms.filter.firstName.value = '';
+      document.forms.filter.lastName.value = '';
+      document.forms.filter.field.value = '';
+      this.searchDoctors();
    }
 
    searchDoctors() {

@@ -5,20 +5,34 @@ import { DoctorService } from '../services/doctor.js';
 
 class ViewModel extends BaseViewModel {
    #id;
-   #modal;
+   #formTitle;
+   #formErrors;
    #results;
+   #modal;
 
    constructor() {
       super();
 
       this.#id = null;
+      this.#formTitle = document.querySelector('[data-form-title]');
+      this.#formErrors = document.querySelector('[data-form-errors]');
+      this.#results = document.querySelector('[data-results]');
+      this.#modal = new Modal(document.querySelector('[data-modal]'), 'medium', () => {
+         this.#id = null;
+         document.forms.insertUpdate.documentId.value = '';
+         document.forms.insertUpdate.firstName.value = '';
+         document.forms.insertUpdate.lastName.value = '';
+         document.forms.insertUpdate.field.selectedIndex = 0;
+         this.#formTitle.textContent = '';
+         this.#formErrors.innerHTML = '';
+      });
    }
 
    //Funciones para poblar la lista de especialidades dinámicamente
    initFields() {
-      FieldService.list((fields) => {
-         this.#populateFields(document.querySelector('[data-form="fields"]'), fields);
-         this.#populateFields(document.querySelector('[data-filter="fields"]'), [{ id: '', name: 'Todos' }, ...fields]);
+      FieldService.list((result) => {
+         this.#populateFields(document.querySelector('[data-form="fields"]'), result.data);
+         this.#populateFields(document.querySelector('[data-filter="fields"]'), [{ id: '', name: 'Todos' }, ...result.data]);
       });
    }
 
@@ -39,17 +53,8 @@ class ViewModel extends BaseViewModel {
    }
 
    initModal() {
-      this.#modal = new Modal(document.querySelector('[data-modal]'), 'medium', () => {
-         this.#id = null;
-         document.forms.insertUpdate.documentId.value = '';
-         document.forms.insertUpdate.firstName.value = '';
-         document.forms.insertUpdate.lastName.value = '';
-         document.forms.insertUpdate.field.selectedIndex = 0;
-         document.querySelector('[data-form-title]').textContent = '';
-      });
-
       document.querySelector('[data-new]').addEventListener('click', () => {
-         document.querySelector('[data-form-title]').textContent = 'Nuevo Doctor';
+         this.#formTitle.textContent = 'Nuevo Doctor';
          this.#modal.open();
       });
 
@@ -63,26 +68,38 @@ class ViewModel extends BaseViewModel {
    }
 
    initResults() {
-      this.#results = document.querySelector('[data-results]');
       this.#results.addEventListener('click', (e) => {
          switch (e.target.getAttribute('data-click')) {
             case 'edit':
                const id = e.target.getAttribute('data-id');
-               DoctorService.get(id, (doctor) => {
+               DoctorService.get(id, (result) => {
+                  const doctor = result.data;
                   this.#id = doctor.id;
                   document.forms.insertUpdate.documentId.value = doctor.documentId;
                   document.forms.insertUpdate.firstName.value = doctor.firstName;
                   document.forms.insertUpdate.lastName.value = doctor.lastName;
-                  document.forms.insertUpdate.field.value = doctor.fieldId;
-                  document.querySelector('[data-form-title]').textContent = 'Editar Doctor';
+                  document.forms.insertUpdate.field.value = doctor.field.id;
+                  this.#formTitle.textContent = 'Editar Doctor';
                   this.#modal.open();
                });
                break;
             case 'delete':
                if (confirm('Desea borrar esta entrada?')) {
                   const id = e.target.getAttribute('data-id');
-                  DoctorService.delete(id, (doctor) => {
-                     this.searchDoctors();
+                  DoctorService.delete(id, (result) => {
+                     if(result.success) {
+                        this.searchDoctors();
+                     } else {
+                        let errors = '';
+
+                        for(const error of result.messages) {
+                           errors += `${error}\n`;
+                        }
+
+                        if(errors != '') {
+                           alert(errors);
+                        }
+                     }
                   })
                }
                break;
@@ -98,20 +115,30 @@ class ViewModel extends BaseViewModel {
          fieldId: document.forms.insertUpdate.field.value
       };
 
-      //Se guarda la referencia al callback a utilizar después de la operación de salvado
-      const afterSave = (doctor) => {
+      this.#formErrors.innerHTML = '';
+      if(this.#id == null) {
+         DoctorService.insert(data, this.#onSaved.bind(this));
+      }else {
+         DoctorService.update(this.#id, data, this.#onSaved.bind(this));
+      }
+   }
+
+   #onSaved(result) {
+      if(result.success){
+         const doctor = result.data;
          this.#modal.close();
          document.forms.filter.documentId.value = doctor.documentId;
          document.forms.filter.firstName.value = '';
          document.forms.filter.lastName.value = '';
          document.forms.filter.field.value = '';
          this.searchDoctors();
-      }
+      } else {
+         for(const message of result.messages) {
+            const li = document.createElement('li');
+            li.textContent = message;
 
-      if(this.#id == null) {
-         DoctorService.insert(data, afterSave);
-      }else {
-         DoctorService.update(this.#id, data, afterSave);
+            this.#formErrors.appendChild(li);
+         }
       }
    }
 
@@ -123,7 +150,8 @@ class ViewModel extends BaseViewModel {
          fieldId: document.forms.filter.field.value
       };
 
-      DoctorService.list(filter, (doctors) => {
+      DoctorService.list(filter, (result) => {
+         const doctors = result.data;
          this.#results.innerHTML = '';
          for (const doctor of doctors) {
             const row = document.createElement('tr');
@@ -137,7 +165,7 @@ class ViewModel extends BaseViewModel {
             row.appendChild(name);
 
             const field = document.createElement('td');
-            field.textContent = doctor.field;
+            field.textContent = doctor.field.name;
             row.appendChild(field);
 
             const buttons = document.createElement('td');
@@ -183,7 +211,7 @@ class ViewModel extends BaseViewModel {
             const mobileFieldText = document.createElement('span');
             mobileFieldLabel.classList.add('label');
             mobileFieldLabel.textContent = 'Especialidad:';
-            mobileFieldText.textContent = doctor.field;
+            mobileFieldText.textContent = doctor.field.name;
             mobileField.classList.add('data');
             mobileField.appendChild(mobileFieldLabel);
             mobileField.appendChild(mobileFieldText);

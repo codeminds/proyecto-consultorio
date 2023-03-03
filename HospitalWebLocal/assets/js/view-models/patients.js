@@ -6,13 +6,25 @@ import { DateService } from '../services/date.js';
 
 class ViewModel extends BaseViewModel {
    #id;
-   #modal;
+   #formTitle;
    #results;
+   #modal;
 
    constructor() {
       super();
 
       this.#id = null;
+      this.#formTitle = document.querySelector('[data-form-title]');
+      this.#results = document.querySelector('[data-results]');
+      this.#modal = new Modal(document.querySelector('[data-modal]'), 'medium', () => {
+         this.#id = null;
+         document.forms.insertUpdate.documentId.value = '';
+         document.forms.insertUpdate.firstName.value = '';
+         document.forms.insertUpdate.lastName.value = '';
+         document.forms.insertUpdate.birthDate.value = '';
+         document.forms.insertUpdate.gender.value = '1';
+         this.#formTitle.textContent = '';
+      });
    }
 
 
@@ -53,18 +65,8 @@ class ViewModel extends BaseViewModel {
    }
 
    initModal() {
-      this.#modal = new Modal(document.querySelector('[data-modal]'), 'medium', () => {
-         this.#id = null;
-         document.forms.insertUpdate.documentId.value = '';
-         document.forms.insertUpdate.firstName.value = '';
-         document.forms.insertUpdate.lastName.value = '';
-         document.forms.insertUpdate.birthDate.value = '';
-         document.forms.insertUpdate.gender.value = '1';
-         document.querySelector('[data-form-title]').textContent = '';
-      });
-
       document.querySelector('[data-new]').addEventListener('click', () => {
-         document.querySelector('[data-form-title]').textContent = 'Nuevo Paciente';
+         this.#formTitle.textContent = 'Nuevo Paciente';
          this.#modal.open();
       });
 
@@ -78,7 +80,6 @@ class ViewModel extends BaseViewModel {
    }
 
    initResults() {
-      this.#results = document.querySelector('[data-results]');
       this.#results.addEventListener('click', (e) => {
          switch (e.target.getAttribute('data-click')) {
             case 'edit':
@@ -90,7 +91,7 @@ class ViewModel extends BaseViewModel {
                   document.forms.insertUpdate.lastName.value = patient.lastName;
                   document.forms.insertUpdate.birthDate.value = DateService.toInputDateString(patient.birthDate);
                   document.forms.insertUpdate.gender.value = patient.genderId;
-                  document.querySelector('[data-form-title]').textContent = 'Editar Paciente';
+                  this.#formTitle.textContent = 'Editar Paciente';
                   this.#modal.open();
                });
                break;
@@ -115,23 +116,22 @@ class ViewModel extends BaseViewModel {
          genderId: document.forms.insertUpdate.gender.value
       };
 
-      //Se guarda la referencia al callback a utilizar después de la operación de salvado
-      const afterSave = (patient) => {
-         this.#modal.close();
-         document.forms.filter.documentId.value = patient.documentId;
-         document.forms.filter.firstName.value = '';
-         document.forms.filter.lastName.value = '';
-         document.forms.filter.birthDateFrom.value = '';
-         document.forms.filter.birthDateTo.value = '';
-         document.forms.filter.gender.value = '';
-         this.searchPatients();
-      };
-
       if(this.#id == null) {
-         PatientsService.insert(data, afterSave);
+         PatientsService.insert(data, this.#onSaved.bind(this));
       } else {
-         PatientsService.update(this.#id, data, afterSave);
+         PatientsService.update(this.#id, data, this.#onSaved.bind(this));
       }
+   }
+
+   #onSaved(patient) {
+      this.#modal.close();
+      document.forms.filter.documentId.value = patient.documentId;
+      document.forms.filter.firstName.value = '';
+      document.forms.filter.lastName.value = '';
+      document.forms.filter.birthDateFrom.value = '';
+      document.forms.filter.birthDateTo.value = '';
+      document.forms.filter.gender.value = '';
+      this.searchPatients();
    }
 
    searchPatients() {

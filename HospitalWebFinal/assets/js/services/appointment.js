@@ -11,11 +11,11 @@ export class AppointmentsService extends BaseService {
          + `&patient.documentId=${filter?.patient?.documentId ?? ''}`
          + `&patient.firstName=${filter?.patient?.firstName ?? ''}`
          + `&patient.lastName=${filter?.patient?.lastName ?? ''}`
-         + `&patient.birthDateFrom=${DateService.toInputDateString(filter?.patient?.birthDateFrom)}`
-         + `&patient.birthDateTo=${DateService.toInputDateString(filter?.patient?.birthDateTo)}`
+         + `&patient.birthDateFrom=${filter?.patient?.birthDateFrom ?? ''}`
+         + `&patient.birthDateTo=${filter?.patient?.birthDateTo ?? ''}`
          + `&patient.genderId=${filter?.patient?.genderId ?? ''}`
-         + `&dateFrom=${DateService.toInputDateString(filter?.dateFrom)}`
-         + `&dateTo=${DateService.toInputDateString(filter?.dateTo)}`;
+         + `&dateFrom=${filter?.dateFrom ?? ''}`
+         + `&dateTo=${filter?.dateTo ?? ''}`;
 
       fetch(`https://localhost:7221/api/appointments?${filterString}`, {
          method: 'GET',
@@ -41,7 +41,7 @@ export class AppointmentsService extends BaseService {
             'Content-Type': 'application/json'
          },
          body: JSON.stringify(data)
-      }).then((response) => this.handleError(response, callback));
+      }).then((response) => this.handleResponse(response, callback));
    }
 
    static update(id, data, callback) {

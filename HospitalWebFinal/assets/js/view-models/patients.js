@@ -6,20 +6,35 @@ import { DateService } from '../services/date.js';
 
 class ViewModel extends BaseViewModel {
    #id;
-   #modal;
+   #formTitle;
+   #formErrors;
    #results;
+   #modal;
 
    constructor() {
       super();
 
       this.#id = null;
+      this.#formTitle = document.querySelector('[data-form-title]');
+      this.#formErrors = document.querySelector('[data-form-errors]');
+      this.#results = document.querySelector('[data-results]');
+      this.#modal = new Modal(document.querySelector('[data-modal]'), 'medium', () => {
+         this.#id = null;
+         document.forms.insertUpdate.documentId.value = '';
+         document.forms.insertUpdate.firstName.value = '';
+         document.forms.insertUpdate.lastName.value = '';
+         document.forms.insertUpdate.birthDate.value = '';
+         document.forms.insertUpdate.gender.value = '1';
+         this.#formTitle.textContent = '';
+         this.#formErrors.innerHTML = '';
+      });
    }
 
 
    initGenders() {
-      GenderService.list((genders) => {
-         this.#populateGenders(document.querySelector('[data-form="genders"]'), genders);
-         this.#populateGenders(document.querySelector('[data-filter="genders"]'), [{ id: '', name: 'Todos' }, ...genders]);
+      GenderService.list((result) => {
+         this.#populateGenders(document.querySelector('[data-form="genders"]'), result.data);
+         this.#populateGenders(document.querySelector('[data-filter="genders"]'), [{ id: '', name: 'Todos' }, ...result.data]);
       });
    }
 
@@ -53,18 +68,8 @@ class ViewModel extends BaseViewModel {
    }
 
    initModal() {
-      this.#modal = new Modal(document.querySelector('[data-modal]'), 'medium', () => {
-         this.#id = null;
-         document.forms.insertUpdate.documentId.value = '';
-         document.forms.insertUpdate.firstName.value = '';
-         document.forms.insertUpdate.lastName.value = '';
-         document.forms.insertUpdate.birthDate.value = '';
-         document.forms.insertUpdate.gender.value = '1';
-         document.querySelector('[data-form-title]').textContent = '';
-      });
-
       document.querySelector('[data-new]').addEventListener('click', () => {
-         document.querySelector('[data-form-title]').textContent = 'Nuevo Paciente';
+         this.#formTitle.textContent = 'Nuevo Paciente';
          this.#modal.open();
       });
 
@@ -83,22 +88,35 @@ class ViewModel extends BaseViewModel {
          switch (e.target.getAttribute('data-click')) {
             case 'edit':
                const id = e.target.getAttribute('data-id');
-               PatientsService.get(id, (patient) => {
+               PatientsService.get(id, (result) => {
+                  const patient = result.data;
                   this.#id = patient.id;
                   document.forms.insertUpdate.documentId.value = patient.documentId;
                   document.forms.insertUpdate.firstName.value = patient.firstName;
                   document.forms.insertUpdate.lastName.value = patient.lastName;
-                  document.forms.insertUpdate.birthDate.value = DateService.toInputDateString(patient.birthDate);
-                  document.forms.insertUpdate.gender.value = patient.genderId;
-                  document.querySelector('[data-form-title]').textContent = 'Editar Paciente';
+                  document.forms.insertUpdate.birthDate.value = patient.birthDate;
+                  document.forms.insertUpdate.gender.value = patient.gender.id;
+                  this.#formTitle.textContent = 'Editar Paciente';
                   this.#modal.open();
                });
                break;
             case 'delete':
                if (confirm('Desea borrar esta entrada?')) {
                   const id = e.target.getAttribute('data-id');
-                  PatientsService.delete(id, (patient) => {
-                     this.searchPatients();
+                  PatientsService.delete(id, (result) => {
+                     if (result.success) {
+                        this.searchPatients();
+                     } else {
+                        let errors = '';
+
+                        for(const error of result.messages) {
+                           errors += `${error}\n`;
+                        }
+
+                        if(errors != '') {
+                           alert(errors);
+                        }
+                     }
                   });
                }
                break;
@@ -111,12 +129,21 @@ class ViewModel extends BaseViewModel {
          documentId: document.forms.insertUpdate.documentId.value,
          firstName: document.forms.insertUpdate.firstName.value,
          lastName: document.forms.insertUpdate.lastName.value,
-         birthDate: new Date(document.forms.insertUpdate.birthDate.value),
+         birthDate: document.forms.insertUpdate.birthDate.value || null,
          genderId: document.forms.insertUpdate.gender.value
       };
 
-      //Se guarda la referencia al callback a utilizar después de la operación de salvado
-      const afterSave = (patient) => {
+      this.#formErrors.innerHTML = '';
+      if(this.#id == null) {
+         PatientsService.insert(data, this.#onSaved.bind(this));
+      } else {
+         PatientsService.update(this.#id, data, this.#onSaved.bind(this));
+      }
+   }
+
+   #onSaved(result) {
+      if(result.success) {
+         const patient = result.data;
          this.#modal.close();
          document.forms.filter.documentId.value = patient.documentId;
          document.forms.filter.firstName.value = '';
@@ -125,29 +152,28 @@ class ViewModel extends BaseViewModel {
          document.forms.filter.birthDateTo.value = '';
          document.forms.filter.gender.value = '';
          this.searchPatients();
-      };
-
-      if(this.#id == null) {
-         PatientsService.insert(data, afterSave);
       } else {
-         PatientsService.update(this.#id, data, afterSave);
+         for(const message of result.messages) {
+            const li = document.createElement('li');
+            li.textContent = message;
+
+            this.#formErrors.appendChild(li);
+         }
       }
    }
 
    searchPatients() {
-      const birthDateFrom = document.forms.filter.birthDateFrom.value;
-      const birthDateTo = document.forms.filter.birthDateTo.value;
-
       const filter = {
          documentId: document.forms.filter.documentId.value,
          firstName: document.forms.filter.firstName.value,
          lastName: document.forms.filter.lastName.value,
-         birthDateFrom: birthDateFrom ? new Date(birthDateFrom) : null,
-         birthDateTo: birthDateTo ? new Date(birthDateTo) : null,
-         genderId: document.forms.filter.gender.value
+         birthDateFrom: document.forms.filter.birthDateFrom.value,
+         birthDateTo: document.forms.filter.birthDateTo.value,
+         genderId: document.forms.filter.gender?.value
       };
 
-      PatientsService.list(filter, (patients) => {
+      PatientsService.list(filter, (result) => {
+         const patients = result.data;
          this.#results.innerHTML = '';
          for (const patient of patients) {
             const row = document.createElement('tr');
@@ -161,11 +187,11 @@ class ViewModel extends BaseViewModel {
             row.appendChild(name);
 
             const birthDate = document.createElement('td');
-            birthDate.textContent = DateService.toDisplayLocaleString(patient.birthDate, 'es-US');
+            birthDate.textContent = DateService.toDisplayLocaleString(new Date(patient.birthDate), 'es-US');
             row.appendChild(birthDate);
 
             const gender = document.createElement('td');
-            gender.textContent = patient.gender;
+            gender.textContent = patient.gender.name;
             row.appendChild(gender);
 
             const buttons = document.createElement('td');
@@ -211,7 +237,7 @@ class ViewModel extends BaseViewModel {
             const mobileBirthDateText = document.createElement('span');
             mobileBirthDateLabel.classList.add('label');
             mobileBirthDateLabel.textContent = 'Nacimiento:';
-            mobileBirthDateText.textContent = DateService.toDisplayLocaleString(patient.birthDate, 'es-US');
+            mobileBirthDateText.textContent = DateService.toDisplayLocaleString(new Date(patient.birthDate), 'es-US');
             mobileBirthDate.classList.add('data');
             mobileBirthDate.appendChild(mobileBirthDateLabel);
             mobileBirthDate.appendChild(mobileBirthDateText);
@@ -222,7 +248,7 @@ class ViewModel extends BaseViewModel {
             const mobileGenderText = document.createElement('span');
             mobileGenderLabel.classList.add('label');
             mobileGenderLabel.textContent = 'Género:';
-            mobileGenderText.textContent = patient.gender;
+            mobileGenderText.textContent = patient.gender.name;
             mobileGender.classList.add('data');
             mobileGender.appendChild(mobileGenderLabel);
             mobileGender.appendChild(mobileGenderText);

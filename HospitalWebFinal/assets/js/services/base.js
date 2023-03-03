@@ -1,5 +1,5 @@
 export class BaseService {
-   #handleError(response) {
+   static #handleError(response) {
       let errorMessage = '';
       
       for(const error of response.messages) {
@@ -11,13 +11,13 @@ export class BaseService {
       }
    }
    
-   handleResponse(response, callback) {
+   static handleResponse(response, callback) {
       return response.json().then((data) => {
          if (data.statusCode == 200) {
             callback(data);
          } else {
             this.#handleError(data);
          }
-      })
+      });
    }
 }
