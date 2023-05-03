@@ -45,9 +45,7 @@ export class ProfilePage implements OnInit, OnDestroy {
   public ngOnInit(): void {
     this.store.user$
       .pipe(
-        takeUntil(this.unsubcribe),
-        //Con este pipe de RxJS ignoramos en la suscripción la emisión de valores
-        filter((user) => user != null)
+        takeUntil(this.unsubcribe)
       )
       .subscribe((user) => {
         //Creamos un nuevo objeto User para evitar que sea la misma referencia ya que
