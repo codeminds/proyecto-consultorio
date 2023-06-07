@@ -12,7 +12,8 @@ export class MainLayout implements OnInit {
   public siteTitle$: Observable<string>; 
 
   //Si se hace click en cualquier lugar del body
-  //el menu se cierra
+  //el menu se cierra. El uso de HostListener no permite el uso
+  //de la fase de captura y crea problemas de eficiencia
   @HostListener('body: click')
   public onBodyClick(): void {
     this.menuOpen = false;

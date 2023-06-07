@@ -17,8 +17,9 @@ export class EventsService {
   //Por medio de RxJS en vez registramos un evento único en el DOM y utilizamos Subjects para esparcir notificación
   //de este evento con una unidad lógica más liviana que son los observables.
   //Por último nos aseguramos de utilizar la captura de evento en vez de la burbuja para evitar que elementos que
-  //cancelen la burbuja para tener funcionalidad especial (e.g.: el modal que se cierra al hacer click afuera) no eviten
-  //que este evento llegue a la funcionalidad global de elementos internos
+  //cancelen la burbuja para tener funcionalidad especial (e.g.: el modal que se cierra al hacer click afuera, por lo que su hijo cancela la burbuja
+  //para evitar que se cierre el modal al dar click en la parte interna interactiva) no eviten que este evento 
+  //llegue a la funcionalidad global de elementos internos
   constructor() {
     this.bodyClick = new Subject();
     fromEvent(document.body, 'click', { capture: true }).subscribe((e) => {

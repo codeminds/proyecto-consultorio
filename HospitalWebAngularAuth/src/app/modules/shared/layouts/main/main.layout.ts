@@ -6,6 +6,7 @@ import { Store } from '@store';
 import { SessionApi } from '@api/session/session.api';
 import { UserRole } from '@utils/enums';
 import { MessageType } from '@services/http/http.types';
+import { EventsService } from '@services/events/events.service';
 
 @Component({
   selector: 'app-main',
@@ -31,7 +32,8 @@ export class MainLayout implements OnInit {
   constructor(
     private store: Store,
     private userApi: UserApi,
-    private sessionApi: SessionApi
+    private sessionApi: SessionApi,
+    private eventsService: EventsService
   ) {
     this.menuOpen = false;
     this.accountMenuOpen = false;
@@ -51,7 +53,7 @@ export class MainLayout implements OnInit {
     //Si se hace click en cualquier lugar del body
     //el menu se cierra con la excepción de dos elementos
     //que queremos ignorar para su propio funcionamiento
-    fromEvent(document.body, 'click', { capture: true })
+    this.eventsService.bodyClick
       .pipe(takeUntil(this.unsubscribe))
       .subscribe((e: any) => {
         if(e.target != this.menuButtonRef.nativeElement && e.target.parentElement != this.menuRef.nativeElement) {
