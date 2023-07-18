@@ -5,13 +5,13 @@ using AutoMapper;
 
 namespace API.Mappers
 {
-   public class AppointmentMapper : Profile
-   {
-      public AppointmentMapper()
-      {
-         CreateMap<Appointment, GetAppointmentDTO>();
-         CreateMap<InsertUpdateAppointmentDTO, Appointment>();
-         CreateMap<FilterAppointmentDTO, AppointmentListFilter>();
-      }
-   }
+    public class AppointmentMapper : Profile
+    {
+        public AppointmentMapper()
+        {
+            CreateMap<Appointment, GetAppointmentDTO>();
+            CreateMap<InsertUpdateAppointmentDTO, Appointment>();
+            CreateMap<FilterAppointmentDTO, AppointmentListFilter>();
+        }
+    }
 }

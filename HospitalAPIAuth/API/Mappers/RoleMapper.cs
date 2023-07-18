@@ -4,11 +4,11 @@ using AutoMapper;
 
 namespace API.Mappers
 {
-   public class RoleMapper : Profile
-   {
-      public RoleMapper()
-      {
-         CreateMap<Role, GetRoleDTO>();
-      }
-   }
+    public class RoleMapper : Profile
+    {
+        public RoleMapper()
+        {
+            CreateMap<Role, GetRoleDTO>();
+        }
+    }
 }

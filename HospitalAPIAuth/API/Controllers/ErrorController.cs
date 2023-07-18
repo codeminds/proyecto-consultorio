@@ -29,8 +29,8 @@ namespace API.Controllers
             case HttpStatusCode.InternalServerError:
                response.Messages.Add("Ha ocurrido un error desconocido del servidor");
 
-               /* Sólo exponemos información detallada interna de los errores
-               en el ambiente de desarrollo, nunca en producción */
+               //Sólo exponemos información detallada interna de los errores
+               //en el ambiente de desarrollo, nunca en producción
                if (this._env.IsDevelopment())
                {
                   Exception? ex = HttpContext.Features.Get<IExceptionHandlerPathFeature>()?.Error;

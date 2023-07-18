@@ -111,7 +111,8 @@ namespace API.Controllers
 
          if (response.Success)
          {
-            await this._doctorService.UpdateDoctor(this._mapper.Map(data, doctor));
+            this._mapper.Map(data, doctor);
+            await this._doctorService.UpdateDoctor(doctor);
             response.Data = this._mapper.Map<Doctor, GetDoctorDTO>(doctor);
             response.Messages.Add("Doctor ha sido actualizado");
          }

@@ -1,6 +1,5 @@
 ﻿using API.Data;
 using API.DataTransferObjects;
-using API.Services;
 
 namespace API.Validators
 {

@@ -2,15 +2,15 @@
 
 namespace API.Utils
 {
-   public enum UserRole
-   {
-      [Description("Administrador")]
-      Administrator = 1,
+    public enum UserRole
+    { 
+        [Description("Administrador")]
+        Administrator = 1,
 
-      [Description("Editor")]
-      Editor = 2,
+        [Description("Editor")]
+        Editor = 2,
 
-      [Description("Asistente")]
-      Assistant = 3
-   }
+        [Description("Asistente")]
+        Assistant = 3
+    }
 }

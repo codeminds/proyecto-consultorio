@@ -8,90 +8,84 @@ using System.Text;
 
 namespace API.Services
 {
-   public class SessionService : ISessionService
-   {
-      private readonly HospitalDB _database;
+    public class SessionService : ISessionService
+    {
+        private readonly HospitalDB _database;
 
-      public SessionService(HospitalDB database)
-      {
-         this._database = database;
-      }
+        public SessionService(HospitalDB database)
+        {
+            this._database = database;
+        }
 
-      public IQueryable<Session> ListSessions(int userId, SessionFilters filter)
-      {
-         return this._database
-                 .Session
-                 .Include(s => s.User)
-                 .Include(s => s.User.Role)
-                 .Where(s => s.UserId == userId
-                     && (string.IsNullOrWhiteSpace(filter.AddressRefreshed) || s.AddressRefreshed!.Contains(filter.AddressRefreshed))
-                     && (string.IsNullOrWhiteSpace(filter.AddressIssued) || s.AddressIssued.Contains(filter.AddressIssued))
-                     && (!filter.DateFrom.HasValue || s.DateIssued >= filter.DateFrom)
-                     && (!filter.DateTo.HasValue || s.DateExpiry <= filter.DateTo));
-      }
+        public IQueryable<Session> ListSessions(int userId, SessionFilters? filter = null)
+        {
+            filter ??= new SessionFilters();
 
-      public async Task<Session?> FindSession(Guid sessionId)
-      {
-         return await this._database
-                         .Session
-                         .Include(s => s.User)
-                         .Include(s => s.User.Role)
-                         .FirstOrDefaultAsync(s => s.SessionId == sessionId);
-      }
+            return this._database.Session
+                    .Include(s => s.User)
+                    .Include(s => s.User.Role)
+                    .Where(s => s.UserId == userId
+                        && (string.IsNullOrEmpty(filter.AddressIssued) || s.AddressIssued.Contains(filter.AddressIssued))
+                        && (string.IsNullOrEmpty(filter.AddressRefreshed) || s.AddressRefreshed!.Contains(filter.AddressRefreshed))
+                        && (!filter.DateFrom.HasValue || s.DateIssued >= filter.DateFrom)
+                        && (!filter.DateTo.HasValue || s.DateIssued <= filter.DateTo));
+        }
 
-      public async Task<Session> InitUserSession(User user, IPAddress? address)
-      {
-         DateTime now = DateTime.Now;
-         Guid sessionId = Guid.NewGuid();
-         string salt = Configuration.Get<string>("Authentication:RefreshTokenSalt");
-         string refreshToken = Token.IssueRefreshToken(user, sessionId);
+        public async Task<Session?> FindSession(Guid sessionId)
+        { 
+            return await this._database
+                .Session
+                .Include(s => s.User)
+                .Include(s => s.User.Role)
+                .FirstOrDefaultAsync(s => s.SessionId == sessionId);    
+        }
 
-         /* El token de refrescado se guarda en la base de datos como un
-         hash para evitar que el valor sea directamente visible en la
-         base de datos */
-         Session session = new()
-         {
-            SessionId = sessionId,
-            UserId = user.Id,
-            DateIssued = now,
-            AddressIssued = address?.ToString() ?? "--",
-            DateExpiry = now.AddDays(Configuration.Get<int>("Authentication:SessionDays")),
-            RefreshToken = Crypter.Hash(refreshToken, Encoding.UTF8.GetBytes(salt)),
-            RefreshTokenString = refreshToken,
-            AccessTokenString = Token.IssueAccessToken(user, sessionId)
-         };
+        public async Task<Session> InitUserSession(User user, IPAddress? address)
+        {
+            DateTime now = DateTime.Now;
+            Guid sessionId = Guid.NewGuid();
+            string salt = Configuration.Get<string>("Authentication:RefreshTokenSalt");
+            string refreshToken = Token.IssueRefreshToken(user, sessionId);
 
-         this._database.Add(session);
-         await this._database.SaveChangesAsync();
+            Session session = new()
+            { 
+                SessionId = sessionId,
+                UserId = user.Id,
+                DateIssued = now,
+                AddressIssued = address?.ToString() ?? "--",
+                DateExpiry = now.AddDays(Configuration.Get<int>("Authentication:SessionDays")),
+                RefreshToken = Crypter.Hash(refreshToken, Encoding.UTF8.GetBytes(salt), Configuration.Get<int>("Cryptography:SaltLength")),
+                RefreshTokenString = refreshToken,
+                AccessTokenString = Token.IssueAccessToken(user, sessionId)
+            };
 
-         return session;
-      }
+            this._database.Add(session);
+            await this._database.SaveChangesAsync();
 
-      public async Task RefreshUserSession(User user, Session session, IPAddress? address)
-      {
-         /* Al refrescar la sesión el token utilizado debe ser descartado
-         ya que sólo debe utilizarse una vez por seguridad, por lo que
-         se debe crear un nuevo token de refrescado y asociarlo a la sesión
-         que se está refrescando */
-         DateTime now = DateTime.Now;
-         string salt = Configuration.Get<string>("Authentication:RefreshTokenSalt");
-         string refreshToken = Token.IssueRefreshToken(user, session.SessionId);
+            return session;
+        }
 
-         session.DateRefreshed = now;
-         session.AddressRefreshed = address?.ToString() ?? "--";
-         session.DateExpiry = now.AddDays(30);
-         session.RefreshToken = Crypter.Hash(refreshToken, Encoding.UTF8.GetBytes(salt));
-         session.RefreshTokenString = refreshToken;
-         session.AccessTokenString = Token.IssueAccessToken(user, session.SessionId);
+        public async Task RefreshUserSession(User user, Session session, IPAddress? address)
+        {
+            DateTime now = DateTime.Now;
+            string salt = Configuration.Get<string>("Authentication:RefreshTokenSalt");
+            string refreshToken = Token.IssueRefreshToken(user, session.SessionId);
 
-         this._database.Update(session);
-         await this._database.SaveChangesAsync();
-      }
+            session.DateRefreshed = now;
+            session.AddressRefreshed = address?.ToString() ?? "--";
+            session.DateExpiry = now.AddDays(Configuration.Get<int>("Authentication:SessionDays"));
+            session.RefreshToken = Crypter.Hash(refreshToken, Encoding.UTF8.GetBytes(salt), Configuration.Get<int>("Cryptography:SaltLength"));
+            session.RefreshTokenString = refreshToken;
+            session.AccessTokenString = Token.IssueAccessToken(user, session.SessionId);
 
-      public async Task DeleteSession(Session entity)
-      {
-         this._database.Session.Remove(entity);
-         await this._database.SaveChangesAsync(); ;
-      }
-   }
+            this._database.Update(session);
+            await this._database.SaveChangesAsync();  
+        }
+
+        public async Task DeleteSession(Session entity)
+        {
+            this._database.Session.Remove(entity);
+            await this._database.SaveChangesAsync();
+        }
+    }
 }

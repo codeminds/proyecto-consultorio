@@ -97,7 +97,8 @@ namespace API.Controllers
 
          if (response.Success)
          {
-            await this._appointmentService.UpdateAppointment(this._mapper.Map(data, appointment));
+            this._mapper.Map(data, appointment);
+            await this._appointmentService.UpdateAppointment(appointment);
             response.Data = this._mapper.Map<Appointment, GetAppointmentDTO>(appointment);
             response.Messages.Add("Cita ha sido actualizada");
          }

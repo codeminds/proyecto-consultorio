@@ -25,6 +25,7 @@ namespace API.Validators
          {
             innerMessages.Add("Cita no puede tener una fecha anterior a la fecha actual");
          }
+         //IMPORTANTE: Sólo para proyecto Angular
          else
          {
             /* No se puede crear una cita a una fecha/hora que haga conflicto con otra cita asignada al mismo paciente y/o doctor.
@@ -90,6 +91,7 @@ namespace API.Validators
          {
             innerMessages.Add("Cita no puede tener una fecha anterior a la fecha actual");
          }
+         //IMPORTANTE: Sólo para proyecto Angular
          else
          {
             bool doctorHasConflict = this._database
