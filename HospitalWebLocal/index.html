@@ -41,9 +41,9 @@
       </nav>
       <main>
          <h1>Citas</h1>
-         <section data-panel class="panel">
-            <h3 data-toggle class="title toggle open">Doctor</h3>
-            <form name="doctorFilter" data-toggle-section class="toggle-section open row">
+         <section class="panel" data-panel>
+            <h3 class="title toggle" data-toggle>Doctor</h3>
+            <form name="doctorFilter" class="row toggle-section" data-toggle-section>
                <div class="form-field col col-4">
                   <label for="doctor-filter-document-id">C&eacute;dula</label>
                   <input type="text" id="doctor-filter-document-id" name="documentId" placeholder="123456789" />
@@ -62,9 +62,9 @@
                </div>
             </form>
          </section>
-         <section data-panel class="panel">
-            <h3 data-toggle class="title toggle open">Paciente</h3>
-            <form name="patientFilter" data-toggle-section class="toggle-section open row">
+         <section class="panel" data-panel>
+            <h3 class="title toggle" data-toggle>Paciente</h3>
+            <form name="patientFilter" class="row toggle-section" data-toggle-section>
                <div class="form-field col col-3">
                   <label for="patient-filter-document-id">C&eacute;dula</label>
                   <input type="text" id="patient-filter-document-id" name="documentId" placeholder="123456789" />
@@ -91,9 +91,9 @@
                </div>
             </form>
          </section>
-         <section data-panel class="panel">
-            <h3 data-toggle class="title toggle open">Cita</h3>
-            <form name="filter" data-toggle-section class="toggle-section open row">
+         <section class="panel" data-panel>
+            <h3 class="title toggle open" data-toggle>Cita</h3>
+            <form name="filter" class="row toggle-section open" data-toggle-section>
                <div class="form-field col col-2">
                   <label for="filter-date-from">Fecha Desde</label>
                   <input type="datetime-local" id="filter-date-from" name="dateFrom" />
@@ -103,7 +103,7 @@
                   <input type="datetime-local" id="filter-date-to" name="dateTo" />
                </div>
                <div class="form-field col col-1">
-                  <button class="button success" type="button" data-search>Buscar</button>
+                  <button type="button" class="button success" data-search>Buscar</button>
                </div>
             </form>
          </section>
@@ -113,18 +113,20 @@
             </div>
             <table>
                <thead>
-                  <th style="width: 175%;">Fecha</th>
-                  <th style="width: 150%;">Doctor</th>
-                  <th style="width: 150%;">Paciente</th>
-                  <th style="width: 100%;">Especialidad</th>
-                  <th style="width: 200%;"></th>
+                  <tr>
+                     <th style="width: 175%;">Fecha</th>
+                     <th style="width: 150%">Doctor</th>
+                     <th style="width: 150%">Paciente</th>
+                     <th style="width: 100%">Especialidad</th>
+                     <th style="width: 200%"></th>
+                  </tr>
                </thead>
                <tbody data-results></tbody>
             </table>
          </section>
       </main>
    </section>
-   <div data-modal class="modal medium">
+   <div class="modal" data-modal>
       <div class="content">
          <h2 data-form-title></h2>
          <form name="insertUpdate">

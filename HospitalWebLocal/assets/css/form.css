@@ -35,15 +35,15 @@
 }
 
 .form-field select option {
-   background: var(--color-form-field-option);
+   background-color: var(--color-form-field-option);
 }
 
 .form-field textarea {
-   min-height: 15rem;
    resize: none;
+   min-height: 15rem;
    /* Scroll para Firefox */
    scrollbar-color: var(--color-scrollbar-light) var(--color-scrollbar-light);
-   scrollbar-width: thin;
+   scrollbar-width: auto;
 }
 
 /* Scroll para Chromium */
@@ -61,12 +61,16 @@
    cursor: pointer;
 }
 
-.form-field label.check:not(.inline):not(:last-child) {
+.form-field label.check:not(:last-child),
+.form-field label.check.inline {
    margin-bottom: 0.4rem;
 }
 
 .form-field label.check.inline {
    display: inline-block;
+}
+
+.form-field label.check.inline:not(:last-child) {
    margin-right: 1.2rem;
 }
 
@@ -76,17 +80,18 @@
 
 .form-field label.check i {
    display: inline-block;
+   cursor: pointer;
    width: 1.8rem;
    height: 1.8rem;
    border: 0.1rem solid var(--color-form-field-border);
    border-radius: 0.2rem;
    margin-right: 0.4rem;
    vertical-align: middle;
-   transition: background-color 0.1s linear;
    background: rgba(255, 255, 255, 0.3);
+   transition: background-color 0.1s linear;
 }
 
-.form-field label.check :checked+i {
+.form-field label.check input:checked+i {
    background: var(--color-main);
 }
 
@@ -97,9 +102,6 @@
 @media screen and (max-width: 1024px) {
    .form-field label.check.inline {
       display: block;
-   }
-
-   .form-field label.check:not(:last-child) {
-      margin-bottom: 0.4rem;
+      margin-right: 0;
    }
 }

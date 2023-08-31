@@ -41,9 +41,9 @@
       </nav>
       <main>
          <h1>Pacientes</h1>
-         <section data-panel class="panel">
-            <h3 data-toggle class="title toggle open">B&uacute;squeda</h3>
-            <form name="filter" data-toggle-section class="toggle-section open row">
+         <section class="panel" data-panel>
+            <h3 class="title toggle open" data-toggle>B&uacute;squeda</h3>
+            <form name="filter" class="row toggle-section open" data-toggle-section>
                <div class="form-field col col-3">
                   <label for="filter-document-id">C&eacute;dula</label>
                   <input type="text" id="filter-document-id" name="documentId" placeholder="123456789" />
@@ -69,7 +69,7 @@
                   <div data-filter="genders"></div>
                </div>
                <div class="form-field col col-1">
-                  <button class="button success" type="button" data-search>Buscar</button>
+                  <button type="button" class="button success" data-search>Buscar</button>
                </div>
             </form>
          </section>
@@ -79,18 +79,20 @@
             </div>
             <table>
                <thead>
-                  <th style="width: 100%;">C&eacute;dula</th>
-                  <th style="width: 175%;">Nombre</th>
-                  <th style="width: 175%;">Nacimiento</th>
-                  <th style="width: 100%;">G&eacute;nero</th>
-                  <th style="width: 200%;"></th>
+                  <tr>
+                     <th style="width: 100%;">C&eacute;dula</th>
+                     <th style="width: 175%">Nombre</th>
+                     <th style="width: 175%">Nacimiento</th>
+                     <th style="width: 100%"> G&eacute;nero</th>
+                     <th style="width: 200%"></th>
+                  </tr>
                </thead>
                <tbody data-results></tbody>
             </table>
          </section>
       </main>
    </section>
-   <div data-modal class="modal medium">
+   <div class="modal" data-modal>
       <div class="content">
          <h2 data-form-title></h2>
          <form name="insertUpdate">

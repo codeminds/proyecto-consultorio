@@ -1,32 +1,31 @@
-import { BaseViewModel } from './base.js';
 import { Modal } from '../controls/modal.js';
+import { PatientService } from '../services/patient.js';
 import { GenderService } from '../services/gender.js';
-import { PatientsService } from '../services/patient.js';
+import { BaseViewModel } from './base.js';
 import { DateService } from '../services/date.js';
 
 class ViewModel extends BaseViewModel {
    #id;
-   #formTitle;
-   #results;
    #modal;
+   #table;
+   #formTitle;
 
    constructor() {
       super();
 
       this.#id = null;
+      this.#table = document.querySelector('[data-results]');
       this.#formTitle = document.querySelector('[data-form-title]');
-      this.#results = document.querySelector('[data-results]');
       this.#modal = new Modal(document.querySelector('[data-modal]'), 'medium', () => {
          this.#id = null;
          document.forms.insertUpdate.documentId.value = '';
          document.forms.insertUpdate.firstName.value = '';
          document.forms.insertUpdate.lastName.value = '';
          document.forms.insertUpdate.birthDate.value = '';
-         document.forms.insertUpdate.gender.value = '1';
+         document.forms.insertUpdate.gender.value = 1;
          this.#formTitle.textContent = '';
       });
    }
-
 
    initGenders() {
       GenderService.list((genders) => {
@@ -79,27 +78,35 @@ class ViewModel extends BaseViewModel {
       });
    }
 
-   initResults() {
-      this.#results.addEventListener('click', (e) => {
+   initTable() {
+      this.#table.addEventListener('click', (e) => {
          switch (e.target.getAttribute('data-click')) {
             case 'edit':
                const id = e.target.getAttribute('data-id');
-               PatientsService.get(id, (patient) => {
-                  this.#id = patient.id;
-                  document.forms.insertUpdate.documentId.value = patient.documentId;
-                  document.forms.insertUpdate.firstName.value = patient.firstName;
-                  document.forms.insertUpdate.lastName.value = patient.lastName;
-                  document.forms.insertUpdate.birthDate.value = DateService.toInputDateString(patient.birthDate);
-                  document.forms.insertUpdate.gender.value = patient.genderId;
-                  this.#formTitle.textContent = 'Editar Paciente';
-                  this.#modal.open();
+               PatientService.get(id, (patient) => {
+                  if (patient != null) {
+                     this.#id = patient.id;
+                     document.forms.insertUpdate.documentId.value = patient.documentId;
+                     document.forms.insertUpdate.firstName.value = patient.firstName;
+                     document.forms.insertUpdate.lastName.value = patient.lastName;
+                     document.forms.insertUpdate.birthDate.value = DateService.toInputDateString(patient.birthDate);
+                     document.forms.insertUpdate.gender.value = patient.gender.id;
+                     this.#formTitle.textContent = 'Editar Paciente';
+                     this.#modal.open();
+                  } else {
+                     alert('Paciente no existe en los registros');
+                  }
                });
                break;
             case 'delete':
-               if (confirm('Desea borrar esta entrada?')) {
+               if (confirm('Desea borrar este paciente?')) {
                   const id = e.target.getAttribute('data-id');
-                  PatientsService.delete(id, (patient) => {
-                     this.searchPatients();
+                  PatientService.delete(id, (patient) => {
+                     if (patient) {
+                        this.searchPatients();
+                     } else {
+                        alert('Paciente no existe en los registros');
+                     }
                   });
                }
                break;
@@ -116,10 +123,10 @@ class ViewModel extends BaseViewModel {
          genderId: document.forms.insertUpdate.gender.value
       };
 
-      if(this.#id == null) {
-         PatientsService.insert(data, this.#onSaved.bind(this));
+      if (this.#id == null) {
+         PatientService.insert(data, this.#onSaved.bind(this));
       } else {
-         PatientsService.update(this.#id, data, this.#onSaved.bind(this));
+         PatientService.update(this.#id, data, this.#onSaved.bind(this));
       }
    }
 
@@ -147,108 +154,121 @@ class ViewModel extends BaseViewModel {
          genderId: document.forms.filter.gender.value
       };
 
-      PatientsService.list(filter, (patients) => {
-         this.#results.innerHTML = '';
-         for (const patient of patients) {
+      PatientService.list(filter, (patients) => {
+         this.#table.innerHTML = '';
+         if (patients.length > 0) {
+            for (const patient of patients) {
+               const row = document.createElement('tr');
+
+               const documentId = document.createElement('td');
+               documentId.textContent = patient.documentId;
+               row.appendChild(documentId);
+
+               const name = document.createElement('td');
+               name.textContent = patient.firstName + ' ' + patient.lastName;
+               row.appendChild(name);
+
+               const birthDate = document.createElement('td');
+               birthDate.textContent = DateService.toDisplayLocaleString(patient.birthDate, 'es-US')
+               row.appendChild(birthDate);
+
+               const gender = document.createElement('td');
+               gender.textContent = patient.gender.name;
+               row.appendChild(gender);
+
+               const buttons = document.createElement('td');
+               buttons.classList.add('buttons');
+
+               const editButton = document.createElement('button');
+               editButton.classList.add('button', 'success');
+               editButton.setAttribute('data-click', 'edit');
+               editButton.setAttribute('data-id', patient.id);
+               editButton.textContent = 'Editar';
+               buttons.appendChild(editButton);
+
+               const deleteButton = document.createElement('button');
+               deleteButton.classList.add('button', 'danger');
+               deleteButton.setAttribute('data-click', 'delete');
+               deleteButton.setAttribute('data-id', patient.id);
+               deleteButton.textContent = 'Borrar';
+               buttons.appendChild(deleteButton);
+
+               row.appendChild(buttons);
+
+               //MOBILE
+               const mobile = document.createElement('td');
+               mobile.classList.add('mobile');
+
+               const mobileHeading = document.createElement('h3');
+               mobileHeading.classList.add('heading');
+               mobileHeading.textContent = patient.documentId;
+               mobile.appendChild(mobileHeading);
+
+               const mobileName = document.createElement('p');
+               const mobileNameLabel = document.createElement('label');
+               const mobileNameText = document.createElement('span');
+               mobileNameText.textContent = patient.firstName + ' ' + patient.lastName;
+               mobileNameLabel.classList.add('label');
+               mobileNameLabel.textContent = 'Nombre:';
+               mobileName.classList.add('data');
+               mobileName.appendChild(mobileNameLabel);
+               mobileName.appendChild(mobileNameText);
+               mobile.appendChild(mobileName);
+
+               const mobileBirthDate = document.createElement('p');
+               const mobileBirthDateLabel = document.createElement('label');
+               const mobileBirthDateText = document.createElement('span');
+               mobileBirthDateText.textContent = DateService.toDisplayLocaleString(patient.birthDate, 'es-US');
+               mobileBirthDateLabel.classList.add('label');
+               mobileBirthDateLabel.textContent = 'Nacimiento:';
+               mobileBirthDate.classList.add('data');
+               mobileBirthDate.appendChild(mobileBirthDateLabel);
+               mobileBirthDate.appendChild(mobileBirthDateText);
+               mobile.appendChild(mobileBirthDate);
+
+               const mobileGender = document.createElement('p');
+               const mobileGenderLabel = document.createElement('label');
+               const mobileGenderText = document.createElement('span');
+               mobileGenderText.textContent = patient.gender.name;
+               mobileGenderLabel.classList.add('label');
+               mobileGenderLabel.textContent = 'Genero:';
+               mobileGender.classList.add('data');
+               mobileGender.appendChild(mobileGenderLabel);
+               mobileGender.appendChild(mobileGenderText);
+               mobile.appendChild(mobileGender);
+
+               const mobileButtons = document.createElement('div');
+               mobileButtons.classList.add('buttons');
+
+               const mobileEditButton = document.createElement('button');
+               mobileEditButton.classList.add('button', 'success');
+               mobileEditButton.setAttribute('data-click', 'edit');
+               mobileEditButton.setAttribute('data-id', patient.id);
+               mobileEditButton.textContent = 'Editar';
+               mobileButtons.appendChild(mobileEditButton);
+
+               const mobileDeleteButton = document.createElement('button');
+               mobileDeleteButton.classList.add('button', 'danger');
+               mobileDeleteButton.setAttribute('data-click', 'delete');
+               mobileDeleteButton.setAttribute('data-id', patient.id);
+               mobileDeleteButton.textContent = 'Borrar';
+               mobileButtons.appendChild(mobileDeleteButton);
+
+               mobile.appendChild(mobileButtons);
+
+               row.appendChild(mobile);
+               this.#table.appendChild(row);
+            }
+         } else {
             const row = document.createElement('tr');
 
-            const documentId = document.createElement('td');
-            documentId.textContent = patient.documentId;
-            row.appendChild(documentId);
+            const noResults = document.createElement('td');
+            noResults.style.textAlign = 'center';
+            noResults.setAttribute('colspan', '5');
+            noResults.textContent = 'No se encontraron resultados';
+            row.appendChild(noResults);
 
-            const name = document.createElement('td');
-            name.textContent = patient.firstName + ' ' + patient.lastName;
-            row.appendChild(name);
-
-            const birthDate = document.createElement('td');
-            birthDate.textContent = DateService.toDisplayLocaleString(patient.birthDate, 'es-US');
-            row.appendChild(birthDate);
-
-            const gender = document.createElement('td');
-            gender.textContent = patient.gender;
-            row.appendChild(gender);
-
-            const buttons = document.createElement('td');
-            buttons.classList.add('buttons');
-
-            const buttonEdit = document.createElement('button');
-            buttonEdit.classList.add('button', 'success');
-            buttonEdit.setAttribute('data-click', 'edit');
-            buttonEdit.setAttribute('data-id', patient.id);
-            buttonEdit.textContent = 'Editar';
-            buttons.appendChild(buttonEdit);
-
-            const buttonDelete = document.createElement('button');
-            buttonDelete.classList.add('button', 'danger');
-            buttonDelete.setAttribute('data-click', 'delete');
-            buttonDelete.setAttribute('data-id', patient.id);
-            buttonDelete.textContent = 'Borrar';
-            buttons.appendChild(buttonDelete);
-
-            row.appendChild(buttons);
-
-            const mobile = document.createElement('td');
-            mobile.classList.add('mobile');
-
-            const mobileHeading = document.createElement('h3');
-            mobileHeading.classList.add('heading');
-            mobileHeading.textContent = patient.documentId;
-            mobile.appendChild(mobileHeading);
-
-            const mobileName = document.createElement('p');
-            const mobileNameLabel = document.createElement('span');
-            const mobileNameText = document.createElement('span');
-            mobileNameLabel.classList.add('label');
-            mobileNameLabel.textContent = 'Nombre:';
-            mobileNameText.textContent = patient.firstName + ' ' + patient.lastName;
-            mobileName.classList.add('data');
-            mobileName.appendChild(mobileNameLabel);
-            mobileName.appendChild(mobileNameText);
-            mobile.appendChild(mobileName);
-
-            const mobileBirthDate = document.createElement('p');
-            const mobileBirthDateLabel = document.createElement('span');
-            const mobileBirthDateText = document.createElement('span');
-            mobileBirthDateLabel.classList.add('label');
-            mobileBirthDateLabel.textContent = 'Nacimiento:';
-            mobileBirthDateText.textContent = DateService.toDisplayLocaleString(patient.birthDate, 'es-US');
-            mobileBirthDate.classList.add('data');
-            mobileBirthDate.appendChild(mobileBirthDateLabel);
-            mobileBirthDate.appendChild(mobileBirthDateText);
-            mobile.appendChild(mobileBirthDate);
-
-            const mobileGender = document.createElement('p');
-            const mobileGenderLabel = document.createElement('span');
-            const mobileGenderText = document.createElement('span');
-            mobileGenderLabel.classList.add('label');
-            mobileGenderLabel.textContent = 'Género:';
-            mobileGenderText.textContent = patient.gender;
-            mobileGender.classList.add('data');
-            mobileGender.appendChild(mobileGenderLabel);
-            mobileGender.appendChild(mobileGenderText);
-            mobile.appendChild(mobileGender);
-
-            const mobileButtons = document.createElement('div');
-            mobileButtons.classList.add('buttons');
-
-            const mobileButtonEdit = document.createElement('button');
-            mobileButtonEdit.classList.add('button', 'success');
-            mobileButtonEdit.setAttribute('data-click', 'edit');
-            mobileButtonEdit.setAttribute('data-id', patient.id);
-            mobileButtonEdit.textContent = 'Editar';
-            mobileButtons.appendChild(mobileButtonEdit);
-
-            const mobileButtonDelete = document.createElement('button');
-            mobileButtonDelete.classList.add('button', 'danger');
-            mobileButtonDelete.setAttribute('data-click', 'delete');
-            mobileButtonDelete.setAttribute('data-id', patient.id);
-            mobileButtonDelete.textContent = 'Borrar';
-            mobileButtons.appendChild(mobileButtonDelete);
-
-            mobile.appendChild(mobileButtons);
-            row.appendChild(mobile);
-
-            this.#results.appendChild(row);
+            this.#table.appendChild(row);
          }
       });
    }
@@ -256,11 +276,9 @@ class ViewModel extends BaseViewModel {
 
 const viewModel = new ViewModel();
 
-//Inicialización
 viewModel.initGenders();
 viewModel.initFilter();
 viewModel.initModal();
-viewModel.initResults();
+viewModel.initTable();
 
-//Búsqueda inicial
 viewModel.searchPatients();

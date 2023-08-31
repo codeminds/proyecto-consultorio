@@ -1,17 +1,16 @@
 /* Pantalla transparente que se posa encima del sitio web para
 dar una ventana alternativa para mostrar funcionalidades */
 .modal {
+   display: none;
    position: fixed;
    top: 0;
    left: 0;
    height: 100%;
    width: 100%;
    background: rgba(0, 0, 0, 0.8);
-   padding: 2rem;
-   box-sizing: border-box;
    overflow: auto;
+   padding: 2rem;
    z-index: 100;
-   display: none;
    /* Estilos de computación de orden de elementos de FlexBox */
    align-items: center;
    justify-content: center;
@@ -31,7 +30,6 @@ dar una ventana alternativa para mostrar funcionalidades */
    background: var(--color-scrollbar-dark);
 }
 
-/* El modal se mantiene escondido hasta que se activa el contenido alternativo */
 .modal.open {
    display: flex;
 }

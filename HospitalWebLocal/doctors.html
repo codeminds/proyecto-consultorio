@@ -41,9 +41,9 @@
       </nav>
       <main>
          <h1>Doctores</h1>
-         <section data-panel class="panel">
-            <h3 data-toggle class="title toggle open">B&uacute;squeda</h3>
-            <form name="filter" data-toggle-section class="toggle-section open row">
+         <section class="panel" data-panel>
+            <h3 class="title toggle open" data-toggle>B&uacute;squeda</h3>
+            <form name="filter" class="row toggle-section open" data-toggle-section>
                <div class="form-field col col-4">
                   <label for="filter-document-id">C&eacute;dula</label>
                   <input type="text" id="filter-document-id" name="documentId" placeholder="123456789" />
@@ -67,21 +67,23 @@
          </section>
          <section class="panel slim table with-controls">
             <div class="controls">
-               <button data-new class="button success">Nuevo Doctor</button>
+               <button class="button success" data-new>Nuevo Doctor</button>
             </div>
             <table>
                <thead>
-                  <th style="width: 100%;">C&eacute;dula</th>
-                  <th style="width: 150%;">Nombre</th>
-                  <th style="width: 100%;">Especialidad</th>
-                  <th style="width: 200%;"></th>
+                  <tr>
+                     <th style="width: 100%;">C&eacute;dula</th>
+                     <th style="width: 150%">Nombre</th>
+                     <th style="width: 100%">Especialidad</th>
+                     <th style="width: 200%"></th>
+                  </tr>
                </thead>
                <tbody data-results></tbody>
             </table>
          </section>
       </main>
    </section>
-   <div data-modal class="modal">
+   <div class="modal" data-modal>
       <div class="content">
          <h2 data-form-title></h2>
          <form name="insertUpdate">

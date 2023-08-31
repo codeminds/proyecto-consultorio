@@ -1,16 +1,21 @@
-import { doctorTestData, fieldTestData, getNextId } from "../test-data.js";
+import { doctorTestData, fieldTestData, getNextId } from '../test-data.js';
 
 export class DoctorService {
    static list(filter, callback) {
       /* Si se recibe un filtro nulo se asigna a la variable un objeto vacío que funcionará 
       igual que un objeto de filtro con valores vacíos */
-      filter = filter ?? {};
+      filter ??= {};
 
       const doctors = doctorTestData.filter((item) => {
-         return ((!filter.documentId || item.documentId.toLowerCase().includes(filter.documentId.toLowerCase()))
-            && (!filter.firstName || item.firstName.toLowerCase().includes(filter.firstName.toLowerCase()))
-            && (!filter.lastName || item.lastName.toLowerCase().includes(filter.lastName.toLowerCase()))
-            && (!filter.fieldId || item.fieldId == filter.fieldId));
+         const matchesDocumentId = !filter.documentId || item.documentId.toLowerCase().includes(filter.documentId.toLowerCase());
+         const matchesFirstName = !filter.firstName || item.firstName.toLowerCase().includes(filter.firstName.toLowerCase());
+         const matchestLastName = !filter.lastName || item.lastName.toLowerCase().includes(filter.lastName.toLowerCase());
+         const matchesField = !filter.fieldId || item.field.id == filter.fieldId;
+
+         return matchesDocumentId
+            && matchesFirstName
+            && matchestLastName
+            && matchesField;
       });
 
       callback(doctors);
@@ -25,30 +30,12 @@ export class DoctorService {
    }
 
    static insert(data, callback) {
-      const doctor = { ...data };
-      doctor.id = getNextId(doctorTestData);
-
-      /* Para llenar la información de la especialidad que se utiliza en el objeto doctor cargamos 
-      una especialidad por medio de su id para utilizar y utilizamos los datos necesarios */
-      const field = fieldTestData.find((item) => {
-         return item.id == doctor.fieldId;
-      });
-
-      doctor.field = field.name;
-
-      doctorTestData.push(doctor);
-      callback(doctor);
-   }
-
-   static update(id, data, callback) {
-      const doctor = doctorTestData.find((item) => {
-         return item.id == id;
-      });
-
-      doctor.documentId = data.documentId;
-      doctor.firstName = data.firstName;
-      doctor.lastName = data.lastName;
-      doctor.fieldId = data.fieldId;
+      const doctor = {
+         id: getNextId(doctorTestData),
+         documentId: data.documentId,
+         firstName: data.firstName,
+         lastName: data.lastName
+      };
 
       /* Para llenar la información de la especialidad que se utiliza en el objeto doctor cargamos 
       una especialidad por medio de su id para utilizar y utilizamos los datos necesarios */
@@ -56,7 +43,34 @@ export class DoctorService {
          return item.id == data.fieldId;
       });
 
-      doctor.field = field.name;
+      doctor.field = {
+         ...field
+      };
+
+      doctorTestData.push(doctor);
+
+      callback(doctor);
+   }
+
+   static update(id, data, callback) {
+      /* No se valida un doctor no existente al actualizar por simplicidad del ejemplo */
+      const doctor = doctorTestData.find((item) => {
+         return item.id == id;
+      });
+
+      doctor.documentId = data.documentId;
+      doctor.firstName = data.firstName;
+      doctor.lastName = data.lastName;
+
+      /* Para llenar la información de la especialidad que se utiliza en el objeto doctor cargamos 
+      una especialidad por medio de su id para utilizar y utilizamos los datos necesarios */
+      const field = fieldTestData.find((item) => {
+         return item.id == data.fieldId;
+      });
+
+      doctor.field = {
+         ...field
+      };
 
       callback(doctor);
    }
@@ -66,7 +80,11 @@ export class DoctorService {
          return item.id == id;
       });
 
-      const doctor = doctorTestData.splice(index, 1)[0];
-      callback(doctor);
+      if (index >= 0) {
+         const doctor = doctorTestData.splice(index, 1)[0];
+         callback(doctor);
+      } else {
+         callback(null);
+      }
    }
 }

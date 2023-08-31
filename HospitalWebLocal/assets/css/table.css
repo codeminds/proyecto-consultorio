@@ -3,16 +3,6 @@
    table-layout: fixed;
 }
 
-.table th {
-   text-align: left;
-   font-weight: 700;
-   padding: 0.8rem 0.5rem;
-}
-
-.table td {
-   padding: 0.5rem;
-   vertical-align: middle;
-}
 
 /* Controles para acciones sobre los récords en la tabla
 con un efecto de flotado para poder mantener la estructura
@@ -27,6 +17,17 @@ un efecto visual que no le afecta */
    position: absolute;
    left: 0;
    top: -4rem;
+}
+
+.table th {
+   text-align: left;
+   font-weight: 700;
+   padding: 0.8rem 0.5rem;
+}
+
+.table td {
+   padding: 0.5rem;
+   vertical-align: middle;
 }
 
 .table tbody tr:nth-child(odd) {
@@ -48,14 +49,13 @@ un efecto visual que no le afecta */
    margin-bottom: 0.9rem;
 }
 
+.table td.mobile .data {
+   margin-bottom: 0.5rem;
+}
 
 .table td.mobile .label {
    font-weight: 700;
    margin-right: 0.5rem;
-}
-
-.table td.mobile .data {
-   margin-bottom: 0.5rem;
 }
 
 .table td.mobile .buttons {

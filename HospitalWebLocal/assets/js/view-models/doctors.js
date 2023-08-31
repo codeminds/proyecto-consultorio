@@ -1,20 +1,21 @@
 import { BaseViewModel } from './base.js';
 import { Modal } from '../controls/modal.js';
-import { FieldService } from '../services/field.js';
+
 import { DoctorService } from '../services/doctor.js';
+import { FieldService } from '../services/field.js';
 
 class ViewModel extends BaseViewModel {
    #id;
-   #formTitle;
-   #results;
    #modal;
+   #table;
+   #formTitle;
 
    constructor() {
       super();
 
       this.#id = null;
+      this.#table = document.querySelector('[data-results]');
       this.#formTitle = document.querySelector('[data-form-title]');
-      this.#results = document.querySelector('[data-results]');
       this.#modal = new Modal(document.querySelector('[data-modal]'), 'medium', () => {
          this.#id = null;
          document.forms.insertUpdate.documentId.value = '';
@@ -25,7 +26,6 @@ class ViewModel extends BaseViewModel {
       });
    }
 
-   //Funciones para poblar la lista de especialidades dinámicamente
    initFields() {
       FieldService.list((fields) => {
          this.#populateFields(document.querySelector('[data-form="fields"]'), fields);
@@ -64,27 +64,35 @@ class ViewModel extends BaseViewModel {
       });
    }
 
-   initResults() {
-      this.#results.addEventListener('click', (e) => {
+   initTable() {
+      this.#table.addEventListener('click', (e) => {
          switch (e.target.getAttribute('data-click')) {
             case 'edit':
                const id = e.target.getAttribute('data-id');
                DoctorService.get(id, (doctor) => {
-                  this.#id = doctor.id;
-                  document.forms.insertUpdate.documentId.value = doctor.documentId;
-                  document.forms.insertUpdate.firstName.value = doctor.firstName;
-                  document.forms.insertUpdate.lastName.value = doctor.lastName;
-                  document.forms.insertUpdate.field.value = doctor.fieldId;
-                  this.#formTitle.textContent = 'Editar Doctor';
-                  this.#modal.open();
+                  if (doctor != null) {
+                     this.#id = doctor.id;
+                     document.forms.insertUpdate.documentId.value = doctor.documentId;
+                     document.forms.insertUpdate.firstName.value = doctor.firstName;
+                     document.forms.insertUpdate.lastName.value = doctor.lastName;
+                     document.forms.insertUpdate.field.value = doctor.field.id;
+                     this.#formTitle.textContent = 'Editar Doctor';
+                     this.#modal.open();
+                  } else {
+                     alert('Doctor no existe en los registros');
+                  }
                });
                break;
             case 'delete':
                if (confirm('Desea borrar esta entrada?')) {
                   const id = e.target.getAttribute('data-id');
                   DoctorService.delete(id, (doctor) => {
-                     this.searchDoctors();
-                  })
+                     if (doctor) {
+                        this.searchDoctors();
+                     } else {
+                        alert('Doctor no existe en los registros');
+                     }
+                  });
                }
                break;
          }
@@ -99,9 +107,9 @@ class ViewModel extends BaseViewModel {
          fieldId: document.forms.insertUpdate.field.value
       };
 
-      if(this.#id == null) {
+      if (this.#id == null) {
          DoctorService.insert(data, this.#onSaved.bind(this));
-      }else {
+      } else {
          DoctorService.update(this.#id, data, this.#onSaved.bind(this));
       }
    }
@@ -124,103 +132,116 @@ class ViewModel extends BaseViewModel {
       };
 
       DoctorService.list(filter, (doctors) => {
-         this.#results.innerHTML = '';
-         for (const doctor of doctors) {
+         this.#table.innerHTML = '';
+         if (doctors.length > 0) {
+            for (const doctor of doctors) {
+               const row = document.createElement('tr');
+
+               const documentId = document.createElement('td');
+               documentId.textContent = doctor.documentId;
+               row.appendChild(documentId);
+
+               const name = document.createElement('td');
+               name.textContent = doctor.firstName + ' ' + doctor.lastName;
+               row.appendChild(name);
+
+               const field = document.createElement('td');
+               field.textContent = doctor.field.name;
+               row.appendChild(field);
+
+               const buttons = document.createElement('td');
+               buttons.classList.add('buttons');
+
+               const editButton = document.createElement('button');
+               editButton.classList.add('button', 'success');
+               editButton.setAttribute('data-click', 'edit');
+               editButton.setAttribute('data-id', doctor.id);
+               editButton.textContent = 'Editar';
+               buttons.appendChild(editButton);
+
+               const deleteButton = document.createElement('button');
+               deleteButton.classList.add('button', 'danger');
+               deleteButton.setAttribute('data-click', 'delete');
+               deleteButton.setAttribute('data-id', doctor.id);
+               deleteButton.textContent = 'Borrar';
+               buttons.appendChild(deleteButton);
+
+               row.appendChild(buttons);
+
+               //MOBILE
+               const mobile = document.createElement('td');
+               mobile.classList.add('mobile');
+
+               const mobileHeading = document.createElement('h3');
+               mobileHeading.classList.add('heading');
+               mobileHeading.textContent = doctor.documentId;
+               mobile.appendChild(mobileHeading);
+
+               const mobileName = document.createElement('p');
+               const mobileNameLabel = document.createElement('label');
+               const mobileNameText = document.createElement('span');
+               mobileNameText.textContent = doctor.firstName + ' ' + doctor.lastName;
+               mobileNameLabel.classList.add('label');
+               mobileNameLabel.textContent = 'Nombre:';
+               mobileName.classList.add('data');
+               mobileName.appendChild(mobileNameLabel);
+               mobileName.appendChild(mobileNameText);
+               mobile.appendChild(mobileName);
+
+               const mobileField = document.createElement('p');
+               const mobileFieldLabel = document.createElement('label');
+               const mobileFieldText = document.createElement('span');
+               mobileFieldText.textContent = doctor.field.name;
+               mobileFieldLabel.classList.add('label');
+               mobileFieldLabel.textContent = 'Especialidad:';
+               mobileField.classList.add('data');
+               mobileField.appendChild(mobileFieldLabel);
+               mobileField.appendChild(mobileFieldText);
+               mobile.appendChild(mobileField);
+
+               const mobileButtons = document.createElement('div');
+               mobileButtons.classList.add('buttons');
+
+               const mobileEditButton = document.createElement('button');
+               mobileEditButton.classList.add('button', 'success');
+               mobileEditButton.setAttribute('data-click', 'edit');
+               mobileEditButton.setAttribute('data-id', doctor.id);
+               mobileEditButton.textContent = 'Editar';
+               mobileButtons.appendChild(mobileEditButton);
+
+               const mobileDeleteButton = document.createElement('button');
+               mobileDeleteButton.classList.add('button', 'danger');
+               mobileDeleteButton.setAttribute('data-click', 'delete');
+               mobileDeleteButton.setAttribute('data-id', doctor.id);
+               mobileDeleteButton.textContent = 'Borrar';
+               mobileButtons.appendChild(mobileDeleteButton);
+
+               mobile.appendChild(mobileButtons);
+
+               row.appendChild(mobile);
+               this.#table.appendChild(row);
+            }
+         } else {
             const row = document.createElement('tr');
 
-            const documentId = document.createElement('td');
-            documentId.textContent = doctor.documentId;
-            row.appendChild(documentId);
+            const noResults = document.createElement('td');
+            noResults.style.textAlign = 'center';
+            noResults.setAttribute('colspan', '4');
+            noResults.textContent = 'No se encontraron resultados';
+            row.appendChild(noResults);
 
-            const name = document.createElement('td');
-            name.textContent = doctor.firstName + ' ' + doctor.lastName;
-            row.appendChild(name);
-
-            const field = document.createElement('td');
-            field.textContent = doctor.field;
-            row.appendChild(field);
-
-            const buttons = document.createElement('td');
-            buttons.classList.add('buttons');
-
-            const buttonEdit = document.createElement('button');
-            buttonEdit.classList.add('button', 'success');
-            buttonEdit.setAttribute('data-click', 'edit');
-            buttonEdit.setAttribute('data-id', doctor.id);
-            buttonEdit.textContent = 'Editar';
-            buttons.appendChild(buttonEdit);
-
-            const buttonDelete = document.createElement('button');
-            buttonDelete.classList.add('button', 'danger');
-            buttonDelete.setAttribute('data-click', 'delete');
-            buttonDelete.setAttribute('data-id', doctor.id);
-            buttonDelete.textContent = 'Borrar';
-            buttons.appendChild(buttonDelete);
-
-            row.appendChild(buttons);
-
-            const mobile = document.createElement('td');
-            mobile.classList.add('mobile');
-
-            const mobileHeading = document.createElement('h3');
-            mobileHeading.classList.add('heading');
-            mobileHeading.textContent = doctor.documentId;
-            mobile.appendChild(mobileHeading);
-
-            const mobileName = document.createElement('p');
-            const mobileNameLabel = document.createElement('span');
-            const mobileNameText = document.createElement('span');
-            mobileNameLabel.classList.add('label');
-            mobileNameLabel.textContent = 'Nombre:';
-            mobileNameText.textContent = doctor.firstName + ' ' + doctor.lastName;
-            mobileName.classList.add('data');
-            mobileName.appendChild(mobileNameLabel);
-            mobileName.appendChild(mobileNameText);
-            mobile.appendChild(mobileName);
-
-            const mobileField = document.createElement('p');
-            const mobileFieldLabel = document.createElement('span');
-            const mobileFieldText = document.createElement('span');
-            mobileFieldLabel.classList.add('label');
-            mobileFieldLabel.textContent = 'Especialidad:';
-            mobileFieldText.textContent = doctor.field;
-            mobileField.classList.add('data');
-            mobileField.appendChild(mobileFieldLabel);
-            mobileField.appendChild(mobileFieldText);
-            mobile.appendChild(mobileField);
-
-            const mobileButtons = document.createElement('div');
-            mobileButtons.classList.add('buttons');
-
-            const mobileButtonEdit = document.createElement('button');
-            mobileButtonEdit.classList.add('button', 'success');
-            mobileButtonEdit.setAttribute('data-click', 'edit');
-            mobileButtonEdit.setAttribute('data-id', doctor.id);
-            mobileButtonEdit.textContent = 'Editar';
-            mobileButtons.appendChild(mobileButtonEdit);
-
-            const mobileButtonDelete = document.createElement('button');
-            mobileButtonDelete.classList.add('button', 'danger');
-            mobileButtonDelete.setAttribute('data-click', 'delete');
-            mobileButtonDelete.setAttribute('data-id', doctor.id);
-            mobileButtonDelete.textContent = 'Borrar';
-            mobileButtons.appendChild(mobileButtonDelete);
-
-            mobile.appendChild(mobileButtons);
-            row.appendChild(mobile);
-
-            this.#results.appendChild(row);
+            this.#table.appendChild(row);
          }
       });
    }
 }
 
-//Inicialización
 const viewModel = new ViewModel();
+
 viewModel.initFields();
 viewModel.initFilter();
 viewModel.initModal();
-viewModel.initResults();
+viewModel.initTable();
 
-//Búsqueda inicial
 viewModel.searchDoctors();
+
