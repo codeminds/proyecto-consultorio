@@ -1,3 +1,5 @@
+/* Pantalla transparente que se posa encima del sitio web para
+dar una ventana alternativa para mostrar funcionalidades */
 .modal {
    display: none;
    position: fixed;
@@ -12,17 +14,6 @@
    flex-wrap: wrap;
    padding: 2rem;
    overflow: auto;
-   scrollbar-color: var(--color-scrollbar-dark) var(--color-scrollbar-dark);
-   scrollbar-width: thin;
-}
-
-.modal::-webkit-scrollbar-thumb {
-   background: var(--color-scrollbar-dark);
-}
-
-.modal::-webkit-scrollbar {
-   width: 0.7rem;
-   background: var(--color-scrollbar-dark);
 }
 
 .modal.open {

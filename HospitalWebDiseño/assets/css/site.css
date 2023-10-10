@@ -68,6 +68,8 @@ h2 {
    vertical-align: middle;
 }
 
+/* Restamos el alto del navbar acorde al elemento de mayor altura
+y sumamos el padding vertical para calzar con la pantalla de manera perfecta */
 .wrapper {
    height: calc(100% - 7rem);
 }
@@ -114,6 +116,7 @@ h2 {
 }
 
 .sidenav .menu a::before {
+   /* Caracter: ◆ */
    content: '\25C6';
    font-size: 1rem;
    margin-right: 0.5rem;
@@ -133,6 +136,8 @@ main {
 }
 
 @media screen and (max-width: 1024px) {
+   /* Recalculamos en pantallas móviles ya que cambia el elemento
+   que mostramos en el navbar */
    .wrapper {
       height: calc(100% - 5.4rem);
       position: relative;
@@ -146,6 +151,8 @@ main {
       display: none;
    }
 
+   /* En el diseño móvil el menú lateral se vuelve desplegable para dar 
+   campo al contenido principal debido al espacio menor en pantalla */
    .sidenav {
       position: absolute;
       top: 0;

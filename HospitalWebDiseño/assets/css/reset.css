@@ -64,6 +64,9 @@ input {
 	margin: 0;
 }
 
+/* Asegurar que todos los elementos basen su 
+ancho desde el borde y configuración global de
+estilos de scroll */
 * {
    box-sizing: border-box;
 	scrollbar-color: var(--color-scrollbar-light) var(--color-scrollbar-light);

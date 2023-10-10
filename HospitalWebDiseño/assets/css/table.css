@@ -11,6 +11,10 @@
    overflow: auto;
 }
 
+/* Controles para acciones sobre los récords en la tabla
+con un efecto de flotado para poder mantener la estructura
+de HTML perteneciendo a la jerarquía correcta pero lograr
+un efecto visual que no le afecta */
 .table.with-controls {
    position: relative;
    margin-top: 7rem;

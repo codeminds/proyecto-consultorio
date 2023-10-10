@@ -46,17 +46,6 @@
 .form-field textarea {
    resize: none;
    min-height: 15rem;
-   scrollbar-color: var(--color-scrollbar-light) var(--color-scrollbar-light);
-   scrollbar-width: auto;
-}
-
-.form-field textarea::-webkit-scrollbar-thumb {
-   background: var(--color-scrollbar-light)
-}
-
-.form-field textarea::-webkit-scrollbar {
-   width: 0.7rem;
-   background: var(--color-scrollbar-light);
 }
 
 .form-field label.check {
@@ -76,8 +65,8 @@
 .form-field label.check i {
    display: inline-block;
    cursor: pointer;
-   width: 1.8rem;
-   height: 1.8rem;
+   width: 1.7rem;
+   height: 1.7rem;
    border: 0.1rem solid var(--color-form-field-border);
    border-radius: 0.2rem;
    background: rgba(255, 255, 255, 0.5);
@@ -85,7 +74,7 @@
 }
 
 .form-field label.check span {
-   vertical-align: text-bottom;
+   vertical-align: middle;
 }
 
 .form-field label.check input:checked+i {
