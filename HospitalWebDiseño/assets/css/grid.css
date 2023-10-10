@@ -33,7 +33,7 @@
 }
 
 .col.col-7 {
-   width: 14.28%
+   width: 14.28%;
 }
 
 .col.col-8 {
@@ -41,7 +41,7 @@
 }
 
 .col.col-9 {
-   width: 11.11%
+   width: 11.11%;
 }
 
 .col.col-10 {
@@ -60,7 +60,7 @@
    padding-right: 0;
 }
 
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 768px) {
    .col.col-1,
    .col.col-2,
    .col.col-3,
@@ -72,8 +72,8 @@
    .col.col-9,
    .col.col-10 {
       width: 100%;
-   }
-
+   } 
+   
    .col.space {
       padding: 1rem 0;
    }

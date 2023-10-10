@@ -4,7 +4,7 @@
    /* LAYOUT */
    --font-main: 'Roboto', Helvetica, sans-serif;
    --color-navbar: #1c1c1c;
-   --color-navbar-menu-hover: rgba(0, 0, 0, 0.1);
+   --color-navbar-menu-hover: rgba(255, 255, 255, 0.1);
    --color-sidenav: #292929;
    --color-sidenav-text: #fff;
    --color-sidenav-category: #313131;
@@ -26,7 +26,6 @@
    --color-form-field-border: #969696;
    --color-form-field-focus: #d2d2d2;
    --color-form-field-option: #363636;
-
 
    /* ALERT COLORS */
    --color-success-primary: #4ca8a7;

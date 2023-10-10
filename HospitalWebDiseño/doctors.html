@@ -1,15 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-      <meta charset="UTF-8" />
-      <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <link rel="shortcut icon" href="/assets/img/favicon.ico" type="image/x-icon" />
-      <link rel="stylesheet" href="/assets/css/site.css" />
-      <title>Hospital Web</title>
+   <meta charset="UTF-8" />
+   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   <link rel="shortcut icon" href="/assets/img/favicon.ico" type="image/x-icon" />
+   <link rel="stylesheet" href="/assets/css/site.css" />
+   <title>Doctores | Hospital Web</title>
 </head>
-
 <body>
    <header class="navbar">
       <button class="menu">&equiv;</button>
@@ -18,7 +16,7 @@
       </figure>
    </header>
    <section class="wrapper">
-      <nav class="sidenav">
+      <nav class="sidenav dark-scroll">
          <h3 class="category">Men&uacute; Principal</h3>
          <ul class="menu">
             <li>
@@ -41,10 +39,10 @@
       <main>
          <h1>Doctores</h1>
          <section class="panel">
-            <h3 class="title toggle">B&uacute;squeda</h3>
-            <form class="row toggle-section">
+            <h3 class="title toggle open">B&uacute;squeda</h3>
+            <form class="row toggle-section open">
                <div class="form-field col col-4">
-                  <label>C&eacute;dula</label>
+                  <label>C&oacute;digo</label>
                   <input type="text" />
                </div>
                <div class="form-field col col-4">
@@ -58,6 +56,7 @@
                <div class="form-field col col-4">
                   <label>Especialidad</label>
                   <select>
+                     <option value="">Todos</option>
                      <option value="1">Doctor General</option>
                      <option value="2">Dentista</option>
                      <option value="3">Cirujano</option>
@@ -73,138 +72,110 @@
             <div class="controls">
                <button class="button success">Nuevo Doctor</button>
             </div>
-            <table>
-               <thead>
-                  <tr>
-                     <th style="width: 100%;">C&eacute;dula</th>
-                     <th style="width: 150%">Nombre</th>
-                     <th style="width: 100%">Especialidad</th>
-                     <th style="width: 200%"></th>
-                  </tr>
-               </thead>
-               <tbody>
-                  <tr>
-                     <td>123456789</td>
-                     <td>Victor Herrera</td>
-                     <td>Doctor General</td>
-                     <td class="buttons">
-                        <button class="button success">Editar</button>
-                        <button class="button danger">Borrar</button>
-                     </td>
-                     <td class="mobile">
-                        <h3 class="heading">123456789</h3>
-                        <p class="data">
-                           <label class="label">Nombre:</label>
+            <div class="scroll">
+               <table>
+                  <thead>
+                     <tr>
+                        <th style="width: 100%">C&oacute;digo</th>
+                        <th style="width: 150%">Nombre</th>
+                        <th style="width: 100%">Especialidad</th>
+                        <th style="width: 200%"></th>
+                     </tr>
+                  </thead>
+                  <tbody>
+                     <tr>
+                        <td class="heading">1234567890</td>
+                        <td class="data">
+                           <label>Nombre</label>
                            <span>Victor Herrera</span>
-                        </p>
-                        <p class="data">
-                           <label class="label">Especialidad:</label>
+                        </td>
+                        <td class="data">
+                           <label>Especialidad</label>
                            <span>Doctor General</span>
-                        </p>
-                        <div class="buttons">
+                        </td>
+                        <td class="buttons">
                            <button class="button success">Editar</button>
                            <button class="button danger">Borrar</button>
-                        </div>
-                     </td>
-                  </tr>
-                  <tr>
-                     <td>123456789</td>
-                     <td>Victor Herrera</td>
-                     <td>Doctor General</td>
-                     <td class="buttons">
-                        <button class="button success">Editar</button>
-                        <button class="button danger">Borrar</button>
-                     </td>
-                     <td class="mobile">
-                        <h3 class="heading">123456789</h3>
-                        <p class="data">
-                           <label class="label">Nombre:</label>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="heading">1234567890</td>
+                        <td class="data">
+                           <label>Nombre</label>
                            <span>Victor Herrera</span>
-                        </p>
-                        <p class="data">
-                           <label class="label">Especialidad:</label>
+                        </td>
+                        <td class="data">
+                           <label>Especialidad</label>
                            <span>Doctor General</span>
-                        </p>
-                        <div class="buttons">
+                        </td>
+                        <td class="buttons">
                            <button class="button success">Editar</button>
                            <button class="button danger">Borrar</button>
-                        </div>
-                     </td>
-                  </tr>
-                  <tr>
-                     <td>123456789</td>
-                     <td>Victor Herrera</td>
-                     <td>Doctor General</td>
-                     <td class="buttons">
-                        <button class="button success">Editar</button>
-                        <button class="button danger">Borrar</button>
-                     </td>
-                     <td class="mobile">
-                        <h3 class="heading">123456789</h3>
-                        <p class="data">
-                           <label class="label">Nombre:</label>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="heading">1234567890</td>
+                        <td class="data">
+                           <label>Nombre</label>
                            <span>Victor Herrera</span>
-                        </p>
-                        <p class="data">
-                           <label class="label">Especialidad:</label>
+                        </td>
+                        <td class="data">
+                           <label>Especialidad</label>
                            <span>Doctor General</span>
-                        </p>
-                        <div class="buttons">
+                        </td>
+                        <td class="buttons">
                            <button class="button success">Editar</button>
                            <button class="button danger">Borrar</button>
-                        </div>
-                     </td>
-                  </tr>
-                  <tr>
-                     <td>123456789</td>
-                     <td>Victor Herrera</td>
-                     <td>Doctor General</td>
-                     <td class="buttons">
-                        <button class="button success">Editar</button>
-                        <button class="button danger">Borrar</button>
-                     </td>
-                     <td class="mobile">
-                        <h3 class="heading">123456789</h3>
-                        <p class="data">
-                           <label class="label">Nombre:</label>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="heading">1234567890</td>
+                        <td class="data">
+                           <label>Nombre</label>
                            <span>Victor Herrera</span>
-                        </p>
-                        <p class="data">
-                           <label class="label">Especialidad:</label>
+                        </td>
+                        <td class="data">
+                           <label>Especialidad</label>
                            <span>Doctor General</span>
-                        </p>
-                        <div class="buttons">
+                        </td>
+                        <td class="buttons">
                            <button class="button success">Editar</button>
                            <button class="button danger">Borrar</button>
-                        </div>
-                     </td>
-                  </tr>
-                  <tr>
-                     <td>123456789</td>
-                     <td>Victor Herrera</td>
-                     <td>Doctor General</td>
-                     <td class="buttons">
-                        <button class="button success">Editar</button>
-                        <button class="button danger">Borrar</button>
-                     </td>
-                     <td class="mobile">
-                        <h3 class="heading">123456789</h3>
-                        <p class="data">
-                           <label class="label">Nombre:</label>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="heading">1234567890</td>
+                        <td class="data">
+                           <label>Nombre</label>
                            <span>Victor Herrera</span>
-                        </p>
-                        <p class="data">
-                           <label class="label">Especialidad:</label>
+                        </td>
+                        <td class="data">
+                           <label>Especialidad</label>
                            <span>Doctor General</span>
-                        </p>
-                        <div class="buttons">
+                        </td>
+                        <td class="buttons">
                            <button class="button success">Editar</button>
                            <button class="button danger">Borrar</button>
-                        </div>
-                     </td>
-                  </tr>
-               </tbody>
-            </table>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="heading">1234567890</td>
+                        <td class="data">
+                           <label>Nombre</label>
+                           <span>Victor Herrera</span>
+                        </td>
+                        <td class="data">
+                           <label>Especialidad</label>
+                           <span>Doctor General</span>
+                        </td>
+                        <td class="buttons">
+                           <button class="button success">Editar</button>
+                           <button class="button danger">Borrar</button>
+                        </td>
+                     </tr>
+                  </tbody>
+               </table>
+            </div>
          </section>
       </main>
    </section>
@@ -213,7 +184,7 @@
          <h2>Nuevo Doctor</h2>
          <form>
             <div class="form-field">
-               <label>C&eacute;dula</label>
+               <label>C&oacute;digo</label>
                <input type="text" />
             </div>
             <div class="form-field">
@@ -241,5 +212,4 @@
       </div>
    </div>
 </body>
-
 </html>

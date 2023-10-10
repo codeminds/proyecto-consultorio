@@ -1,15 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-      <meta charset="UTF-8" />
-      <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <link rel="shortcut icon" href="/assets/img/favicon.ico" type="image/x-icon" />
-      <link rel="stylesheet" href="/assets/css/site.css" />
-      <title>Hospital Web</title>
+   <meta charset="UTF-8" />
+   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   <link rel="shortcut icon" href="/assets/img/favicon.ico" type="image/x-icon" />
+   <link rel="stylesheet" href="/assets/css/site.css" />
+   <title>Citas | Hospital Web</title>
 </head>
-
 <body>
    <header class="navbar">
       <button class="menu">&equiv;</button>
@@ -18,7 +16,7 @@
       </figure>
    </header>
    <section class="wrapper">
-      <nav class="sidenav">
+      <nav class="sidenav dark-scroll">
          <h3 class="category">Men&uacute; Principal</h3>
          <ul class="menu">
             <li class="active">
@@ -44,7 +42,7 @@
             <h3 class="title toggle">Doctor</h3>
             <form class="row toggle-section">
                <div class="form-field col col-4">
-                  <label>C&eacute;dula</label>
+                  <label>C&oacute;digo</label>
                   <input type="text" />
                </div>
                <div class="form-field col col-4">
@@ -58,6 +56,7 @@
                <div class="form-field col col-4">
                   <label>Especialidad</label>
                   <select>
+                     <option value="">Todos</option>
                      <option value="1">Doctor General</option>
                      <option value="2">Dentista</option>
                      <option value="3">Cirujano</option>
@@ -67,60 +66,60 @@
             </form>
          </section>
          <section class="panel">
-            <h3 class="title open toggle">Paciente</h3>
-            <form class="row open toggle-section">
-               <div class="form-field col col-3">
+            <h3 class="title toggle">Paciente</h3>
+            <form class="row toggle-section">
+               <div class="form-field col col-5">
                   <label>C&eacute;dula</label>
                   <input type="text" />
                </div>
-               <div class="form-field col col-3">
+               <div class="form-field col col-5">
                   <label>Nombre</label>
                   <input type="text" />
                </div>
-               <div class="form-field col col-3">
+               <div class="form-field col col-5">
                   <label>Apellido</label>
                   <input type="text" />
                </div>
-               <div class="form-field col col-3">
-                  <label>Fecha Desde</label>
-                  <input type="datetime-local" />
+               <div class="form-field col col-5">
+                  <label>Tel</label>
+                  <input type="text" />
                </div>
-               <div class="form-field col col-3">
-                  <label>Fecha Hasta</label>
-                  <input type="datetime-local" />
-               </div>
-               <div class="form-field col col-3">
-                  <label>G&eacute;nero</label>
-                  <div>
-                     <label class="check inline">
-                        <input type="radio" name="gender" value="" checked />
-                        <i></i>
-                        <span>Todos</span>
-                     </label>
-                     <label class="check inline">
-                        <input type="radio" name="gender" value="1" />
-                        <i></i>
-                        <span>Femenino</span>
-                     </label>
-                     <label class="check inline">
-                        <input type="radio" name="gender" value="2" />
-                        <i></i>
-                        <span>Masculino</span>
-                     </label>
-                  </div>
+               <div class="form-field col col-5">
+                  <label>Correo</label>
+                  <input type="text" />
                </div>
             </form>
          </section>
          <section class="panel">
             <h3 class="title toggle open">Cita</h3>
             <form class="row toggle-section open">
-               <div class="form-field col col-2">
+               <div class="form-field col col-3">
                   <label>Fecha Desde</label>
                   <input type="datetime-local" />
                </div>
-               <div class="form-field col col-2">
+               <div class="form-field col col-3">
                   <label>Fecha Hasta</label>
                   <input type="datetime-local" />
+               </div>
+               <div class="form-field col col-3">
+                  <label>Estado</label>
+                  <div>
+                     <label class="check inline">
+                        <input type="radio" name="status" value="" checked />
+                        <i></i>
+                        <span>Todos</span>
+                     </label>
+                     <label class="check inline">
+                        <input type="radio" name="status" value="1" />
+                        <i></i>
+                        <span>Activa</span>
+                     </label>
+                     <label class="check inline">
+                        <input type="radio" name="status" value="2" />
+                        <i></i>
+                        <span>Cancelada</span>
+                     </label>
+                  </div>
                </div>
                <div class="form-field col col-1">
                   <button class="button success">Buscar</button>
@@ -131,169 +130,163 @@
             <div class="controls">
                <button class="button success">Nueva Cita</button>
             </div>
-            <table>
-               <thead>
-                  <tr>
-                     <th style="width: 175%;">Fecha</th>
-                     <th style="width: 150%">Doctor</th>
-                     <th style="width: 150%">Paciente</th>
-                     <th style="width: 100%">Especialidad</th>
-                     <th style="width: 200%"></th>
-                  </tr>
-               </thead>
-               <tbody>
-                  <tr>
-                     <td>20/05/2023 10:00AM</td>
-                     <td>Victor Herrera</td>
-                     <td>Carlos Monge</td>
-                     <td>Doctor General</td>
-                     <td class="buttons">
-                        <button class="button success">Editar</button>
-                        <button class="button danger">Borrar</button>
-                     </td>
-                     <td class="mobile">
-                        <h3 class="heading">20/05/2023 10:00AM</h3>
-                        <p class="data">
-                           <label class="label">Doctor:</label>
+            <div class="scroll">
+               <table>
+                  <thead>
+                     <tr>
+                        <th style="width: 175%">Fecha</th>
+                        <th style="width: 150%">Doctor</th>
+                        <th style="width: 150%">Paciente</th>
+                        <th style="width: 100%">Estado</th>
+                        <th style="width: 200%"></th>
+                     </tr>
+                  </thead>
+                  <tbody>
+                     <tr>
+                        <td class="heading">20/05/2023 10:00AM</td>
+                        <td class="data">
+                           <label>Doctor</label>
                            <span>Victor Herrera</span>
-                        </p>
-                        <p class="data">
-                           <label class="label">Paciente:</label>
+                        </td>
+                        <td class="data">
+                           <label>Paciente</label>
                            <span>Carlos Monge</span>
-                        </p>
-                        <p class="data">
-                           <label class="label">Especialidad:</label>
-                           <span>Doctor General</span>
-                        </p>
-                        <div class="buttons">
+                        </td>
+                        <td class="data">
+                           <label>Estado</label>
+                           <span>Activa</span>
+                        </td>
+                        <td class="buttons">
                            <button class="button success">Editar</button>
                            <button class="button danger">Borrar</button>
-                        </div>
-                     </td>
-                  </tr>
-                  <tr>
-                     <td>20/05/2023 10:00AM</td>
-                     <td>Victor Herrera</td>
-                     <td>Carlos Monge</td>
-                     <td>Doctor General</td>
-                     <td class="buttons">
-                        <button class="button success">Editar</button>
-                        <button class="button danger">Borrar</button>
-                     </td>
-                     <td class="mobile">
-                        <h3 class="heading">20/05/2023 10:00AM</h3>
-                        <p class="data">
-                           <label class="label">Doctor:</label>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="heading">20/05/2023 10:00AM</td>
+                        <td class="data">
+                           <label>Doctor</label>
                            <span>Victor Herrera</span>
-                        </p>
-                        <p class="data">
-                           <label class="label">Paciente:</label>
+                        </td>
+                        <td class="data">
+                           <label>Paciente</label>
                            <span>Carlos Monge</span>
-                        </p>
-                        <p class="data">
-                           <label class="label">Especialidad:</label>
-                           <span>Doctor General</span>
-                        </p>
-                        <div class="buttons">
+                        </td>
+                        <td class="data">
+                           <label>Estado</label>
+                           <span>Activa</span>
+                        </td>
+                        <td class="buttons">
                            <button class="button success">Editar</button>
                            <button class="button danger">Borrar</button>
-                        </div>
-                     </td>
-                  </tr>
-                  <tr>
-                     <td>20/05/2023 10:00AM</td>
-                     <td>Victor Herrera</td>
-                     <td>Carlos Monge</td>
-                     <td>Doctor General</td>
-                     <td class="buttons">
-                        <button class="button success">Editar</button>
-                        <button class="button danger">Borrar</button>
-                     </td>
-                     <td class="mobile">
-                        <h3 class="heading">20/05/2023 10:00AM</h3>
-                        <p class="data">
-                           <label class="label">Doctor:</label>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="heading">20/05/2023 10:00AM</td>
+                        <td class="data">
+                           <label>Doctor</label>
                            <span>Victor Herrera</span>
-                        </p>
-                        <p class="data">
-                           <label class="label">Paciente:</label>
+                        </td>
+                        <td class="data">
+                           <label>Paciente</label>
                            <span>Carlos Monge</span>
-                        </p>
-                        <p class="data">
-                           <label class="label">Especialidad:</label>
-                           <span>Doctor General</span>
-                        </p>
-                        <div class="buttons">
+                        </td>
+                        <td class="data">
+                           <label>Estado</label>
+                           <span>Activa</span>
+                        </td>
+                        <td class="buttons">
                            <button class="button success">Editar</button>
                            <button class="button danger">Borrar</button>
-                        </div>
-                     </td>
-                  </tr>
-                  <tr>
-                     <td>20/05/2023 10:00AM</td>
-                     <td>Victor Herrera</td>
-                     <td>Carlos Monge</td>
-                     <td>Doctor General</td>
-                     <td class="buttons">
-                        <button class="button success">Editar</button>
-                        <button class="button danger">Borrar</button>
-                     </td>
-                     <td class="mobile">
-                        <h3 class="heading">20/05/2023 10:00AM</h3>
-                        <p class="data">
-                           <label class="label">Doctor:</label>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="heading">20/05/2023 10:00AM</td>
+                        <td class="data">
+                           <label>Doctor</label>
                            <span>Victor Herrera</span>
-                        </p>
-                        <p class="data">
-                           <label class="label">Paciente:</label>
+                        </td>
+                        <td class="data">
+                           <label>Paciente</label>
                            <span>Carlos Monge</span>
-                        </p>
-                        <p class="data">
-                           <label class="label">Especialidad:</label>
-                           <span>Doctor General</span>
-                        </p>
-                        <div class="buttons">
+                        </td>
+                        <td class="data">
+                           <label>Estado</label>
+                           <span>Activa</span>
+                        </td>
+                        <td class="buttons">
                            <button class="button success">Editar</button>
                            <button class="button danger">Borrar</button>
-                        </div>
-                     </td>
-                  </tr>
-               </tbody>
-            </table>
-         </section>
-         <div class="modal medium">
-            <div class="content">
-               <h2>Nueva Cita</h2>
-               <form>
-                  <div class="form-field">
-                     <label>Fecha</label>
-                     <input type="datetime-local" />
-                  </div>
-                  <div class="form-field">
-                     <label>Doctor</label>
-                     <select>
-                        <option value="1">(Doctor General) Victor Herrera</option>
-                        <option value="2">(Doctor General) Victor Herrera</option>
-                        <option value="3">(Doctor General) Victor Herrera</option>
-                     </select>
-                  </div>
-                  <div class="form-field">
-                     <label>Paciente</label>
-                     <select>
-                        <option value="1">(123456789) Carlos Monge</option>
-                        <option value="2">(123456789) Carlos Monge</option>
-                        <option value="3">(123456789) Carlos Monge</option>
-                     </select>
-                  </div>
-                  <div class="form-field">
-                     <button class="button success">Guardar</button>
-                     <button class="button neutral">Cancelar</button>
-                  </div>
-               </form>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="heading">20/05/2023 10:00AM</td>
+                        <td class="data">
+                           <label>Doctor</label>
+                           <span>Victor Herrera</span>
+                        </td>
+                        <td class="data">
+                           <label>Paciente</label>
+                           <span>Carlos Monge</span>
+                        </td>
+                        <td class="data">
+                           <label>Estado</label>
+                           <span>Activa</span>
+                        </td>
+                        <td class="buttons">
+                           <button class="button success">Editar</button>
+                           <button class="button danger">Borrar</button>
+                        </td>
+                     </tr>
+                  </tbody>
+               </table>
             </div>
-         </div>
+         </section>
       </main>
    </section>
+   <div class="modal medium">
+      <div class="content">
+         <h2>Nueva Cita</h2>
+         <form>
+            <div class="form-field">
+               <label>Fecha</label>
+               <input type="datetime-local" />
+            </div>
+            <div class="form-field">
+               <label>Doctor</label>
+               <select>
+                  <option value="1">(Doctor General) Victor Herrera</option>
+                  <option value="2">(Dentista) Josu&eacute; Vargas</option>
+                  <option value="3">(Cirujano) Pablo Mendez</option>
+               </select>
+            </div>
+            <div class="form-field">
+               <label>Paciente</label>
+               <select>
+                  <option value="1">(123456789) Carlos Monge</option>
+                  <option value="2">(234536271) Andr&eacute;s Mora</option>
+               </select>
+            </div>
+            <div class="form-field">
+               <label>Estado</label>
+               <div>
+                  <label class="check">
+                     <input type="radio" name="status" value="1" checked />
+                     <i></i>
+                     <span>Activa</span>
+                  </label>
+                  <label class="check">
+                     <input type="radio" name="status" value="2" />
+                     <i></i>
+                     <span>Cancelada</span>
+                  </label>
+               </div>
+            </div>
+            <div class="form-field">
+               <button class="button success">Guardar</button>
+               <button class="button neutral">Cancelar</button>
+            </div>
+         </form>
+      </div>
+   </div>
 </body>
-
 </html>

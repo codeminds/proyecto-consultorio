@@ -9,6 +9,7 @@
    margin-right: 0.5rem;
    border-radius: 0.2rem;
    text-decoration: none;
+   text-align: center;
    transition: background-color 0.1s linear;
 }
 
@@ -20,32 +21,41 @@
    margin-right: 0;
 }
 
-button.success {
+.button.success {
    background: var(--color-success-primary);
    border-color: var(--color-success-secondary);
    color: #fff;
 }
 
-button.success:hover {
+.button.success:hover {
    background: var(--color-success-tertiary);
 }
 
-button.danger {
+.button.danger {
    background: var(--color-danger-primary);
    border-color: var(--color-danger-secondary);
    color: #fff;
 }
 
-button.danger:hover {
+.button.danger:hover {
    background: var(--color-danger-tertiary);
 }
 
-button.neutral {
+.button.neutral {
    background: var(--color-neutral-primary);
    border-color: var(--color-neutral-secondary);
    color: #fff;
 }
 
-button.neutral:hover {
+.button.neutral:hover {
    background: var(--color-neutral-tertiary);
+}
+
+@media screen and (max-width: 768px) {
+   .button {
+      padding: 0.7rem 1.4rem;
+      width: calc(50% - 0.5rem);
+      min-width: min(175px, 100%);
+      margin-bottom: 0.5rem;
+   }
 }

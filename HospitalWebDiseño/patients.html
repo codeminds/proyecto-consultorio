@@ -1,15 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
    <meta charset="UTF-8" />
    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   <title>Pacientes | Hospital Web</title>
    <link rel="shortcut icon" href="/assets/img/favicon.ico" type="image/x-icon" />
    <link rel="stylesheet" href="/assets/css/site.css" />
-   <title>Hospital Web</title>
 </head>
-
 <body>
    <header class="navbar">
       <button class="menu">&equiv;</button>
@@ -18,7 +16,7 @@
       </figure>
    </header>
    <section class="wrapper">
-      <nav class="sidenav">
+      <nav class="sidenav dark-scroll">
          <h3 class="category">Men&uacute; Principal</h3>
          <ul class="menu">
             <li>
@@ -41,47 +39,27 @@
       <main>
          <h1>Pacientes</h1>
          <section class="panel">
-            <h3 class="title open toggle">B&uacute;squeda</h3>
-            <form class="row open toggle-section">
-               <div class="form-field col col-3">
+            <h3 class="title toggle open">B&uacute;squeda</h3>
+            <form class="row toggle-section open">
+               <div class="form-field col col-5">
                   <label>C&eacute;dula</label>
                   <input type="text" />
                </div>
-               <div class="form-field col col-3">
+               <div class="form-field col col-5">
                   <label>Nombre</label>
                   <input type="text" />
                </div>
-               <div class="form-field col col-3">
+               <div class="form-field col col-5">
                   <label>Apellido</label>
                   <input type="text" />
                </div>
-               <div class="form-field col col-3">
-                  <label>Fecha Desde</label>
-                  <input type="datetime-local" />
+               <div class="form-field col col-5">
+                  <label>Tel</label>
+                  <input type="text" />
                </div>
-               <div class="form-field col col-3">
-                  <label>Fecha Hasta</label>
-                  <input type="datetime-local" />
-               </div>
-               <div class="form-field col col-3">
-                  <label>G&eacute;nero</label>
-                  <div>
-                     <label class="check inline">
-                        <input type="radio" name="gender" value="" checked />
-                        <i></i>
-                        <span>Todos</span>
-                     </label>
-                     <label class="check inline">
-                        <input type="radio" name="gender" value="1" />
-                        <i></i>
-                        <span>Femenino</span>
-                     </label>
-                     <label class="check inline">
-                        <input type="radio" name="gender" value="2" />
-                        <i></i>
-                        <span>Masculino</span>
-                     </label>
-                  </div>
+               <div class="form-field col col-5">
+                  <label>Correo</label>
+                  <input type="text" />
                </div>
                <div class="form-field col col-1">
                   <button class="button success">Buscar</button>
@@ -92,135 +70,135 @@
             <div class="controls">
                <button class="button success">Nuevo Paciente</button>
             </div>
-            <table>
-               <thead>
-                  <tr>
-                     <th style="width: 100%;">C&eacute;dula</th>
-                     <th style="width: 175%">Nombre</th>
-                     <th style="width: 175%">Nacimiento</th>
-                     <th style="width: 100%"> G&eacute;nero</th>
-                     <th style="width: 200%"></th>
-                  </tr>
-               </thead>
-               <tbody>
-                  <tr>
-                     <td>123456789</td>
-                     <td>Victor Herrera</td>
-                     <td>30/01/1992 11:00:00AM</td>
-                     <td>Masculino</td>
-                     <td class="buttons">
-                        <button class="button success">Editar</button>
-                        <button class="button danger">Borrar</button>
-                     </td>
-                     <td class="mobile">
-                        <h3 class="heading">123456789</h3>
-                        <p class="data">
-                           <label class="label">Nombre:</label>
+            <div class="scroll">
+               <table>
+                  <thead>
+                     <tr>
+                        <th style="width: 100%">C&eacute;dula</th>
+                        <th style="width: 150%">Nombre</th>
+                        <th style="width: 100%">Tel</th>
+                        <th style="width: 150%">Correo</th>
+                        <th style="width: 200%"></th>
+                     </tr>
+                  </thead>
+                  <tbody>
+                     <tr>
+                        <td class="heading">123456789</td>
+                        <td class="data">
+                           <label>Nombre</label>
                            <span>Victor Herrera</span>
-                        </p>
-                        <p class="data">
-                           <label class="label">Nacimiento:</label>
-                           <span>30/01/1992 11:00:00AM</span>
-                        </p>
-                        <p class="data">
-                           <label class="label">G&eacute;nero:</label>
-                           <span>Masculino</span>
-                        </p>
-                        <div class="buttons">
+                        </td>
+                        <td class="data">
+                           <label>Tel</label>
+                           <span>12345678</span>
+                        </td>
+                        <td class="data">
+                           <label>Correo</label>
+                           <span>victor@mail.com</span>
+                        </td>
+                        <td class="buttons">
                            <button class="button success">Editar</button>
                            <button class="button danger">Borrar</button>
-                        </div>
-                     </td>
-                  </tr>
-                  <tr>
-                     <td>123456789</td>
-                     <td>Victor Herrera</td>
-                     <td>30/01/1992 11:00:00AM</td>
-                     <td>Masculino</td>
-                     <td class="buttons">
-                        <button class="button success">Editar</button>
-                        <button class="button danger">Borrar</button>
-                     </td>
-                     <td class="mobile">
-                        <h3 class="heading">123456789</h3>
-                        <p class="data">
-                           <label class="label">Nombre:</label>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="heading">123456789</td>
+                        <td class="data">
+                           <label>Nombre</label>
                            <span>Victor Herrera</span>
-                        </p>
-                        <p class="data">
-                           <label class="label">Nacimiento:</label>
-                           <span>30/01/1992 11:00:00AM</span>
-                        </p>
-                        <p class="data">
-                           <label class="label">G&eacute;nero:</label>
-                           <span>Masculino</span>
-                        </p>
-                        <div class="buttons">
+                        </td>
+                        <td class="data">
+                           <label>Tel</label>
+                           <span>12345678</span>
+                        </td>
+                        <td class="data">
+                           <label>Correo</label>
+                           <span>victor@mail.com</span>
+                        </td>
+                        <td class="buttons">
                            <button class="button success">Editar</button>
                            <button class="button danger">Borrar</button>
-                        </div>
-                     </td>
-                  </tr>
-                  <tr>
-                     <td>123456789</td>
-                     <td>Victor Herrera</td>
-                     <td>30/01/1992 11:00:00AM</td>
-                     <td>Masculino</td>
-                     <td class="buttons">
-                        <button class="button success">Editar</button>
-                        <button class="button danger">Borrar</button>
-                     </td>
-                     <td class="mobile">
-                        <h3 class="heading">123456789</h3>
-                        <p class="data">
-                           <label class="label">Nombre:</label>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="heading">123456789</td>
+                        <td class="data">
+                           <label>Nombre</label>
                            <span>Victor Herrera</span>
-                        </p>
-                        <p class="data">
-                           <label class="label">Nacimiento:</label>
-                           <span>30/01/1992 11:00:00AM</span>
-                        </p>
-                        <p class="data">
-                           <label class="label">G&eacute;nero:</label>
-                           <span>Masculino</span>
-                        </p>
-                        <div class="buttons">
+                        </td>
+                        <td class="data">
+                           <label>Tel</label>
+                           <span>12345678</span>
+                        </td>
+                        <td class="data">
+                           <label>Correo</label>
+                           <span>victor@mail.com</span>
+                        </td>
+                        <td class="buttons">
                            <button class="button success">Editar</button>
                            <button class="button danger">Borrar</button>
-                        </div>
-                     </td>
-                  </tr>
-                  <tr>
-                     <td>123456789</td>
-                     <td>Victor Herrera</td>
-                     <td>30/01/1992 11:00:00AM</td>
-                     <td>Masculino</td>
-                     <td class="buttons">
-                        <button class="button success">Editar</button>
-                        <button class="button danger">Borrar</button>
-                     </td>
-                     <td class="mobile">
-                        <h3 class="heading">123456789</h3>
-                        <p class="data">
-                           <label class="label">Nombre:</label>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="heading">123456789</td>
+                        <td class="data">
+                           <label>Nombre</label>
                            <span>Victor Herrera</span>
-                        </p>
-                        <p class="data">
-                           <label class="label">Nacimiento:</label>
-                           <span>30/01/1992 11:00:00AM</span>
-                        </p>
-                        <p class="data">
-                           <label class="label">G&eacute;nero:</label>
-                           <span>Masculino</span>
-                        </p>
-                        <div class="buttons">
+                        </td>
+                        <td class="data">
+                           <label>Tel</label>
+                           <span>12345678</span>
+                        </td>
+                        <td class="data">
+                           <label>Correo</label>
+                           <span>victor@mail.com</span>
+                        </td>
+                        <td class="buttons">
                            <button class="button success">Editar</button>
                            <button class="button danger">Borrar</button>
-                        </div>
-                     </td>
-                  </tr>
-               </tbody>
-            </table>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="heading">123456789</td>
+                        <td class="data">
+                           <label>Nombre</label>
+                           <span>Victor Herrera</span>
+                        </td>
+                        <td class="data">
+                           <label>Tel</label>
+                           <span>12345678</span>
+                        </td>
+                        <td class="data">
+                           <label>Correo</label>
+                           <span>victor@mail.com</span>
+                        </td>
+                        <td class="buttons">
+                           <button class="button success">Editar</button>
+                           <button class="button danger">Borrar</button>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="heading">123456789</td>
+                        <td class="data">
+                           <label>Nombre</label>
+                           <span>Victor Herrera</span>
+                        </td>
+                        <td class="data">
+                           <label>Tel</label>
+                           <span>12345678</span>
+                        </td>
+                        <td class="data">
+                           <label>Correo</label>
+                           <span>victor@mail.com</span>
+                        </td>
+                        <td class="buttons">
+                           <button class="button success">Editar</button>
+                           <button class="button danger">Borrar</button>
+                        </td>
+                     </tr>
+                  </tbody>
+               </table>
+            </div>
          </section>
       </main>
    </section>
@@ -241,23 +219,12 @@
                <input type="text" />
             </div>
             <div class="form-field">
-               <label>Nacimiento</label>
-               <input type="datetime-local" />
+               <label>Tel</label>
+               <input type="text" />
             </div>
             <div class="form-field">
-               <label>G&eacute;nero</label>
-               <div>
-                  <label class="check inline">
-                     <input type="radio" name="gender" value="1" checked />
-                     <i></i>
-                     <span>Femenino</span>
-                  </label>
-                  <label class="check inline">
-                     <input type="radio" name="gender" value="2" />
-                     <i></i>
-                     <span>Masculino</span>
-                  </label>
-               </div>
+               <label>Correo</label>
+               <input type="text" />
             </div>
             <div class="form-field">
                <button class="button success">Guardar</button>
@@ -267,5 +234,4 @@
       </div>
    </div>
 </body>
-
 </html>
