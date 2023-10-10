@@ -14,11 +14,11 @@ class ViewModel extends BaseViewModel {
       super();
 
       this.#id = null;
-      this.#table = document.querySelector('[data-results]');
+      this.#table = document.querySelector('[data-table]');
       this.#formTitle = document.querySelector('[data-form-title]');
       this.#modal = new Modal(document.querySelector('[data-modal]'), 'medium', () => {
          this.#id = null;
-         document.forms.insertUpdate.documentId.value = '';
+         document.forms.insertUpdate.code.value = '';
          document.forms.insertUpdate.firstName.value = '';
          document.forms.insertUpdate.lastName.value = '';
          document.forms.insertUpdate.field.selectedIndex = 0;
@@ -72,7 +72,7 @@ class ViewModel extends BaseViewModel {
                DoctorService.get(id, (doctor) => {
                   if (doctor != null) {
                      this.#id = doctor.id;
-                     document.forms.insertUpdate.documentId.value = doctor.documentId;
+                     document.forms.insertUpdate.code.value = doctor.code;
                      document.forms.insertUpdate.firstName.value = doctor.firstName;
                      document.forms.insertUpdate.lastName.value = doctor.lastName;
                      document.forms.insertUpdate.field.value = doctor.field.id;
@@ -101,7 +101,7 @@ class ViewModel extends BaseViewModel {
 
    #save() {
       const data = {
-         documentId: document.forms.insertUpdate.documentId.value,
+         code: document.forms.insertUpdate.code.value,
          firstName: document.forms.insertUpdate.firstName.value,
          lastName: document.forms.insertUpdate.lastName.value,
          fieldId: document.forms.insertUpdate.field.value
@@ -116,7 +116,7 @@ class ViewModel extends BaseViewModel {
 
    #onSaved(doctor) {
       this.#modal.close();
-      document.forms.filter.documentId.value = doctor.documentId;
+      document.forms.filter.code.value = doctor.code;
       document.forms.filter.firstName.value = '';
       document.forms.filter.lastName.value = '';
       document.forms.filter.field.value = '';
@@ -125,7 +125,7 @@ class ViewModel extends BaseViewModel {
 
    searchDoctors() {
       const filter = {
-         documentId: document.forms.filter.documentId.value,
+         code: document.forms.filter.code.value,
          firstName: document.forms.filter.firstName.value,
          lastName: document.forms.filter.lastName.value,
          fieldId: document.forms.filter.field.value
@@ -137,18 +137,41 @@ class ViewModel extends BaseViewModel {
             for (const doctor of doctors) {
                const row = document.createElement('tr');
 
-               const documentId = document.createElement('td');
-               documentId.textContent = doctor.documentId;
-               row.appendChild(documentId);
+               //Code
+               const code = document.createElement('td');
+               code.classList.add('heading');
+               code.textContent = doctor.code;
+               row.appendChild(code);
 
+               //Name
                const name = document.createElement('td');
-               name.textContent = doctor.firstName + ' ' + doctor.lastName;
+               name.classList.add('data');
+
+               const nameLabel = document.createElement('label');
+               nameLabel.textContent = 'Nombre';
+               name.appendChild(nameLabel);
+
+               const nameText = document.createElement('span');
+               nameText.textContent = doctor.firstName + ' ' + doctor.lastName;
+               name.appendChild(nameText);
+
                row.appendChild(name);
 
+               //Field
                const field = document.createElement('td');
-               field.textContent = doctor.field.name;
+               field.classList.add('data');
+
+               const fieldLabel = document.createElement('label');
+               fieldLabel.textContent = 'Especialidad';
+               field.appendChild(fieldLabel);
+
+               const fieldText = document.createElement('span');
+               fieldText.textContent = doctor.field.name;
+               field.appendChild(fieldText);
+
                row.appendChild(field);
 
+               //Buttons
                const buttons = document.createElement('td');
                buttons.classList.add('buttons');
 
@@ -168,57 +191,6 @@ class ViewModel extends BaseViewModel {
 
                row.appendChild(buttons);
 
-               //MOBILE
-               const mobile = document.createElement('td');
-               mobile.classList.add('mobile');
-
-               const mobileHeading = document.createElement('h3');
-               mobileHeading.classList.add('heading');
-               mobileHeading.textContent = doctor.documentId;
-               mobile.appendChild(mobileHeading);
-
-               const mobileName = document.createElement('p');
-               const mobileNameLabel = document.createElement('label');
-               const mobileNameText = document.createElement('span');
-               mobileNameText.textContent = doctor.firstName + ' ' + doctor.lastName;
-               mobileNameLabel.classList.add('label');
-               mobileNameLabel.textContent = 'Nombre:';
-               mobileName.classList.add('data');
-               mobileName.appendChild(mobileNameLabel);
-               mobileName.appendChild(mobileNameText);
-               mobile.appendChild(mobileName);
-
-               const mobileField = document.createElement('p');
-               const mobileFieldLabel = document.createElement('label');
-               const mobileFieldText = document.createElement('span');
-               mobileFieldText.textContent = doctor.field.name;
-               mobileFieldLabel.classList.add('label');
-               mobileFieldLabel.textContent = 'Especialidad:';
-               mobileField.classList.add('data');
-               mobileField.appendChild(mobileFieldLabel);
-               mobileField.appendChild(mobileFieldText);
-               mobile.appendChild(mobileField);
-
-               const mobileButtons = document.createElement('div');
-               mobileButtons.classList.add('buttons');
-
-               const mobileEditButton = document.createElement('button');
-               mobileEditButton.classList.add('button', 'success');
-               mobileEditButton.setAttribute('data-click', 'edit');
-               mobileEditButton.setAttribute('data-id', doctor.id);
-               mobileEditButton.textContent = 'Editar';
-               mobileButtons.appendChild(mobileEditButton);
-
-               const mobileDeleteButton = document.createElement('button');
-               mobileDeleteButton.classList.add('button', 'danger');
-               mobileDeleteButton.setAttribute('data-click', 'delete');
-               mobileDeleteButton.setAttribute('data-id', doctor.id);
-               mobileDeleteButton.textContent = 'Borrar';
-               mobileButtons.appendChild(mobileDeleteButton);
-
-               mobile.appendChild(mobileButtons);
-
-               row.appendChild(mobile);
                this.#table.appendChild(row);
             }
          } else {

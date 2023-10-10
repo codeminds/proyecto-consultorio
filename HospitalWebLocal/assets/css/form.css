@@ -2,6 +2,10 @@
    padding: 0.7rem;
 }
 
+.form-field ::placeholder {
+   color: var(--color-placeholder);
+}
+
 .form-field>label {
    display: inline-block;
    font-weight: 700;
@@ -10,22 +14,23 @@
    font-size: inherit;
 }
 
-.form-field ::placeholder {
-   color: var(--color-placeholder);
-}
-
 .form-field input:not([type="checkbox"]):not([type="radio"]),
 .form-field select,
 .form-field textarea {
    display: inline-block;
-   width: 100%;
-   padding: 0.5rem;
    font-size: inherit;
-   color: inherit;
+   padding: 0.5rem;
+   width: 100%;
    border: 0.1rem solid var(--color-form-field-border);
    border-radius: 0.2rem;
    outline: 0;
    background: rgba(255, 255, 255, 0.4);
+   color: inherit;
+}
+
+/* Arreglo por comportamiento inusual de tamaño de select */
+.form-field select {
+   padding: 0.4rem 0.5rem;
 }
 
 .form-field input:not([type="checkbox"]):not([type="radio"]):focus,
@@ -34,26 +39,13 @@
    border-color: var(--color-form-field-focus);
 }
 
-.form-field select option {
-   background-color: var(--color-form-field-option);
+.form-field select option{
+   background: var(--color-form-field-option);
 }
 
 .form-field textarea {
    resize: none;
    min-height: 15rem;
-   /* Scroll para Firefox */
-   scrollbar-color: var(--color-scrollbar-light) var(--color-scrollbar-light);
-   scrollbar-width: auto;
-}
-
-/* Scroll para Chromium */
-.form-field textarea::-webkit-scrollbar-thumb {
-   background: var(--color-scrollbar-light);
-}
-
-.form-field textarea::-webkit-scrollbar {
-   width: 0.7rem;
-   background: var(--color-scrollbar-light);
 }
 
 .form-field label.check {
@@ -61,34 +53,29 @@
    cursor: pointer;
 }
 
-.form-field label.check:not(:last-child),
-.form-field label.check.inline {
+.form-field label.check:not(:last-child) {
    margin-bottom: 0.4rem;
 }
 
 .form-field label.check.inline {
    display: inline-block;
-}
-
-.form-field label.check.inline:not(:last-child) {
    margin-right: 1.2rem;
-}
-
-.form-field label.check span {
-   vertical-align: text-bottom;
 }
 
 .form-field label.check i {
    display: inline-block;
    cursor: pointer;
-   width: 1.8rem;
-   height: 1.8rem;
+   width: 1.7rem;
+   height: 1.7rem;
    border: 0.1rem solid var(--color-form-field-border);
    border-radius: 0.2rem;
-   margin-right: 0.4rem;
+   background: rgba(255, 255, 255, 0.5);
    vertical-align: middle;
-   background: rgba(255, 255, 255, 0.3);
-   transition: background-color 0.1s linear;
+   margin-right: 0.3rem;
+}
+
+.form-field label.check span {
+   vertical-align: middle;
 }
 
 .form-field label.check input:checked+i {
@@ -99,9 +86,9 @@
    display: none;
 }
 
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 768px) {
    .form-field label.check.inline {
       display: block;
       margin-right: 0;
-   }
+   }   
 }

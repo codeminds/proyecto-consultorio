@@ -1,4 +1,4 @@
-import { genderTestData, getNextId, patientTestData } from '../test-data.js';
+import { getNextId, patientTestData } from '../test-data.js';
 
 export class PatientService {
    static list(filter, callback) {
@@ -10,16 +10,14 @@ export class PatientService {
          const matchesDocumentId = !filter.documentId || item.documentId.toLowerCase().includes(filter.documentId.toLowerCase());
          const matchesFirstName = !filter.firstName || item.firstName.toLowerCase().includes(filter.firstName.toLowerCase());
          const matchestLastName = !filter.lastName || item.lastName.toLowerCase().includes(filter.lastName.toLowerCase());
-         const matchesBirthDateFrom = !filter.birthDateFrom || item.birthDate >= filter.birthDateFrom;
-         const matchesBirthDateTo = !filter.birthDateTo || item.birthDate <= filter.birthDateTo;
-         const matchesGender = !filter.genderId || item.gender.id == filter.genderId;
+         const matchesTel = !filter.tel || item.tel.toLowerCase().includes(filter.tel.toLowerCase());
+         const matchesEmail = !filter.email || item.email.toLowerCase().includes(filter.email.toLowerCase());
 
          return matchesDocumentId
             && matchesFirstName
             && matchestLastName
-            && matchesBirthDateFrom
-            && matchesBirthDateTo
-            && matchesGender
+            && matchesTel
+            && matchesEmail;
       });
 
       callback(patients);
@@ -39,17 +37,8 @@ export class PatientService {
          documentId: data.documentId,
          firstName: data.firstName,
          lastName: data.lastName,
-         birthDate: data.birthDate
-      };
-
-      /* Para llenar la información del género que se utiliza en el objeto paciente cargamos 
-      un género por medio de su id para utilizar y utilizamos los datos necesarios */
-      const gender = genderTestData.find((item) => {
-         return item.id == data.genderId;
-      });
-
-      patient.gender = {
-         ...gender
+         tel: data.tel,
+         email: data.email
       };
 
       patientTestData.push(patient);
@@ -66,17 +55,8 @@ export class PatientService {
       patient.documentId = data.documentId;
       patient.firstName = data.firstName;
       patient.lastName = data.lastName;
-      patient.birthDate = data.birthDate;
-
-      /* Para llenar la información de la especialidad que se utiliza en el objeto doctor cargamos 
-      una especialidad por medio de su id para utilizar y utilizamos los datos necesarios */
-      const gender = genderTestData.find((item) => {
-         return item.id == data.genderId;
-      });
-
-      patient.gender = {
-         ...gender
-      };
+      patient.tel = data.tel;
+      patient.email = data.email;
 
       callback(patient);
    }

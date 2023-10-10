@@ -1,6 +1,5 @@
 import { Modal } from '../controls/modal.js';
 import { PatientService } from '../services/patient.js';
-import { GenderService } from '../services/gender.js';
 import { BaseViewModel } from './base.js';
 import { DateService } from '../services/date.js';
 
@@ -14,47 +13,17 @@ class ViewModel extends BaseViewModel {
       super();
 
       this.#id = null;
-      this.#table = document.querySelector('[data-results]');
+      this.#table = document.querySelector('[data-table]');
       this.#formTitle = document.querySelector('[data-form-title]');
       this.#modal = new Modal(document.querySelector('[data-modal]'), 'medium', () => {
          this.#id = null;
          document.forms.insertUpdate.documentId.value = '';
          document.forms.insertUpdate.firstName.value = '';
          document.forms.insertUpdate.lastName.value = '';
-         document.forms.insertUpdate.birthDate.value = '';
-         document.forms.insertUpdate.gender.value = 1;
+         document.forms.insertUpdate.tel.value = '';
+         document.forms.insertUpdate.email.value = '';
          this.#formTitle.textContent = '';
       });
-   }
-
-   initGenders() {
-      GenderService.list((genders) => {
-         this.#populateGenders(document.querySelector('[data-form="genders"]'), genders);
-         this.#populateGenders(document.querySelector('[data-filter="genders"]'), [{ id: '', name: 'Todos' }, ...genders]);
-      });
-   }
-
-   #populateGenders(checks, genders) {
-      for (const gender of genders) {
-         const check = document.createElement('label');
-         check.classList.add('check', 'inline');
-
-         const input = document.createElement('input');
-         input.setAttribute('type', 'radio');
-         input.setAttribute('name', 'gender');
-         input.value = gender.id;
-         check.appendChild(input);
-
-         check.appendChild(document.createElement('i'));
-
-         const span = document.createElement('span');
-         span.textContent = gender.name;
-         check.appendChild(span);
-
-         checks.appendChild(check);
-      }
-
-      checks.querySelector('label.check:first-child input').checked = true;
    }
 
    initFilter() {
@@ -89,8 +58,8 @@ class ViewModel extends BaseViewModel {
                      document.forms.insertUpdate.documentId.value = patient.documentId;
                      document.forms.insertUpdate.firstName.value = patient.firstName;
                      document.forms.insertUpdate.lastName.value = patient.lastName;
-                     document.forms.insertUpdate.birthDate.value = DateService.toInputDateString(patient.birthDate);
-                     document.forms.insertUpdate.gender.value = patient.gender.id;
+                     document.forms.insertUpdate.tel.value = patient.tel;
+                     document.forms.insertUpdate.email.value = patient.email;
                      this.#formTitle.textContent = 'Editar Paciente';
                      this.#modal.open();
                   } else {
@@ -119,8 +88,8 @@ class ViewModel extends BaseViewModel {
          documentId: document.forms.insertUpdate.documentId.value,
          firstName: document.forms.insertUpdate.firstName.value,
          lastName: document.forms.insertUpdate.lastName.value,
-         birthDate: new Date(document.forms.insertUpdate.birthDate.value),
-         genderId: document.forms.insertUpdate.gender.value
+         tel: document.forms.insertUpdate.tel.value,
+         email: document.forms.insertUpdate.email.value
       };
 
       if (this.#id == null) {
@@ -135,23 +104,18 @@ class ViewModel extends BaseViewModel {
       document.forms.filter.documentId.value = patient.documentId;
       document.forms.filter.firstName.value = '';
       document.forms.filter.lastName.value = '';
-      document.forms.filter.birthDateFrom.value = '';
-      document.forms.filter.birthDateTo.value = '';
-      document.forms.filter.gender.value = '';
+      document.forms.filter.tel.value = '';
+      document.forms.filter.email.value = '';
       this.searchPatients();
    }
 
    searchPatients() {
-      const birthDateFrom = document.forms.filter.birthDateFrom.value;
-      const birthDateTo = document.forms.filter.birthDateTo.value;
-
       const filter = {
          documentId: document.forms.filter.documentId.value,
          firstName: document.forms.filter.firstName.value,
          lastName: document.forms.filter.lastName.value,
-         birthDateFrom: birthDateFrom ? new Date(birthDateFrom) : null,
-         birthDateTo: birthDateTo ? new Date(birthDateTo) : null,
-         genderId: document.forms.filter.gender.value
+         tel: document.forms.filter.tel.value,
+         email: document.forms.filter.email.value
       };
 
       PatientService.list(filter, (patients) => {
@@ -160,22 +124,55 @@ class ViewModel extends BaseViewModel {
             for (const patient of patients) {
                const row = document.createElement('tr');
 
+               //DocumentId
                const documentId = document.createElement('td');
+               documentId.classList.add('heading');
                documentId.textContent = patient.documentId;
                row.appendChild(documentId);
 
+               //Name
                const name = document.createElement('td');
-               name.textContent = patient.firstName + ' ' + patient.lastName;
+               name.classList.add('data');
+
+               const nameLabel = document.createElement('label');
+               nameLabel.textContent = 'Nombre';
+               name.appendChild(nameLabel);
+
+               const nameText = document.createElement('span');
+               nameText.textContent = patient.firstName + ' ' + patient.lastName;
+               name.appendChild(nameText);
+
                row.appendChild(name);
 
-               const birthDate = document.createElement('td');
-               birthDate.textContent = DateService.toDisplayLocaleString(patient.birthDate, 'es-US')
-               row.appendChild(birthDate);
+               //Tel
+               const tel = document.createElement('td');
+               tel.classList.add('data');
 
-               const gender = document.createElement('td');
-               gender.textContent = patient.gender.name;
-               row.appendChild(gender);
+               const telLabel = document.createElement('label');
+               telLabel.textContent = 'Tel';
+               tel.appendChild(telLabel);
 
+               const telText = document.createElement('span');
+               telText.textContent = patient.tel;
+               tel.appendChild(telText);
+
+               row.appendChild(tel);
+
+               //Email
+               const email = document.createElement('td');
+               email.classList.add('data');
+
+               const emailLabel = document.createElement('label');
+               emailLabel.textContent = 'Correo';
+               email.appendChild(emailLabel);
+
+               const emailText = document.createElement('span');
+               emailText.textContent = patient.email;
+               email.appendChild(emailText);
+
+               row.appendChild(email);
+
+               //Buttons
                const buttons = document.createElement('td');
                buttons.classList.add('buttons');
 
@@ -195,68 +192,6 @@ class ViewModel extends BaseViewModel {
 
                row.appendChild(buttons);
 
-               //MOBILE
-               const mobile = document.createElement('td');
-               mobile.classList.add('mobile');
-
-               const mobileHeading = document.createElement('h3');
-               mobileHeading.classList.add('heading');
-               mobileHeading.textContent = patient.documentId;
-               mobile.appendChild(mobileHeading);
-
-               const mobileName = document.createElement('p');
-               const mobileNameLabel = document.createElement('label');
-               const mobileNameText = document.createElement('span');
-               mobileNameText.textContent = patient.firstName + ' ' + patient.lastName;
-               mobileNameLabel.classList.add('label');
-               mobileNameLabel.textContent = 'Nombre:';
-               mobileName.classList.add('data');
-               mobileName.appendChild(mobileNameLabel);
-               mobileName.appendChild(mobileNameText);
-               mobile.appendChild(mobileName);
-
-               const mobileBirthDate = document.createElement('p');
-               const mobileBirthDateLabel = document.createElement('label');
-               const mobileBirthDateText = document.createElement('span');
-               mobileBirthDateText.textContent = DateService.toDisplayLocaleString(patient.birthDate, 'es-US');
-               mobileBirthDateLabel.classList.add('label');
-               mobileBirthDateLabel.textContent = 'Nacimiento:';
-               mobileBirthDate.classList.add('data');
-               mobileBirthDate.appendChild(mobileBirthDateLabel);
-               mobileBirthDate.appendChild(mobileBirthDateText);
-               mobile.appendChild(mobileBirthDate);
-
-               const mobileGender = document.createElement('p');
-               const mobileGenderLabel = document.createElement('label');
-               const mobileGenderText = document.createElement('span');
-               mobileGenderText.textContent = patient.gender.name;
-               mobileGenderLabel.classList.add('label');
-               mobileGenderLabel.textContent = 'Genero:';
-               mobileGender.classList.add('data');
-               mobileGender.appendChild(mobileGenderLabel);
-               mobileGender.appendChild(mobileGenderText);
-               mobile.appendChild(mobileGender);
-
-               const mobileButtons = document.createElement('div');
-               mobileButtons.classList.add('buttons');
-
-               const mobileEditButton = document.createElement('button');
-               mobileEditButton.classList.add('button', 'success');
-               mobileEditButton.setAttribute('data-click', 'edit');
-               mobileEditButton.setAttribute('data-id', patient.id);
-               mobileEditButton.textContent = 'Editar';
-               mobileButtons.appendChild(mobileEditButton);
-
-               const mobileDeleteButton = document.createElement('button');
-               mobileDeleteButton.classList.add('button', 'danger');
-               mobileDeleteButton.setAttribute('data-click', 'delete');
-               mobileDeleteButton.setAttribute('data-id', patient.id);
-               mobileDeleteButton.textContent = 'Borrar';
-               mobileButtons.appendChild(mobileDeleteButton);
-
-               mobile.appendChild(mobileButtons);
-
-               row.appendChild(mobile);
                this.#table.appendChild(row);
             }
          } else {
@@ -276,7 +211,6 @@ class ViewModel extends BaseViewModel {
 
 const viewModel = new ViewModel();
 
-viewModel.initGenders();
 viewModel.initFilter();
 viewModel.initModal();
 viewModel.initTable();

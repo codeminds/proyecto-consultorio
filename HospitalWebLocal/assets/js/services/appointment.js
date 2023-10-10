@@ -1,4 +1,4 @@
-import { appointmentTestData, getNextId, doctorTestData, patientTestData } from '../test-data.js';
+import { appointmentTestData, getNextId, doctorTestData, patientTestData, statusTestData } from '../test-data.js';
 import { DoctorService } from './doctor.js';
 import { PatientService } from './patient.js';
 
@@ -24,6 +24,7 @@ export class AppointmentService {
       const appointments = appointmentTestData.filter((item) => {
          const matchesDateFrom = !filter.dateFrom || item.date >= filter.dateFrom;
          const matchesDateTo = !filter.dateTo || item.date <= filter.dateTo;
+         const matchesStatus = !filter.statusId || item.status.id == filter.statusId;
          const matchesDoctors = doctors.some((doctor) => {
             return doctor.id == item.doctor.id;
          });
@@ -33,6 +34,7 @@ export class AppointmentService {
 
          return matchesDateFrom
             && matchesDateTo
+            && matchesStatus
             && matchesDoctors
             && matchesPatients;
       });
@@ -74,8 +76,18 @@ export class AppointmentService {
 
       /* Para evitar valores por referencia el campo gender se redefine con el spread */
       appointment.patient = {
-         ...patient,
-         gender: { ...patient.gender }
+         ...patient
+      };
+
+      /* Para llenar la información de la estado que se utiliza en el objeto cita cargamos 
+      un estado por medio de su id para utilizar y utilizamos los datos necesarios */
+      const status = statusTestData.find((item) => {
+         return item.id == data.statusId;
+      });
+
+      /* Para evitar valores por referencia el campo status se redefine con el spread */
+      appointment.status = {
+         ...status
       };
 
       appointmentTestData.push(appointment);
@@ -111,8 +123,18 @@ export class AppointmentService {
 
       /* Para evitar valores por referencia el campo gender se redefine con el spread */
       appointment.patient = {
-         ...patient,
-         gender: { ...patient.gender }
+         ...patient
+      };
+
+      /* Para llenar la información de la estado que se utiliza en el objeto cita cargamos 
+      un estado por medio de su id para utilizar y utilizamos los datos necesarios */
+      const status = statusTestData.find((item) => {
+         return item.id == data.statusId;
+      });
+
+      /* Para evitar valores por referencia el campo status se redefine con el spread */
+      appointment.status = {
+         ...status
       };
 
       callback(appointment);

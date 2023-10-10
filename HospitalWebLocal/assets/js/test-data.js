@@ -17,21 +17,21 @@ export const fieldTestData = [
    }
 ];
 
-export const genderTestData = [
+export const statusTestData = [
    {
       id: 1,
-      name: 'Femenino'
+      name: 'Activa'
    },
    {
       id: 2,
-      name: 'Masculino'
+      name: 'Cancelada'
    }
 ];
 
 export const doctorTestData = [
    {
       id: 1,
-      documentId: '123232123',
+      code: '1232321231',
       firstName: 'Hugo',
       lastName: 'Doctor 1',
       field: {
@@ -41,7 +41,7 @@ export const doctorTestData = [
    },
    {
       id: 2,
-      documentId: '123245123',
+      code: '1232451232',
       firstName: 'Paco',
       lastName: 'Doctor 2',
       field: {
@@ -51,7 +51,7 @@ export const doctorTestData = [
    },
    {
       id: 3,
-      documentId: '323232563',
+      code: '3232325632',
       firstName: 'Luis',
       lastName: 'Doctor 3',
       field: {
@@ -67,44 +67,32 @@ export const patientTestData = [
       documentId: '123456789',
       firstName: 'Hugo',
       lastName: 'Patient 1',
-      birthDate: new Date('1992-01-30T11:00:00'),
-      gender: {
-         id: 2,
-         name: 'Masculino'
-      }
+      tel: '23439475',
+      email: 'hugo@mail.com'
    },
    {
       id: 2,
       documentId: '234567890',
       firstName: 'Paco',
       lastName: 'Patient 2',
-      birthDate: new Date('1987-05-11T03:00:00'),
-      gender: {
-         id: 2,
-         name: 'Masculino'
-      }
+      tel: '8574657',
+      email: 'paco@mail.com'
    },
    {
       id: 3,
-      documentId: '345678901',
+      documentId: '3456789012',
       firstName: 'Luis',
       lastName: 'Patient 3',
-      birthDate: new Date('1992-01-25T22:00:00'),
-      gender: {
-         id: 2,
-         name: 'Masculino'
-      }
+      tel: '47563758',
+      email: 'luis@mail.com'
    },
    {
       id: 4,
       documentId: '145678901',
       firstName: 'Daniela',
       lastName: 'Patient 4',
-      birthDate: new Date('1970-04-04T03:00:00'),
-      gender: {
-         id: 1,
-         name: 'Femenino'
-      }
+      tel: '87586970',
+      email: 'daniela@mail.com'
    }
 ];
 
@@ -127,11 +115,12 @@ export const appointmentTestData = [
          documentId: '123456789',
          firstName: 'Hugo',
          lastName: 'Patient 1',
-         birthDate: new Date('1992-01-30T11:00:00'),
-         gender: {
-            id: 2,
-            name: 'Masculino'
-         }
+         tel: '23439475',
+         email: 'hugo@mail.com'
+      },
+      status: {
+         id: 1,
+         name: 'Activa'
       }
    },
    {
@@ -149,14 +138,15 @@ export const appointmentTestData = [
       },
       patient: {
          id: 3,
-         documentId: '345678901',
+         documentId: '3456789012',
          firstName: 'Luis',
          lastName: 'Patient 3',
-         birthDate: new Date('1992-01-25T22:00:00'),
-         gender: {
-            id: 2,
-            name: 'Masculino'
-         }
+         tel: '47563758',
+         email: 'luis@mail.com'
+      },
+      status: {
+         id: 1,
+         name: 'Activa'
       }
    },
    {
@@ -177,11 +167,12 @@ export const appointmentTestData = [
          documentId: '145678901',
          firstName: 'Daniela',
          lastName: 'Patient 4',
-         birthDate: new Date('1970-04-04T03:00:00'),
-         gender: {
-            id: 1,
-            name: 'Femenino'
-         }
+         tel: '87586970',
+         email: 'daniela@mail.com'
+      },
+      status: {
+         id: 2,
+         name: 'Cancelada'
       }
    },
 ];

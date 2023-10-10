@@ -1,8 +1,15 @@
 .table table {
    width: 100%;
+   min-width: 70rem;
    table-layout: fixed;
 }
 
+/* La tabla no responde adecuadamente a scrolling, por lo que se 
+   encapsula en un contenedor para lograr el efecto deseado */
+.table .scroll {
+   max-height: 45rem;
+   overflow: auto;
+}
 
 /* Controles para acciones sobre los récords en la tabla
 con un efecto de flotado para poder mantener la estructura
@@ -15,63 +22,85 @@ un efecto visual que no le afecta */
 
 .table .controls {
    position: absolute;
+   width: 100%;
    left: 0;
    top: -4rem;
+}
+
+/* Position sticky es un tipo de posicionamiento que causa al elemento 
+   similar a position relative, con la excepción de no ser afectado por
+   el scroll del contenedor padre */
+.table thead {
+   position: sticky;
+   top: 0;
+   background: var(--color-background);
 }
 
 .table th {
    text-align: left;
    font-weight: 700;
    padding: 0.8rem 0.5rem;
+   position: sticky;
+   overflow: hidden;
+   text-overflow: ellipsis;
 }
 
 .table td {
    padding: 0.5rem;
    vertical-align: middle;
+   overflow: hidden;
+   text-overflow: ellipsis;
 }
 
 .table tbody tr:nth-child(odd) {
    background: var(--color-alternate-item-background);
 }
 
-.table td.buttons {
+.table .buttons {
    text-align: right;
 }
 
-.table td.mobile {
+.table .data label {
    display: none;
-   position: relative;
-}
-
-.table td.mobile .heading {
-   font-size: 1.7rem;
-   font-weight: 500;
-   margin-bottom: 0.9rem;
-}
-
-.table td.mobile .data {
-   margin-bottom: 0.5rem;
-}
-
-.table td.mobile .label {
    font-weight: 700;
-   margin-right: 0.5rem;
+   margin-bottom: 0.3rem;
 }
 
-.table td.mobile .buttons {
-   position: absolute;
-   top: 0.5rem;
-   right: 0.5rem;
-}
+@media screen and (max-width: 768px) {
+   .table table {
+      min-width: 0;
+   }
 
-@media screen and (max-width: 1024px) {
-
-   .table thead,
-   .table td {
+   .table .scroll {
+      max-height: none;
+   }
+   
+   .table thead {
       display: none;
    }
 
-   .table td.mobile {
+   .table tr {
+      position: relative;
       display: block;
+      padding: 1rem;
+   }
+   
+   .table td {
+      display: block;
+   } 
+
+   .table .heading {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+   }
+
+   .table .data label {
+      display: block;
+   }
+
+   .table .buttons {
+      text-align: left;
+      margin-top: 1.8rem;
    }
 }

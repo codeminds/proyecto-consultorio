@@ -33,7 +33,7 @@
 }
 
 .col.col-7 {
-   width: 14.28%
+   width: 14.28%;
 }
 
 .col.col-8 {
@@ -60,7 +60,7 @@
    padding-right: 0;
 }
 
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 768px) {
    /* Se extienden todas las columnas al 100% en el diseño móvil
    para mantener una buena experiencia de usuario */
    .col.col-1,
@@ -74,8 +74,8 @@
    .col.col-9,
    .col.col-10 {
       width: 100%;
-   }
-
+   } 
+   
    .col.space {
       padding: 1rem 0;
    }

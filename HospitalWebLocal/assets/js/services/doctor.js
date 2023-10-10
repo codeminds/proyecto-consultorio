@@ -7,12 +7,12 @@ export class DoctorService {
       filter ??= {};
 
       const doctors = doctorTestData.filter((item) => {
-         const matchesDocumentId = !filter.documentId || item.documentId.toLowerCase().includes(filter.documentId.toLowerCase());
+         const matchesCode = !filter.code || item.code.toLowerCase().includes(filter.code.toLowerCase());
          const matchesFirstName = !filter.firstName || item.firstName.toLowerCase().includes(filter.firstName.toLowerCase());
          const matchestLastName = !filter.lastName || item.lastName.toLowerCase().includes(filter.lastName.toLowerCase());
          const matchesField = !filter.fieldId || item.field.id == filter.fieldId;
 
-         return matchesDocumentId
+         return matchesCode
             && matchesFirstName
             && matchestLastName
             && matchesField;
@@ -32,7 +32,7 @@ export class DoctorService {
    static insert(data, callback) {
       const doctor = {
          id: getNextId(doctorTestData),
-         documentId: data.documentId,
+         code: data.code,
          firstName: data.firstName,
          lastName: data.lastName
       };
@@ -43,6 +43,7 @@ export class DoctorService {
          return item.id == data.fieldId;
       });
 
+      /* Para evitar valores por referencia el campo field se redefine con el spread */
       doctor.field = {
          ...field
       };
@@ -58,7 +59,7 @@ export class DoctorService {
          return item.id == id;
       });
 
-      doctor.documentId = data.documentId;
+      doctor.code = data.code;
       doctor.firstName = data.firstName;
       doctor.lastName = data.lastName;
 
@@ -68,6 +69,7 @@ export class DoctorService {
          return item.id == data.fieldId;
       });
 
+      /* Para evitar valores por referencia el campo field se redefine con el spread */
       doctor.field = {
          ...field
       };

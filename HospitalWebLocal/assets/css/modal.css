@@ -5,29 +5,16 @@ dar una ventana alternativa para mostrar funcionalidades */
    position: fixed;
    top: 0;
    left: 0;
+   z-index: 100;
    height: 100%;
    width: 100%;
    background: rgba(0, 0, 0, 0.8);
-   overflow: auto;
-   padding: 2rem;
-   z-index: 100;
    /* Estilos de computación de orden de elementos de FlexBox */
    align-items: center;
    justify-content: center;
    flex-wrap: wrap;
-   /* Scroll para Firefox */
-   scrollbar-color: var(--color-scrollbar-dark) var(--color-scrollbar-dark);
-   scrollbar-width: thin;
-}
-
-/* Scroll para Chromium */
-.modal::-webkit-scrollbar-thumb {
-   background: var(--color-scrollbar-dark);
-}
-
-.modal::-webkit-scrollbar {
-   width: 0.7rem;
-   background: var(--color-scrollbar-dark);
+   padding: 2rem;
+   overflow: auto;
 }
 
 .modal.open {

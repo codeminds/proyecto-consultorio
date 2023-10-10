@@ -5,7 +5,7 @@ import { AppointmentService } from '../services/appointment.js';
 import { DateService } from '../services/date.js';
 import { DoctorService } from '../services/doctor.js';
 import { FieldService } from '../services/field.js';
-import { GenderService } from '../services/gender.js';
+import { StatusService } from '../services/status.js';
 import { PatientService } from '../services/patient.js';
 
 class ViewModel extends BaseViewModel {
@@ -18,13 +18,14 @@ class ViewModel extends BaseViewModel {
       super();
 
       this.#id = null;
-      this.#table = document.querySelector('[data-results]');
+      this.#table = document.querySelector('[data-table]');
       this.#formTitle = document.querySelector('[data-form-title]');
       this.#modal = new Modal(document.querySelector('[data-modal]'), 'medium', () => {
          this.#id = null;
          document.forms.insertUpdate.date.value = '';
          document.forms.insertUpdate.doctor.selectedIndex = 0;
          document.forms.insertUpdate.patient.selectedIndex = 0;
+         document.forms.insertUpdate.status.value = 1;
          this.#formTitle.textContent = '';
       });
    }
@@ -45,27 +46,31 @@ class ViewModel extends BaseViewModel {
       }
    }
 
-   initGenders() {
-      GenderService.list((genders) => {
-         this.#populateGenders(document.querySelector('[data-filter="genders"]'), [{ id: '', name: 'Todos' }, ...genders]);
+   initStatusses() {
+      StatusService.list((statusses) => {
+         this.#populateStatusses(document.querySelector('[data-form="statusses"]'), statusses, false);
+         this.#populateStatusses(document.querySelector('[data-filter="statusses"]'), [{ id: '', name: 'Todos' }, ...statusses], true);
       });
    }
 
-   #populateGenders(checks, genders) {
-      for (const gender of genders) {
+   #populateStatusses(checks, statusses, inline) {
+      for (const status of statusses) {
          const check = document.createElement('label');
-         check.classList.add('check', 'inline');
+         check.classList.add('check');
+         if(inline) {
+            check.classList.add('inline');
+         }
 
          const input = document.createElement('input');
          input.setAttribute('type', 'radio');
-         input.setAttribute('name', 'gender');
-         input.value = gender.id;
+         input.setAttribute('name', 'status');
+         input.value = status.id;
          check.appendChild(input);
 
          check.appendChild(document.createElement('i'));
 
          const span = document.createElement('span');
-         span.textContent = gender.name;
+         span.textContent = status.name;
          check.appendChild(span);
 
          checks.appendChild(check);
@@ -136,6 +141,7 @@ class ViewModel extends BaseViewModel {
                      document.forms.insertUpdate.date.value = DateService.toInputDateString(appointment.date);
                      document.forms.insertUpdate.doctor.value = appointment.doctor.id;
                      document.forms.insertUpdate.patient.value = appointment.patient.id;
+                     document.forms.insertUpdate.status.value = appointment.status.id;
                      this.#formTitle.textContent = 'Editar Cita';
                      this.#modal.open();
                   } else {
@@ -163,7 +169,8 @@ class ViewModel extends BaseViewModel {
       const data = {
          date: new Date(document.forms.insertUpdate.date.value),
          doctorId: document.forms.insertUpdate.doctor.value,
-         patientId: document.forms.insertUpdate.patient.value
+         patientId: document.forms.insertUpdate.patient.value,
+         statusId: document.forms.insertUpdate.status.value
       };
 
       if (this.#id == null) {
@@ -175,18 +182,18 @@ class ViewModel extends BaseViewModel {
 
    #onsaved(appointment) {
       this.#modal.close();
-      document.forms.doctorFilter.documentId.value = appointment.doctor.documentId;
+      document.forms.doctorFilter.code.value = appointment.doctor.code;
       document.forms.doctorFilter.firstName.value = '';
       document.forms.doctorFilter.lastName.value = '';
       document.forms.doctorFilter.field.value = '';
       document.forms.patientFilter.documentId.value = appointment.patient.documentId;
       document.forms.patientFilter.firstName.value = '';
       document.forms.patientFilter.lastName.value = '';
-      document.forms.patientFilter.birthDateFrom.value = '';
-      document.forms.patientFilter.birthDateTo.value = '';
-      document.forms.patientFilter.gender.value = '';
+      document.forms.patientFilter.tel.value = '';
+      document.forms.patientFilter.email.value = '';
       document.forms.filter.dateFrom.value = DateService.toInputDateString(appointment.date);
       document.forms.filter.dateTo.value = DateService.toInputDateString(appointment.date);
+      document.forms.filter.status.value = '';
       this.searchAppointments();
    }
 
@@ -194,14 +201,12 @@ class ViewModel extends BaseViewModel {
       const dateFrom = document.forms.filter.dateFrom.value;
       const dateTo = document.forms.filter.dateTo.value;
 
-      const patientBirthDateFrom = document.forms.patientFilter.birthDateFrom.value;
-      const patientBirthDateTo = document.forms.patientFilter.birthDateTo.value;
-
       const filter = {
          dateFrom: dateFrom ? new Date(dateFrom) : null,
          dateTo: dateTo ? new Date(dateTo) : null,
+         statusId: document.forms.filter.status.value,
          doctor: {
-            documentId: document.forms.doctorFilter.documentId.value,
+            code: document.forms.doctorFilter.code.value,
             firstName: document.forms.doctorFilter.firstName.value,
             lastName: document.forms.doctorFilter.lastName.value,
             fieldId: document.forms.doctorFilter.field.value
@@ -210,9 +215,8 @@ class ViewModel extends BaseViewModel {
             documentId: document.forms.patientFilter.documentId.value,
             firstName: document.forms.patientFilter.firstName.value,
             lastName: document.forms.patientFilter.lastName.value,
-            birthDateFrom: patientBirthDateFrom ? new Date(patientBirthDateFrom) : null,
-            birthDateTo: patientBirthDateTo ? new Date(patientBirthDateTo) : null,
-            genderId: document.forms.patientFilter.gender.value
+            tel: document.forms.patientFilter.tel.value,
+            email: document.forms.patientFilter.email.value,
          }
       };
 
@@ -223,21 +227,53 @@ class ViewModel extends BaseViewModel {
                const row = document.createElement('tr');
 
                const date = document.createElement('td');
+               date.classList.add('heading');
                date.textContent = DateService.toDisplayLocaleString(appointment.date, 'es-US');
                row.appendChild(date);
 
-               const doctorName = document.createElement('td');
-               doctorName.textContent = appointment.doctor.firstName + ' ' + appointment.doctor.lastName;
-               row.appendChild(doctorName);
+               //Doctor
+               const doctor = document.createElement('td');
+               doctor.classList.add('data');
 
-               const patientName = document.createElement('td');
-               patientName.textContent = appointment.patient.firstName + ' ' + appointment.patient.lastName;
-               row.appendChild(patientName);
+               const doctorLabel = document.createElement('label');
+               doctorLabel.textContent = 'Nombre';
+               doctor.appendChild(doctorLabel);
 
-               const field = document.createElement('td');
-               field.textContent = appointment.doctor.field.name;
-               row.appendChild(field);
+               const doctorText = document.createElement('span');
+               doctorText.textContent = appointment.doctor.firstName + ' ' + appointment.doctor.lastName;
+               doctor.appendChild(doctorText);
 
+               row.appendChild(doctor);
+
+               //Patient
+               const patient = document.createElement('td');
+               patient.classList.add('data');
+
+               const patientLabel = document.createElement('label');
+               patientLabel.textContent = 'Nombre';
+               patient.appendChild(patientLabel);
+
+               const patientText = document.createElement('span');
+               patientText.textContent = appointment.patient.firstName + ' ' + appointment.patient.lastName;
+               patient.appendChild(patientText);
+
+               row.appendChild(patient);
+
+               //Status
+               const status = document.createElement('td');
+               status.classList.add('data');
+
+               const statusLabel = document.createElement('label');
+               statusLabel.textContent = 'Nombre';
+               status.appendChild(statusLabel);
+
+               const statusText = document.createElement('span');
+               statusText.textContent = appointment.status.name;
+               status.appendChild(statusText);
+
+               row.appendChild(status);
+
+               //Buttons
                const buttons = document.createElement('td');
                buttons.classList.add('buttons');
 
@@ -257,68 +293,6 @@ class ViewModel extends BaseViewModel {
 
                row.appendChild(buttons);
 
-               //MOBILE 
-               const mobile = document.createElement('td');
-               mobile.classList.add('mobile');
-
-               const mobileHeading = document.createElement('h3');
-               mobileHeading.classList.add('heading');
-               mobileHeading.textContent = DateService.toDisplayLocaleString(appointment.date, 'es-US');
-               mobile.appendChild(mobileHeading);
-
-               const mobileDoctorName = document.createElement('p');
-               const mobileDoctorNameLabel = document.createElement('label');
-               const mobileDoctorNameText = document.createElement('span');
-               mobileDoctorNameText.textContent = appointment.doctor.firstName + ' ' + appointment.doctor.lastName;
-               mobileDoctorNameLabel.classList.add('label');
-               mobileDoctorNameLabel.textContent = 'Doctor:';
-               mobileDoctorName.classList.add('data');
-               mobileDoctorName.appendChild(mobileDoctorNameLabel);
-               mobileDoctorName.appendChild(mobileDoctorNameText);
-               mobile.appendChild(mobileDoctorName);
-
-               const mobilePatientName = document.createElement('p');
-               const mobilePatientNameLabel = document.createElement('label');
-               const mobilePatientNameText = document.createElement('span');
-               mobilePatientNameText.textContent = appointment.patient.firstName + ' ' + appointment.patient.lastName;
-               mobilePatientNameLabel.classList.add('label');
-               mobilePatientNameLabel.textContent = 'Paciente:';
-               mobilePatientName.classList.add('data');
-               mobilePatientName.appendChild(mobilePatientNameLabel);
-               mobilePatientName.appendChild(mobilePatientNameText);
-               mobile.appendChild(mobilePatientName);
-
-               const mobileField = document.createElement('p');
-               const mobileFieldLabel = document.createElement('label');
-               const mobileFieldText = document.createElement('span');
-               mobileFieldText.textContent = appointment.doctor.field.name;
-               mobileFieldLabel.classList.add('label');
-               mobileFieldLabel.textContent = 'Especialidad:';
-               mobileField.classList.add('data');
-               mobileField.appendChild(mobileFieldLabel);
-               mobileField.appendChild(mobileFieldText);
-               mobile.appendChild(mobileField);
-
-               const mobileButtons = document.createElement('div');
-               mobileButtons.classList.add('buttons');
-
-               const mobileEditButton = document.createElement('button');
-               mobileEditButton.classList.add('button', 'success');
-               mobileEditButton.setAttribute('data-click', 'edit');
-               mobileEditButton.setAttribute('data-id', appointment.id);
-               mobileEditButton.textContent = 'Editar';
-               mobileButtons.appendChild(mobileEditButton);
-
-               const mobileDeleteButton = document.createElement('button');
-               mobileDeleteButton.classList.add('button', 'danger');
-               mobileDeleteButton.setAttribute('data-click', 'delete');
-               mobileDeleteButton.setAttribute('data-id', appointment.id);
-               mobileDeleteButton.textContent = 'Borrar';
-               mobileButtons.appendChild(mobileDeleteButton);
-
-               mobile.appendChild(mobileButtons);
-
-               row.appendChild(mobile);
                this.#table.appendChild(row);
             }
          } else {
@@ -340,7 +314,7 @@ class ViewModel extends BaseViewModel {
 const viewModel = new ViewModel();
 
 viewModel.initFields();
-viewModel.initGenders();
+viewModel.initStatusses();
 viewModel.initDoctors();
 viewModel.initPatients();
 viewModel.initFilter();
