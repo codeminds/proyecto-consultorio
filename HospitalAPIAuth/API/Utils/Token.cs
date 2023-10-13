@@ -9,12 +9,12 @@ namespace API.Utils
     public static class Token
     {
         public static string IssueAccessToken(User user, Guid session)
-        { 
+        {
             /* La lista de información personalizada de un token se conoce como "Claims"
             lo cual es una colección de afirmaciones que tiene el token sobre alguien
             que lo tiene, como una tarjeta de acceso digital */
             List<Claim> claims = new()
-            { 
+            {
                 new Claim(Claims.IssueDate, DateTimeOffset.Now.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64),
                 new Claim(Claims.UserId, user.Id.ToString(), ClaimValueTypes.Integer),
                 new Claim(Claims.User, user.Email, ClaimValueTypes.String),
@@ -65,12 +65,12 @@ namespace API.Utils
         }
 
         public static List<Claim> GetValidTokenClaims(string jwtToken, bool validateExpiration)
-        { 
+        {
             /* Antes de utilizar la información del token que estamos recibiendo, se valida su firma,
             además de otros parámetros para confirmar que este fue gestionado por un ente válido */
             SymmetricSecurityKey key = new(Encoding.UTF8.GetBytes(Configuration.Get<string>("JWT:Secret")));
             TokenValidationParameters validation = new()
-            { 
+            {
                 ValidateIssuer = true,
                 ValidIssuer = Configuration.Get<string>("JWT:Issuer"),
                 ValidateAudience = true,
@@ -81,7 +81,7 @@ namespace API.Utils
                 IssuerSigningKey = key
             };
 
-            if(validateExpiration)
+            if (validateExpiration)
             {
                 validation.ClockSkew = TimeSpan.FromMinutes(Configuration.Get<int>("JWT:ClockSkewMinutes"));
             }

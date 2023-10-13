@@ -7,7 +7,7 @@ public partial class Doctor
 {
     public int Id { get; set; }
 
-    public string DocumentId { get; set; } = null!;
+    public string Code { get; set; } = null!;
 
     public string FirstName { get; set; } = null!;
 

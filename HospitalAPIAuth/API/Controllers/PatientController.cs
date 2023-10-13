@@ -82,13 +82,12 @@ namespace API.Controllers
         public async Task<ActionResult<APIResponse>> InsertPatient(InsertUpdatePatientDTO data)
         {
             APIResponse response = new();
-            response.Success = this._patientValidator.ValidateInsert(data, response.Messages);
+            response.Success = this._patientValidator.ValidateInsertUpdate(null, data, response.Messages);
 
             if (response.Success)
             {
                 Patient patient = this._mapper.Map<InsertUpdatePatientDTO, Patient>(data);
                 await this._patientService.InsertPatient(patient);
-
                 response.Data = this._mapper.Map<Patient, GetPatientDTO>(patient);
                 response.Messages.Add("Paciente ha sido insertado");
             }
@@ -108,7 +107,7 @@ namespace API.Controllers
             }
 
             APIResponse response = new();
-            response.Success = this._patientValidator.ValidateUpdate(id, data, response.Messages);
+            response.Success = this._patientValidator.ValidateInsertUpdate(id, data, response.Messages);
 
             if (response.Success)
             {

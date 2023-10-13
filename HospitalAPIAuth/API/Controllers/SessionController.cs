@@ -35,14 +35,15 @@ namespace API.Controllers
         [HttpGet]
         [Authorize]
         public async Task<ActionResult<APIResponse>> ListSessions([FromQuery] FilterSessionDTO data)
-        { 
+        {
             SessionFilters filter = this._mapper.Map<FilterSessionDTO, SessionFilters>(data);
             List<Session> list = await this._sessionService
                                         .ListSessions(Convert.ToInt32(HttpContext.Items[Claims.UserId]), filter)
+                                        .OrderBy(s => s.AddressIssued)
                                         .ToListAsync();
 
             APIResponse response = new()
-            { 
+            {
                 Data = list.Select(s => this._mapper.Map<Session, GetSessionDTO>(s))
             };
 

@@ -9,14 +9,14 @@ namespace API.Validators
             List<string> innerMessages = new();
 
             //Email
-            if(string.IsNullOrWhiteSpace(data.Email))
-            { 
+            if (string.IsNullOrWhiteSpace(data.Email))
+            {
                 innerMessages.Add("Usuario es requerido");
             }
 
             //Password
-            if(string.IsNullOrWhiteSpace(data.Password))
-            { 
+            if (string.IsNullOrWhiteSpace(data.Password))
+            {
                 innerMessages.Add("Contraseña es requerida");
             }
 

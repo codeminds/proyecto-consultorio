@@ -32,12 +32,12 @@ namespace API.Services
         }
 
         public async Task<Session?> FindSession(Guid sessionId)
-        { 
+        {
             return await this._database
                 .Session
                 .Include(s => s.User)
                 .Include(s => s.User.Role)
-                .FirstOrDefaultAsync(s => s.SessionId == sessionId);    
+                .FirstOrDefaultAsync(s => s.SessionId == sessionId);
         }
 
         public async Task<Session> InitUserSession(User user, IPAddress? address)
@@ -48,7 +48,7 @@ namespace API.Services
             string refreshToken = Token.IssueRefreshToken(user, sessionId);
 
             Session session = new()
-            { 
+            {
                 SessionId = sessionId,
                 UserId = user.Id,
                 DateIssued = now,
@@ -79,7 +79,7 @@ namespace API.Services
             session.AccessTokenString = Token.IssueAccessToken(user, session.SessionId);
 
             this._database.Update(session);
-            await this._database.SaveChangesAsync();  
+            await this._database.SaveChangesAsync();
         }
 
         public async Task DeleteSession(Session entity)

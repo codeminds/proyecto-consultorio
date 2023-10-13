@@ -3,14 +3,14 @@ using API.Data.Models;
 
 namespace API.Services
 {
-   public interface IPatientService
-   {
-      IQueryable<Patient> ListPatients(PatientListFilter? filter = null);
-      //IMPORTANTE: Sólo para proyecto Angular
-      IQueryable<Patient> SearchPatients(string[] values);
-      Task<Patient?> FindPatient(int id);
-      Task InsertPatient(Patient entity);
-      Task UpdatePatient(Patient entity);
-      Task DeletePatient(Patient entity);
-   }
+    public interface IPatientService
+    {
+        IQueryable<Patient> ListPatients(PatientListFilter? filter = null);
+        //IMPORTANTE: Sólo para proyecto Angular
+        IQueryable<Patient> SearchPatients(string[] values);
+        Task<Patient?> FindPatient(int id);
+        Task InsertPatient(Patient entity);
+        Task UpdatePatient(Patient entity);
+        Task DeletePatient(Patient entity);
+    }
 }

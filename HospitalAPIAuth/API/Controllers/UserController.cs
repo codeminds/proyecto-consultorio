@@ -50,7 +50,7 @@ namespace API.Controllers
         public async Task<ActionResult<APIResponse>> InsertUser(InsertUpdateUserDTO data)
         {
             APIResponse response = new();
-            response.Success = this._userValidator.ValidateInsert(data, response.Messages);
+            response.Success = this._userValidator.ValidateInsertUpdate(null, data, Convert.ToBoolean(HttpContext.Items[Claims.SuperAdmin]), response.Messages);
 
             if (response.Success)
             {
@@ -75,7 +75,7 @@ namespace API.Controllers
             }
 
             APIResponse response = new();
-            response.Success = this._userValidator.ValidateUpdate(id, data, Convert.ToBoolean(HttpContext.Items[Claims.SuperAdmin]), response.Messages);
+            response.Success = this._userValidator.ValidateInsertUpdate(id, data, Convert.ToBoolean(HttpContext.Items[Claims.SuperAdmin]), response.Messages);
 
             if (response.Success)
             {
@@ -118,8 +118,8 @@ namespace API.Controllers
         public async Task<ActionResult<APIResponse>> GetCurrentUser()
         {
             User? user = await this._userService.FindUser(Convert.ToInt32(HttpContext.Items[Claims.UserId]));
-            if(user == null)
-            { 
+            if (user == null)
+            {
                 return HttpErrors.NotFound("Usuario no existe en el sistema");
             }
 
@@ -135,18 +135,18 @@ namespace API.Controllers
         [Route("me")]
         [Authorize]
         public async Task<ActionResult<APIResponse>> UpdateCurrentUser(UpdateSelfUserDTO data)
-        { 
+        {
             User? user = await this._userService.FindUser(Convert.ToInt32(HttpContext.Items[Claims.UserId]));
-            if(user == null)
-            { 
+            if (user == null)
+            {
                 return HttpErrors.NotFound("Usuario no existe en el sistema");
             }
 
             APIResponse response = new();
             response.Success = this._userValidator.ValidateUpdateSelf(user.Id, data, response.Messages);
 
-            if(response.Success)
-            { 
+            if (response.Success)
+            {
                 this._mapper.Map(data, user);
                 await this._userService.UpdateUser(user);
                 response.Data = this._mapper.Map<User, GetUserDTO>(user);

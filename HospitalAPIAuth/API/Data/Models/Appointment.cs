@@ -13,7 +13,11 @@ public partial class Appointment
 
     public int DoctorId { get; set; }
 
+    public int StatusId { get; set; }
+
     public virtual Doctor Doctor { get; set; } = null!;
 
     public virtual Patient Patient { get; set; } = null!;
+
+    public virtual Status Status { get; set; } = null!;
 }

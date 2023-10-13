@@ -3,7 +3,7 @@
 namespace API.Utils
 {
     public enum UserRole
-    { 
+    {
         [Description("Administrador")]
         Administrator = 1,
 

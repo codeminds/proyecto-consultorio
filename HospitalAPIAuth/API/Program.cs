@@ -18,11 +18,12 @@ HTTP 400 (Bad Request) y crea un objeto específico diferente a nuestro APIRespon
 sin embargo con esta configuración personalizada controlamos cómo responde el servidor
 creando un objeto APIResponse para responder en vez */
 builder.Services.AddControllers()
-                .ConfigureApiBehaviorOptions(options => {
+                .ConfigureApiBehaviorOptions(options =>
+                {
                     options.InvalidModelStateResponseFactory = context =>
                     {
                         return HttpErrors.BadRequest(data: "Invalid data model");
-                    }; 
+                    };
                 });
 
 builder.Services.AddAutoMapper(typeof(Program));
@@ -32,10 +33,10 @@ builder.Services.AddDbContext<HospitalDB>();
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 builder.Services.AddScoped<IDoctorService, DoctorService>();
 builder.Services.AddScoped<IFieldService, FieldService>();
-builder.Services.AddScoped<IGenderService, GenderService>();
 builder.Services.AddScoped<IPatientService, PatientService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<ISessionService, SessionService>();
+builder.Services.AddScoped<IStatusService, StatusService>();
 builder.Services.AddScoped<IUserService, UserService>();
 
 //VALIDATORS

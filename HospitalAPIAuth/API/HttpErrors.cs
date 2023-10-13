@@ -16,7 +16,7 @@ namespace API
         }
 
         public static UnauthorizedObjectResult Unauthorized(string? message = null, object? data = null)
-        { 
+        {
             return new UnauthorizedObjectResult(GetErrorAPIResponse(HttpStatusCode.Unauthorized, message, data));
         }
 

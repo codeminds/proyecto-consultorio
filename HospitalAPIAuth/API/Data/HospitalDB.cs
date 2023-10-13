@@ -22,13 +22,13 @@ public partial class HospitalDB : DbContext
 
     public virtual DbSet<Field> Field { get; set; }
 
-    public virtual DbSet<Gender> Gender { get; set; }
-
     public virtual DbSet<Patient> Patient { get; set; }
 
     public virtual DbSet<Role> Role { get; set; }
 
     public virtual DbSet<Session> Session { get; set; }
+
+    public virtual DbSet<Status> Status { get; set; }
 
     public virtual DbSet<User> User { get; set; }
 
@@ -41,6 +41,8 @@ public partial class HospitalDB : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PKAppointment");
 
+            entity.HasIndex(e => new { e.Date, e.PatientId, e.DoctorId, e.StatusId }, "IXAppointmentLookup");
+
             entity.HasOne(d => d.Doctor).WithMany(p => p.Appointment)
                 .HasForeignKey(d => d.DoctorId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -50,16 +52,23 @@ public partial class HospitalDB : DbContext
                 .HasForeignKey(d => d.PatientId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FKPatientAppointmentPatientId");
+
+            entity.HasOne(d => d.Status).WithMany(p => p.Appointment)
+                .HasForeignKey(d => d.StatusId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FKStatusAppointmentStatusId");
         });
 
         modelBuilder.Entity<Doctor>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PKDoctor");
 
-            entity.HasIndex(e => e.DocumentId, "UXDoctorDocumentId").IsUnique();
+            entity.HasIndex(e => new { e.Code, e.FirstName, e.LastName, e.FieldId }, "IXDoctorLookup");
 
-            entity.Property(e => e.DocumentId)
-                .HasMaxLength(9)
+            entity.HasIndex(e => e.Code, "UXDoctorCode").IsUnique();
+
+            entity.Property(e => e.Code)
+                .HasMaxLength(10)
                 .IsUnicode(false);
             entity.Property(e => e.FirstName)
                 .HasMaxLength(50)
@@ -78,15 +87,7 @@ public partial class HospitalDB : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PKField");
 
-            entity.Property(e => e.Name)
-                .HasMaxLength(50)
-                .IsUnicode(false);
-        });
-
-        modelBuilder.Entity<Gender>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PKGender");
-
+            entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.Name)
                 .HasMaxLength(50)
                 .IsUnicode(false);
@@ -96,10 +97,17 @@ public partial class HospitalDB : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PKPatient");
 
+            entity.HasIndex(e => new { e.DocumentId, e.FirstName, e.LastName, e.Tel, e.Email }, "IXPatientLookup");
+
             entity.HasIndex(e => e.DocumentId, "UXPatientDocumentId").IsUnique();
+
+            entity.HasIndex(e => e.Email, "UXPatientEmail").IsUnique();
 
             entity.Property(e => e.DocumentId)
                 .HasMaxLength(9)
+                .IsUnicode(false);
+            entity.Property(e => e.Email)
+                .HasMaxLength(100)
                 .IsUnicode(false);
             entity.Property(e => e.FirstName)
                 .HasMaxLength(50)
@@ -107,11 +115,9 @@ public partial class HospitalDB : DbContext
             entity.Property(e => e.LastName)
                 .HasMaxLength(50)
                 .IsUnicode(false);
-
-            entity.HasOne(d => d.Gender).WithMany(p => p.Patient)
-                .HasForeignKey(d => d.GenderId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FKGenderPatientGenderId");
+            entity.Property(e => e.Tel)
+                .HasMaxLength(8)
+                .IsUnicode(false);
         });
 
         modelBuilder.Entity<Role>(entity =>
@@ -119,16 +125,16 @@ public partial class HospitalDB : DbContext
             entity.HasKey(e => e.Id).HasName("PKRole");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
-            entity.Property(e => e.Name)
-                .HasMaxLength(50)
-                .IsUnicode(false);
+            entity.Property(e => e.Name).HasMaxLength(50);
         });
 
         modelBuilder.Entity<Session>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PKSession");
 
-            entity.HasIndex(e => e.SessionId, "UXSessionId").IsUnique();
+            entity.HasIndex(e => new { e.AddressIssued, e.AddressRefreshed, e.DateIssued }, "IXSessionLookup");
+
+            entity.HasIndex(e => e.SessionId, "UXSessionSessionId").IsUnique();
 
             entity.Property(e => e.AddressIssued)
                 .HasMaxLength(40)
@@ -146,21 +152,29 @@ public partial class HospitalDB : DbContext
                 .HasConstraintName("FKUserSessionUserId");
         });
 
+        modelBuilder.Entity<Status>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PKStatus");
+
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.Name)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+        });
+
         modelBuilder.Entity<User>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PKUser");
+
+            entity.HasIndex(e => new { e.Email, e.FirstName, e.LastName, e.RoleId }, "IXUserLookup");
 
             entity.HasIndex(e => e.Email, "UXUserEmail").IsUnique();
 
             entity.Property(e => e.Email)
                 .HasMaxLength(100)
                 .IsUnicode(false);
-            entity.Property(e => e.FirstName)
-                .HasMaxLength(50)
-                .IsUnicode(false);
-            entity.Property(e => e.LastName)
-                .HasMaxLength(50)
-                .IsUnicode(false);
+            entity.Property(e => e.FirstName).HasMaxLength(50);
+            entity.Property(e => e.LastName).HasMaxLength(50);
             entity.Property(e => e.Password)
                 .HasMaxLength(64)
                 .IsFixedLength();

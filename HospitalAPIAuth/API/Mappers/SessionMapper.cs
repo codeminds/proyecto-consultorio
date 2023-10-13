@@ -8,7 +8,7 @@ namespace API.Mappers
     public class SessionMapper : Profile
     {
         public SessionMapper()
-        { 
+        {
             CreateMap<Session, GetSessionDTO>();
             CreateMap<Session, GetSessionTokensDTO>()
                 .ForMember(dest => dest.AccessToken, opt => opt.MapFrom(source => source.AccessTokenString))

@@ -3,19 +3,19 @@ using API.Data.Models;
 
 namespace API.Services
 {
-    public class FieldService : IFieldService
+    public class StatusService : IStatusService
     {
         private readonly HospitalDB _database;
 
-        public FieldService(HospitalDB database)
+        public StatusService(HospitalDB database)
         {
             this._database = database;
         }
 
-        public IQueryable<Field> ListFields()
+        public IQueryable<Status> ListStatusses()
         {
             return this._database
-                    .Field;
+                    .Status;
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿namespace API.Utils
 {
     public static class Claims
-    { 
+    {
         public const string IssueDate = "issue_date";
         public const string UserId = "user_id";
         public const string User = "user";
@@ -12,7 +12,7 @@
     }
 
     public static class RegularExpressions
-    { 
+    {
         public const string Email = @"^[\w\-\.]+@([\w\-]+\.)+[\w]+$";
         public const string Password = @"^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[@$!%*#?&])[A-Za-z0-9@$!%*#?&]{8,}$";
     }

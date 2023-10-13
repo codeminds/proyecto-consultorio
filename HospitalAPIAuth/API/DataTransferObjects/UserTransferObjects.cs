@@ -10,7 +10,7 @@
         public bool IsSuperAdmin { get; set; }
     }
 
-    public class UpdateSelfUserDTO 
+    public class UpdateSelfUserDTO
     {
         public string? Email { get; set; }
         public string? FirstName { get; set; }
