@@ -1,4 +1,4 @@
-IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = 'HospitalDB')
+IF NOT EXISTS (SELECT * FROM sys.databases WHERE [name] = 'HospitalDB')
 BEGIN
 	CREATE DATABASE HospitalDB;
 END
@@ -8,92 +8,97 @@ USE HospitalDB;
 GO
 
 -- CREATE FIELD
-IF NOT EXISTS (SELECT * FROM sys.sysobjects WHERE name = 'Field' and xtype = 'U')
+IF NOT EXISTS (SELECT * FROM sys.sysobjects WHERE [name] = 'Field' and xtype = 'U')
 BEGIN
 	CREATE TABLE Field (
-		Id INT NOT NULL IDENTITY(1,1),
-		Name VARCHAR(50) NOT NULL,
-		CONSTRAINT PKField PRIMARY KEY (Id)
+		Id INT NOT NULL,
+		[Name] VARCHAR(50) NOT NULL,
+		CONSTRAINT PKField PRIMARY KEY CLUSTERED (Id)
 	)
 END
 GO
 
 -- CREATE DOCTOR
-IF NOT EXISTS (SELECT * FROM sys.sysobjects WHERE name = 'Doctor' and xtype = 'U')
+IF NOT EXISTS (SELECT * FROM sys.sysobjects WHERE [name] = 'Doctor' AND xtype = 'U')
 BEGIN
 	CREATE TABLE Doctor (
 		Id INT NOT NULL IDENTITY(1,1),
-		DocumentId VARCHAR(9) NOT NULL,
+		Code VARCHAR(10) NOT NULL,
 		FirstName VARCHAR(50) NOT NULL,
 		LastName VARCHAR(50) NOT NULL,
 		FieldId INT NOT NULL,
-		CONSTRAINT PKDoctor PRIMARY KEY (Id),
-		CONSTRAINT UXDoctorDocumentId UNIQUE (DocumentId),
-		CONSTRAINT FKFieldDoctorFieldId FOREIGN KEY (FieldId) REFERENCES Field (Id)
-	)
-END
-GO
-
--- CREATE GENDER
-IF NOT EXISTS (SELECT * FROM sys.sysobjects WHERE name = 'Gender' and xtype = 'U')
-BEGIN
-	CREATE TABLE Gender (
-		Id INT NOT NULL IDENTITY(1,1),
-		Name VARCHAR(50) NOT NULL,
-		CONSTRAINT PKGender PRIMARY KEY (Id)
+		CONSTRAINT PKDoctor PRIMARY KEY CLUSTERED (Id),
+		CONSTRAINT UXDoctorCode UNIQUE (Code),
+		CONSTRAINT FKFieldDoctorFieldId FOREIGN KEY (FieldId) REFERENCES Field (Id),
+		INDEX IXDoctorLookup NONCLUSTERED (Code, FirstName, LastName, FieldId)
 	)
 END
 GO
 
 -- CREATE PATIENT
-IF NOT EXISTS (SELECT * FROM sys.sysobjects WHERE name = 'Patient' and xtype = 'U')
-BEGIN
-	CREATE TABLE Patient (
+IF NOT EXISTS (SELECT * FROM  sys.sysobjects WHERE [name] = 'Patient' AND xtype = 'U')
+BEGIN	
+	CREATE TABLE Patient(
 		Id INT NOT NULL IDENTITY(1,1),
-		DocumentId VARCHAR(9) NOT NULL,
+		DocumentId VARCHAR(9)NOT NULL,
 		FirstName VARCHAR(50) NOT NULL,
 		LastName VARCHAR(50) NOT NULL,
-		BirthDate DATETIME2(7) NOT NULL,
-		GenderId INT NOT NULL
-		CONSTRAINT PKPatient PRIMARY KEY (Id),
+		Tel VARCHAR(8) NOT NULL,
+		Email VARCHAR (100)NOT NULL,
+		CONSTRAINT PKPatient PRIMARY KEY CLUSTERED (Id),
 		CONSTRAINT UXPatientDocumentId UNIQUE (DocumentId),
-		CONSTRAINT FKGenderPatientGenderId FOREIGN KEY (GenderId) REFERENCES Gender (Id)
+		CONSTRAINT UXPatientEmail UNIQUE (Email),
+		INDEX IXPatientLookup NONCLUSTERED (DocumentId, FirstName, LastName, Tel, Email)
 	)
 END
 GO
 
+-- CREATE STATUS
+IF NOT EXISTS (SELECT * FROM sys.sysobjects WHERE [name] = 'Status' AND xtype = 'U')
+BEGIN 
+	CREATE TABLE [Status](
+		Id INT NOT NULL,
+		[Name] VARCHAR(50) NOT NULL,
+		CONSTRAINT PKStatus PRIMARY KEY CLUSTERED (Id)
+	)
+END
+GO			
+
 -- CREATE APPOINTMENT
-IF NOT EXISTS (SELECT * FROM sys.sysobjects WHERE name = 'Appointment' and xtype = 'U')
+IF NOT EXISTS (SELECT * FROM sys.sysobjects WHERE [name] = 'Appointment' AND xtype = 'U')
 BEGIN
-	CREATE TABLE Appointment (
+	CREATE TABLE Appointment(
 		Id INT NOT NULL IDENTITY(1,1),
-		Date DATETIME2(7) NOT NULL,
+		[Date] DATETIME2 NOT NULL,
 		PatientId INT NOT NULL,
 		DoctorId INT NOT NULL,
-		CONSTRAINT PKAppointment PRIMARY KEY (Id),
+		StatusId INT NOT NULL,
+		CONSTRAINT PKAppointment PRIMARY KEY CLUSTERED (Id),
 		CONSTRAINT FKPatientAppointmentPatientId FOREIGN KEY (PatientId) REFERENCES Patient (Id),
-		CONSTRAINT FKDoctorAppointmentDoctorId FOREIGN KEY (DoctorId) REFERENCES Doctor (Id)
+		CONSTRAINT FKDoctorAppointmentDoctorId FOREIGN KEY (DoctorId) REFERENCES Doctor (Id),
+		CONSTRAINT FKStatusAppointmentStatusId FOREIGN KEY (StatusId) REFERENCES [Status] (Id),
+		INDEX IXAppointmentLookup NONCLUSTERED ([Date], PatientId, DoctorId, StatusId)
 	)
 END
 GO
 
 -- CREATE ROLE
-IF NOT EXISTS(SELECT * FROM sys.sysobjects WHERE Name = 'Role' AND xtype = 'U')
+IF NOT EXISTS(SELECT * FROM sys.sysobjects WHERE [name] = 'Role' AND xtype = 'U')
 BEGIN
-	CREATE TABLE Role(
+	CREATE TABLE [Role](
 		Id INT NOT NULL,
-		Name NVARCHAR(50) NOT NULL,
+		[Name] NVARCHAR(50) NOT NULL,
 		CONSTRAINT PKRole PRIMARY KEY CLUSTERED (Id),
 	);
 END
 
 -- CREATE USER
-IF NOT EXISTS(SELECT * FROM sys.sysobjects WHERE Name = 'User' AND xtype = 'U')
+IF NOT EXISTS(SELECT * FROM sys.sysobjects WHERE [name] = 'User' AND xtype = 'U')
 BEGIN
 	CREATE TABLE [User](
 		Id INT NOT NULL IDENTITY(1, 1),
 		Email VARCHAR(100) NOT NULL,
-		Password BINARY(64) NOT NULL,
+		[Password] BINARY(64) NOT NULL,
 		PasswordSalt BINARY(64) NOT NULL,
 		FirstName NVARCHAR(50) NOT NULL,
 		LastName NVARCHAR(50) NOT NULL,
@@ -101,15 +106,15 @@ BEGIN
 		IsSuperAdmin BIT NOT NULL CONSTRAINT DFUserIsSuperAdmin DEFAULT 0,
 		CONSTRAINT PKUser PRIMARY KEY CLUSTERED (Id),
 		CONSTRAINT UXUserEmail UNIQUE NONCLUSTERED (Email),
-		CONSTRAINT FKRoleUserRoleId FOREIGN KEY(RoleId) REFERENCES Role(Id),
+		CONSTRAINT FKRoleUserRoleId FOREIGN KEY(RoleId) REFERENCES [Role](Id),
 		INDEX IXUserLookup NONCLUSTERED (Email, FirstName, LastName, RoleId)
 	);
 END
 
 -- CREATE SESSION
-IF NOT EXISTS(SELECT * FROM sys.sysobjects WHERE Name = 'Session' AND xtype = 'U')
+IF NOT EXISTS(SELECT * FROM sys.sysobjects WHERE [name] = 'Session' AND xtype = 'U')
 BEGIN
-	CREATE TABLE Session(
+	CREATE TABLE [Session](
 		Id BIGINT NOT NULL IDENTITY(1,1),
 		SessionId UNIQUEIDENTIFIER NOT NULL,
 		UserId INT NOT NULL,
@@ -122,53 +127,54 @@ BEGIN
 		CONSTRAINT PKSession PRIMARY KEY CLUSTERED (Id),
 		CONSTRAINT UXSessionSessionId UNIQUE NONCLUSTERED (SessionId),
 		CONSTRAINT FKUserSessionUserId FOREIGN KEY (UserId) REFERENCES [User](Id),
+		INDEX IXSessionLookup NONCLUSTERED (AddressIssued, AddressRefreshed, DateIssued)
 	);
 END
 
--- INSERT FIELD DATA
-IF NOT EXISTS (SELECT * FROM Field WHERE Name = 'Doctor General')
-BEGIN
-	INSERT INTO Field (Name) VALUES ('Doctor General');
+--INSERT FIELD DATA
+IF NOT EXISTS (SELECT * FROM Field WHERE Id = 1)
+BEGIN 
+	INSERT INTO Field (Id, Name) VALUES (1, 'Doctor General')
 END
 
-IF NOT EXISTS (SELECT * FROM Field WHERE Name = 'Dentista')
-BEGIN
-	INSERT INTO Field (Name) VALUES ('Dentista');
+IF NOT EXISTS (SELECT * FROM Field WHERE Id = 2)
+BEGIN 
+	INSERT INTO Field (Id, Name) VALUES (2, 'Dentista')
 END
 
-IF NOT EXISTS (SELECT * FROM Field WHERE Name = 'Pediatra')
-BEGIN
-	INSERT INTO Field (Name) VALUES ('Pediatra');
+IF NOT EXISTS (SELECT * FROM Field WHERE Id = 3)
+BEGIN 
+	INSERT INTO Field (Id, Name) VALUES (3, 'Pediatra')
 END
 
-IF NOT EXISTS (SELECT * FROM Field WHERE Name = 'Cirujano')
-BEGIN
-	INSERT INTO Field (Name) VALUES ('Cirujano');
+IF NOT EXISTS (SELECT * FROM Field WHERE Id = 4)
+BEGIN 
+	INSERT INTO Field (Id, Name) VALUES (4, 'Cirujano')
 END
 
--- INSERT GENDER DATA
-IF NOT EXISTS (SELECT * FROM Gender WHERE Name = 'Femenino')
+-- INSERT STATUS DATA
+IF NOT EXISTS (SELECT * FROM [Status] WHERE Id = 1)
 BEGIN
-	INSERT INTO Gender(Name) VALUES ('Femenino');
+	INSERT INTO [Status] (Id, [Name]) VALUES (1, 'Activa')
 END
 
-IF NOT EXISTS (SELECT * FROM Gender WHERE Name = 'Masculino')
+IF NOT EXISTS (SELECT * FROM [Status] WHERE Id = 2)
 BEGIN
-	INSERT INTO Gender (Name) VALUES ('Masculino');
+	INSERT INTO [Status] (Id, [Name]) VALUES (2, 'Cancelada')
 END
 
 -- INSERT ROLE DATA
-IF NOT EXISTS(SELECT * FROM Role WHERE Name = 'Administrador')
+IF NOT EXISTS(SELECT * FROM [Role] WHERE Id = 1)
 BEGIN
-	INSERT INTO Role (Id, Name) VALUES (1, 'Administrador');
+	INSERT INTO [Role] (Id, [Name]) VALUES (1, 'Administrador');
 END
 
-IF NOT EXISTS(SELECT * FROM Role WHERE Name = 'Editor')
+IF NOT EXISTS(SELECT * FROM [Role] WHERE Id = 2)
 BEGIN
-	INSERT INTO Role (Id, Name) VALUES (2, 'Editor');
+	INSERT INTO [Role] (Id, [Name]) VALUES (2, 'Editor');
 END
 
-IF NOT EXISTS(SELECT * FROM Role WHERE Name = 'Asistente')
+IF NOT EXISTS(SELECT * FROM [Role] WHERE Id = 3)
 BEGIN
-	INSERT INTO Role (Id, Name) VALUES (3, 'Asistente');
+	INSERT INTO [Role] (Id, [Name]) VALUES (3, 'Asistente');
 END
