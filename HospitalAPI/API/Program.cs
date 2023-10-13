@@ -26,7 +26,7 @@ builder.Services.AddDbContext<HospitalDB>();
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 builder.Services.AddScoped<IDoctorService, DoctorService>();
 builder.Services.AddScoped<IFieldService, FieldService>();
-builder.Services.AddScoped<IGenderService, GenderService>();
+builder.Services.AddScoped<IStatusService, StatusService>();
 builder.Services.AddScoped<IPatientService, PatientService>();
 
 //VALIDATORS

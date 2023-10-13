@@ -4,11 +4,11 @@ using AutoMapper;
 
 namespace API.Mappers
 {
-    public class StatusMapper : Profile
+    public class FieldMapper : Profile
     {
-        public StatusMapper()
+        public FieldMapper()
         {
-            CreateMap<Status, GetStatusDTO>();
+            CreateMap<Field, GetFieldDTO>();
         }
     }
 }
