@@ -1,95 +1,115 @@
-USE HospitalDB;
+USE HospitalDB
 GO
 
-DECLARE @GenderMasculineId INT;
-SELECT TOP 1 @GenderMasculineId = Id FROM Gender WHERE Name = 'Masculino';
-
-DECLARE @GenderFeminineId INT;
-SELECT TOP 1 @GenderFeminineId = Id FROM Gender WHERE Name = 'Femenino';
-
-DECLARE @GeneralDoctorId INT;
-SELECT TOP 1 @GeneralDoctorId = Id FROM Field WHERE Name = 'Doctor General';
-
-DECLARE @DentistDoctorId INT;
-SELECT TOP 1 @DentistDoctorId = Id FROM Field WHERE Name = 'Dentista';
-
-DECLARE @SurgeonDoctorId INT;
-SELECT TOP 1 @SurgeonDoctorId = Id FROM Field WHERE Name = 'Cirujano';
-
-DECLARE @PediatricianDoctorId INT;
-SELECT TOP 1 @PediatricianDoctorId = Id FROM Field WHERE Name = 'Pediatra';
-
-
 -- INSERT PATIENTS
+
+-- 123456789 Daniel Mora 3547565 daniel@mora.com
 IF NOT EXISTS (SELECT * FROM Patient WHERE DocumentId = '123456789')
 BEGIN
-	INSERT INTO Patient (DocumentId, FirstName, LastName, BirthDate, GenderId) VALUES ('123456789', 'Paciente', 'Uno', '1992-01-30 11:00:00.000', @GenderMasculineId);
+	INSERT INTO Patient (DocumentId, FirstName, LastName, Tel, Email) VALUES ('123456789', 'Daniel', 'Mora', '3547565', 'daniel@mora.com')
 END
-DECLARE @PatientId1 INT;
-SELECT TOP 1 @PatientId1 = Id FROM Patient WHERE DocumentId = '123456789';
 
+-- 234567890 Josué Sánchez 84751236 josue@sanchez.com
 IF NOT EXISTS (SELECT * FROM Patient WHERE DocumentId = '234567890')
 BEGIN
-	INSERT INTO Patient (DocumentId, FirstName, LastName, BirthDate, GenderId) VALUES ('234567890', 'Paciente', 'Dos', '1990-05-11 15:00:00.000', @GenderFeminineId);
+	INSERT INTO Patient (DocumentId, FirstName, LastName, Tel, Email) VALUES ('234567890', 'Josué', 'Sánchez', '84751236', 'josue@sanchez.com')
 END
-DECLARE @PatientId2 INT;
-SELECT TOP 1 @PatientId2 = Id FROM Patient WHERE DocumentId = '234567890';
 
-IF NOT EXISTS (SELECT * FROM Patient WHERE DocumentId = '345678901')
+-- 475869589 Ernesto Chan 76554534 ernesto@chan.com
+IF NOT EXISTS (SELECT * FROM Patient WHERE DocumentId = '475869589')
 BEGIN
-	INSERT INTO Patient (DocumentId, FirstName, LastName, BirthDate, GenderId) VALUES ('345678901', 'Paciente', 'Tres', '2005-06-01 00:00:00.000', @GenderMasculineId);
+	INSERT INTO Patient (DocumentId, FirstName, LastName, Tel, Email) VALUES ('475869589', 'Ernesto', 'Chan', '76554534', 'ernesto@chan.com')
 END
-DECLARE @PatientId3 INT;
-SELECT TOP 1 @PatientId3 = Id FROM Patient WHERE DocumentId = '345678901';
 
-IF NOT EXISTS (SELECT * FROM Patient WHERE DocumentId = '456789012')
+-- 756453647 Carlos Mora 87665475 carlos@mora.com
+IF NOT EXISTS (SELECT * FROM Patient WHERE DocumentId = '756453647')
 BEGIN
-	INSERT INTO Patient (DocumentId, FirstName, LastName, BirthDate, GenderId) VALUES ('456789012', 'Paciente', 'Cuatro', '2010-12-01 10:45:00.000', @GenderFeminineId);
+	INSERT INTO Patient (DocumentId, FirstName, LastName, Tel, Email) VALUES ('756453647', 'Carlos', 'Mora', '87665475', 'carlos@mora.com')
 END
-DECLARE @PatientId4 INT;
-SELECT TOP 1 @PatientId4 = Id FROM Patient WHERE DocumentId = '456789012';
 
 -- INSERT DOCTORS
-IF NOT EXISTS (SELECT * FROM Doctor WHERE DocumentId = '524857652')
-BEGIN
-	INSERT INTO Doctor (DocumentId, FirstName, LastName, FieldId) VALUES ('524857652', 'Doctor', 'General', @GeneralDoctorId);
-END
-DECLARE @DoctorId1 INT;
-SELECT TOP 1 @DoctorId1 = Id FROM Doctor WHERE DocumentId = '524857652';
 
-IF NOT EXISTS (SELECT * FROM Doctor WHERE DocumentId = '547412586')
+-- 53647586 Carlos Jimenez 1
+IF NOT EXISTS (SELECT * FROM Doctor WHERE Code = '53647586')
 BEGIN
-	INSERT INTO Doctor (DocumentId, FirstName, LastName, FieldId) VALUES ('547412586', 'Doctor', 'Dentista', @DentistDoctorId);
+	INSERT INTO Doctor (Code, FirstName, LastName, FieldId) VALUES ('53647586', 'Carlos', 'Jimenez', 1)
 END
-DECLARE @DoctorId2 INT;
-SELECT TOP 1 @DoctorId2 = Id FROM Doctor WHERE DocumentId = '547412586';
 
-IF NOT EXISTS (SELECT * FROM Doctor WHERE DocumentId = '125846589')
+-- 64536456 Juan Perez 2
+IF NOT EXISTS (SELECT * FROM Doctor WHERE Code = '64536456')
 BEGIN
-	INSERT INTO Doctor (DocumentId, FirstName, LastName, FieldId) VALUES ('125846589', 'Doctor', 'Cirujano', @SurgeonDoctorId);
+	INSERT INTO Doctor (Code, FirstName, LastName, FieldId) VALUES ('64536456', 'Juan', 'Perez', 2)
 END
-DECLARE @DoctorId3 INT;
-SELECT TOP 1 @DoctorId3 = Id FROM Doctor WHERE DocumentId = '125846589';
 
-IF NOT EXISTS (SELECT * FROM Doctor WHERE DocumentId = '352485412')
+-- 54443234 Karla Hernandez 3
+IF NOT EXISTS (SELECT * FROM Doctor WHERE Code = '54443234')
 BEGIN
-	INSERT INTO Doctor (DocumentId, FirstName, LastName, FieldId) VALUES ('352485412', 'Doctor', 'Pediatra', @PediatricianDoctorId);
+	INSERT INTO Doctor (Code, FirstName, LastName, FieldId) VALUES ('54443234', 'Karla', 'Hernandez', 3)
 END
-DECLARE @DoctorId4 INT;
-SELECT TOP 1 @DoctorId4 = Id FROM Doctor WHERE DocumentId = '352485412';
+
+-- 44354323 Luis Blanco 4
+IF NOT EXISTS (SELECT * FROM Doctor WHERE Code = '44354323')
+BEGIN
+	INSERT INTO Doctor (Code, FirstName, LastName, FieldId) VALUES ('44354323', 'Luis', 'Blanco', 4)
+END
 
 -- INSERT APPOINTMENTS
-IF NOT EXISTS (SELECT * FROM Appointment WHERE PatientId = @PatientId1 AND DoctorId = @DoctorId1)
+DECLARE @Patient1 INT
+SELECT @Patient1 = Id FROM Patient WHERE DocumentId = '123456789'
+
+DECLARE @Patient2 INT
+SELECT @Patient2 = Id FROM Patient WHERE DocumentId = '234567890'
+
+DECLARE @Patient3 INT
+SELECT @Patient3 = Id FROM Patient WHERE DocumentId = '475869589'
+
+DECLARE @Patient4 INT
+SELECT @Patient4 = Id FROM Patient WHERE DocumentId = '756453647'
+
+DECLARE @Doctor1 INT
+SELECT @Doctor1 = Id FROM Doctor WHERE Code = '53647586'
+
+DECLARE @Doctor2 INT
+SELECT @Doctor2 = Id FROM Doctor WHERE Code = '64536456'
+
+DECLARE @Doctor3 INT
+SELECT @Doctor3 = Id FROM Doctor WHERE Code = '54443234'
+
+DECLARE @Doctor4 INT
+SELECT @Doctor4 = Id FROM Doctor WHERE Code = '44354323'
+
+-- 2021-01-02 11:00:00 Paciente1 Doctor1 1
+IF NOT EXISTS (SELECT * FROM Appointment WHERE PatientId = @Patient1 AND DoctorId = @Doctor1)
 BEGIN
-	INSERT INTO Appointment (Date, PatientId, DoctorId) VALUES ('2021-01-02 11:00:00.000', @PatientId1, @DoctorId1);
+	INSERT INTO Appointment ([Date], PatientId, DoctorId, StatusId) VALUES ('2021-01-02 11:00:00', @Patient1, @Doctor1, 1)
 END
 
-IF NOT EXISTS (SELECT * FROM Appointment WHERE PatientId = @PatientId2 AND DoctorId = @DoctorId4)
+-- 2021-01-03 11:00:00 Paciente2 Doctor2 2
+IF NOT EXISTS (SELECT * FROM Appointment WHERE PatientId = @Patient2 AND DoctorId = @Doctor2)
 BEGIN
-	INSERT INTO Appointment (Date, PatientId, DoctorId) VALUES ('2021-01-02 15:30:00.000', @PatientId2, @DoctorId4);
+	INSERT INTO Appointment ([Date], PatientId, DoctorId, StatusId) VALUES ('2021-01-03 11:00:00', @Patient2, @Doctor2, 2)
 END
 
-IF NOT EXISTS (SELECT * FROM Appointment WHERE PatientId = @PatientId3 AND DoctorId = @DoctorId3)
+-- 2021-01-02 15:30:00 Paciente1 Doctor2 1
+IF NOT EXISTS (SELECT * FROM Appointment WHERE PatientId = @Patient1 AND DoctorId = @Doctor2)
 BEGIN
-	INSERT INTO Appointment (Date, PatientId, DoctorId) VALUES ('2020-12-20 20:45:00.000', @PatientId3, @DoctorId3);
+	INSERT INTO Appointment ([Date], PatientId, DoctorId, StatusId) VALUES ('2021-01-02 15:30:00', @Patient1, @Doctor2, 1)
+END
+
+-- 2020-12-20 20:45:00 Paciente3 Doctor3 1
+IF NOT EXISTS (SELECT * FROM Appointment WHERE PatientId = @Patient3 AND DoctorId = @Doctor3)
+BEGIN
+	INSERT INTO Appointment ([Date], PatientId, DoctorId, StatusId) VALUES ('2020-12-20 20:45:00', @Patient3, @Doctor3, 1)
+END
+
+-- 2023-01-01 17:00:00 Paciente3 Doctor4 2
+IF NOT EXISTS (SELECT * FROM Appointment WHERE PatientId = @Patient3 AND DoctorId = @Doctor4)
+BEGIN
+	INSERT INTO Appointment ([Date], PatientId, DoctorId, StatusId) VALUES ('2023-01-01 17:00:00', @Patient3, @Doctor4, 2)
+END
+
+-- 2022-05-05 08:00:00 Paciente2 Doctor1 1
+IF NOT EXISTS (SELECT * FROM Appointment WHERE PatientId = @Patient2 AND DoctorId = @Doctor1)
+BEGIN
+	INSERT INTO Appointment ([Date], PatientId, DoctorId, StatusId) VALUES ('2022-05-05 08:00:00', @Patient2, @Doctor1, 1)
 END

@@ -1,110 +1,112 @@
-IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = 'HospitalDB')
+IF NOT EXISTS (SELECT * FROM sys.databases WHERE [name] = 'HospitalDB')
 BEGIN
-	CREATE DATABASE HospitalDB;
+	CREATE DATABASE HospitalDB
 END
 GO
 
-USE HospitalDB;
+USE HospitalDB
 GO
 
 -- CREATE FIELD
-IF NOT EXISTS (SELECT * FROM sys.sysobjects WHERE name = 'Field' and xtype = 'U')
+IF NOT EXISTS (SELECT * FROM sys.sysobjects WHERE [name] = 'Field' and xtype = 'U')
 BEGIN
 	CREATE TABLE Field (
-		Id INT NOT NULL IDENTITY(1,1),
-		Name VARCHAR(50) NOT NULL,
+		Id INT NOT NULL,
+		[Name] VARCHAR(50) NOT NULL,
 		CONSTRAINT PKField PRIMARY KEY (Id)
 	)
 END
 GO
 
 -- CREATE DOCTOR
-IF NOT EXISTS (SELECT * FROM sys.sysobjects WHERE name = 'Doctor' and xtype = 'U')
+IF NOT EXISTS (SELECT * FROM sys.sysobjects WHERE [name] = 'Doctor' AND xtype = 'U')
 BEGIN
 	CREATE TABLE Doctor (
 		Id INT NOT NULL IDENTITY(1,1),
-		DocumentId VARCHAR(9) NOT NULL,
+		Code VARCHAR(10) NOT NULL,
 		FirstName VARCHAR(50) NOT NULL,
 		LastName VARCHAR(50) NOT NULL,
 		FieldId INT NOT NULL,
 		CONSTRAINT PKDoctor PRIMARY KEY (Id),
-		CONSTRAINT UXDoctorDocumentId UNIQUE (DocumentId),
+		CONSTRAINT UXDoctorCode UNIQUE (Code),
 		CONSTRAINT FKFieldDoctorFieldId FOREIGN KEY (FieldId) REFERENCES Field (Id)
 	)
 END
 GO
 
--- CREATE GENDER
-IF NOT EXISTS (SELECT * FROM sys.sysobjects WHERE name = 'Gender' and xtype = 'U')
-BEGIN
-	CREATE TABLE Gender (
-		Id INT NOT NULL IDENTITY(1,1),
-		Name VARCHAR(50) NOT NULL,
-		CONSTRAINT PKGender PRIMARY KEY (Id)
-	)
-END
-GO
-
 -- CREATE PATIENT
-IF NOT EXISTS (SELECT * FROM sys.sysobjects WHERE name = 'Patient' and xtype = 'U')
-BEGIN
-	CREATE TABLE Patient (
+IF NOT EXISTS (SELECT * FROM  sys.sysobjects WHERE [name] = 'Patient' AND xtype = 'U')
+BEGIN	
+	CREATE TABLE Patient(
 		Id INT NOT NULL IDENTITY(1,1),
-		DocumentId VARCHAR(9) NOT NULL,
+		DocumentId VARCHAR(9)NOT NULL,
 		FirstName VARCHAR(50) NOT NULL,
 		LastName VARCHAR(50) NOT NULL,
-		BirthDate DATETIME2(7) NOT NULL,
-		GenderId INT NOT NULL
+		Tel VARCHAR(8) NOT NULL,
+		Email VARCHAR (100)NOT NULL,
 		CONSTRAINT PKPatient PRIMARY KEY (Id),
 		CONSTRAINT UXPatientDocumentId UNIQUE (DocumentId),
-		CONSTRAINT FKGenderPatientGenderId FOREIGN KEY (GenderId) REFERENCES Gender (Id)
+		CONSTRAINT UXPatientEmail UNIQUE (Email)
 	)
 END
 GO
+
+-- CREATE STATUS
+IF NOT EXISTS (SELECT * FROM sys.sysobjects WHERE [name] = 'Status' AND xtype = 'U')
+BEGIN 
+	CREATE TABLE [Status](
+		Id INT NOT NULL,
+		[Name] VARCHAR(50) NOT NULL,
+		CONSTRAINT PKStatus PRIMARY KEY (Id)
+	)
+END
+GO			
 
 -- CREATE APPOINTMENT
-IF NOT EXISTS (SELECT * FROM sys.sysobjects WHERE name = 'Appointment' and xtype = 'U')
+IF NOT EXISTS (SELECT * FROM sys.sysobjects WHERE [name] = 'Appointment' AND xtype = 'U')
 BEGIN
-	CREATE TABLE Appointment (
+	CREATE TABLE Appointment(
 		Id INT NOT NULL IDENTITY(1,1),
-		Date DATETIME2(7) NOT NULL,
+		[Date] DATETIME2 NOT NULL,
 		PatientId INT NOT NULL,
 		DoctorId INT NOT NULL,
+		StatusId INT NOT NULL,
 		CONSTRAINT PKAppointment PRIMARY KEY (Id),
 		CONSTRAINT FKPatientAppointmentPatientId FOREIGN KEY (PatientId) REFERENCES Patient (Id),
-		CONSTRAINT FKDoctorAppointmentDoctorId FOREIGN KEY (DoctorId) REFERENCES Doctor (Id)
+		CONSTRAINT FKDoctorAppointmentDoctorId FOREIGN KEY (DoctorId) REFERENCES Doctor (Id),
+		CONSTRAINT FKStatusAppointmentStatusId FOREIGN KEY (StatusId) REFERENCES [Status] (Id)
 	)
 END
 GO
 
--- INSERT FIELD DATA
-IF NOT EXISTS (SELECT * FROM Field WHERE Name = 'Doctor General')
-BEGIN
-	INSERT INTO Field (Name) VALUES ('Doctor General');
+--INSERT FIELD DATA
+IF NOT EXISTS (SELECT * FROM Field WHERE Id = 1)
+BEGIN 
+	INSERT INTO Field (Id, Name) VALUES (1, 'Doctor General')
 END
 
-IF NOT EXISTS (SELECT * FROM Field WHERE Name = 'Dentista')
-BEGIN
-	INSERT INTO Field (Name) VALUES ('Dentista');
+IF NOT EXISTS (SELECT * FROM Field WHERE Id = 2)
+BEGIN 
+	INSERT INTO Field (Id, Name) VALUES (2, 'Dentista')
 END
 
-IF NOT EXISTS (SELECT * FROM Field WHERE Name = 'Pediatra')
-BEGIN
-	INSERT INTO Field (Name) VALUES ('Pediatra');
+IF NOT EXISTS (SELECT * FROM Field WHERE Id = 3)
+BEGIN 
+	INSERT INTO Field (Id, Name) VALUES (3, 'Pediatra')
 END
 
-IF NOT EXISTS (SELECT * FROM Field WHERE Name = 'Cirujano')
-BEGIN
-	INSERT INTO Field (Name) VALUES ('Cirujano');
+IF NOT EXISTS (SELECT * FROM Field WHERE Id = 4)
+BEGIN 
+	INSERT INTO Field (Id, Name) VALUES (4, 'Cirujano')
 END
 
--- INSERT GENDER DATA
-IF NOT EXISTS (SELECT * FROM Gender WHERE Name = 'Femenino')
+-- INSERT STATUS DATA
+IF NOT EXISTS (SELECT * FROM [Status] WHERE Id = 1)
 BEGIN
-	INSERT INTO Gender(Name) VALUES ('Femenino');
+	INSERT INTO [Status] (Id, [Name]) VALUES (1, 'Activa')
 END
 
-IF NOT EXISTS (SELECT * FROM Gender WHERE Name = 'Masculino')
+IF NOT EXISTS (SELECT * FROM [Status] WHERE Id = 2)
 BEGIN
-	INSERT INTO Gender (Name) VALUES ('Masculino');
+	INSERT INTO [Status] (Id, [Name]) VALUES (2, 'Cancelada')
 END
