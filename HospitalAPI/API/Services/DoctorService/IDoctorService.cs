@@ -5,7 +5,7 @@ namespace API.Services
 {
     public interface IDoctorService
     {
-        IQueryable<Doctor> ListDoctors(DoctorListFilter? filter);
+        IQueryable<Doctor> ListDoctors(DoctorListFilter? filter = null);
         //IMPORTANTE: Sólo para proyecto Angular
         IQueryable<Doctor> SearchDoctors(string[] values);
         Task<Doctor?> FindDoctor(int id);

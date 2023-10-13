@@ -5,7 +5,7 @@ namespace API.Services
 {
     public interface IPatientService
     {
-        IQueryable<Patient> ListPatients(PatientListFilter? filter);
+        IQueryable<Patient> ListPatients(PatientListFilter? filter = null);
         //IMPORTANTE: Sólo para proyecto Angular
         IQueryable<Patient> SearchPatients(string[] values);
         Task<Patient?> FindPatient(int id);
