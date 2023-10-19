@@ -2,23 +2,28 @@ using API;
 using API.Data;
 using API.Services;
 using API.Validators;
+using System.Text.Json;
 
 //BUILDER
 var builder = WebApplication.CreateBuilder(args);
 
-/* Al recibir un objeto JSON que no es compatible con los parámetros
-de la acción del controlador, el servidor prepara una respuesta con un código
-HTTP 400 (Bad Request) y crea un objeto específico diferente a nuestro APIResponse,
-sin embargo con esta configuración personalizada controlamos cómo responde el servidor
-creando un objeto APIResponse para responder en vez */
 builder.Services.AddControllers()
-                .ConfigureApiBehaviorOptions(options =>
-                {
-                    options.InvalidModelStateResponseFactory = context =>
-                    {
-                        return HttpErrors.BadRequest(data: "Invalid data model");
-                    };
-                });
+    .ConfigureApiBehaviorOptions(options =>
+    {
+        /* Elimina el mapping automático de errores de cliente permitiendo 
+        que la respuesta sea manejada por UseStatusCodePagesWithReExecute */
+        options.SuppressMapClientErrors = true;
+
+        /* Al recibir un objeto JSON que no es compatible con los parámetros
+        de la acción del controlador, el servidor prepara una respuesta con un código
+        HTTP 400 (Bad Request) y crea un objeto específico diferente a nuestro APIResponse,
+        sin embargo con esta configuración personalizada controlamos cómo responde el servidor
+        creando un objeto APIResponse para responder en vez */
+        options.InvalidModelStateResponseFactory = context =>
+        {
+            return HttpErrors.BadRequest(data: "Invalid data model");
+        };
+    });
 
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddDbContext<HospitalDB>();
@@ -47,7 +52,7 @@ app.UseCors(options =>
 });
 
 /* Con estas funciones podemos configurar la respuesta del servidor
-ante errores HTTP como error 500, 404, 400 u otros, controlando una ruta
+ante errores HTTP como error 404, 500 u otros, controlando una ruta
 a la cual dirigirse. En este caso lo enviamos a la ruta de nuestro ErrorController
 que crear los errores con objetos APIResponse para mantener el estándar de nuestras respuestas */
 app.UseExceptionHandler("/errors/500");
