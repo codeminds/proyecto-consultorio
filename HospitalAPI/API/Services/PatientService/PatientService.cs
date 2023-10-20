@@ -25,8 +25,8 @@ namespace API.Services
                     .Where(p => (string.IsNullOrWhiteSpace(filter.DocumentId) || p.DocumentId.Contains(filter.DocumentId))
                         && (string.IsNullOrWhiteSpace(filter.FirstName) || p.FirstName.Contains(filter.FirstName))
                         && (string.IsNullOrWhiteSpace(filter.LastName) || p.LastName.Contains(filter.LastName))
-                        && (string.IsNullOrWhiteSpace(filter.Tel) || p.LastName.Contains(filter.Tel))
-                        && (string.IsNullOrWhiteSpace(filter.Email) || p.LastName.Contains(filter.Email)));
+                        && (string.IsNullOrWhiteSpace(filter.Tel) || p.Tel.Contains(filter.Tel))
+                        && (string.IsNullOrWhiteSpace(filter.Email) || p.Email.Contains(filter.Email)));
         }
 
         //IMPORTANTE: Sólo para proyecto Angular

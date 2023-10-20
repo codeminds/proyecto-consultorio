@@ -10,8 +10,8 @@ export class BaseViewModel {
       const button = document.querySelector('[data-menu-button]');
       const menu = document.querySelector('[data-menu]');
 
-      if (!button || !menu) {
-         throw new Error('Menu elements not present')
+      if (button == null || menu == null) {
+         throw new Error('Menu elements not present');
       }
 
       button.addEventListener('click', () => {

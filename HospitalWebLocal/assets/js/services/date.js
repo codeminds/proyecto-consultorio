@@ -19,10 +19,10 @@ export class DateService {
    }
 
    static #pad(num, size) {
-      let s = num + '';
+      let s = `${num}`;
 
       while (s.length < size) {
-         s = '0' + s;
+         s = `0${s}`;
       }
 
       return s;

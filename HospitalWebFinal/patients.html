@@ -5,10 +5,10 @@
    <meta charset="UTF-8" />
    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   <title>Pacientes | Hospital Web</title>
    <link rel="shortcut icon" href="/assets/img/favicon.ico" type="image/x-icon" />
    <link rel="stylesheet" href="/assets/css/site.css" />
-   <script src="/assets/js/view-models/patients.js" type="module"></script>
-   <title>Hospital Web</title>
+   <script type="module" src="/assets/js/view-models/patients.js"></script>
 </head>
 
 <body>
@@ -19,7 +19,7 @@
       </figure>
    </header>
    <section class="wrapper">
-      <nav class="sidenav" data-menu>
+      <nav class="sidenav dark-scroll" data-menu>
          <h3 class="category">Men&uacute; Principal</h3>
          <ul class="menu">
             <li>
@@ -41,35 +41,31 @@
       </nav>
       <main>
          <h1>Pacientes</h1>
-         <section data-panel class="panel">
-            <h3 data-toggle class="title toggle open">B&uacute;squeda</h3>
-            <form name="filter" data-toggle-section class="toggle-section open row">
-               <div class="form-field col col-3">
+         <section class="panel" data-panel>
+            <h3 class="title toggle open" data-toggle>B&uacute;squeda</h3>
+            <form name="filter" class="row toggle-section open" data-toggle-section>
+               <div class="form-field col col-5">
                   <label for="filter-document-id">C&eacute;dula</label>
                   <input type="text" id="filter-document-id" name="documentId" placeholder="123456789" />
                </div>
-               <div class="form-field col col-3">
+               <div class="form-field col col-5">
                   <label for="filter-first-name">Nombre</label>
                   <input type="text" id="filter-first-name" name="firstName" placeholder="John" />
                </div>
-               <div class="form-field col col-3">
+               <div class="form-field col col-5">
                   <label for="filter-last-name">Apellido</label>
                   <input type="text" id="filter-last-name" name="lastName" placeholder="Smith" />
                </div>
-               <div class="form-field col col-3">
-                  <label for="filter-birth-date-from">Fecha Desde</label>
-                  <input type="datetime-local" id="filter-birth-date-from" name="birthDateFrom" />
+               <div class="form-field col col-5">
+                  <label for="filter-tel">Tel</label>
+                  <input type="text" id="filter-tel" name="tel" placeholder="12345678" />
                </div>
-               <div class="form-field col col-3">
-                  <label for="filter-birth-date-to">Fecha Hasta</label>
-                  <input type="datetime-local" id="filter-birth-date-to" name="birthDateTo" />
-               </div>
-               <div class="form-field col col-3">
-                  <label>G&eacute;nero</label>
-                  <div data-filter="genders"></div>
+               <div class="form-field col col-5">
+                  <label for="filter-email">Correo</label>
+                  <input type="text" id="filter-email" name="email" placeholder="john@smith.com" />
                </div>
                <div class="form-field col col-1">
-                  <button class="button success" type="button" data-search>Buscar</button>
+                  <button type="button" class="button success" data-search>Buscar</button>
                </div>
             </form>
          </section>
@@ -77,20 +73,24 @@
             <div class="controls">
                <button class="button success" data-new>Nuevo Paciente</button>
             </div>
-            <table>
-               <thead>
-                  <th style="width: 100%;">C&eacute;dula</th>
-                  <th style="width: 175%;">Nombre</th>
-                  <th style="width: 175%;">Nacimiento</th>
-                  <th style="width: 100%;">G&eacute;nero</th>
-                  <th style="width: 200%;"></th>
-               </thead>
-               <tbody data-results></tbody>
-            </table>
+            <div class="scroll">
+               <table>
+                  <thead>
+                     <tr>
+                        <th style="width: 100%">C&eacute;dula</th>
+                        <th style="width: 150%">Nombre</th>
+                        <th style="width: 100%">Tel</th>
+                        <th style="width: 150%">Correo</th>
+                        <th style="width: 200%"></th>
+                     </tr>
+                  </thead>
+                  <tbody data-table></tbody>
+               </table>
+            </div>
          </section>
       </main>
    </section>
-   <div data-modal class="modal medium">
+   <div class="modal" data-modal>
       <div class="content">
          <h2 data-form-title></h2>
          <form name="insertUpdate">
@@ -110,12 +110,12 @@
                <input type="text" id="form-last-name" name="lastName" placeholder="Smith" />
             </div>
             <div class="form-field">
-               <label for="form-birth-date">Nacimiento</label>
-               <input type="datetime-local" id="form-birth-date" name="birthDate" />
+               <label for="form-tel">Tel</label>
+               <input type="text" id="form-tel" name="tel" placeholder="12345678" />
             </div>
             <div class="form-field">
-               <label>G&eacute;nero</label>
-               <div data-form="genders"></div>
+               <label for="form-email">Correo</label>
+               <input type="text" id="form-email" name="email" placeholder="john@smith.com" />
             </div>
             <div class="form-field">
                <button type="button" class="button success" data-save>Guardar</button>

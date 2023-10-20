@@ -5,10 +5,10 @@ import { DoctorService } from '../services/doctor.js';
 
 class ViewModel extends BaseViewModel {
    #id;
+   #modal;
+   #table;
    #formTitle;
    #formErrors;
-   #results;
-   #modal;
 
    constructor() {
       super();
@@ -16,10 +16,10 @@ class ViewModel extends BaseViewModel {
       this.#id = null;
       this.#formTitle = document.querySelector('[data-form-title]');
       this.#formErrors = document.querySelector('[data-form-errors]');
-      this.#results = document.querySelector('[data-results]');
+      this.#table = document.querySelector('[data-table]');
       this.#modal = new Modal(document.querySelector('[data-modal]'), 'medium', () => {
          this.#id = null;
-         document.forms.insertUpdate.documentId.value = '';
+         document.forms.insertUpdate.code.value = '';
          document.forms.insertUpdate.firstName.value = '';
          document.forms.insertUpdate.lastName.value = '';
          document.forms.insertUpdate.field.selectedIndex = 0;
@@ -31,8 +31,10 @@ class ViewModel extends BaseViewModel {
    //Funciones para poblar la lista de especialidades dinámicamente
    initFields() {
       FieldService.list((result) => {
-         this.#populateFields(document.querySelector('[data-form="fields"]'), result.data);
-         this.#populateFields(document.querySelector('[data-filter="fields"]'), [{ id: '', name: 'Todos' }, ...result.data]);
+         if (result.success) {
+            this.#populateFields(document.querySelector('[data-form="fields"]'), result.data);
+            this.#populateFields(document.querySelector('[data-filter="fields"]'), [{ id: '', name: 'Todos' }, ...result.data]);
+         }
       });
    }
 
@@ -68,36 +70,38 @@ class ViewModel extends BaseViewModel {
    }
 
    initResults() {
-      this.#results.addEventListener('click', (e) => {
+      this.#table.addEventListener('click', (e) => {
          switch (e.target.getAttribute('data-click')) {
             case 'edit':
                const id = e.target.getAttribute('data-id');
                DoctorService.get(id, (result) => {
-                  const doctor = result.data;
-                  this.#id = doctor.id;
-                  document.forms.insertUpdate.documentId.value = doctor.documentId;
-                  document.forms.insertUpdate.firstName.value = doctor.firstName;
-                  document.forms.insertUpdate.lastName.value = doctor.lastName;
-                  document.forms.insertUpdate.field.value = doctor.field.id;
-                  this.#formTitle.textContent = 'Editar Doctor';
-                  this.#modal.open();
+                  if (result.success) {
+                     const doctor = result.data;
+                     this.#id = doctor.id;
+                     document.forms.insertUpdate.code.value = doctor.code;
+                     document.forms.insertUpdate.firstName.value = doctor.firstName;
+                     document.forms.insertUpdate.lastName.value = doctor.lastName;
+                     document.forms.insertUpdate.field.value = doctor.field.id;
+                     this.#formTitle.textContent = 'Editar Doctor';
+                     this.#modal.open();
+                  }
                });
                break;
             case 'delete':
                if (confirm('Desea borrar esta entrada?')) {
                   const id = e.target.getAttribute('data-id');
                   DoctorService.delete(id, (result) => {
-                     if(result.success) {
+                     if (result.success) {
                         this.searchDoctors();
                      } else {
-                        let errors = '';
+                        let errorMessage = '';
 
-                        for(const error of result.messages) {
-                           errors += `${error}\n`;
+                        for (const message of result.messages) {
+                           errorMessage += `${message}\n`;
                         }
 
-                        if(errors != '') {
-                           alert(errors);
+                        if (errorMessage != '') {
+                           alert(errorMessage);
                         }
                      }
                   })
@@ -109,31 +113,31 @@ class ViewModel extends BaseViewModel {
 
    #save() {
       const data = {
-         documentId: document.forms.insertUpdate.documentId.value,
+         code: document.forms.insertUpdate.code.value,
          firstName: document.forms.insertUpdate.firstName.value,
          lastName: document.forms.insertUpdate.lastName.value,
          fieldId: document.forms.insertUpdate.field.value
       };
 
       this.#formErrors.innerHTML = '';
-      if(this.#id == null) {
+      if (this.#id == null) {
          DoctorService.insert(data, this.#onSaved.bind(this));
-      }else {
+      } else {
          DoctorService.update(this.#id, data, this.#onSaved.bind(this));
       }
    }
 
    #onSaved(result) {
-      if(result.success){
+      if (result.success) {
          const doctor = result.data;
          this.#modal.close();
-         document.forms.filter.documentId.value = doctor.documentId;
+         document.forms.filter.code.value = doctor.code;
          document.forms.filter.firstName.value = '';
          document.forms.filter.lastName.value = '';
          document.forms.filter.field.value = '';
          this.searchDoctors();
       } else {
-         for(const message of result.messages) {
+         for (const message of result.messages) {
             const li = document.createElement('li');
             li.textContent = message;
 
@@ -144,100 +148,85 @@ class ViewModel extends BaseViewModel {
 
    searchDoctors() {
       const filter = {
-         documentId: document.forms.filter.documentId.value,
+         code: document.forms.filter.code.value,
          firstName: document.forms.filter.firstName.value,
          lastName: document.forms.filter.lastName.value,
          fieldId: document.forms.filter.field.value
       };
 
       DoctorService.list(filter, (result) => {
+         this.#table.innerHTML = '';
          const doctors = result.data;
-         this.#results.innerHTML = '';
-         for (const doctor of doctors) {
+         if (result.success && doctors.length > 0) {
+            for (const doctor of doctors) {
+               const row = document.createElement('tr');
+
+               //Code
+               const code = document.createElement('td');
+               code.classList.add('heading');
+               code.textContent = doctor.code;
+               row.appendChild(code);
+
+               //Name
+               const name = document.createElement('td');
+               name.classList.add('data');
+
+               const nameLabel = document.createElement('label');
+               nameLabel.textContent = 'Nombre';
+               name.appendChild(nameLabel);
+
+               const nameText = document.createElement('span');
+               nameText.textContent = doctor.firstName + ' ' + doctor.lastName;
+               name.appendChild(nameText);
+
+               row.appendChild(name);
+
+               //Field
+               const field = document.createElement('td');
+               field.classList.add('data');
+
+               const fieldLabel = document.createElement('label');
+               fieldLabel.textContent = 'Especialidad';
+               field.appendChild(fieldLabel);
+
+               const fieldText = document.createElement('span');
+               fieldText.textContent = doctor.field.name;
+               field.appendChild(fieldText);
+
+               row.appendChild(field);
+
+               //Buttons
+               const buttons = document.createElement('td');
+               buttons.classList.add('buttons');
+
+               const editButton = document.createElement('button');
+               editButton.classList.add('button', 'success');
+               editButton.setAttribute('data-click', 'edit');
+               editButton.setAttribute('data-id', doctor.id);
+               editButton.textContent = 'Editar';
+               buttons.appendChild(editButton);
+
+               const deleteButton = document.createElement('button');
+               deleteButton.classList.add('button', 'danger');
+               deleteButton.setAttribute('data-click', 'delete');
+               deleteButton.setAttribute('data-id', doctor.id);
+               deleteButton.textContent = 'Borrar';
+               buttons.appendChild(deleteButton);
+
+               row.appendChild(buttons);
+
+               this.#table.appendChild(row);
+            }
+         } else {
             const row = document.createElement('tr');
 
-            const documentId = document.createElement('td');
-            documentId.textContent = doctor.documentId;
-            row.appendChild(documentId);
+            const noResults = document.createElement('td');
+            noResults.style.textAlign = 'center';
+            noResults.setAttribute('colspan', '4');
+            noResults.textContent = 'No se encontraron resultados';
+            row.appendChild(noResults);
 
-            const name = document.createElement('td');
-            name.textContent = doctor.firstName + ' ' + doctor.lastName;
-            row.appendChild(name);
-
-            const field = document.createElement('td');
-            field.textContent = doctor.field.name;
-            row.appendChild(field);
-
-            const buttons = document.createElement('td');
-            buttons.classList.add('buttons');
-
-            const buttonEdit = document.createElement('button');
-            buttonEdit.classList.add('button', 'success');
-            buttonEdit.setAttribute('data-click', 'edit');
-            buttonEdit.setAttribute('data-id', doctor.id);
-            buttonEdit.textContent = 'Editar';
-            buttons.appendChild(buttonEdit);
-
-            const buttonDelete = document.createElement('button');
-            buttonDelete.classList.add('button', 'danger');
-            buttonDelete.setAttribute('data-click', 'delete');
-            buttonDelete.setAttribute('data-id', doctor.id);
-            buttonDelete.textContent = 'Borrar';
-            buttons.appendChild(buttonDelete);
-
-            row.appendChild(buttons);
-
-            const mobile = document.createElement('td');
-            mobile.classList.add('mobile');
-
-            const mobileHeading = document.createElement('h3');
-            mobileHeading.classList.add('heading');
-            mobileHeading.textContent = doctor.documentId;
-            mobile.appendChild(mobileHeading);
-
-            const mobileName = document.createElement('p');
-            const mobileNameLabel = document.createElement('span');
-            const mobileNameText = document.createElement('span');
-            mobileNameLabel.classList.add('label');
-            mobileNameLabel.textContent = 'Nombre:';
-            mobileNameText.textContent = doctor.firstName + ' ' + doctor.lastName;
-            mobileName.classList.add('data');
-            mobileName.appendChild(mobileNameLabel);
-            mobileName.appendChild(mobileNameText);
-            mobile.appendChild(mobileName);
-
-            const mobileField = document.createElement('p');
-            const mobileFieldLabel = document.createElement('span');
-            const mobileFieldText = document.createElement('span');
-            mobileFieldLabel.classList.add('label');
-            mobileFieldLabel.textContent = 'Especialidad:';
-            mobileFieldText.textContent = doctor.field.name;
-            mobileField.classList.add('data');
-            mobileField.appendChild(mobileFieldLabel);
-            mobileField.appendChild(mobileFieldText);
-            mobile.appendChild(mobileField);
-
-            const mobileButtons = document.createElement('div');
-            mobileButtons.classList.add('buttons');
-
-            const mobileButtonEdit = document.createElement('button');
-            mobileButtonEdit.classList.add('button', 'success');
-            mobileButtonEdit.setAttribute('data-click', 'edit');
-            mobileButtonEdit.setAttribute('data-id', doctor.id);
-            mobileButtonEdit.textContent = 'Editar';
-            mobileButtons.appendChild(mobileButtonEdit);
-
-            const mobileButtonDelete = document.createElement('button');
-            mobileButtonDelete.classList.add('button', 'danger');
-            mobileButtonDelete.setAttribute('data-click', 'delete');
-            mobileButtonDelete.setAttribute('data-id', doctor.id);
-            mobileButtonDelete.textContent = 'Borrar';
-            mobileButtons.appendChild(mobileButtonDelete);
-
-            mobile.appendChild(mobileButtons);
-            row.appendChild(mobile);
-
-            this.#results.appendChild(row);
+            this.#table.appendChild(row);
          }
       });
    }

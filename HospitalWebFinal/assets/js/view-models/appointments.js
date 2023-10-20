@@ -1,18 +1,18 @@
 import { BaseViewModel } from './base.js';
 import { Modal } from '../controls/modal.js';
 import { FieldService } from '../services/field.js';
-import { GenderService } from '../services/gender.js';
-import { AppointmentsService } from '../services/appointment.js';
+import { StatusService } from '../services/status.js';
+import { AppointmentService } from '../services/appointment.js';
 import { DateService } from '../services/date.js';
 import { DoctorService } from '../services/doctor.js';
-import { PatientsService } from '../services/patient.js';
+import { PatientService } from '../services/patient.js';
 
 class ViewModel extends BaseViewModel {
    #id;
+   #table;
+   #modal;
    #formTitle;
    #formErrors;
-   #results;
-   #modal;
 
    constructor() {
       super();
@@ -20,20 +20,25 @@ class ViewModel extends BaseViewModel {
       this.#id = null;
       this.#formTitle = document.querySelector('[data-form-title]');
       this.#formErrors = document.querySelector('[data-form-errors]');
-      this.#results = document.querySelector('[data-results]');
-      this.#modal = new Modal(document.querySelector('[data-modal]'), 'medium', () => {
-         this.#id = null;
-         document.forms.insertUpdate.date.value = '';
-         document.forms.insertUpdate.doctor.selectedIndex = 0;
-         document.forms.insertUpdate.patient.selectedIndex = 0;
-         this.#formTitle.textContent = '';
-         this.#formErrors.innerHTML = '';
-      });
+      this.#table = document.querySelector('[data-table]');
+      this.#modal = new Modal(
+         document.querySelector('[data-modal]'), 'medium', () => {
+            this.#id = null;
+            document.forms.insertUpdate.date.value = '';
+            document.forms.insertUpdate.doctor.selectedIndex = 0;
+            document.forms.insertUpdate.patient.selectedIndex = 0;
+            document.forms.insertUpdate.status.value = 1;
+            this.#formTitle.textContent = '';
+            this.#formErrors.innerHTML = '';
+         }
+      );
    }
 
    initFields() {
       FieldService.list((result) => {
-         this.#populateFields(document.querySelector('[data-filter="fields"]'), [{ id: '', name: 'Todos' }, ...result.data]);
+         if (result.success) {
+            this.#populateFields(document.querySelector('[data-filter="fields"]'), [{ id: '', name: 'Todos' }, ...result.data]);
+         }
       });
    }
 
@@ -47,27 +52,33 @@ class ViewModel extends BaseViewModel {
       }
    }
 
-   initGenders() {
-      GenderService.list((result) => {
-         this.#populateGenders(document.querySelector('[data-filter="genders"]'), [{ id: '', name: 'Todos' }, ...result.data]);
+   initStatusses() {
+      StatusService.list((result) => {
+         if (result.success) {
+            this.#populateStatusses(document.querySelector('[data-form="statusses"]'), result.data);
+            this.#populateStatusses(document.querySelector('[data-filter="statusses"]'), [{ id: '', name: 'Todos' }, ...result.data]);
+         }
       });
    }
 
-   #populateGenders(checks, genders) {
-      for (const gender of genders) {
+   #populateStatusses(checks, statusses, inline) {
+      for (const status of statusses) {
          const check = document.createElement('label');
-         check.classList.add('check', 'inline');
+         check.classList.add('check');
+         if (inline) {
+            check.classList.add('inline');
+         }
 
          const input = document.createElement('input');
          input.setAttribute('type', 'radio');
-         input.setAttribute('name', 'gender');
-         input.value = gender.id;
+         input.setAttribute('name', 'status');
+         input.value = status.id;
          check.appendChild(input);
 
          check.appendChild(document.createElement('i'));
 
          const span = document.createElement('span');
-         span.textContent = gender.name;
+         span.textContent = status.name;
          check.appendChild(span);
 
          checks.appendChild(check);
@@ -78,7 +89,9 @@ class ViewModel extends BaseViewModel {
 
    initDoctors() {
       DoctorService.list(null, (result) => {
-         this.#populateDoctors(document.querySelector('[data-form="doctors"]'), result.data);
+         if (result.success) {
+            this.#populateDoctors(document.querySelector('[data-form="doctors"]'), result.data);
+         }
       });
    }
 
@@ -94,8 +107,10 @@ class ViewModel extends BaseViewModel {
    }
 
    initPatients() {
-      PatientsService.list(null, (result) => {
-         this.#populatePatients(document.querySelector('[data-form="patients"]'), result.data);
+      PatientService.list(null, (result) => {
+         if (result.success) {
+            this.#populatePatients(document.querySelector('[data-form="patients"]'), result.data);
+         }
       });
    }
 
@@ -132,35 +147,38 @@ class ViewModel extends BaseViewModel {
    }
 
    initResults() {
-      this.#results.addEventListener('click', (e) => {
+      this.#table.addEventListener('click', (e) => {
          switch (e.target.getAttribute('data-click')) {
             case 'edit':
                const id = e.target.getAttribute('data-id');
-               AppointmentsService.get(id, (result) => {
-                  const appointment = result.data;
-                  this.#id = appointment.id;
-                  document.forms.insertUpdate.date.value = appointment.date;
-                  document.forms.insertUpdate.doctor.value = appointment.doctor.id;
-                  document.forms.insertUpdate.patient.value = appointment.patient.id;
-                  this.#formTitle.textContent = 'Editar Cita';
-                  this.#modal.open();
+               AppointmentService.get(id, (result) => {
+                  if (result.success) {
+                     const appointment = result.data;
+                     this.#id = appointment.id;
+                     document.forms.insertUpdate.date.value = appointment.date;
+                     document.forms.insertUpdate.doctor.value = appointment.doctor.id;
+                     document.forms.insertUpdate.patient.value = appointment.patient.id;
+                     document.forms.insertUpdate.status.value = appointment.status.id;
+                     this.#formTitle.textContent = 'Editar Cita';
+                     this.#modal.open();
+                  }
                });
                break;
             case 'delete':
                if (confirm('Desea borrar esta entrada?')) {
                   const id = e.target.getAttribute('data-id');
-                  AppointmentsService.delete(id, (result) => {
-                     if(result.success) {
+                  AppointmentService.delete(id, (result) => {
+                     if (result.success) {
                         this.searchAppointments();
                      } else {
-                        let errors = '';
+                        let errorMessage = '';
 
-                        for(const error of result.messages) {
-                           errors += `${error}\n`;
+                        for (const message of result.messages) {
+                           errorMessage += `${message}\n`;
                         }
 
-                        if(errors != '') {
-                           alert(errors);
+                        if (errorMessage != '') {
+                           alert(errorMessage);
                         }
                      }
                   });
@@ -174,36 +192,37 @@ class ViewModel extends BaseViewModel {
       const data = {
          date: document.forms.insertUpdate.date.value || null,
          doctorId: document.forms.insertUpdate.doctor.value,
-         patientId: document.forms.insertUpdate.patient.value
+         patientId: document.forms.insertUpdate.patient.value,
+         statusId: document.forms.insertUpdate.status?.value,
       };
 
       this.#formErrors.innerHTML = '';
-      if(this.#id == null) {
-         AppointmentsService.insert(data, this.#onSaved.bind(this));
+      if (this.#id == null) {
+         AppointmentService.insert(data, this.#onSaved.bind(this));
       } else {
-         AppointmentsService.update(this.#id, data, this.#onSaved.bind(this));
+         AppointmentService.update(this.#id, data, this.#onSaved.bind(this));
       }
    }
 
    #onSaved(result) {
-      if(result.success) {
+      if (result.success) {
          const appointment = result.data;
          this.#modal.close();
-         document.forms.doctorFilter.documentId.value = appointment.doctor.documentId;
+         document.forms.doctorFilter.code.value = appointment.doctor.code;
          document.forms.doctorFilter.firstName.value = '';
          document.forms.doctorFilter.lastName.value = '';
          document.forms.doctorFilter.field.value = '';
          document.forms.patientFilter.documentId.value = appointment.patient.documentId;
          document.forms.patientFilter.firstName.value = '';
          document.forms.patientFilter.lastName.value = '';
-         document.forms.patientFilter.birthDateFrom.value = '';
-         document.forms.patientFilter.birthDateTo.value = '';
-         document.forms.patientFilter.gender.value = '';
+         document.forms.patientFilter.tel.value = '';
+         document.forms.patientFilter.email.value = '';
          document.forms.filter.dateFrom.value = appointment.date;
          document.forms.filter.dateTo.value = appointment.date;
+         document.forms.filter.status.value = '';
          this.searchAppointments();
       } else {
-         for(const message of result.messages) {
+         for (const message of result.messages) {
             const li = document.createElement('li');
             li.textContent = message;
 
@@ -216,125 +235,108 @@ class ViewModel extends BaseViewModel {
       const filter = {
          dateFrom: document.forms.filter.dateFrom.value,
          dateTo: document.forms.filter.dateTo.value,
+         statusId: document.forms.filter.status?.value,
          doctor: {
-            documentId: document.forms.doctorFilter.documentId.value,
+            code: document.forms.doctorFilter.code.value,
             firstName: document.forms.doctorFilter.firstName.value,
             lastName: document.forms.doctorFilter.lastName.value,
-            fieldId: document.forms.doctorFilter.field.value
+            fieldId: document.forms.doctorFilter.field.value,
          },
          patient: {
             documentId: document.forms.patientFilter.documentId.value,
             firstName: document.forms.patientFilter.firstName.value,
             lastName: document.forms.patientFilter.lastName.value,
-            birthDateFrom: document.forms.patientFilter.birthDateFrom.value,
-            birthDateTo: document.forms.patientFilter.birthDateTo.value,
-            genderId: document.forms.patientFilter.gender?.value
+            tel: document.forms.patientFilter.tel.value,
+            email: document.forms.patientFilter.email.value,
          }
       };
 
-      AppointmentsService.list(filter, (result) => {
+      AppointmentService.list(filter, (result) => {
          const appointments = result.data;
-         this.#results.innerHTML = '';
-         for (const appointment of appointments) {
+         this.#table.innerHTML = '';
+         if (result.success && appointments.length > 0) {
+            for (const appointment of appointments) {
+               const row = document.createElement('tr');
+
+               const date = document.createElement('td');
+               date.classList.add('heading');
+               date.textContent = DateService.toDisplayLocaleString(new Date(appointment.date), 'es-US');
+               row.appendChild(date);
+
+               //Doctor
+               const doctor = document.createElement('td');
+               doctor.classList.add('data');
+
+               const doctorLabel = document.createElement('label');
+               doctorLabel.textContent = 'Nombre';
+               doctor.appendChild(doctorLabel);
+
+               const doctorText = document.createElement('span');
+               doctorText.textContent = appointment.doctor.firstName + ' ' + appointment.doctor.lastName;
+               doctor.appendChild(doctorText);
+
+               row.appendChild(doctor);
+
+               //Patient
+               const patient = document.createElement('td');
+               patient.classList.add('data');
+
+               const patientLabel = document.createElement('label');
+               patientLabel.textContent = 'Nombre';
+               patient.appendChild(patientLabel);
+
+               const patientText = document.createElement('span');
+               patientText.textContent = appointment.patient.firstName + ' ' + appointment.patient.lastName;
+               patient.appendChild(patientText);
+
+               row.appendChild(patient);
+
+               //Status
+               const status = document.createElement('td');
+               status.classList.add('data');
+
+               const statusLabel = document.createElement('label');
+               statusLabel.textContent = 'Nombre';
+               status.appendChild(statusLabel);
+
+               const statusText = document.createElement('span');
+               statusText.textContent = appointment.status.name;
+               status.appendChild(statusText);
+
+               row.appendChild(status);
+
+               //Buttons
+               const buttons = document.createElement('td');
+               buttons.classList.add('buttons');
+
+               const editButton = document.createElement('button');
+               editButton.classList.add('button', 'success');
+               editButton.setAttribute('data-click', 'edit');
+               editButton.setAttribute('data-id', appointment.id);
+               editButton.textContent = 'Editar';
+               buttons.appendChild(editButton);
+
+               const deleteButton = document.createElement('button');
+               deleteButton.classList.add('button', 'danger');
+               deleteButton.setAttribute('data-click', 'delete');
+               deleteButton.setAttribute('data-id', appointment.id);
+               deleteButton.textContent = 'Borrar';
+               buttons.appendChild(deleteButton);
+
+               row.appendChild(buttons);
+
+               this.#table.appendChild(row);
+            }
+         } else {
             const row = document.createElement('tr');
 
-            const birthDate = document.createElement('td');
-            birthDate.textContent = DateService.toDisplayLocaleString(new Date(appointment.date), 'es-US');
-            row.appendChild(birthDate);
+            const noResults = document.createElement('td');
+            noResults.style.textAlign = 'center';
+            noResults.setAttribute('colspan', '5');
+            noResults.textContent = 'No se encontraron resultados';
+            row.appendChild(noResults);
 
-            const name = document.createElement('td');
-            name.textContent = `${appointment.doctor.firstName} ${appointment.doctor.lastName}`;
-            row.appendChild(name);
-
-            const patients = document.createElement('td');
-            patients.textContent = `${appointment.patient.firstName} ${appointment.patient.lastName}`;
-            row.appendChild(patients);
-
-            const field = document.createElement('td');
-            field.textContent = appointment.doctor.field.name;
-            row.appendChild(field);
-
-            const buttons = document.createElement('td');
-            buttons.classList.add('buttons');
-
-            const buttonEdit = document.createElement('button');
-            buttonEdit.classList.add('button', 'success');
-            buttonEdit.setAttribute('data-click', 'edit');
-            buttonEdit.setAttribute('data-id', appointment.id);
-            buttonEdit.textContent = 'Editar';
-            buttons.appendChild(buttonEdit);
-
-            const buttonDelete = document.createElement('button');
-            buttonDelete.classList.add('button', 'danger');
-            buttonDelete.setAttribute('data-click', 'delete');
-            buttonDelete.setAttribute('data-id', appointment.id);
-            buttonDelete.textContent = 'Borrar';
-            buttons.appendChild(buttonDelete);
-
-            row.appendChild(buttons);
-
-            const mobile = document.createElement('td');
-            mobile.classList.add('mobile');
-
-            const mobileHeading = document.createElement('h3');
-            mobileHeading.classList.add('heading');
-            mobileHeading.textContent = DateService.toDisplayLocaleString(new Date(appointment.date), 'es-US');
-            mobile.appendChild(mobileHeading);
-
-            const mobileDoctor = document.createElement('p');
-            const mobileDoctorLabel = document.createElement('span');
-            const mobileDoctorText = document.createElement('span');
-            mobileDoctorLabel.classList.add('label');
-            mobileDoctorLabel.textContent = 'Doctor:';
-            mobileDoctorText.textContent = `${appointment.doctor.firstName} ${appointment.doctor.lastName}`;
-            mobileDoctor.classList.add('data');
-            mobileDoctor.appendChild(mobileDoctorLabel);
-            mobileDoctor.appendChild(mobileDoctorText);
-            mobile.appendChild(mobileDoctor);
-
-            const mobilePatient = document.createElement('p');
-            const mobilePatientLabel = document.createElement('span');
-            const mobilePatientText = document.createElement('span');
-            mobilePatientLabel.classList.add('label');
-            mobilePatientLabel.textContent = 'Paciente:';
-            mobilePatientText.textContent = `${appointment.patient.firstName} ${appointment.patient.lastName}`;
-            mobilePatient.classList.add('data');
-            mobilePatient.appendChild(mobilePatientLabel);
-            mobilePatient.appendChild(mobilePatientText);
-            mobile.appendChild(mobilePatient);
-
-            const mobileField = document.createElement('p');
-            const mobileFieldLabel = document.createElement('span');
-            const mobileFieldText = document.createElement('span');
-            mobileFieldLabel.classList.add('label');
-            mobileFieldLabel.textContent = 'Especialidad:';
-            mobileFieldText.textContent = appointment.doctor.field.name
-            mobileField.classList.add('data');
-            mobileField.appendChild(mobileFieldLabel);
-            mobileField.appendChild(mobileFieldText);
-            mobile.appendChild(mobileField);
-
-            const mobileButtons = document.createElement('div');
-            mobileButtons.classList.add('buttons');
-
-            const mobileButtonEdit = document.createElement('button');
-            mobileButtonEdit.classList.add('button', 'success');
-            mobileButtonEdit.setAttribute('data-click', 'edit');
-            mobileButtonEdit.setAttribute('data-id', appointment.id);
-            mobileButtonEdit.textContent = 'Editar';
-            mobileButtons.appendChild(mobileButtonEdit);
-
-            const mobileButtonDelete = document.createElement('button');
-            mobileButtonDelete.classList.add('button', 'danger');
-            mobileButtonDelete.setAttribute('data-click', 'delete');
-            mobileButtonDelete.setAttribute('data-id', appointment.id);
-            mobileButtonDelete.textContent = 'Borrar';
-            mobileButtons.appendChild(mobileButtonDelete);
-
-            mobile.appendChild(mobileButtons);
-            row.appendChild(mobile);
-
-            this.#results.appendChild(row);
+            this.#table.appendChild(row);
          }
       });
    }
@@ -344,7 +346,7 @@ const viewModel = new ViewModel();
 
 //Inicialización
 viewModel.initFields();
-viewModel.initGenders();
+viewModel.initStatusses();
 viewModel.initDoctors();
 viewModel.initPatients();
 viewModel.initFilter();

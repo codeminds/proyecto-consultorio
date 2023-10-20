@@ -42,7 +42,7 @@ i:hover{
     background: rgba(0, 0, 0, 0.15);
 }
 
-.danger {
+.neutral {
     background: var(--color-neutral-primary);
     border-color: var(--color-neutral-secondary);
 }

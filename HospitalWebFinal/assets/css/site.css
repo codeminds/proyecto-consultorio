@@ -1,217 +1,189 @@
-@import 'theme.css';
-@import 'reset.css';
-@import 'grid.css';
-@import 'panel.css';
-@import 'modal.css';
-@import 'form.css';
-@import 'button.css';
-@import 'table.css';
+@import url('/assets/css/theme.css');
+@import url('/assets/css/reset.css');
+@import url('/assets/css/grid.css');
+@import url('/assets/css/panel.css');
+@import url('/assets/css/modal.css');
+@import url('/assets/css/form.css');
+@import url('/assets/css/button.css');
+@import url('/assets/css/table.css');
 
 /* STRUCTURE */
 html {
-	font-size: 10px;
-	height: 100%;
+   font-size: 10px;
+   height: 100%;
 }
 
 body {
-	font-size: 1.4rem;
-	font-family: var(--font-main);
-	background: var(--color-background);
-	color: var(--color-text);
-	height: 100%;
-	overflow: hidden;
+   height: 100%;
+   font-size: 1.4rem;
+   line-height: 1.1;
+   overflow: hidden;
+   font-family: var(--font-main);
+   background: var(--color-background);
+   color: var(--color-text);
 }
 
 h1 {
-	font-size: 4rem;
-	font-weight: 700;
-	margin-bottom: 1rem;
+   font-size: 4rem;
+   font-weight: 700;
+   margin-bottom: 1rem;
 }
 
 h2 {
-	font-size: 3.3rem;
-	font-weight: 700;
-	margin-bottom: 0.8rem;
+   font-size: 3.3rem;
+   font-weight: 700;
+   margin-bottom: 0.8rem;
 }
 
 /* LAYOUT */
 .navbar {
-	background: var(--color-navbar);
-	padding: 0.5rem;
-	box-shadow: 0 0 0.8rem -0.4rem var(--color-shadow-dark);
+   background: var(--color-navbar);
+   padding: 0.5rem; 
+   box-shadow: 0 0 0.8rem -0.4rem var(--color-shadow-dark);
 }
 
 .navbar .menu {
-	display: none;
-	font-size: 2.4rem;
-	font-weight: 500;
-	font-family: none;
-	margin: 0 0.2rem;
-	padding: 0.8rem 1.6rem;
-	border-radius: 5rem;
-	border: none;
-	background: none;
-	transition: background-color 0.2s linear;
+   display: none;
+   font-size: 2.5rem;
+   font-family: none;
+   background: none;
+   border: none;
+   border-radius: 5rem;
+   padding: 0.8rem 1.6rem;
+   transition: background-color 0.2s linear;
 }
 
 .navbar .menu:hover {
-	background: var(--color-navbar-menu-hover);
+   background: var(--color-navbar-menu-hover);
 }
 
 .navbar figure {
-	display: inline-block;
-	height: 6rem;
+   height: 6rem;
+   display: inline-block;
 }
 
 .navbar figure img {
-	max-height: 100%;
-	width: auto;
-}
-
-.wrapper::after {
-	content: '';
-	display: block;
-	clear: both;
+   max-height: 100%;
+   width: auto;
+   vertical-align: middle;
 }
 
 .wrapper {
-	/* Restamos el alto del navbar acorde al elemento de mayor altura
-	para calzar con la pantalla de manera perfecta */
-	height: calc(100% - 7rem);
+   /* Restamos el alto del navbar acorde al elemento de mayor altura
+   y sumamos el padding vertical para calzar con la pantalla de manera perfecta */
+   height: calc(100% - 7rem);
+}
+
+.wrapper::after {
+   content: '';
+   display: block;
+   clear: both;
 }
 
 .sidenav {
-	float: left;
-	width: 25rem;
-	background: var(--color-sidenav);
-	color: var(--color-sidenav-text);
-	height: 100%;
-	overflow: auto;
-	box-shadow: 0.1rem 0.1rem 0.3rem 0 var(--color-shadow-dark);
-	/* Scroll para Firefox */
-	scrollbar-color: var(--color-scrollbar-dark) var(--color-scrollbar-dark);
-	scrollbar-width: thin;
-}
-
-/* Scroll para Chromium */
-.sidenav::-webkit-scrollbar-thumb {
-	background: var(--color-scrollbar-dark);
-}
-
-.sidenav::-webkit-scrollbar {
-	width: 0.7rem;
-	background: var(--color-scrollbar-dark);
+   float: left;
+   width: 25rem;
+   background: var(--color-sidenav);
+   color: var(--color-sidenav-text);
+   height: 100%;
+   overflow: auto;
+   box-shadow: 0.1rem 0.1rem 0.3rem 0 var(--color-shadow-dark);
 }
 
 .sidenav .category {
-	font-size: 2.2rem;
-	padding: 1.5rem 1rem;
-	margin: 0;
-	font-weight: 300;
-	background: var(--color-sidenav-category);
+   font-size: 2.2rem;
+   padding: 1.5rem 1rem;
+   font-weight: 300;
+   background: var(--color-sidenav-category);
 }
 
 .sidenav .menu li {
-	font-size: 1.6rem;
-	font-weight: 300;
-	transition: background-color 0.1s linear;
+   font-size: 1.6rem;
+   font-weight: 300;
+   transition: background-color 0.1s linear;
 }
 
 .sidenav .menu li:hover,
 .sidenav .menu li.active {
-	border-right: 0.4rem solid var(--color-main);
-	background: var(--color-sidenav-active);
+   background: var(--color-sidenav-active);
+   border-right: 0.4rem solid var(--color-main)
 }
 
 .sidenav .menu a {
-	text-decoration: none;
-	display: block;
-	padding: 1.2rem;
+   text-decoration: none;
+   display: block;
+   padding: 1.2rem;
 }
 
 .sidenav .menu a::before {
-	/* Caracter: ◆ */
-	content: '\25C6';
-	font-size: 1rem;
-	margin-right: 0.5rem;
-	vertical-align: middle;
-	;
+   /* Caracter: ◆ */
+   content: '\25C6';
+   font-size: 1rem;
+   margin-right: 0.5rem;
+   vertical-align: middle;
 }
 
 .sidenav .menu a span {
-	vertical-align: middle;
+   vertical-align: middle;
 }
 
 main {
-	float: left;
-	width: calc(100% - 25rem);
-	height: 100%;
-	overflow: auto;
-	padding: 2rem;
-	/* Scroll para Firefox */
-	scrollbar-color: var(--color-scrollbar-light) var(--color-scrollbar-light);
-	scrollbar-width: thin;
-}
-
-/* Scroll para Chromium */
-main::-webkit-scrollbar-thumb {
-	background: var(--color-scrollbar-light);
-}
-
-main::-webkit-scrollbar {
-	width: 0.7rem;
-	background: var(--color-scrollbar-light);
+   float: left;
+   width: calc(100% - 25rem);
+   height: 100%;
+   overflow: auto;
+   padding: 2rem;
 }
 
 @media screen and (max-width: 1024px) {
-	/* Recalculamos en pantallas móviles ya que cambia el elemento
-	que mostramos en el navbar */
-	.wrapper {
-		height: calc(100% - 5.1rem);
-		position: relative;
-	}
+   /* Recalculamos en pantallas móviles ya que cambia el elemento
+   que mostramos en el navbar */
+   .wrapper {
+      height: calc(100% - 5.4rem);
+      position: relative;
+   }
 
-	.navbar .menu {
-		display: inline-block;
-	}
+   .navbar .menu {
+      display: inline-block;
+   }
 
-	.navbar figure {
-		display: none;
-	}
+   .navbar figure {
+      display: none;
+   }
 
    /* En el diseño móvil el menú lateral se vuelve desplegable para dar 
    campo al contenido principal debido al espacio menor en pantalla */
-	.sidenav {
-		position: absolute;
-		z-index: 90;
-		width: 80%;
-		max-width: 25rem;
-		top: 0;
-		left: -80%;
-		transition: left 0.6s ease-in;
-	}
+   .sidenav {
+      position: absolute;
+      top: 0;
+      left: -80%;
+      z-index: 90;
+      width: 80%;
+      max-width: 25rem;
+      transition: left 0.6s ease-in;
+   }
 
-	.sidenav.open {
-		left: 0;
-		transition: left 0.6s ease-out;
-	}
+   .sidenav.open {
+      left: 0;
+      transition: left 0.6s ease-out;
+   }
 
-	.sidenav .category:first-of-type {
-		position: relative;
-	}
+   .sidenav .category {
+      position: relative;
+   }
 
-	.sidenav .category:first-of-type::after {
-		content: '';
-		position: absolute;
-		top: 0;
-		right: 0.5rem;
-		width: 4.5rem;
-		height: 100%;
-		background: url(/assets/img/code-minds.png) no-repeat center center;
-		background-size: 100% auto;
-	}
+   .sidenav .category:first-child::after {
+      content: '';
+      position: absolute;
+      height: 100%;
+      width: 4.5rem;
+      top: 0;
+      right: 0.5rem;
+      background: url(/assets/img/code-minds.png) no-repeat center center;
+      background-size: 100% auto;
+   }
 
-	main {
-		width: 100%;
-	}
+   main {
+      width: 100%;
+   }
 }

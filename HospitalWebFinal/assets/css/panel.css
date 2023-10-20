@@ -30,12 +30,12 @@
 
 .panel .title.toggle::after {
    /* Caracter: ► */
-   content: '\025B8';
+   content: '\025b8';
 }
 
 .panel .title.toggle.open::after {
    /* Caracter: ▼ */
-   content: '\025BE';
+   content: '\025be';
 }
 
 .panel .toggle-section {

@@ -17,41 +17,47 @@ export const fieldTestData = [
    }
 ];
 
-export const genderTestData = [
+export const statusTestData = [
    {
       id: 1,
-      name: 'Femenino'
+      name: 'Activa'
    },
    {
       id: 2,
-      name: 'Masculino'
+      name: 'Cancelada'
    }
 ];
 
 export const doctorTestData = [
    {
       id: 1,
-      documentId: '123232123',
+      code: '1232321231',
       firstName: 'Hugo',
       lastName: 'Doctor 1',
-      fieldId: 1,
-      field: 'Doctor General'
+      field: {
+         id: 1,
+         name: 'Doctor General'
+      }
    },
    {
       id: 2,
-      documentId: '123245123',
+      code: '1232451232',
       firstName: 'Paco',
       lastName: 'Doctor 2',
-      fieldId: 4,
-      field: 'Cirujano'
+      field: {
+         id: 4,
+         name: 'Cirujano'
+      }
    },
    {
       id: 3,
-      documentId: '323232563',
+      code: '3232325632',
       firstName: 'Luis',
       lastName: 'Doctor 3',
-      fieldId: 2,
-      field: 'Dentista'
+      field: {
+         id: 2,
+         name: 'Dentista'
+      }
    }
 ];
 
@@ -61,36 +67,32 @@ export const patientTestData = [
       documentId: '123456789',
       firstName: 'Hugo',
       lastName: 'Patient 1',
-      genderId: 2,
-      gender: 'Masculino',
-      birthDate: new Date('1992-01-30T11:00:00')
+      tel: '23439475',
+      email: 'hugo@mail.com'
    },
    {
       id: 2,
       documentId: '234567890',
       firstName: 'Paco',
       lastName: 'Patient 2',
-      genderId: 2,
-      gender: 'Masculino',
-      birthDate: new Date('1987-05-11T03:00:00')
+      tel: '8574657',
+      email: 'paco@mail.com'
    },
    {
       id: 3,
-      documentId: '345678901',
+      documentId: '3456789012',
       firstName: 'Luis',
       lastName: 'Patient 3',
-      genderId: 2,
-      gender: 'Masculino',
-      birthDate: new Date('1992-01-25T22:00:00')
+      tel: '47563758',
+      email: 'luis@mail.com'
    },
    {
       id: 4,
       documentId: '145678901',
       firstName: 'Daniela',
       lastName: 'Patient 4',
-      genderId: 1,
-      gender: 'Femenino',
-      birthDate: new Date('1970-04-04T03:00:00')
+      tel: '87586970',
+      email: 'daniela@mail.com'
    }
 ];
 
@@ -98,39 +100,81 @@ export const appointmentTestData = [
    {
       id: 1,
       date: new Date('2021-11-08T15:30:00'),
-      patientId: 1, //Paciente Hugo
-      patientName: 'Hugo Patient 1',
-      doctorId: 1, //Doctor Hugo
-      doctorName: 'Hugo Doctor 1',
-      doctorField: 'Doctor General'
+      doctor: {
+         id: 1,
+         documentId: '123232123',
+         firstName: 'Hugo',
+         lastName: 'Doctor 1',
+         field: {
+            id: 1,
+            name: 'Doctor General'
+         }
+      },
+      patient: {
+         id: 1,
+         documentId: '123456789',
+         firstName: 'Hugo',
+         lastName: 'Patient 1',
+         tel: '23439475',
+         email: 'hugo@mail.com'
+      },
+      status: {
+         id: 1,
+         name: 'Activa'
+      }
    },
    {
       id: 2,
       date: new Date('2021-11-08T13:00:00'),
-      patientId: 2, //Paciente Paco
-      patientName: 'Paco Patient 2',
-      doctorId: 2, //Doctor Paco
-      doctorName: 'Paco Doctor 2',
-      doctorField: 'Cirujano'
+      doctor: {
+         id: 3,
+         documentId: '323232563',
+         firstName: 'Luis',
+         lastName: 'Doctor 3',
+         field: {
+            id: 3,
+            name: 'Dentista'
+         }
+      },
+      patient: {
+         id: 3,
+         documentId: '3456789012',
+         firstName: 'Luis',
+         lastName: 'Patient 3',
+         tel: '47563758',
+         email: 'luis@mail.com'
+      },
+      status: {
+         id: 1,
+         name: 'Activa'
+      }
    },
    {
       id: 3,
-      date: new Date('2021-09-25T14:30:00'),
-      patientId: 3, //Paciente Luis
-      patientName: 'Luis Patient 3',
-      doctorId: 3, //Doctor Luis
-      doctorName: 'Luis Doctor 3',
-      doctorField: 'Dentista'
-   },
-   {
-      id: 4,
       date: new Date('2021-10-12T09:00:00'),
-      patientId: 4, //Paciente Daniela
-      patientName: 'Daniela Patient 4',
-      doctorId: 1, //Doctor Hugo
-      doctorName: 'Hugo Doctor 1',
-      doctorField: 'Doctor General'
-   }
+      doctor: {
+         id: 1,
+         documentId: '12332123',
+         firstName: 'Hugo',
+         lastName: 'Doctor 1',
+         field: {
+            id: 1,
+            name: 'Doctor General'
+         }
+      },
+      patient: {
+         id: 4,
+         documentId: '145678901',
+         firstName: 'Daniela',
+         lastName: 'Patient 4',
+         tel: '87586970',
+         email: 'daniela@mail.com'
+      },
+      status: {
+         id: 2,
+         name: 'Cancelada'
+      }
+   },
 ];
 
 export function getNextId(collection) {

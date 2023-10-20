@@ -1,8 +1,8 @@
 export class BaseService {
-   static #handleError(response) {
+   static #handleError(data) {
       let errorMessage = '';
       
-      for(const error of response.messages) {
+      for(const error of data.messages) {
          errorMessage += `${error}\n`;
       }
 
@@ -10,13 +10,13 @@ export class BaseService {
          alert(errorMessage);
       }
    }
-   
+
    static handleResponse(response, callback) {
       return response.json().then((data) => {
-         if (data.statusCode == 200) {
+         if(data.statusCode == 200) {
             callback(data);
          } else {
-            this.#handleError(data);
+            BaseService.#handleError(data);
          }
       });
    }

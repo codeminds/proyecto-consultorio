@@ -1,15 +1,13 @@
 import { BaseService } from "./base.js";
-import { DateService } from "./date.js";
 
-export class PatientsService extends BaseService {
+export class PatientService extends BaseService {
    static list(filter, callback) {
       /* Se crea el filtro de la lista en query params para enviar al API */
       const filterString = `&documentId=${filter?.documentId ?? ''}`
          + `&firstName=${filter?.firstName ?? ''}`
          + `&lastName=${filter?.lastName ?? ''}`
-         + `&birthDateFrom=${filter?.birthDateFrom ?? ''}`
-         + `&birthDateTo=${filter?.birthDateTo ?? ''}`
-         + `&genderId=${filter?.genderId ?? ''}`;
+         + `&tel=${filter?.tel ?? ''}`
+         + `&email=${filter?.email ?? ''}`;
 
       fetch(`https://localhost:7221/api/patients?${filterString}`, {
          method: 'GET',

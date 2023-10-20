@@ -3,10 +3,10 @@ import { BaseService } from "./base.js";
 export class DoctorService extends BaseService {
    static list(filter, callback) {
       /* Se crea el filtro de la lista en query params para enviar al API */
-      const filterString = `documentId=${filter?.documentId ?? ''}`
-                            + `&firstName=${filter?.firstName ?? ''}`
-                            + `&lastName=${filter?.lastName ?? ''}`
-                            + `&fieldId=${filter?.fieldId ?? ''}`;
+      const filterString = `code=${filter?.code ?? ''}`
+         + `&firstName=${filter?.firstName ?? ''}`
+         + `&lastName=${filter?.lastName ?? ''}`
+         + `&fieldId=${filter?.fieldId ?? ''}`;
 
       fetch(`https://localhost:7221/api/doctors?${filterString}`, {
          method: 'GET',
