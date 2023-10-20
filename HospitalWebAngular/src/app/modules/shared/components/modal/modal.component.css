@@ -7,9 +7,7 @@
     background: rgba(0, 0, 0, 0.8);
     padding: 2rem;
     box-sizing: border-box;
-    overflow-y: auto;    
-    scrollbar-color: var(--color-scrollbar-dark) var(--color-scrollbar-dark);
-    scrollbar-width: thin;
+    overflow-y: auto;
     align-items: center;
     justify-content: center;
     display: flex;
@@ -31,15 +29,6 @@
 
 .transparent {
     background: none;
-}
-
-.modal::-webkit-scrollbar-thumb {
-    background: var(--color-scrollbar-dark);
-}
-
-.modal::-webkit-scrollbar {
-    width: 0.7rem;
-    background: var(--color-scrollbar-dark);
 }
 
 .title{

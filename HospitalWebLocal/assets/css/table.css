@@ -40,7 +40,6 @@ un efecto visual que no le afecta */
    text-align: left;
    font-weight: 700;
    padding: 0.8rem 0.5rem;
-   position: sticky;
    overflow: hidden;
    text-overflow: ellipsis;
 }

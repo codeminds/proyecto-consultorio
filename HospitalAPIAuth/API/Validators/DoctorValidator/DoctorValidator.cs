@@ -30,7 +30,7 @@ namespace API.Validators
             {
                 innerMessages.Add("Código no puede comenzar con 0");
             }
-            else if (!int.TryParse(data.Code, out int num) || num < 0)
+            else if (!long.TryParse(data.Code, out long num) || num < 0)
             {
                 innerMessages.Add("Código sólo puede contener números");
             }

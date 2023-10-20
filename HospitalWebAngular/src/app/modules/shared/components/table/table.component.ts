@@ -11,9 +11,6 @@ export class TableComponent implements OnInit {
   public template: TemplateRef<unknown>;
 
   @Input()
-  public templateMobile: TemplateRef<unknown>;
-
-  @Input()
   public source: unknown[];
 
   @Input()
@@ -36,7 +33,6 @@ export class TableComponent implements OnInit {
 
   constructor() {
     this.template = null;
-    this.templateMobile = null;
     this.source = null;
     this.headers = [];
     this.noResultsText = null;

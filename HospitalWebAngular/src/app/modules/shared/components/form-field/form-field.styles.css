@@ -24,7 +24,7 @@ select {
     font-size: inherit;
     background: rgba(255, 255, 255, 0.2);
     color: inherit;
-    border: solid 0.1rem var(--color-form-field-input);
+    border: solid 0.1rem var(--color-form-field-border);
     border-radius: 0.2rem;
     outline: 0;
 }
@@ -38,17 +38,6 @@ select:focus {
 textarea {
     min-height: 15rem;
     resize: none;
-    scrollbar-color: var(--color-scrollbar-light) var(--color-scrollbar-light);
-    scrollbar-width: thin;
-}
-
-textarea::-webkit-scrollbar-thumb {
-    background: var(--color-scrollbar-light);
-}
-
-textarea::-webkit-scrollbar {
-    width: 0.7rem;
-    background: var(--color-scrollbar-light);
 }
 
 textarea.resizable {
@@ -106,17 +95,6 @@ textarea.resizable {
     margin-top: 0.1rem;
     background: var(--color-background);
     overflow: auto;
-    scrollbar-color: var(--color-scrollbar-light) var(--color-scrollbar-light);
-    scrollbar-width: thin;
-}
-
-.options ul::-webkit-scrollbar-thumb {
-    background: var(--color-scrollbar-light);
-}
-
-.options ul::-webkit-scrollbar {
-    width: 0.7rem;
-    background: var(--color-scrollbar-light);
 }
 
 .options li {

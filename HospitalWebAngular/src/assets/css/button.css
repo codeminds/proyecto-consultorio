@@ -5,20 +5,27 @@
    line-height: 1.3;
    background: rgba(255, 255, 255, 0.3);
    color: inherit;
-   margin-right: 0.5rem;
    border: 0.1rem solid var(--color-border);
    border-radius: 0.2rem;
-   font-weight: 400;
    text-decoration: none;
-   transition: background-color 0.1s linear, filter 0.1s linear;
+   text-align: center;
+   transition: background-color 0.1s linear;
 }
 
 .button:hover:not(:disabled) {
    background: rgba(255, 255, 255, 0.6);
 }
 
-.button:last-child {
+.button:not(:last-child) {
+   margin-right: 0.5rem;
+}
+
+.button.right {
    margin-right: 0;
+}
+
+.button.right:not(:first-child) {
+   margin-left: 0.5rem;
 }
 
 .button.success {
@@ -54,4 +61,13 @@
 .button:disabled {
    cursor: not-allowed;
    filter: grayscale(70%);
+}
+
+@media screen and (max-width: 768px) {
+   .button {
+      padding: 0.7rem 1.4rem;
+      width: calc(50% - 0.25rem);
+      min-width: min(15rem, 100%);
+      margin-bottom: 0.5rem;
+   }
 }

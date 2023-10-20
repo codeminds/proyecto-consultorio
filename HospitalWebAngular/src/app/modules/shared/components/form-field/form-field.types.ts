@@ -15,13 +15,6 @@ export enum DateType {
     DateTime = 'datetime-local'
 }
 
-export enum ButtonType {
-    None = '',
-    Netural = 'neutral',
-    Success = 'success',
-    Danger = 'danger'
-}
-
 export interface Attributes {
     [name: string]: boolean | string | number;
 }

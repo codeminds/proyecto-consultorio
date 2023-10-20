@@ -1,6 +1,5 @@
 <div>
-    <i *ngIf="loading" class="material-symbols-sharp">loop</i>
-    <table [ngClass]="{'mobile': templateMobile != null}">
+    <table>
         <thead *ngIf="filteredHeaders.length > 0">
             <tr>
                 <th *ngFor="let header of filteredHeaders" [attr.style]="getHeaderWidth(header.size)">{{header.label}}</th>
@@ -9,17 +8,13 @@
         <tbody #items>
             <tr *ngFor="let row of source">
                 <ng-container *ngTemplateOutlet="template; context: {$implicit: row}"></ng-container>
-                <td *ngIf="templateMobile" class="mobile">
-                    <ng-container *ngTemplateOutlet="templateMobile; context: {$implicit: row}"></ng-container>
-                </td>
             </tr>
             <tr *ngIf="!loading && (!source || source.length == 0)" class="no-results">
                 <td [attr.colspan]="filteredHeaders.length">{{noResultsText}}</td>
-                <td *ngIf="templateMobile" class="mobile">{{noResultsText}}</td>
             </tr>
             <tr *ngIf="loading" class="loading">
-                <td class="mobile">
-                    <i *ngIf="loading" class="material-symbols-sharp">loop</i>
+                <td [attr.colspan]="filteredHeaders.length">
+                    <i class="material-symbols-sharp">loop</i>
                 </td>
             </tr>
         </tbody>

@@ -9,12 +9,12 @@ import { FieldApi } from '@api/field/field.api';
 import { MessageType, QueryParams } from '@services/http/http.types';
 import { Patient } from '@api/patient/patient.model';
 import { PatientApi } from '@api/patient/patient.api';
-import { InputType, ButtonType, DateType } from '@shared/components/form-field/form-field.types';
+import { InputType, DateType } from '@shared/components/form-field/form-field.types';
 import { ModalSize, ModalPosition } from '@shared/components/modal/modal.types';
 import { Store } from '@store';
 import { firstValueFrom } from 'rxjs';
-import { Gender } from '@api/gender/gender.model';
-import { GenderApi } from '@api/gender/gender.api';
+import { Status } from '@api/status/status.model';
+import { StatusApi } from '@api/status/status.api';
 
 @Component({
   selector: 'app-appointments',
@@ -31,7 +31,7 @@ export class AppointmentsPage implements OnInit {
 
   public appointments: Appointment[];
   public fields: Field[];
-  public genders: Gender[];
+  public statusses: Status[];
   public modalOpen: boolean;
   public panelOpen: boolean;
   public appointment: Appointment;
@@ -44,7 +44,6 @@ export class AppointmentsPage implements OnInit {
   public InputType = InputType;
   public ModalSize = ModalSize;
   public ModalPosition = ModalPosition;
-  public ButtonType = ButtonType;
   public DateType = DateType;
   
   constructor(
@@ -52,12 +51,12 @@ export class AppointmentsPage implements OnInit {
     private doctorApi: DoctorApi,
     private patientApi: PatientApi,
     private fieldApi: FieldApi,
-    private genderApi: GenderApi,
+    private statusApi: StatusApi,
     private store: Store
   ) { 
     this.appointments = [];
     this.fields = [];
-    this.genders = [];
+    this.statusses = [];
     this.modalOpen = false;
     this.panelOpen = false;
     this.appointment = null;
@@ -69,7 +68,7 @@ export class AppointmentsPage implements OnInit {
 
   public ngOnInit(): void {
     this.loadFields();
-    this.loadGenders();
+    this.loadStatusses();
     this.list();
   }
 
@@ -80,10 +79,10 @@ export class AppointmentsPage implements OnInit {
     }
   }
 
-  public async loadGenders(): Promise<void> {
-    const response = await firstValueFrom(this.genderApi.list());
+  public async loadStatusses(): Promise<void> {
+    const response = await firstValueFrom(this.statusApi.list());
     if(response.success) {
-      this.genders = response.data;
+      this.statusses = response.data;
     }
   }
 
@@ -114,15 +113,13 @@ export class AppointmentsPage implements OnInit {
       this.messages = [];
       
       if(response.success) {
-        if(isNew) {
-          this.panelOpen = true;
-          this.filter = new FilterAppointmentDTO({
-            doctor: { documentId: response.data.doctor.documentId },
-            patient: { documentId: response.data.patient.documentId },
-            dateFrom: response.data.date,
-            dateTo: response.data.date
-          });
-        }
+        this.panelOpen = true;
+        this.filter = new FilterAppointmentDTO({
+          doctor: { code: response.data.doctor.code },
+          patient: { documentId: response.data.patient.documentId },
+          dateFrom: response.data.date,
+          dateTo: response.data.date
+        });
 
         this.modalOpen = false;
         this.store.siteMessage = { type: MessageType.Success, text: response.messages[0] };

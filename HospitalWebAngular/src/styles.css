@@ -79,6 +79,12 @@ h2 {
     margin-right: 0;
 }
 
+@media screen and (max-width: 768px) {
+    .page-controls {
+        width: 15rem;
+    }
+}
+
 @keyframes fade-in {
     0% {
         opaicty: 0;

@@ -21,13 +21,13 @@
                 [option]="{label: 'name', value: 'id', output: 'id'}">
             </app-select>
             <app-input 
-                name="documentId" 
+                name="code" 
                 form="doctorFilter" 
-                label="Cédula"
+                label="Código"
                 class="col-2"
                 [type]="InputType.Text" 
-                [(model)]="filter.doctor.documentId"
-                [attributes]="{'placeholder': 'E.g.:123456789'}">
+                [(model)]="filter.doctor.code"
+                [attributes]="{'placeholder': 'E.g.: 1234567890'}">
             </app-input>
             <app-input 
                 name="firstName" 
@@ -36,7 +36,7 @@
                 class="col-2"
                 [type]="InputType.Text" 
                 [(model)]="filter.doctor.firstName"
-                [attributes]="{'placeholder': 'E.g.:John'}">
+                [attributes]="{'placeholder': 'E.g.: John'}">
             </app-input>
             <app-input 
                 name="lastName" 
@@ -45,7 +45,7 @@
                 class="col-2"
                 [type]="InputType.Text" 
                 [(model)]="filter.doctor.lastName"
-                [attributes]="{'placeholder': 'E.g.:Smith'}">
+                [attributes]="{'placeholder': 'E.g.: Smith'}">
             </app-input>
         </form>
     </app-panel>
@@ -57,8 +57,8 @@
                 label="Cédula"
                 class="col-3"
                 [type]="InputType.Text" 
-                [(model)]="filter.patientDocumentId"
-                [attributes]="{'placeholder': 'E.g.:123456789'}">
+                [(model)]="filter.patient.documentId"
+                [attributes]="{'placeholder': 'E.g.: 123456789'}">
             </app-input>
             <app-input 
                 name="firstName" 
@@ -67,7 +67,7 @@
                 class="col-3"
                 [type]="InputType.Text" 
                 [(model)]="filter.patient.firstName"
-                [attributes]="{'placeholder': 'E.g.:John'}">
+                [attributes]="{'placeholder': 'E.g.: John'}">
             </app-input>  
             <app-input 
                 name="lastName" 
@@ -76,43 +76,35 @@
                 class="col-3"
                 [type]="InputType.Text" 
                 [(model)]="filter.patient.lastName"
-                [attributes]="{'placeholder': 'E.g.:Smith'}">
+                [attributes]="{'placeholder': 'E.g.: Smith'}">
             </app-input>
-            <app-date 
-                name="birthDateFrom" 
+            <app-input 
+                name="tel" 
                 form="patientFilter" 
-                label="Desde"
+                label="Tel"
                 class="col-3"
-                [type]="DateType.DateTime"
-                [(model)]="filter.patient.birthDateFrom">
-            </app-date>
-            <app-date 
-                name="birthDateTo" 
+                [type]="InputType.Tel"
+                [(model)]="filter.patient.tel"
+                [attributes]="{'placeholder': 'E.g.: 12345678'}">
+            </app-input>
+            <app-input 
+                name="email" 
                 form="patientFilter" 
-                label="Hasta"
+                label="Correo"
                 class="col-3"
-                [type]="DateType.DateTime"
-                [(model)]="filter.patient.birthDateTo">
-            </app-date>
-            <app-select
-                name="gender"
-                form="patientFilter"
-                label="Género"
-                class="col-3"
-                nullOption="Todos"
-                [(model)]="filter.patient.genderId"
-                [options]="genders"
-                [option]="{label: 'name', value: 'id', output: 'id'}">
-            </app-select>
+                [type]="InputType.Email"
+                [(model)]="filter.patient.email"
+                [attributes]="{'placeholder': 'E.g.: john@smith.com'}">
+            </app-input>
         </form>
     </app-panel>
-    <app-panel class="col-1 space-y unboxed slim" panelTitle="Fecha">
+    <app-panel class="col-1 space-y unboxed slim" panelTitle="Cita">
         <form class="row" (keyup.enter)="list()">
             <app-date 
                 name="dateFrom" 
                 form="appointmentFilter" 
                 label="Desde"
-                class="col-2"
+                class="col-3"
                 [type]="DateType.DateTime"
                 [(model)]="filter.dateFrom">
             </app-date>
@@ -120,14 +112,26 @@
                 name="dateTo" 
                 form="appointmentFilter" 
                 label="Hasta"
-                class="col-2"
+                class="col-3"
                 [type]="DateType.DateTime"
                 [(model)]="filter.dateTo">
             </app-date>
-            <app-button [type]="ButtonType.Success" [disabled]="loading" [loading]="loading" (clicked)="list()">
-                <i class="material-symbols-sharp">search</i>
-                <span>Buscar</span>
-            </app-button> 
+            <app-select
+                name="status"
+                form="appointmentFilter"
+                label="Estado"
+                class="col-3"
+                nullOption="Todos"
+                [(model)]="filter.statusId"
+                [options]="statusses"
+                [option]="{label: 'name', value: 'id', output: 'id'}">
+            </app-select>
+            <app-custom-field>
+                <button class="button success" (click)="list()" [disabled]="loading">
+                    <i class="material-symbols-sharp">search</i>
+                    <span>Buscar</span>
+                </button>
+            </app-custom-field>
         </form>
     </app-panel>
 </app-panel>
@@ -138,18 +142,26 @@
         [headers]="[{ label: 'Fecha', size: 2 },
                     { label: 'Doctor', size: 1.5 },
                     { label: 'Paciente',size: 1.5 },
-                    { label: 'Especialidad' },
-                    { size: 2 }]" 
-        [template]="appointmentRow" 
-        [templateMobile]="appointmentRowMobile" 
+                    { label: 'Estado' },
+                    { size: 2.5 }]" 
+        [template]="appointmentRow"
         [source]="appointments"
         [loading]="loading"
         noResultsText="No se han encontrado resultados">
         <ng-template #appointmentRow let-appointment>
-            <td>{{appointment.date.toLocaleDisplayString('es-US')}}</td>
-            <td>{{appointment.doctor.firstName}} {{appointment.doctor.lastName}}</td>
-            <td>{{appointment.patient.firstName}} {{appointment.patient.lastName}}</td>
-            <td>{{appointment.doctor.field.name}}</td>    
+            <td class="heading">{{appointment.date.toLocaleDisplayString('es-US')}}</td>
+            <td>
+                <label>Doctor:</label> 
+                <span>{{appointment.doctor.firstName}} {{appointment.doctor.lastName}}</span>
+            </td>
+            <td>
+                <label>Paciente:</label> 
+                <span>{{appointment.patient.firstName}} {{appointment.patient.lastName}}</span>
+            </td>
+            <td>
+                <label>Estado:</label> 
+                <span>{{appointment.status.name}}</span>
+            </td>    
             <td class="buttons">
                 <button class="button success" (click)="insertUpdate(appointment)">
                     <i class="material-symbols-sharp">edit</i>
@@ -160,33 +172,6 @@
                     <span>Borrar</span>
                 </button>
             </td>
-        </ng-template>
-        <ng-template #appointmentRowMobile let-appointment>
-            <div class="mobile">
-                <h3 class="heading">{{appointment.date.toLocaleDisplayString('es-US')}}</h3>
-                <p class="data">
-                    <span class="label">Doctor:</span> 
-                    <span>{{appointment.doctor.firstName}} {{appointment.doctor.lastName}}</span>
-                </p>
-                <p class="data">
-                    <span class="label">Paciente:</span> 
-                    <span>{{appointment.patient.firstName}} {{appointment.patient.lastName}}</span>
-                </p>
-                <p class="data">
-                    <span class="label">Especialidad:</span> 
-                    <span>{{appointment.doctor.field.name}}</span>
-                </p>
-                <div class="buttons">
-                    <button class="button success" (click)="insertUpdate(appointment)">
-                        <i class="material-symbols-sharp">edit</i>
-                        <span>Editar</span>
-                    </button>
-                    <button class="button danger" (click)="deleteId = appointment.id">
-                        <i class="material-symbols-sharp">delete</i>
-                        <span>Borrar</span>
-                    </button>
-                </div>
-            </div>
         </ng-template>
     </app-table>
 </app-panel>    
@@ -226,7 +211,7 @@
             </ng-template>
             <ng-template #lookupDoctorInfo let-doctor>
                 <p><b>{{doctor.firstName}} {{doctor.lastName}}</b></p>
-                <p>{{doctor.documentId}}</p>
+                <p>{{doctor.code}}</p>
             </ng-template>
         </app-autocomplete>
         <app-autocomplete
@@ -246,19 +231,25 @@
             </ng-template>
             <ng-template #lookupPatientInfo let-patient>
                 <p><b>{{patient.firstName}} {{patient.lastName}}</b></p>
-                <p>{{patient.gender.name}}</p>
+                <p>{{patient.tel}}</p>
+                <p>{{patient.email}}</p>
             </ng-template>
         </app-autocomplete>
-        <div class="row">
-            <app-button
-                [type]="ButtonType.Success"
-                [disabled]="saving || !confirmDelete" [ngClass]="{'loading': saving || !confirmDelete}"
-                (clicked)="saveAppointment()">
-                Guardar
+        <app-select
+            name="status"
+            form="insertUpdate"
+            label="Estado"
+            [(model)]="appointment.status"
+            [options]="statusses"
+            [option]="{label: 'name', value: 'id', compare: 'id'}">
+        </app-select>
+        <app-custom-field>
+            <button class="button success" (click)="saveAppointment()" [disabled]="saving">
+                <span>Guardar</span>
                 <i *ngIf="saving" class="material-symbols-sharp rotate">data_saver_off</i>
-            </app-button>
-            <app-button [type]="ButtonType.Danger" (clicked)="modalOpen = false">Cancelar</app-button>
-        </div>
+            </button>
+            <button class="button danger" (click)="modalOpen = false" [disabled]="saving">Cancelar</button>
+        </app-custom-field>
     </form>
 </app-modal>
 
@@ -271,13 +262,13 @@
     <p class="prompt-text">Está seguro que desea eliminar este récord?</p>
     <div class="prompt-buttons">
         <button
-            class="button danger"
+            class="button danger right"
             [disabled]="saving || !confirmDelete"
             [ngClass]="{'loading': saving || !confirmDelete}"
             (click)="deleteAppointment()">
             Eliminar
             <i *ngIf="saving" class="material-symbols-sharp rotate">data_saver_off</i>
         </button>
-        <button class="button neutral" (click)="deleteId = null">Cancelar</button>
+        <button class="button neutral right" (click)="deleteId = null">Cancelar</button>
     </div>
 </app-modal>

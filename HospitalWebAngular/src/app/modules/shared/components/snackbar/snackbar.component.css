@@ -1,16 +1,22 @@
-div {
-    max-width: 50%;
-    color: #fff;
+:host {
     position: fixed;
-    border-radius: 0.2rem;
-    border: 0.1rem solid;
-    padding: 0.8rem 2.8rem 0.8rem 1.2rem;
-    animation: slide-in 0.7s ease-out forwards;
+    width: 100%;
+    bottom: 2rem;
+    display: flex;
+    justify-content: center;
     z-index: 100;
 }
 
+div {
+    max-width: 50%;
+    color: #fff;
+    border-radius: 0.2rem;
+    border: 0.1rem solid;
+    padding: 0.8rem 2.8rem 0.8rem 1.2rem;
+    animation: slide-in 0.4s ease-out forwards;
+}
+
 .close {
-    bottom: 1rem;
     animation-name: slide-out;
     animation-timing-function: ease-in;
 }
@@ -85,7 +91,7 @@ i:hover{
 
 @keyframes slide-in {
     0% {
-        bottom: -50vh;   
+        margin-bottom: -20vh;   
     }
 
     10% {
@@ -93,22 +99,22 @@ i:hover{
     }
 
     100% {
-        bottom: 1rem;
+        margin-bottom: 0rem;
         transform: scale(1);
     }
 }
 
 @keyframes slide-out {
     0% {
-        transform: scale(1); 
+        margin-bottom: 0rem;
     }
 
     10% {
-        bottom: 1rem;  
+        transform: scale(1);  
     }
 
     100% {
-        bottom: -50vh;
+        margin-bottom: -20vh;
         transform: scale(0);
     }
 }

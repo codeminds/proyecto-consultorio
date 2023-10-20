@@ -4,7 +4,7 @@ import { DoctorApi } from '@api/doctor/doctor.api';
 import { Field } from '@api/field/field.model';
 import { FieldApi } from '@api/field/field.api';
 import { MessageType, QueryParams } from '@services/http/http.types';
-import { ButtonType, InputType } from '@shared/components/form-field/form-field.types';
+import { InputType } from '@shared/components/form-field/form-field.types';
 import { ModalPosition, ModalSize } from '@shared/components/modal/modal.types';
 import { Store } from '@store';
 import { firstValueFrom } from 'rxjs';
@@ -37,7 +37,6 @@ export class DoctorsPage implements OnInit{
   public InputType = InputType;
   public ModalSize = ModalSize;
   public ModalPosition = ModalPosition;
-  public ButtonType = ButtonType;
   
   constructor(
     private doctorApi: DoctorApi,
@@ -96,7 +95,7 @@ export class DoctorsPage implements OnInit{
       if(response.success) {
         if(isNew) {
           this.panelOpen = true;
-          this.filter = new FilterDoctorDTO({ documentId: response.data.documentId });
+          this.filter = new FilterDoctorDTO({ code: response.data.code });
         }
 
         this.modalOpen = false;

@@ -2,13 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { Patient } from '@api/patient/patient.model';
 import { PatientApi } from '@api/patient/patient.api';
 import { MessageType, QueryParams } from '@services/http/http.types';
-import { ButtonType, DateType, InputType } from '@shared/components/form-field/form-field.types';
+import { DateType, InputType } from '@shared/components/form-field/form-field.types';
 import { ModalPosition, ModalSize } from '@shared/components/modal/modal.types';
 import { firstValueFrom } from 'rxjs';
 import { Store } from '@store';
 import { FilterPatientDTO } from '@api/patient/patient.dto';
-import { Gender } from '@api/gender/gender.model';
-import { GenderApi } from '@api/gender/gender.api';
+import { Status } from '@api/status/status.model';
+import { StatusApi } from '@api/status/status.api';
 
 @Component({
   selector: 'app-patients',
@@ -24,7 +24,7 @@ export class PatientsPage implements OnInit{
   }
 
   public patients: Patient[];
-  public genders: Gender[];
+  public genders: Status[];
   public modalOpen: boolean;
   public panelOpen: boolean;
   public patient: Patient;
@@ -38,11 +38,10 @@ export class PatientsPage implements OnInit{
   public DateType = DateType;
   public ModalSize = ModalSize;
   public ModalPosition = ModalPosition;
-  public ButtonType = ButtonType;
   
   constructor(
     private patientApi: PatientApi,
-    private genderApi: GenderApi,
+    private genderApi: StatusApi,
     private store: Store
   ) { 
     this.patients = [];
