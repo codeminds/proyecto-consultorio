@@ -69,6 +69,7 @@ export class DoctorsPage implements OnInit{
   public async list(): Promise<void> {
     if(!this.loading) {
       this.loading = true;
+      this.doctors = [];
 
       const response = await firstValueFrom(this.doctorApi.list(this.filter));
       if(response.success) {

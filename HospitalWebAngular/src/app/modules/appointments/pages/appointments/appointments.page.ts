@@ -89,6 +89,7 @@ export class AppointmentsPage implements OnInit {
   public async list(): Promise<void> {
     if(!this.loading) {
       this.loading = true;
+      this.appointments = [];
 
       const response = await firstValueFrom(this.appointmentApi.list(this.filter));
       if(response.success) {
