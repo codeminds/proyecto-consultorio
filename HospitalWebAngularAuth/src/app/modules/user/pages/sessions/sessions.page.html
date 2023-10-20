@@ -23,7 +23,7 @@
          name="dateFrom" 
          form="filter" 
          label="Desde (Acceso Inicial)"
-         class="col-3"
+         class="col-4"
          [type]="DateType.DateTime"
          [(model)]="filter.dateFrom">
       </app-date>
@@ -31,14 +31,17 @@
          name="dateTo" 
          form="filter" 
          label="Hasta (Expiración)"
-         class="col-3"
+         class="col-4"
          [type]="DateType.DateTime"
          [(model)]="filter.dateTo">
       </app-date>
-      <app-button [type]="ButtonType.Success" [disabled]="loading" [loading]="loading" (clicked)="list()">
-         <i class="material-symbols-sharp">search</i>
+      <app-custom-field
+         class="col-1">
+         <button class="button success" [disabled]="loading" (click)="list()">
+             <i class="material-symbols-sharp">search</i>
          <span>Buscar</span>
-      </app-button>
+         </button>
+     </app-custom-field>
    </form>
 </app-panel>
 
@@ -53,16 +56,27 @@
                   { label: 'Expiración' },
                   { size: 0.8 }]" 
       [template]="sessionRow" 
-      [templateMobile]="sessionRowMobile" 
       [source]="sessions"
       [loading]="loading"
       noResultsText="No se han encontrado resultados">
       <ng-template #sessionRow let-session>
-         <td>{{session.addressRefreshed ?? session.addressIssued}}</td>
-         <td>{{session.addressIssued}}</td>
-         <td>{{session.dateIssued.toLocaleDisplayString('es-US')}}</td>
-         <td>{{session.dateRefreshed?.toLocaleDisplayString('es-US')}}</td>
-         <td>{{session.dateExpiry?.toLocaleDisplayString('es-US')}}</td>
+         <td class="heading">{{session.addressRefreshed ?? session.addressIssued}}</td>
+         <td>
+            <label>IP Inicial:</label> 
+            <span>{{session.addressIssued}}</span>
+         </td>
+         <td>
+            <label>Accesso Inicial:</label>
+            <span>{{session.dateIssued.toLocaleDisplayString('es-US')}}</span>
+         </td>
+         <td>
+            <label>Última Actualización:</label>
+            <span>{{session.dateRefreshed?.toLocaleDisplayString('es-US')}}</span>
+         </td>
+         <td>
+            <label>Expiración:</label>
+            <span>{{session.dateExpiry?.toLocaleDisplayString('es-US')}}</span>
+         </td>
          <td class="buttons">
             <button *ngIf="currentSession != session.sessionId" class="button danger" (click)="deleteId = session.sessionId">
                <i class="material-symbols-sharp">cloud_off</i>
@@ -73,34 +87,6 @@
                <span>Eliminar</span>
             </button>
          </td>
-      </ng-template>
-      <ng-template #sessionRowMobile let-session>
-         <div class="mobile">
-            <h3 class="heading">{{session.addressRefreshed ?? session.addressIssued}}</h3>
-            <p class="data">
-                  <span class="label">IP Inicial:</span> 
-                  <span>{{session.addressIssued}}</span>
-            </p>
-            <p class="data">
-                  <span class="label">Accesso Inicial:</span>
-                  <span>{{session.dateIssued.toLocaleDisplayString('es-US')}}</span>
-            </p>
-            <p class="data">
-               <span class="label">Última Actualización:</span>
-               <span>{{session.dateRefreshed?.toLocaleDisplayString('es-US')}}</span>
-            </p>
-            <p class="data">
-               <span class="label">Expiración:</span>
-               <span>{{session.dateExpiry?.toLocaleDisplayString('es-US')}}</span>
-            </p>
-            <div class="buttons">
-               <button *ngIf="currentSession != session.sessionId" class="button danger" (click)="deleteId = session.sessionId">
-                  <i class="material-symbols-sharp">cloud_off</i>
-                  <span>Eliminar</span>
-               </button>
-               <span *ngIf="currentSession == session.sessionId">(Este Dispositivo)</span>
-            </div>
-         </div>
       </ng-template>
    </app-table>
 </app-panel>

@@ -1,7 +1,6 @@
 <!-- Controles de página -->
-<!-- Sintaxis para obsevables con async pipes -->
-<div *ngIf="(user$ | async) as user" class="page-controls">
-    <button *ngIf="canEdit(user)" class="button success" (click)="insertUpdate()">
+<div *ngIf="canUserEdit()" class="page-controls">
+    <button class="button success" (click)="insertUpdate()">
         <i class="material-symbols-sharp">add_circle</i>
         <span>Agregar</span>
     </button>
@@ -21,13 +20,13 @@
             [option]="{label: 'name', value: 'id', output: 'id'}">
         </app-select>
         <app-input 
-            name="documentId" 
+            name="code" 
             form="filter" 
-            label="Cédula"
+            label="Código"
             class="col-4"
             [type]="InputType.Text" 
-            [(model)]="filter.documentId"
-            [attributes]="{'placeholder': 'E.g.:123456789'}">
+            [(model)]="filter.code"
+            [attributes]="{'placeholder': 'E.g.:1234567890'}">
         </app-input>
         <app-input 
             name="firstName" 
@@ -47,32 +46,39 @@
             [(model)]="filter.lastName"
             [attributes]="{'placeholder': 'E.g.:Smith'}">
         </app-input>
-        <app-button [type]="ButtonType.Success" [disabled]="loading" [loading]="loading" (clicked)="list()">
-            <i class="material-symbols-sharp">search</i>
-            <span>Buscar</span>
-        </app-button>
+        <app-custom-field
+            class="col-1">
+            <button class="button success" [disabled]="loading" (click)="list()">
+                <i class="material-symbols-sharp">search</i>
+                <span>Buscar</span>
+            </button>
+        </app-custom-field>
     </form>
 </app-panel>
 
 <!--- Tabla de resultados -->
-<!-- Sintaxis para obsevables con async pipes -->
-<app-panel *ngIf="(user$ | async) as user" class="slim">
+<app-panel class="slim">
     <app-table 
         [headers]="[{ label: 'Especialidad' },
-                    { label: 'Cédula' },
+                    { label: 'Código' },
                     { label: 'Nombre', size: 2 },
-                    { size: 2 }]" 
-        [template]="doctorRow" 
-        [templateMobile]="doctorRowMobile" 
+                    { size: 2.5 }]" 
+        [template]="doctorRow"
         [source]="doctors"
         [loading]="loading"
         noResultsText="No se han encontrado resultados">
         <ng-template #doctorRow let-doctor>
-            <td>{{doctor.field.name}}</td>
-            <td>{{doctor.documentId}}</td>
-            <td>{{doctor.firstName}} {{doctor.lastName}}</td>    
+            <td class="heading">{{doctor.field.name}}</td>
+            <td>
+                <label>Código:</label> 
+                <span>{{doctor.code}}</span>
+            </td>
+            <td>
+                <label>Nombre:</label>
+                <span>{{doctor.firstName}} {{doctor.lastName}}</span>
+            </td>    
             <td class="buttons">
-                <ng-container *ngIf="canEdit(user)">
+                <ng-container *ngIf="canUserEdit()">
                     <button class="button success" (click)="insertUpdate(doctor)">
                         <i class="material-symbols-sharp">edit</i>
                         <span>Editar</span>
@@ -83,29 +89,6 @@
                     </button>
                 </ng-container>
             </td>
-        </ng-template>
-        <ng-template #doctorRowMobile let-doctor>
-            <div class="mobile">
-                <h3 class="heading">{{doctor.field.name}}</h3>
-                <p class="data">
-                    <span class="label">Cédula:</span> 
-                    <span>{{doctor.documentId}}</span>
-                </p>
-                <p class="data">
-                    <span class="label">Nombre:</span>
-                    <span>{{doctor.firstName}} {{doctor.lastName}}</span>
-                </p>
-                <div class="buttons" *ngIf="canEdit(user)">
-                    <button class="button success" (click)="insertUpdate(doctor)">
-                        <i class="material-symbols-sharp">edit</i>
-                        <span>Editar</span>
-                    </button>
-                    <button class="button danger" (click)="deleteId = doctor.id">
-                        <i class="material-symbols-sharp">delete</i>
-                        <span>Borrar</span>
-                    </button>
-                </div>
-            </div>
         </ng-template>
     </app-table>
 </app-panel>
@@ -130,12 +113,12 @@
             [option]="{label: 'name', value: 'id', compare: 'id'}">
         </app-select>
         <app-input 
-            name="documentId" 
+            name="code" 
             form="insertUpdate" 
-            label="Cédula"
+            label="Código"
             [type]="InputType.Text" 
-            [(model)]="doctor.documentId"
-            [attributes]="{'placeholder': 'E.g.:123456789'}">
+            [(model)]="doctor.code"
+            [attributes]="{'placeholder': 'E.g.:1234567890'}">
         </app-input>
         <app-input 
             name="firstName" 
@@ -153,17 +136,13 @@
             [(model)]="doctor.lastName"
             [attributes]="{'placeholder': 'E.g.:Smith'}">
         </app-input>
-        <div class="row">
-            <app-button 
-                [type]="ButtonType.Success"
-                [disabled]="saving || !modalOpen"
-                [loading]="loading || !modalOpen"
-                (clicked)="saveDoctor()">
-                Guardar 
+        <app-custom-field>
+            <button class="button success" [disabled]="saving" (click)="saveDoctor()" >
+                <span>Guardar</span>
                 <i *ngIf="saving" class="material-symbols-sharp rotate">data_saver_off</i>
-            </app-button>
-            <app-button [type]="ButtonType.Danger" (clicked)="modalOpen = false">Cancelar</app-button>
-        </div>
+            </button>
+            <button class="button neutral" [disabled]="saving" (click)="modalOpen = false" >Cancelar</button>
+        </app-custom-field>
     </form>
 </app-modal>
 
@@ -176,13 +155,13 @@
     <p class="prompt-text">Está seguro que desea eliminar este récord?</p>
     <div class="prompt-buttons">
         <button
-            class="button danger"
+            class="button danger right"
             [disabled]="saving || !confirmDelete"
             [ngClass]="{'loading': saving || !confirmDelete}"
             (click)="deleteDoctor()">
             Eliminar
             <i *ngIf="saving" class="material-symbols-sharp rotate">data_saver_off</i>
         </button>
-        <button class="button neutral" (click)="deleteId = null">Cancelar</button>
+        <button class="button neutral right" (click)="deleteId = null">Cancelar</button>
     </div>
 </app-modal>

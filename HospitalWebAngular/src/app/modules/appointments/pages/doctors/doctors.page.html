@@ -47,7 +47,7 @@
             [attributes]="{'placeholder': 'E.g.:Smith'}">
         </app-input>
         <app-custom-field>
-            <button class="button success" (click)="list()" [disabled]="loading">
+            <button class="button success" [disabled]="loading" (click)="list()">
                 <i class="material-symbols-sharp">search</i>
                 <span>Buscar</span>
             </button>
@@ -134,11 +134,11 @@
             [attributes]="{'placeholder': 'E.g.:Smith'}">
         </app-input>
         <app-custom-field>
-            <button class="button success" (click)="saveDoctor()" [disabled]="saving">
+            <button class="button success" [disabled]="saving" (click)="saveDoctor()">
                 <span>Guardar</span>
                 <i *ngIf="saving" class="material-symbols-sharp rotate">data_saver_off</i>
             </button>
-            <button class="button danger" (click)="modalOpen = false" [disabled]="saving">Cancelar</button>
+            <button class="button neutral" [disabled]="saving" (click)="modalOpen = false">Cancelar</button>
         </app-custom-field>
     </form>
 </app-modal>

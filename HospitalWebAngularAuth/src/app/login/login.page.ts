@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { SessionApi } from '@api/session/session.api';
-import { ButtonType, InputType } from '@shared/components/form-field/form-field.types';
+import { InputType } from '@shared/components/form-field/form-field.types';
 import { StorageKeys } from '@utils/constants';
 import { firstValueFrom } from 'rxjs';
 
@@ -17,7 +17,6 @@ export class LoginPage {
   public messages: string[];
 
   public InputType = InputType;
-  public ButtonType = ButtonType;
 
   constructor(
     private sessionApi: SessionApi,

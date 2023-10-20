@@ -32,7 +32,7 @@
 
 <section class="wrapper">
     <!-- El evitar el event bubbling en el sidenav evita que este se cierre por el host listener de body  -->
-    <nav class="sidenav" (click)="$event.stopPropagation()" [ngClass]="{'open': menuOpen}">
+    <nav class="sidenav dark-scroll" (click)="$event.stopPropagation()" [ngClass]="{'open': menuOpen}">
         <h3 class="category main">Men&uacute; Principal</h3>
         <!-- 
         A pesar que el evento click del padre "sidenav" evita la propagación para que el menú se cierre,
@@ -58,7 +58,7 @@
         </ul>
 
         <ng-container *ngIf="(user$ | async)?.hasRoles([UserRole.Administrator])">
-            <h3 class="category main">Administración</h3>
+            <h3 class="category">Administración</h3>
             <ul class="menu" (click)="handleMenuNavigate()">
                 <li routerLinkActive="active">
                     <a routerLink="/admin/users">

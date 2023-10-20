@@ -27,9 +27,9 @@ export class FilterUserDTO {
        //Técnica de deep copy para eliminar referencias de memoria
        data = data ? JSON.parse(JSON.stringify(data)) : {};
 
-       this.email = data.email != null ? String(data.email) : null;
-       this.firstName = data.firstName != null ? String(data.firstName) : null;
-       this.lastName = data.lastName != null ? String(data.lastName) : null;
-       this.roleId = data.roleId != null ? Number(data.roleId) : null;
+       this.email = data.email ?? null;
+       this.firstName = data.firstName ?? null;
+       this.lastName = data.lastName ?? null;
+       this.roleId = data.roleId ?? null;
    }
 }

@@ -90,7 +90,7 @@ export class DoctorsPage implements OnInit{
       this.saving = true;
       
       const isNew = this.doctor.id == null
-      const response = await firstValueFrom(isNew ? this.doctorApi.post(this.doctor) : this.doctorApi.put(this.doctor));  
+      const response = await firstValueFrom(isNew ? this.doctorApi.insert(this.doctor) : this.doctorApi.update(this.doctor));  
       this.messages = [];
       
       if(response.success) {

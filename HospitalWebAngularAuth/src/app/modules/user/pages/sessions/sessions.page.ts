@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Session } from '@api/session/session.model';
 import { SessionApi } from '@api/session/session.api';
 import { MessageType, QueryParams } from '@services/http/http.types';
-import { ButtonType, DateType, InputType } from '@shared/components/form-field/form-field.types';
+import { DateType, InputType } from '@shared/components/form-field/form-field.types';
 import { ModalPosition, ModalSize } from '@shared/components/modal/modal.types';
 import { Store } from '@store';
 import { firstValueFrom } from 'rxjs';
@@ -30,7 +30,6 @@ export class SessionsPage implements OnInit{
   public DateType = DateType;
   public ModalSize = ModalSize;
   public ModalPosition = ModalPosition;
-  public ButtonType = ButtonType;
   
   constructor(
     private sessionApi: SessionApi,

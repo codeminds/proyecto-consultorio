@@ -6,6 +6,7 @@ export class InsertUpdateAppointmentDTO {
     public readonly date: string;
     public readonly doctorId: number;
     public readonly patientId: number;
+    public readonly statusId: number;
 
     constructor(data: Appointment) {
         //Convertimos la fecha a date string porque Angular fuerza
@@ -16,12 +17,14 @@ export class InsertUpdateAppointmentDTO {
         this.date = data.date?.toInputDateString();
         this.doctorId = data.doctor.id;
         this.patientId = data.patient.id;
+        this.statusId = data.status.id;
     }
 }
 
 export class FilterAppointmentDTO {
     public dateFrom: Date;
     public dateTo: Date;
+    public statusId: number;
     public patient: FilterPatientDTO;
     public doctor: FilterDoctorDTO;
 
@@ -31,6 +34,7 @@ export class FilterAppointmentDTO {
 
         this.dateFrom = data.dateFrom != null ? new Date(data.dateFrom) : null;
         this.dateTo = data.dateTo != null ? new Date(data.dateTo) : null;
+        this.statusId = data.statusId;
         this.patient = new FilterPatientDTO(data.patient);
         this.doctor = new FilterDoctorDTO(data.doctor);
     }

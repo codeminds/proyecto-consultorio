@@ -52,12 +52,12 @@
             [attributes]="{'placeholder': 'Confirmar nueva contraseña'}">
          </app-input>
       </div>
-      <app-button 
-         [type]="ButtonType.Success"
-         [disabled]="saving || !passwordConfirmed"
-         (clicked)="saveUser()">
-         Guardar 
-      </app-button>
+      <app-custom-field>
+         <button class="button success" [disabled]="saving || !passwordConfirmed" (click)="saveUser()">
+            <span>Guardar</span>
+            <i *ngIf="saving" class="material-symbols-sharp rotate">data_saver_off</i>
+         </button>
+      </app-custom-field>
    </form>
 </app-panel>
 

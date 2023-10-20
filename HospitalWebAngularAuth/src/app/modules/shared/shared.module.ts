@@ -10,11 +10,11 @@ import { CheckComponent } from './components/form-field/check/check.component';
 import { RadioComponent } from './components/form-field/radio/radio.component';
 import { FormsModule } from '@angular/forms';
 import { ModalComponent } from './components/modal/modal.component';
-import { ButtonComponent } from './components/form-field/button/button.component';
 import { TableComponent } from './components/table/table.component';
 import { SnackbarComponent } from './components/snackbar/snackbar.component';
 import { DateComponent } from './components/form-field/date/date.component';
 import { AutocompleteComponent } from './components/form-field/autocomplete/autocomplete.component';
+import { CustomFieldComponent } from './components/form-field/custom-field/custom-field.component';
 
 @NgModule({
   declarations: [
@@ -26,11 +26,11 @@ import { AutocompleteComponent } from './components/form-field/autocomplete/auto
     CheckComponent,
     RadioComponent,
     ModalComponent,
-    ButtonComponent,
     TableComponent,
     SnackbarComponent,
     DateComponent,
-    AutocompleteComponent
+    AutocompleteComponent,
+    CustomFieldComponent
   ],
   imports: [
     CommonModule,
@@ -47,9 +47,9 @@ import { AutocompleteComponent } from './components/form-field/autocomplete/auto
     CheckComponent,
     RadioComponent,
     ModalComponent,
-    ButtonComponent,
     TableComponent,
-    SnackbarComponent
+    SnackbarComponent,
+    CustomFieldComponent
   ]
 })
 export class SharedModule { }

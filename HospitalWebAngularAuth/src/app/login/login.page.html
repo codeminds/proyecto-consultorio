@@ -23,7 +23,12 @@
                 [(model)]="password"
                 [attributes]="{'placeholder': 'E.g.:P@ssw0rd123'}"
             ></app-input>
-            <app-button [type]="ButtonType.Success" [disabled]="loading" [loading]="loading" (clicked)="login()">Ingresar <i *ngIf="loading" class="material-symbols-sharp rotate">data_saver_off</i></app-button>
+            <app-custom-field>
+                <button class="button success" [disabled]="loading" (click)="login()">
+                    <span>Ingresar</span> 
+                    <i *ngIf="loading" class="material-symbols-sharp rotate">data_saver_off</i>
+                </button>
+            </app-custom-field>
         </form>
     </main>
 </app-panel>

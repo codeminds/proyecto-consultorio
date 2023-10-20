@@ -33,6 +33,7 @@ th {
     padding: 0.8rem 0.5rem;
     overflow: hidden;
     text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 th:last-child {
@@ -53,6 +54,7 @@ tr.loading td {
     vertical-align: middle;
     overflow: hidden;
     text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 ::ng-deep td label {

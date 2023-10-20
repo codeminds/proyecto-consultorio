@@ -127,7 +127,7 @@
                 [option]="{label: 'name', value: 'id', output: 'id'}">
             </app-select>
             <app-custom-field>
-                <button class="button success" (click)="list()" [disabled]="loading">
+                <button class="button success" [disabled]="loading" (click)="list()">
                     <i class="material-symbols-sharp">search</i>
                     <span>Buscar</span>
                 </button>
@@ -244,11 +244,11 @@
             [option]="{label: 'name', value: 'id', compare: 'id'}">
         </app-select>
         <app-custom-field>
-            <button class="button success" (click)="saveAppointment()" [disabled]="saving">
+            <button class="button success" [disabled]="saving" (click)="saveAppointment()">
                 <span>Guardar</span>
                 <i *ngIf="saving" class="material-symbols-sharp rotate">data_saver_off</i>
             </button>
-            <button class="button danger" (click)="modalOpen = false" [disabled]="saving">Cancelar</button>
+            <button class="button neutral" [disabled]="saving" (click)="modalOpen = false">Cancelar</button>
         </app-custom-field>
     </form>
 </app-modal>

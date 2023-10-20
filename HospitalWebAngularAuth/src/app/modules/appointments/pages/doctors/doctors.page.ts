@@ -1,22 +1,22 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Doctor } from '@api/doctor/doctor.model';
 import { DoctorApi } from '@api/doctor/doctor.api';
 import { Field } from '@api/field/field.model';
 import { FieldApi } from '@api/field/field.api';
 import { MessageType, QueryParams } from '@services/http/http.types';
-import { ButtonType, InputType } from '@shared/components/form-field/form-field.types';
+import { InputType } from '@shared/components/form-field/form-field.types';
 import { ModalPosition, ModalSize } from '@shared/components/modal/modal.types';
 import { Store } from '@store';
-import { firstValueFrom, Observable } from 'rxjs';
+import { firstValueFrom, Subject, takeUntil } from 'rxjs';
+import { FilterDoctorDTO } from '@api/doctor/doctor.dto';
 import { User } from '@api/user/user.model';
 import { UserRole } from '@utils/enums';
-import { FilterDoctorDTO } from '@api/doctor/doctor.dto';
 
 @Component({
   selector: 'app-doctors',
   templateUrl: './doctors.page.html'
 })
-export class DoctorsPage implements OnInit{
+export class DoctorsPage implements OnInit, OnDestroy {
   public get modalTitle() {
     return this.doctor?.id ?  'Editar Doctor' : 'Nuevo Doctor';
   }
@@ -35,13 +35,14 @@ export class DoctorsPage implements OnInit{
   public filter: QueryParams;
   public deleteId: number;
   public messages: string[];
-  public user$: Observable<User>;
+  public user: User;
 
   public InputType = InputType;
   public ModalSize = ModalSize;
   public ModalPosition = ModalPosition;
-  public ButtonType = ButtonType;
   
+  private _unsubscribe: Subject<void>;
+
   constructor(
     private doctorApi: DoctorApi,
     private fieldApi: FieldApi,
@@ -56,12 +57,23 @@ export class DoctorsPage implements OnInit{
     this.saving = false;
     this.messages = [];
     this.filter = new FilterDoctorDTO();
+    this.user = new User();
+    this._unsubscribe = new Subject();
   }
 
   public ngOnInit(): void {
-    this.user$ = this.store.user$;
     this.loadFields();
     this.list();
+    this.store.user$
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe((user) => { 
+        this.user = user;
+      });
+  }
+
+  public ngOnDestroy(): void {
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 
   public async loadFields(): Promise<void> {
@@ -74,6 +86,7 @@ export class DoctorsPage implements OnInit{
   public async list(): Promise<void> {
     if(!this.loading) {
       this.loading = true;
+      this.doctors = [];
 
       const response = await firstValueFrom(this.doctorApi.list(this.filter));
       if(response.success) {
@@ -94,12 +107,14 @@ export class DoctorsPage implements OnInit{
       this.saving = true;
       
       const isNew = this.doctor.id == null
-      const response = await firstValueFrom(isNew ? this.doctorApi.post(this.doctor) : this.doctorApi.put(this.doctor));  
+      const response = await firstValueFrom(isNew ? this.doctorApi.insert(this.doctor) : this.doctorApi.update(this.doctor));  
       this.messages = [];
       
       if(response.success) {
-        this.panelOpen = true;
-        this.filter = new FilterDoctorDTO({ documentId: response.data.documentId });
+        if(isNew) {
+          this.panelOpen = true;
+          this.filter = new FilterDoctorDTO({ code: response.data.code });
+        }
 
         this.modalOpen = false;
         this.store.siteMessage = { type: MessageType.Success, text: response.messages[0] };
@@ -134,7 +149,7 @@ export class DoctorsPage implements OnInit{
     this.messages = [];
   }
 
-  public canEdit(user: User): boolean {
-    return user.isSuperAdmin || user.hasRoles([UserRole.Administrator, UserRole.Editor]);
+  public canUserEdit(): boolean {
+    return this.user.isSuperAdmin || this.user.hasRoles([UserRole.Administrator, UserRole.Editor]);
   }
 }

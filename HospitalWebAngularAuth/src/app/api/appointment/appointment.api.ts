@@ -21,15 +21,15 @@ export class AppointmentApi {
     return this.httpService.get(this._api, { params: filter, accessToken: true }).mapArrayResponse((item: object) => new Appointment(item));
   }
 
-  public get(id: number): Observable<APIResponse<Appointment>> {
+  public find(id: number): Observable<APIResponse<Appointment>> {
     return this.httpService.get(`${this._api}/${id}`, { accessToken: true }).mapObjectResponse((item: object) => new Appointment(item));
   }
 
-  public post(data: Appointment): Observable<APIResponse<Appointment>> {
+  public insert(data: Appointment): Observable<APIResponse<Appointment>> {
     return this.httpService.post(this._api, new InsertUpdateAppointmentDTO(data), { accessToken: true }).mapObjectResponse((item: object) => new Appointment(item));
   }
 
-  public put(data: Appointment): Observable<APIResponse<Appointment>> {
+  public update(data: Appointment): Observable<APIResponse<Appointment>> {
     return this.httpService.put(`${this._api}/${data.id}`, new InsertUpdateAppointmentDTO(data), { accessToken: true }).mapObjectResponse((item: object) => new Appointment(item));
   }
 

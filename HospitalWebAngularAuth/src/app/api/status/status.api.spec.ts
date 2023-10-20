@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { GenderApi } from './gender.api';
+import { StatusApi } from './status.api';
 
-describe('GenderApi', () => {
-  let service: GenderApi;
+describe('StatusApi', () => {
+  let service: StatusApi;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(GenderApi);
+    service = TestBed.inject(StatusApi);
   });
 
   it('should be created', () => {

@@ -111,17 +111,6 @@
     color: var(--color-sidenav-text);
     overflow: auto;
     box-shadow: 0.1rem 0.1rem 0.3rem 0 var(--color-shadow-dark);
-    scrollbar-color: var(--color-scrollbar-dark) var(--color-scrollbar-dark);
-    scrollbar-width: thin;
-}
-
-.sidenav::-webkit-scrollbar-thumb {
-    background: var(--color-scrollbar-dark);
-}
-
-.sidenav::-webkit-scrollbar {
-    width: 0.7rem;
-    background: var(--color-scrollbar-dark);
 }
 
 .sidenav .category {
@@ -166,19 +155,7 @@ main {
     height: 100%;
     padding: 2rem;
     overflow: auto;
-    scrollbar-color: var(--color-scrollbar-light) var(--color-scrollbar-light);
-    scrollbar-width: thin;
 }
-
-main::-webkit-scrollbar-thumb {
-    background: var(--color-scrollbar-light);
-}
-
-main::-webkit-scrollbar {
-    width: 0.7rem;
-    background: var(--color-scrollbar-light);
-}
-
 
 @media screen and (max-width: 1024px) {
     .wrapper {
@@ -213,11 +190,11 @@ main::-webkit-scrollbar {
         transition: left 0.6s ease-out;
     }
 
-    .sidenav .category.main {
+    .sidenav .category:first-child {
         position: relative;
     }
 
-    .sidenav .category.main::after {
+    .sidenav .category:first-child::after {
         content: '';
         position: absolute;
         top: 0;

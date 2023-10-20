@@ -1,14 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Patient } from '@api/patient/patient.model';
 import { PatientApi } from '@api/patient/patient.api';
 import { MessageType, QueryParams } from '@services/http/http.types';
-import { ButtonType, DateType, InputType } from '@shared/components/form-field/form-field.types';
+import { DateType, InputType } from '@shared/components/form-field/form-field.types';
 import { ModalPosition, ModalSize } from '@shared/components/modal/modal.types';
-import { firstValueFrom, Observable } from 'rxjs';
+import { firstValueFrom, Subject, takeUntil } from 'rxjs';
 import { Store } from '@store';
 import { FilterPatientDTO } from '@api/patient/patient.dto';
-import { Gender } from '@api/gender/gender.model';
-import { GenderApi } from '@api/gender/gender.api';
+import { Status } from '@api/status/status.model';
+import { StatusApi } from '@api/status/status.api';
 import { User } from '@api/user/user.model';
 import { UserRole } from '@utils/enums';
 
@@ -16,7 +16,7 @@ import { UserRole } from '@utils/enums';
   selector: 'app-patients',
   templateUrl: './patients.page.html'
 })
-export class PatientsPage implements OnInit{
+export class PatientsPage implements OnInit, OnDestroy {
   public get modalTitle() {
     return this.patient?.id ?  'Editar Paciente' : 'Nuevo Paciente';
   }
@@ -26,7 +26,7 @@ export class PatientsPage implements OnInit{
   }
 
   public patients: Patient[];
-  public genders: Gender[];
+  public genders: Status[];
   public modalOpen: boolean;
   public panelOpen: boolean;
   public patient: Patient;
@@ -35,17 +35,18 @@ export class PatientsPage implements OnInit{
   public filter: QueryParams;
   public deleteId: number;
   public messages: string[];
-  public user$: Observable<User>;
+  public user: User;
 
   public InputType = InputType;
   public DateType = DateType;
   public ModalSize = ModalSize;
   public ModalPosition = ModalPosition;
-  public ButtonType = ButtonType;
+
+  private _unsubscribe: Subject<void>;
   
   constructor(
     private patientApi: PatientApi,
-    private genderApi: GenderApi,
+    private genderApi: StatusApi,
     private store: Store
   ) { 
     this.patients = [];
@@ -57,12 +58,23 @@ export class PatientsPage implements OnInit{
     this.saving = false;
     this.messages = [];
     this.filter = new FilterPatientDTO();
+    this.user = new User();
+    this._unsubscribe = new Subject();
   }
 
   public ngOnInit(): void {
-    this.user$ = this.store.user$;
     this.loadGenders();
     this.list();
+    this.store.user$
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe((user) => { 
+        this.user = user;
+      });
+  }
+
+  public ngOnDestroy(): void {
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 
   public async loadGenders(): Promise<void> {
@@ -75,6 +87,7 @@ export class PatientsPage implements OnInit{
   public async list(): Promise<void> {
     if(!this.loading) {
       this.loading = true;
+      this.patients = [];
 
       const response = await firstValueFrom(this.patientApi.list(this.filter));
       if(response.success) {
@@ -95,12 +108,14 @@ export class PatientsPage implements OnInit{
       this.saving = true;
       
       const isNew = this.patient.id == null
-      const response = await firstValueFrom(isNew ? this.patientApi.post(this.patient) : this.patientApi.put(this.patient));  
+      const response = await firstValueFrom(isNew ? this.patientApi.insert(this.patient) : this.patientApi.update(this.patient));  
       this.messages = [];
       
       if(response.success) {
-        this.panelOpen = true;
-        this.filter = new FilterPatientDTO({ documentId: response.data.documentId });
+        if(isNew) {
+          this.panelOpen = true;
+          this.filter = new FilterPatientDTO({ documentId: response.data.documentId });
+        }
 
         this.modalOpen = false;
         this.store.siteMessage = { type: MessageType.Success, text: response.messages[0] };
@@ -135,7 +150,7 @@ export class PatientsPage implements OnInit{
     this.messages = [];
   }
 
-  public canEdit(user: User): boolean {
-    return user.isSuperAdmin || user.hasRoles([UserRole.Administrator, UserRole.Editor]);
+  public canUserEdit(): boolean {
+    return this.user.isSuperAdmin || this.user.hasRoles([UserRole.Administrator, UserRole.Editor]);
   }
 }

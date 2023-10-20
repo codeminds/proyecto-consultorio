@@ -1,5 +1,7 @@
 div {
     position: relative;
+    max-height: 45rem;
+    overflow: auto;
 }
 
 div>i {
@@ -15,23 +17,23 @@ i {
 
 table {
     width: 100%;
+    min-width: 70rem;
     table-layout: fixed;
 }
 
-::ng-deep td {
-    padding: 0.5rem;
-}
-
-::ng-deep td:not(.mobile) {
-    vertical-align: middle;
-    line-height: 1;
-    height: 4rem;
+thead {
+    position: sticky;
+    top: 0;
+    background: var(--color-background);
 }
 
 th {
     text-align: left;
     font-weight: 700;
     padding: 0.8rem 0.5rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 th:last-child {
@@ -42,61 +44,69 @@ tbody tr:nth-child(odd) {
     background: var(--color-alternate-item-background);
 }
 
-::ng-deep td.buttons {
-    text-align: right;
-}
-
-::ng-deep td.mobile {
-    display: none;
-    position: relative;
-    padding: 1rem
-}
-
-::ng-deep td.mobile .heading {
-    font-size: 1.7rem;
-    font-weight: 500;
-    margin-bottom: 0.9rem;
-}
-
-::ng-deep td.mobile .label {
-    font-weight: 700;
-    margin-right: 0.5rem;
-}
-
-::ng-deep td.mobile .data {
-    margin-bottom: 0.5rem;
-}
-
-::ng-deep td.mobile .buttons {
-    position: absolute;
-    top: 0.5rem;
-    right: 0.5rem;
-}
-
 tr.no-results td,
 tr.loading td {
     text-align: center;
 }
 
-@media screen and (max-width: 1024px) {
+::ng-deep td {
+    padding: 0.5rem;
+    vertical-align: middle;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+::ng-deep td label {
+    display: none;
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+}
+
+::ng-deep td.buttons {
+    text-align: right;
+}
+
+@media screen and (max-width: 768px) {
+    div {
+        max-height: none;
+    }
+
     div>i {
         display: none;
+    }
+
+    table {
+        min-width: 0;
     }
 
     thead {
         display: none;
     }
 
-    table.mobile ::ng-deep td {
-        display: none;
+    tr {
+        position: relative;
+        display: block;
+        padding: 1rem;
     }
 
-    table.mobile td.mobile {
+    ::ng-deep td {
+        display: block;
+    }
+    
+    ::ng-deep td.heading {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+
+    ::ng-deep td label {
         display: block;
     }
 
-    table.mobile tr.loading {
-        display: block;
+    ::ng-deep td.buttons {
+        text-align: left;
+        margin-top: 1.8rem;
     }
 }
 

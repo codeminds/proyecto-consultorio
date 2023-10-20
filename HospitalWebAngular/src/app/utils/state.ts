@@ -1,7 +1,7 @@
-import { Observable, ReplaySubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 export class State<T> {
-  private _state: ReplaySubject<T>;
+  private _state: BehaviorSubject<T>;
 
   public get value$(): Observable<T> {
     return this._state.asObservable();
@@ -11,7 +11,11 @@ export class State<T> {
     this._state.next(value);
   }
 
-  constructor() { 
-    this._state = new ReplaySubject();
+  public get value() {
+    return this._state.value;
+  }
+
+  constructor(initial: T = null) { 
+    this._state = new BehaviorSubject(initial);
   }
 }

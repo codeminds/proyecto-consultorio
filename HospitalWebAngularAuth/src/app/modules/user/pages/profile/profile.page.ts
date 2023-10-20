@@ -2,10 +2,10 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UserApi } from '@api/user/user.api';
 import { User } from '@api/user/user.model';
 import { MessageType } from '@services/http/http.types';
-import { InputType, ButtonType } from '@shared/components/form-field/form-field.types';
+import { InputType } from '@shared/components/form-field/form-field.types';
 import { ModalSize, ModalPosition } from '@shared/components/modal/modal.types';
 import { Store } from '@store';
-import { filter, firstValueFrom, Subject, takeUntil } from 'rxjs';
+import { firstValueFrom, Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-profile',
@@ -26,7 +26,6 @@ export class ProfilePage implements OnInit, OnDestroy {
   public InputType = InputType;
   public ModalSize = ModalSize;
   public ModalPosition = ModalPosition;
-  public ButtonType = ButtonType;
 
   private unsubcribe: Subject<void>;
 
@@ -68,7 +67,7 @@ export class ProfilePage implements OnInit, OnDestroy {
     if(!this.saving) {
       this.saving = true;
 
-      const response = await firstValueFrom(this.userApi.putSelf(this.user, this.password));  
+      const response = await firstValueFrom(this.userApi.updateSelf(this.user, this.password));  
       this.messages = [];
       
       if(response.success) {

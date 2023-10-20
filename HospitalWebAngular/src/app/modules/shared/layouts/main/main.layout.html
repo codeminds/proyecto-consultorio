@@ -11,7 +11,7 @@
 <section class="wrapper">
     <!-- El evitar el event bubbling en el sidenav evita que este se cierre por el host listener de body  -->
     <nav class="sidenav dark-scroll" (click)="$event.stopPropagation()" [ngClass]="{'open': menuOpen}">
-        <h3 class="category main">Men&uacute; Principal</h3>
+        <h3 class="category">Men&uacute; Principal</h3>
         <!-- 
         A pesar que el evento click del padre "sidenav" evita la propagación para que el menú se cierre,
         con el evento click en menu queremos que al navegar correctamente en una de las opciones el menú 

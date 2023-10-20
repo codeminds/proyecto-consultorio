@@ -26,7 +26,7 @@ export class AppComponent implements OnInit {
 
     //Cuando el state de App cambia se modifica el título de la pestaña
     this.store.siteTitle$.subscribe((title) => {
-      this.title.setTitle(`Hospital Angular${title ? ' | ' + title : ''}`);
+      this.title.setTitle(`${title ? ' | ' + title : ''}Hospital Angular`);
     });
 
     this.router.events.pipe(

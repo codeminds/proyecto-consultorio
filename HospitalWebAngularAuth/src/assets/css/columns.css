@@ -69,7 +69,7 @@
     padding-right: 0;
 }
 
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 768px) {
     .row > .col-1, .row > .col-2, .row > .col-3, .row > .col-4, .row > .col-5,
     .row > .col-6, .row > .col-7, .row > .col-8, .row > .col-9, .row > .col-10 {
         width: 100%;

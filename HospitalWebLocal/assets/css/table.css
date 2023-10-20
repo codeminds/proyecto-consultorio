@@ -42,6 +42,7 @@ un efecto visual que no le afecta */
    padding: 0.8rem 0.5rem;
    overflow: hidden;
    text-overflow: ellipsis;
+   white-space: nowrap;
 }
 
 .table td {
@@ -49,6 +50,7 @@ un efecto visual que no le afecta */
    vertical-align: middle;
    overflow: hidden;
    text-overflow: ellipsis;
+   white-space: nowrap;
 }
 
 .table tbody tr:nth-child(odd) {

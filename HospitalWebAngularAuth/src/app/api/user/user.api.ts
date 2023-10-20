@@ -30,15 +30,15 @@ export class UserApi {
     return this.httpService.get(this._api, { params: filter, accessToken: true }).mapArrayResponse((item: object) => new User(item));
   }
 
-  public post(data: User, password: string): Observable<APIResponse<User>> {
+  public insert(data: User, password: string): Observable<APIResponse<User>> {
     return this.httpService.post(this._api, new InsertUpdateUserDTO(data, password), { accessToken: true }).mapObjectResponse((item: object) => new User(item));
   }
 
-  public put(data: User, password: string): Observable<APIResponse<User>> {
+  public update(data: User, password: string): Observable<APIResponse<User>> {
     return this.httpService.put(`${this._api}/${data.id}`, new InsertUpdateUserDTO(data, password), { accessToken: true }).mapObjectResponse((item: object) => new User(item));
   }
 
-  public putSelf(data: User, password: string): Observable<APIResponse<User>> {
+  public updateSelf(data: User, password: string): Observable<APIResponse<User>> {
     return this.httpService.put(`${this._api}/me`, new InsertUpdateUserDTO(data, password), { accessToken: true }).mapObjectResponse((item: object) => new User(item));
   }
 

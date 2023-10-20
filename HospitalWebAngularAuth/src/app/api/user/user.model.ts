@@ -12,12 +12,12 @@ export class User {
         //Técnica de deep copy para eliminar referencias de memoria
         data = data ? JSON.parse(JSON.stringify(data)) : {};
 
-        this.id = data.id != null ? Number(data.id) : null;
-        this.email = data.email != null ? String(data.email) : null;
-        this.firstName = data.firstName != null ? String(data.firstName) : null;
-        this.lastName = data.lastName != null ? String(data.lastName) : null;
+        this.id = data.id ?? null;
+        this.email = data.email ?? null;
+        this.firstName = data.firstName ?? null;
+        this.lastName = data.lastName ?? null;
         this.role = new Role(data.role);
-        this.isSuperAdmin = data.isSuperAdmin != null ? data.isSuperAdmin : null;
+        this.isSuperAdmin = data.isSuperAdmin ?? null;
     }
 
     public hasRoles(roles: UserRole[]): boolean {
@@ -33,7 +33,7 @@ export class Role {
         //Técnica de deep copy para eliminar referencias de memoria
         data = data ? JSON.parse(JSON.stringify(data)) : {};
 
-        this.id = data.id != null ? Number(data.id) : null;
-        this.name = data.name != null ? String(data.name) : null;
+        this.id = data.id ?? null;
+        this.name = data.name ?? null;
     }
 }

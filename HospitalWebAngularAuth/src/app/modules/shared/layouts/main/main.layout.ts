@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { firstValueFrom, fromEvent, Observable, Subject, takeUntil } from 'rxjs';
+import { firstValueFrom, Observable, Subject, takeUntil } from 'rxjs';
 import { UserApi } from '@api/user/user.api';
 import { User } from '@api/user/user.model';
 import { Store } from '@store';

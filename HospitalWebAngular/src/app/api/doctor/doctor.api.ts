@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { APIResponse, QueryParams } from '@services/http/http.types';
 import { HttpService } from '@services/http/http.service';
 import { Observable } from 'rxjs';
-import { CreateUpdateDoctorDTO } from './doctor.dto';
+import { InsertUpdateDoctorDTO } from './doctor.dto';
 import { Doctor } from './doctor.model';
 
 @Injectable({
@@ -25,16 +25,16 @@ export class DoctorApi{
     return this.httpService.get(`${this._api}/search`, { s: values }).mapArrayResponse((item: object) => new Doctor(item));
   }
 
-  public get(id: number): Observable<APIResponse<Doctor>> {
+  public find(id: number): Observable<APIResponse<Doctor>> {
     return this.httpService.get(`${this._api}/${id}`).mapObjectResponse((item: object) => new Doctor(item));
   }
 
-  public post(data: Doctor): Observable<APIResponse<Doctor>> {
-    return this.httpService.post(this._api, new CreateUpdateDoctorDTO(data)).mapObjectResponse((item: object) => new Doctor(item));
+  public insert(data: Doctor): Observable<APIResponse<Doctor>> {
+    return this.httpService.post(this._api, new InsertUpdateDoctorDTO(data)).mapObjectResponse((item: object) => new Doctor(item));
   }
 
-  public put(data: Doctor): Observable<APIResponse<Doctor>> {
-    return this.httpService.put(`${this._api}/${data.id}`, new CreateUpdateDoctorDTO(data)).mapObjectResponse((item: object) => new Doctor(item));
+  public update(data: Doctor): Observable<APIResponse<Doctor>> {
+    return this.httpService.put(`${this._api}/${data.id}`, new InsertUpdateDoctorDTO(data)).mapObjectResponse((item: object) => new Doctor(item));
   }
 
   public delete(id: number): Observable<APIResponse<Doctor>> {

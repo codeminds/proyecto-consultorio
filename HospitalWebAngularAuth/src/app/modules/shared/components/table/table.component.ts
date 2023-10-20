@@ -11,9 +11,6 @@ export class TableComponent implements OnInit {
   public template: TemplateRef<unknown>;
 
   @Input()
-  public templateMobile: TemplateRef<unknown>;
-
-  @Input()
   public source: unknown[];
 
   @Input()
@@ -36,7 +33,6 @@ export class TableComponent implements OnInit {
 
   constructor() {
     this.template = null;
-    this.templateMobile = null;
     this.source = null;
     this.headers = [];
     this.noResultsText = null;
@@ -50,7 +46,7 @@ export class TableComponent implements OnInit {
 
     //Si el template proporcionado no respeta la semántica de la tabla que sólo
     //debe tener hijos td, el component causará un fallo
-    if(this.template.createEmbeddedView(null).rootNodes.some((node) => node.tagName != 'TD' && node.nodeType != Node.COMMENT_NODE)) { 
+    if(this.template.createEmbeddedView(null).rootNodes.some((node) => node.tagName != 'TD')) { 
       throw new Error('Template can only have direct children of type td');
     }
   }
@@ -59,6 +55,6 @@ export class TableComponent implements OnInit {
   //entre todos los headers actúan como calculadores proporcionales
   //en vez de valores absolutos
   public getHeaderWidth(size?: number): string {
-    return `width: ${size > 0 ? (100 * size) : '100'}%;`;
+    return `width: ${size && size > 0 ? (100 * size) : '100'}%;`;
   }
 }

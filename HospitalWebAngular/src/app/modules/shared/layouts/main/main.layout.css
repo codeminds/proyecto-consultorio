@@ -132,11 +132,11 @@ main {
         transition: left 0.6s ease-out;
     }
 
-    .sidenav .category.main {
+    .sidenav .category:first-child {
         position: relative;
     }
 
-    .sidenav .category.main::after {
+    .sidenav .category:first-child::after {
         content: '';
         position: absolute;
         top: 0;

@@ -1,21 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { RoleApi } from '@api/role/role.api';
 import { UserApi } from '@api/user/user.api';
 import { FilterUserDTO } from '@api/user/user.dto';
 import { User, Role } from '@api/user/user.model';
-import { QueryParams, MessageType, APIResponse } from '@services/http/http.types';
-import { InputType, ButtonType } from '@shared/components/form-field/form-field.types';
+import { QueryParams, MessageType } from '@services/http/http.types';
+import { InputType } from '@shared/components/form-field/form-field.types';
 import { ModalSize, ModalPosition } from '@shared/components/modal/modal.types';
 import { Store } from '@store';
 import { UserRole } from '@utils/enums';
-import { Observable, firstValueFrom, of, forkJoin } from 'rxjs';
+import { firstValueFrom, Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-users',
   templateUrl: './users.page.html',
   styleUrls: ['./users.page.css']
 })
-export class UsersPage implements OnInit {
+export class UsersPage implements OnInit, OnDestroy {
   public get modalTitle() {
     return this.user?.id ?  'Editar Usuario' : 'Nuevo Usuario';
   }
@@ -42,13 +42,14 @@ export class UsersPage implements OnInit {
   public filter: QueryParams;
   public deleteId: number;
   public messages: string[];
-  public user$: Observable<User>;
+  public loggedUser: User;
 
   public InputType = InputType;
   public ModalSize = ModalSize;
   public ModalPosition = ModalPosition;
-  public ButtonType = ButtonType;
   public UserRole = UserRole;
+
+  private _unsubscribe: Subject<void>;
   
   constructor(
     private userApi: UserApi,
@@ -66,12 +67,23 @@ export class UsersPage implements OnInit {
     this.saving = false;
     this.messages = [];
     this.filter = new FilterUserDTO();
+    this.loggedUser = new User();
+    this._unsubscribe = new Subject();
   }
 
   public ngOnInit(): void {
-    this.user$ = this.store.user$;
     this.loadRoles();
     this.list();
+    this.store.user$
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe((user) => { 
+        this.loggedUser = user;
+      });
+  }
+
+  public ngOnDestroy(): void {
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 
   public async loadRoles(): Promise<void> {
@@ -104,7 +116,7 @@ export class UsersPage implements OnInit {
       this.saving = true;
         
       const isNew = this.user.id == null
-      const response = await firstValueFrom(isNew ? this.userApi.post(this.user, this.password) : this.userApi.put(this.user, this.password));  
+      const response = await firstValueFrom(isNew ? this.userApi.insert(this.user, this.password) : this.userApi.update(this.user, this.password));  
       this.messages = [];
       
       if(response.success) {
@@ -148,7 +160,7 @@ export class UsersPage implements OnInit {
     this.messages = [];
   }
 
-  public canEdit(isSuperAdmin: boolean, user: User): boolean {
-    return isSuperAdmin || !user.hasRoles([UserRole.Administrator]);
+  public canUserEdit(user: User): boolean {
+    return this.loggedUser.isSuperAdmin || !user.hasRoles([UserRole.Administrator]);
   }
 }
