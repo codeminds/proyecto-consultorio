@@ -13,17 +13,21 @@ export enum HttpMethod {
 }
 
 export interface APIResponse<T> {
-    httpStatusCode: number,
-    success: boolean,
-    messages: string[],
-    data: T
+    httpStatusCode: number;
+    success: boolean;
+    messages: string[];
+    data: T;
 }
 
 export interface QueryParams {
     [name: string]: any;
 }
 
+export interface HttpOptions {
+    params?: QueryParams;
+ }
+
 export interface Message {
-    type: MessageType,
-    text: string
+    type: MessageType;
+    text: string;
 }

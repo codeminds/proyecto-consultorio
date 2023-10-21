@@ -25,10 +25,6 @@ export class PatientApi{
     return this.httpService.get(`${this._api}/search`, { params: { s: values }, accessToken: true }).mapArrayResponse((item: object) => new Patient(item));
   }
 
-  public find(id: number): Observable<APIResponse<Patient>> {
-    return this.httpService.get(`${this._api}/${id}`, { accessToken: true }).mapObjectResponse((item: object) => new Patient(item));
-  }
-
   public insert(data: Patient): Observable<APIResponse<Patient>> {
     return this.httpService.post(this._api, new InsertUpdatePatientDTO(data), { accessToken: true }).mapObjectResponse((item: object) => new Patient(item));
   }

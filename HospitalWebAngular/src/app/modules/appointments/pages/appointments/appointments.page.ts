@@ -6,7 +6,7 @@ import { Doctor } from '@api/doctor/doctor.model';
 import { DoctorApi } from '@api/doctor/doctor.api';
 import { Field } from '@api/field/field.model';
 import { FieldApi } from '@api/field/field.api';
-import { MessageType, QueryParams } from '@services/http/http.types';
+import { MessageType } from '@services/http/http.types';
 import { Patient } from '@api/patient/patient.model';
 import { PatientApi } from '@api/patient/patient.api';
 import { InputType, DateType } from '@shared/components/form-field/form-field.types';
@@ -37,7 +37,7 @@ export class AppointmentsPage implements OnInit {
   public appointment: Appointment;
   public loading: boolean;
   public saving: boolean;
-  public filter: QueryParams;
+  public filter: FilterAppointmentDTO;
   public deleteId: number;
   public messages: string[];
 

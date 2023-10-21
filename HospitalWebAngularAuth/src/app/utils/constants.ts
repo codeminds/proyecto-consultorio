@@ -8,6 +8,7 @@ export class ResponseHeaders {
 }
 
 export class RequestHeaders {
+    public static readonly CONTENT_TYPE = 'Content-Type';
     public static readonly AUTHORIZATION = 'Authorization';
     public static readonly SESSION = 'Session';
 }

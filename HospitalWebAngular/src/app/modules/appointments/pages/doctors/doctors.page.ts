@@ -3,7 +3,7 @@ import { Doctor } from '@api/doctor/doctor.model';
 import { DoctorApi } from '@api/doctor/doctor.api';
 import { Field } from '@api/field/field.model';
 import { FieldApi } from '@api/field/field.api';
-import { MessageType, QueryParams } from '@services/http/http.types';
+import { MessageType } from '@services/http/http.types';
 import { InputType } from '@shared/components/form-field/form-field.types';
 import { ModalPosition, ModalSize } from '@shared/components/modal/modal.types';
 import { Store } from '@store';
@@ -30,7 +30,7 @@ export class DoctorsPage implements OnInit{
   public doctor: Doctor;
   public loading: boolean;
   public saving: boolean;
-  public filter: QueryParams;
+  public filter: FilterDoctorDTO;
   public deleteId: number;
   public messages: string[];
 

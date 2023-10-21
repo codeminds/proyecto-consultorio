@@ -26,7 +26,7 @@ export class HttpService{
   public get(url: string, options: HttpOptions = null): Observable<APIResponse<unknown>> {
     const takingLong = this.setTakingLongTimeout();
 
-    return this.httpClient.get<APIResponse<unknown>>(`${options?.apiUrl || environment.apiURL}/${url}?${this.getQuery(options?.params)}`, {
+    return this.httpClient.get<APIResponse<unknown>>(`${environment.apiURL}/${url}?${this.getQuery(options?.params)}`, {
       headers: this.getHeaders(options)
     }).pipe(
       timeout((this._takingLongSeconds / 2) * 3 * 1000),
@@ -39,7 +39,7 @@ export class HttpService{
   public post(url: string, data: unknown, options: HttpOptions = null): Observable<APIResponse<unknown>> {
     const takingLong = this.setTakingLongTimeout();
 
-    return this.httpClient.post<APIResponse<unknown>>(`${options?.apiUrl || environment.apiURL}/${url}?${this.getQuery(options?.params)}`, data, {
+    return this.httpClient.post<APIResponse<unknown>>(`${environment.apiURL}/${url}?${this.getQuery(options?.params)}`, data, {
       headers: this.getHeaders(options)
     }).pipe(
       timeout((this._takingLongSeconds / 2) * 3 * 1000),
@@ -52,7 +52,7 @@ export class HttpService{
   public put(url: string, data: unknown, options: HttpOptions = null): Observable<APIResponse<unknown>> {
     const takingLong = this.setTakingLongTimeout();
 
-    return this.httpClient.put<APIResponse<unknown>>(`${options?.apiUrl || environment.apiURL}/${url}?${this.getQuery(options?.params)}`, data, {
+    return this.httpClient.put<APIResponse<unknown>>(`${environment.apiURL}/${url}?${this.getQuery(options?.params)}`, data, {
       headers: this.getHeaders(options)
     }).pipe(
       timeout((this._takingLongSeconds / 2) * 3 * 1000),
@@ -65,7 +65,7 @@ export class HttpService{
   public patch(url: string, data: unknown, options: HttpOptions = null): Observable<APIResponse<unknown>> {
     const takingLong = this.setTakingLongTimeout();
 
-    return this.httpClient.patch<APIResponse<unknown>>(`${options?.apiUrl || environment.apiURL}/${url}?${this.getQuery(options?.params)}`, data, {
+    return this.httpClient.patch<APIResponse<unknown>>(`${environment.apiURL}/${url}?${this.getQuery(options?.params)}`, data, {
       headers: this.getHeaders(options)
     }).pipe(
       timeout((this._takingLongSeconds / 2) * 3 * 1000),
@@ -78,7 +78,7 @@ export class HttpService{
   public delete(url: string, options: HttpOptions = null): Observable<APIResponse<unknown>> {
     const takingLong = this.setTakingLongTimeout();
 
-    return this.httpClient.delete<APIResponse<unknown>>(`${options?.apiUrl || environment.apiURL}/${url}?${this.getQuery(options?.params)}`, {
+    return this.httpClient.delete<APIResponse<unknown>>(`${environment.apiURL}/${url}?${this.getQuery(options?.params)}`, {
       headers: this.getHeaders(options)
     }).pipe(
       timeout((this._takingLongSeconds / 2) * 3 * 1000),
@@ -91,7 +91,7 @@ export class HttpService{
   private setTakingLongTimeout(): NodeJS.Timeout {
     return setTimeout(() => {
       this.store.siteMessage = { text: 'La acción está tardando, por favor espere...', type: MessageType.Warning };
-    }, this._takingLongSeconds * 1000);
+    }, this._takingLongSeconds * 0.75 * 1000);
   }
 
   //Reintenta una petición una cantidad de veces si el error cumple con ciertas características
@@ -136,7 +136,7 @@ export class HttpService{
 
   private getHeaders(options?: HttpOptions): { [header: string]: string | string[] } {
     return {
-      'Content-Type': 'application/json',
+      [RequestHeaders.CONTENT_TYPE]: 'application/json' ,
       ...options?.accessToken && { [RequestHeaders.AUTHORIZATION]: `Bearer ${localStorage.getItem(StorageKeys.ACCESS_TOKEN)}` },
       ...options?.refreshToken && { [RequestHeaders.SESSION]: `Bearer ${localStorage.getItem(StorageKeys.REFRESH_TOKEN)}` }
     };

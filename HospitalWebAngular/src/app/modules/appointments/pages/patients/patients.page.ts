@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Patient } from '@api/patient/patient.model';
 import { PatientApi } from '@api/patient/patient.api';
-import { MessageType, QueryParams } from '@services/http/http.types';
+import { MessageType } from '@services/http/http.types';
 import { DateType, InputType } from '@shared/components/form-field/form-field.types';
 import { ModalPosition, ModalSize } from '@shared/components/modal/modal.types';
 import { firstValueFrom } from 'rxjs';
@@ -30,7 +30,7 @@ export class PatientsPage implements OnInit{
   public patient: Patient;
   public loading: boolean;
   public saving: boolean;
-  public filter: QueryParams;
+  public filter: FilterPatientDTO;
   public deleteId: number;
   public messages: string[];
 

@@ -1,9 +1,10 @@
 import { HttpClient, HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Store } from '@store';
+import { RequestHeaders } from '@utils/constants';
 import { catchError, delay, finalize, Observable, ObservableInput, of, retryWhen, tap, timeout, TimeoutError } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { APIResponse, MessageType, QueryParams } from './http.types';
+import { APIResponse, HttpOptions, MessageType, QueryParams } from './http.types';
 
 @Injectable({
   providedIn: 'root'
@@ -22,13 +23,11 @@ export class HttpService{
     this._takingLongSeconds = 10;
   }
 
-  public get(url: string, params: QueryParams = null, apiOverride: string = null): Observable<APIResponse<unknown>> {
+  public get(url: string, options: HttpOptions = {}): Observable<APIResponse<unknown>> {
     const takingLong = this.setTakingLongTimeout();
     
-    return this.httpClient.get<APIResponse<unknown>>(`${apiOverride || environment.apiURL}/${url}?${this.getQuery(params)}`, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
+    return this.httpClient.get<APIResponse<unknown>>(`${environment.apiURL}/${url}?${this.getQuery(options?.params)}`, {
+      headers: this.getHeaders()
     }).pipe(
       timeout((this._takingLongSeconds / 2) * 3 * 1000),
       retryWhen(error => this.retryRequest(error)),
@@ -37,13 +36,11 @@ export class HttpService{
     );
   }
 
-  public post(url: string, data: unknown = null, params: QueryParams = null, apiOverride: string = null): Observable<APIResponse<unknown>> {
+  public post(url: string, data: unknown = null, options: HttpOptions = {}): Observable<APIResponse<unknown>> {
     const takingLong = this.setTakingLongTimeout();
 
-    return this.httpClient.post<APIResponse<unknown>>(`${apiOverride || environment.apiURL}/${url}?${this.getQuery(params)}`, data, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
+    return this.httpClient.post<APIResponse<unknown>>(`${environment.apiURL}/${url}?${this.getQuery(options?.params)}`, data, {
+      headers: this.getHeaders()
     }).pipe(
       timeout((this._takingLongSeconds / 2) * 3 * 1000),
       retryWhen(error => this.retryRequest(error)),
@@ -52,13 +49,11 @@ export class HttpService{
     );
   }
 
-  public put(url: string, data: unknown = null, params: QueryParams = null, apiOverride: string = null): Observable<APIResponse<unknown>> {
+  public put(url: string, data: unknown = null, options: HttpOptions = {}): Observable<APIResponse<unknown>> {
     const takingLong = this.setTakingLongTimeout();
 
-    return this.httpClient.put<APIResponse<unknown>>(`${apiOverride || environment.apiURL}/${url}?${this.getQuery(params)}`, data, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
+    return this.httpClient.put<APIResponse<unknown>>(`${environment.apiURL}/${url}?${this.getQuery(options?.params)}`, data, {
+      headers: this.getHeaders()
     }).pipe(
       timeout((this._takingLongSeconds / 2) * 3 * 1000),
       retryWhen(error => this.retryRequest(error)),
@@ -67,13 +62,11 @@ export class HttpService{
     );
   }
 
-  public delete(url: string, params: QueryParams = null, apiOverride: string = null): Observable<APIResponse<unknown>> {
+  public delete(url: string, options: HttpOptions = {}): Observable<APIResponse<unknown>> {
     const takingLong = this.setTakingLongTimeout();
 
-    return this.httpClient.delete<APIResponse<unknown>>(`${apiOverride || environment.apiURL}/${url}?${this.getQuery(params)}`, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
+    return this.httpClient.delete<APIResponse<unknown>>(`${environment.apiURL}/${url}?${this.getQuery(options?.params)}`, {
+      headers: this.getHeaders()
     }).pipe(
       timeout((this._takingLongSeconds / 2) * 3 * 1000),
       retryWhen(error => this.retryRequest(error)),
@@ -85,7 +78,7 @@ export class HttpService{
   private setTakingLongTimeout(): NodeJS.Timeout {
     return setTimeout(() => {
       this.store.siteMessage = { text: 'La acción está tardando, por favor espere...', type: MessageType.Warning };
-    }, this._takingLongSeconds * 1000);
+    }, this._takingLongSeconds * 0.75 * 1000);
   }
 
   private retryRequest(error: Observable<any>): Observable<any> {
@@ -124,6 +117,12 @@ export class HttpService{
 
     console.warn(`HttpService: ${JSON.stringify(error.message, null, 4)}`);
     return of({ httpStatusCode: null, success: false, messages: [], data: null });
+  }
+
+  private getHeaders(): { [header: string]: string | string[] } {
+    return {
+      [RequestHeaders.CONTENT_TYPE]: 'application/json'
+    };
   }
 
   private getQuery(params: QueryParams, prefix: string = null): string {

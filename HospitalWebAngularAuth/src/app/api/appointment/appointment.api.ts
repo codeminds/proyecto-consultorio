@@ -21,10 +21,6 @@ export class AppointmentApi {
     return this.httpService.get(this._api, { params: filter, accessToken: true }).mapArrayResponse((item: object) => new Appointment(item));
   }
 
-  public find(id: number): Observable<APIResponse<Appointment>> {
-    return this.httpService.get(`${this._api}/${id}`, { accessToken: true }).mapObjectResponse((item: object) => new Appointment(item));
-  }
-
   public insert(data: Appointment): Observable<APIResponse<Appointment>> {
     return this.httpService.post(this._api, new InsertUpdateAppointmentDTO(data), { accessToken: true }).mapObjectResponse((item: object) => new Appointment(item));
   }

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpService } from '@services/http/http.service';
-import { QueryParams, APIResponse } from '@services/http/http.types';
+import { APIResponse } from '@services/http/http.types';
 import { Observable } from 'rxjs';
-import { InsertUpdateAppointmentDTO } from './appointment.dto';
+import { FilterAppointmentDTO, InsertUpdateAppointmentDTO } from './appointment.dto';
 import { Appointment } from './appointment.model';
 
 @Injectable({
@@ -17,12 +17,8 @@ export class AppointmentApi {
     this._api = 'appointments';
   }
 
-  public list(filter: QueryParams): Observable<APIResponse<Appointment[]>> {
-    return this.httpService.get(this._api, filter).mapArrayResponse((item: object) => new Appointment(item));
-  }
-
-  public find(id: number): Observable<APIResponse<Appointment>> {
-    return this.httpService.get(`${this._api}/${id}`).mapObjectResponse((item: object) => new Appointment(item));
+  public list(filter: FilterAppointmentDTO): Observable<APIResponse<Appointment[]>> {
+    return this.httpService.get(this._api, { params: filter }).mapArrayResponse((item: object) => new Appointment(item));
   }
 
   public insert(data: Appointment): Observable<APIResponse<Appointment>> {
