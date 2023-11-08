@@ -49,6 +49,9 @@ un efecto visual que no le afecta */
 .table td {
    padding: 0.5rem;
    vertical-align: middle;
+}
+
+.table td:not(.buttons) {
    overflow: hidden;
    text-overflow: ellipsis;
    white-space: nowrap;

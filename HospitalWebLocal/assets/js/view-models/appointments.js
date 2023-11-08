@@ -153,7 +153,7 @@ class ViewModel extends BaseViewModel {
                if (confirm('Desea borrar esta cita?')) {
                   const id = e.target.getAttribute('data-id');
                   AppointmentService.delete(id, (appointment) => {
-                     if (appointment) {
+                     if (appointment != null) {
                         this.searchAppointments();
                      } else {
                         alert('Cita no existe en los registros');

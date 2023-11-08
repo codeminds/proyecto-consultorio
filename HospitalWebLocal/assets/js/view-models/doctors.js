@@ -87,7 +87,7 @@ class ViewModel extends BaseViewModel {
                if (confirm('Desea borrar esta entrada?')) {
                   const id = e.target.getAttribute('data-id');
                   DoctorService.delete(id, (doctor) => {
-                     if (doctor) {
+                     if (doctor != null) {
                         this.searchDoctors();
                      } else {
                         alert('Doctor no existe en los registros');
