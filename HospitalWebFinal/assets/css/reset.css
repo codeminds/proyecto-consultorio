@@ -90,9 +90,9 @@ estilos de scroll */
 }
 
 .dark-scroll::-webkit-scrollbar-thumb {
-   background: var(--color-scrollbar-light);
+   background: var(--color-scrollbar-dark);
 }
 
 .dark-scroll::-webkit-scrollbar {
-   background: var(--color-scrollbar-light);
+   background: var(--color-scrollbar-dark);
 }
