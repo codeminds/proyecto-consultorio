@@ -56,7 +56,6 @@
                 </a>
             </li>
         </ul>
-
         <ng-container *ngIf="(user$ | async)?.hasRoles([UserRole.Administrator])">
             <h3 class="category">Administración</h3>
             <ul class="menu" (click)="handleMenuNavigate()">

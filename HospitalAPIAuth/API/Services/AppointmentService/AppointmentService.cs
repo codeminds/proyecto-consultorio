@@ -56,8 +56,8 @@ namespace API.Services
             this._database.Appointment.Add(entity);
             await this._database.SaveChangesAsync();
             await this._database.Entry(entity).Reference(a => a.Doctor).Query().Include(d => d.Field).LoadAsync();
-            await this._database.Entry(entity).Reference(a => a.Patient).Query().LoadAsync();
-            await this._database.Entry(entity).Reference(a => a.Status).Query().LoadAsync();
+            await this._database.Entry(entity).Reference(a => a.Patient).LoadAsync();
+            await this._database.Entry(entity).Reference(a => a.Status).LoadAsync();
         }
 
         public async Task UpdateAppointment(Appointment entity)
@@ -65,8 +65,8 @@ namespace API.Services
             this._database.Appointment.Update(entity);
             await this._database.SaveChangesAsync();
             await this._database.Entry(entity).Reference(a => a.Doctor).Query().Include(d => d.Field).LoadAsync();
-            await this._database.Entry(entity).Reference(a => a.Patient).Query().LoadAsync();
-            await this._database.Entry(entity).Reference(a => a.Status).Query().LoadAsync();
+            await this._database.Entry(entity).Reference(a => a.Patient).LoadAsync();
+            await this._database.Entry(entity).Reference(a => a.Status).LoadAsync();
         }
 
         public async Task DeleteAppointment(Appointment entity)
