@@ -1,5 +1,5 @@
-.navbar {
-    background: var(--color-navbar);
+.topbar {
+    background: var(--color-topbar);
     padding: 0.5rem;
     box-shadow: 0 0 0.8rem -0.4rem var(--color-shadow-dark);
     display: flex;
@@ -7,7 +7,7 @@
     justify-content: space-between;
 }
 
-.navbar .menu {
+.topbar .menu {
     display: none;
     font-size: 2.5rem;
     font-weight: 500;
@@ -21,27 +21,27 @@
     transition: background-color 0.2s linear;
 }
 
-.navbar .menu:hover {
-    background: var(--color-navbar-menu-hover);
+.topbar .menu:hover {
+    background: var(--color-topbar-menu-hover);
 }
 
-.navbar figure {
+.topbar figure {
     display: inline-block;
     vertical-align: middle;
     height: 6rem;
 }
 
-.navbar figure img {
+.topbar figure img {
     max-height: 100%;
     width: auto;
     vertical-align: middle;
 }
 
-.navbar .account-menu {
+.topbar .account-menu {
     position: relative;
 }
 
-.navbar .account-menu-toggle {
+.topbar .account-menu-toggle {
     border: 0;
     background: none;
     display: flex;
@@ -49,41 +49,41 @@
     font-size: 3.5rem;
     padding: 0.5rem;
     margin: 0;
-    color: var(--color-navbar-user);
+    color: var(--color-topbar-user);
     border-radius: 5rem;
     transition: background-color 0.2s linear;
 }
 
-.navbar .account-menu-toggle:hover,
-.navbar .account-menu-toggle.open {
+.topbar .account-menu-toggle:hover,
+.topbar .account-menu-toggle.open {
     background: var(--color-alternate-item-background);
 }
 
-.navbar .account-menu ul {
+.topbar .account-menu ul {
     position: absolute;
     right: 0.5rem;
     top: 5rem;
     z-index: 10;
     white-space: nowrap;
-    background: var(--color-navbar);
+    background: var(--color-topbar);
     box-shadow: 0.2rem 0.2rem 0.8rem -0.4rem var(--color-shadow-dark);
 }
 
-.navbar .account-menu li:not(:last-child) {
+.topbar .account-menu li:not(:last-child) {
     border-bottom: 1px solid var(--color-border);
 }
 
-.navbar .account-menu li:hover:not(.user) {
+.topbar .account-menu li:hover:not(.user) {
     background:rgba(255, 255, 255, 0.2);
 }
 
-.navbar .account-menu .user {
+.topbar .account-menu .user {
     padding: 1rem 2rem;
     cursor: default;
 }
 
-.navbar .account-menu ul a,
-.navbar .account-menu ul button {
+.topbar .account-menu ul a,
+.topbar .account-menu ul button {
     background: none;
     border: 0;
     padding: 1rem 2rem;
@@ -94,7 +94,7 @@
 }
 
 .wrapper {
-    /* Restamos el alto del navbar acorde al elemento de mayor altura
+    /* Restamos el alto del topbar acorde al elemento de mayor altura
     y sumamos el padding vertical para calzar con la pantalla de manera perfecta */
     height: calc(100% - 7rem);
 }
@@ -163,17 +163,17 @@ main {
 @media screen and (max-width: 1024px) {
 
     /* Recalculamos en pantallas móviles ya que cambian los elementos
-    que mostramos en el navbar */
+    que mostramos en el topbar */
     .wrapper {
         height: calc(100% - 5.4rem);
         position: relative;
     }
 
-    .navbar .menu {
+    .topbar .menu {
         display: inline-block;
     }
 
-    .navbar figure {
+    .topbar figure {
         height: 3rem;
         margin-left: 0.5rem;
     }

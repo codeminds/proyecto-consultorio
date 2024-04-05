@@ -1,10 +1,10 @@
-.navbar {
-    background: var(--color-navbar);
+.topbar {
+    background: var(--color-topbar);
     padding: 0.5rem;
     box-shadow: 0 0 0.8rem -0.4rem var(--color-shadow-dark);
 }
 
-.navbar .menu {
+.topbar .menu {
     display: none;
     font-size: 2.5rem;
     font-weight: 500;
@@ -18,24 +18,24 @@
     transition: background-color 0.2s linear;
 }
 
-.navbar .menu:hover {
-    background: var(--color-navbar-menu-hover);
+.topbar .menu:hover {
+    background: var(--color-topbar-menu-hover);
 }
 
-.navbar figure {
+.topbar figure {
     display: inline-block;
     vertical-align: middle;
     height: 6rem;
 }
 
-.navbar figure img {
+.topbar figure img {
     max-height: 100%;
     width: auto;
     vertical-align: middle;
 }
 
 .wrapper {
-    /* Restamos el alto del navbar acorde al elemento de mayor altura
+    /* Restamos el alto del topbar acorde al elemento de mayor altura
     y sumamos el padding vertical para calzar con la pantalla de manera perfecta */
     height: calc(100% - 7rem);
 }
@@ -104,17 +104,17 @@ main {
 @media screen and (max-width: 1024px) {
 
     /* Recalculamos en pantallas móviles ya que cambian los elementos
-    que mostramos en el navbar */
+    que mostramos en el topbar */
     .wrapper {
         height: calc(100% - 5.4rem);
         position: relative;
     }
 
-    .navbar .menu {
+    .topbar .menu {
         display: inline-block;
     }
 
-    .navbar figure {
+    .topbar figure {
         height: 3rem;
         margin-left: 0.5rem;
     }

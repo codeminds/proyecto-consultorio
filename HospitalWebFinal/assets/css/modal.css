@@ -3,18 +3,17 @@ dar una ventana alternativa para mostrar funcionalidades */
 .modal {
    display: none;
    position: fixed;
+   z-index: 100;
    top: 0;
    left: 0;
-   z-index: 100;
    height: 100%;
    width: 100%;
    background: rgba(0, 0, 0, 0.8);
-   /* Estilos de computación de orden de elementos de FlexBox */
+   overflow: auto; 
+   padding: 2rem;
+   flex-wrap: wrap;
    align-items: center;
    justify-content: center;
-   flex-wrap: wrap;
-   padding: 2rem;
-   overflow: auto;
 }
 
 .modal.open {

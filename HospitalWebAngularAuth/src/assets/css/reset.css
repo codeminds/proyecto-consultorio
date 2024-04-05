@@ -47,11 +47,6 @@ table {
 	border-spacing: 0;
 }
 
-figure img {
-	max-width: 100%;
-	vertical-align: middle;
-}
-
 a, button {
    color: inherit;
 }
@@ -75,29 +70,9 @@ estilos de scroll */
 * {
    box-sizing: border-box;
 	scrollbar-color: var(--color-scrollbar-light) var(--color-scrollbar-light);
-   scrollbar-width: auto;
-}
-
-::-webkit-scrollbar-thumb {
-   width: 0.7rem;
-	height: 0.8rem;
-   background: var(--color-scrollbar-light);
-}
-
-::-webkit-scrollbar {
-   width: 0.7rem;
-	height: 0.8rem;
-   background: var(--color-scrollbar-light);
+	scrollbar-width: thin;
 }
 
 .dark-scroll {
 	scrollbar-color: var(--color-scrollbar-dark) var(--color-scrollbar-dark);
-}
-
-.dark-scroll::-webkit-scrollbar-thumb {
-   background: var(--color-scrollbar-light);
-}
-
-.dark-scroll::-webkit-scrollbar {
-   background: var(--color-scrollbar-light);
 }

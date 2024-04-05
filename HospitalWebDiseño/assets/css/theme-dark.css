@@ -3,8 +3,8 @@
 :root {
    /* LAYOUT */
    --font-main: 'Roboto', Helvetica, sans-serif;
-   --color-navbar: #1c1c1c;
-   --color-navbar-menu-hover: rgba(255, 255, 255, 0.1);
+   --color-topbar: #1c1c1c;
+   --color-topbar-menu-hover: rgba(255, 255, 255, 0.1);
    --color-sidenav: #292929;
    --color-sidenav-text: #fff;
    --color-sidenav-category: #313131;

@@ -19,7 +19,7 @@ END
 GO
 
 -- CREATE DOCTOR
-IF NOT EXISTS (SELECT * FROM sys.sysobjects WHERE [name] = 'Doctor' AND xtype = 'U')
+IF NOT EXISTS (SELECT * FROM sys.sysobjects WHERE [name] = 'Doctor' and xtype = 'U')
 BEGIN
 	CREATE TABLE Doctor (
 		Id INT NOT NULL IDENTITY(1,1),
@@ -35,39 +35,39 @@ END
 GO
 
 -- CREATE PATIENT
-IF NOT EXISTS (SELECT * FROM  sys.sysobjects WHERE [name] = 'Patient' AND xtype = 'U')
-BEGIN	
-	CREATE TABLE Patient(
+IF NOT EXISTS (SELECT * FROM sys.sysobjects WHERE [name] = 'Patient' and xtype = 'U')
+BEGIN
+	CREATE TABLE Patient (
 		Id INT NOT NULL IDENTITY(1,1),
-		DocumentId VARCHAR(9)NOT NULL,
+		DocumentId VARCHAR(9) NOT NULL,
 		FirstName VARCHAR(50) NOT NULL,
 		LastName VARCHAR(50) NOT NULL,
 		Tel VARCHAR(8) NOT NULL,
-		Email VARCHAR (100)NOT NULL,
+		Email VARCHAR(100) NOT NULL
 		CONSTRAINT PKPatient PRIMARY KEY (Id),
-		CONSTRAINT UXPatientDocumentId UNIQUE (DocumentId),
+		CONSTRAINT UXPatientDocumentID UNIQUE (DocumentId),
 		CONSTRAINT UXPatientEmail UNIQUE (Email)
 	)
 END
 GO
 
 -- CREATE STATUS
-IF NOT EXISTS (SELECT * FROM sys.sysobjects WHERE [name] = 'Status' AND xtype = 'U')
-BEGIN 
-	CREATE TABLE [Status](
+IF NOT EXISTS (SELECT * FROM sys.sysobjects WHERE [name] = 'Status' and xtype = 'U')
+BEGIN
+	CREATE TABLE [Status] (
 		Id INT NOT NULL,
 		[Name] VARCHAR(50) NOT NULL,
 		CONSTRAINT PKStatus PRIMARY KEY (Id)
 	)
 END
-GO			
+GO
 
 -- CREATE APPOINTMENT
-IF NOT EXISTS (SELECT * FROM sys.sysobjects WHERE [name] = 'Appointment' AND xtype = 'U')
+IF NOT EXISTS (SELECT * FROM sys.sysobjects WHERE [name] = 'Appointment' and xtype = 'U')
 BEGIN
-	CREATE TABLE Appointment(
+	CREATE TABLE Appointment (
 		Id INT NOT NULL IDENTITY(1,1),
-		[Date] DATETIME2 NOT NULL,
+		[Date] DATETIME2(7) NOT NULL,
 		PatientId INT NOT NULL,
 		DoctorId INT NOT NULL,
 		StatusId INT NOT NULL,
@@ -79,34 +79,34 @@ BEGIN
 END
 GO
 
---INSERT FIELD DATA
+-- INSERT FIELD DATA
 IF NOT EXISTS (SELECT * FROM Field WHERE Id = 1)
-BEGIN 
-	INSERT INTO Field (Id, Name) VALUES (1, 'Doctor General')
+BEGIN
+	INSERT INTO FIeld (Id, Name) VALUES (1, 'Doctor General')
 END
 
 IF NOT EXISTS (SELECT * FROM Field WHERE Id = 2)
-BEGIN 
-	INSERT INTO Field (Id, Name) VALUES (2, 'Dentista')
+BEGIN
+	INSERT INTO FIeld (Id, Name) VALUES (2, 'Dentista')
 END
 
 IF NOT EXISTS (SELECT * FROM Field WHERE Id = 3)
-BEGIN 
-	INSERT INTO Field (Id, Name) VALUES (3, 'Pediatra')
+BEGIN
+	INSERT INTO FIeld (Id, Name) VALUES (3, 'Pediatra')
 END
 
 IF NOT EXISTS (SELECT * FROM Field WHERE Id = 4)
-BEGIN 
-	INSERT INTO Field (Id, Name) VALUES (4, 'Cirujano')
+BEGIN
+	INSERT INTO FIeld (Id, Name) VALUES (4, 'Cirujano')
 END
 
--- INSERT STATUS DATA
+-- INSERT STATUS DATA 
 IF NOT EXISTS (SELECT * FROM [Status] WHERE Id = 1)
 BEGIN
-	INSERT INTO [Status] (Id, [Name]) VALUES (1, 'Activa')
+	INSERT INTO [Status] (Id, Name) VALUES (1, 'Activa')
 END
 
 IF NOT EXISTS (SELECT * FROM [Status] WHERE Id = 2)
 BEGIN
-	INSERT INTO [Status] (Id, [Name]) VALUES (2, 'Cancelada')
+	INSERT INTO [Status] (Id, Name) VALUES (2, 'Cancelada')
 END

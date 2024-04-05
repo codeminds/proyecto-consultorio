@@ -29,7 +29,7 @@
 }
 
 .panel .title.toggle::after {
-    /* Caracter: ► */
+   /* Caracter: ► */
    content: '\025b8';
 }
 

@@ -14,32 +14,36 @@
    font-size: inherit;
 }
 
-.form-field input:not([type="checkbox"]):not([type="radio"]),
+.form-field input:not([type="radio"]):not([type="checkbox"]),
 .form-field select,
 .form-field textarea {
    display: inline-block;
    font-size: inherit;
    padding: 0.5rem;
    width: 100%;
+   outline: 0;
    border: 0.1rem solid var(--color-form-field-border);
    border-radius: 0.2rem;
-   outline: 0;
    background: rgba(255, 255, 255, 0.4);
    color: inherit;
 }
 
-/* Arreglo por comportamiento inusual de tamaño de select */
+/* Arreglo por comportamiento inusual de tamaño del datepicker y select */
+.form-field input[type="datetime-local"]:not([type="radio"]):not([type="checkbox"]) {
+   padding: 0.35rem 0.5rem;
+}
+
 .form-field select {
    padding: 0.4rem 0.5rem;
 }
 
-.form-field input:not([type="checkbox"]):not([type="radio"]):focus,
+.form-field input:not([type="radio"]):not([type="checkbox"]):focus,
 .form-field select:focus,
 .form-field textarea:focus {
    border-color: var(--color-form-field-focus);
 }
 
-.form-field select option{
+.form-field select option {
    background: var(--color-form-field-option);
 }
 
@@ -53,13 +57,13 @@
    cursor: pointer;
 }
 
-.form-field label.check:not(:last-child) {
-   margin-bottom: 0.4rem;
-}
-
 .form-field label.check.inline {
    display: inline-block;
    margin-right: 1.2rem;
+}
+
+.form-field label.check:not(:last-child) {
+   margin-bottom: 0.4rem;
 }
 
 .form-field label.check i {
@@ -69,17 +73,17 @@
    height: 1.7rem;
    border: 0.1rem solid var(--color-form-field-border);
    border-radius: 0.2rem;
-   background: rgba(255, 255, 255, 0.5);
+   background: rgba(255, 255, 255, 0.4);
    vertical-align: middle;
    margin-right: 0.3rem;
 }
 
-.form-field label.check span {
-   vertical-align: middle;
-}
-
 .form-field label.check input:checked+i {
    background: var(--color-main);
+}
+
+.form-field label.check span {
+   vertical-align: middle;
 }
 
 .form-field label.check input {
@@ -90,5 +94,5 @@
    .form-field label.check.inline {
       display: block;
       margin-right: 0;
-   }   
+   }
 }

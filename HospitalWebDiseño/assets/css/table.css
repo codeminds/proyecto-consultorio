@@ -40,10 +40,9 @@ un efecto visual que no le afecta */
    text-align: left;
    font-weight: 700;
    padding: 0.8rem 0.5rem;
-   position: sticky;
+   white-space: nowrap;
    overflow: hidden;
    text-overflow: ellipsis;
-   white-space: nowrap;
 }
 
 .table td {
@@ -52,10 +51,11 @@ un efecto visual que no le afecta */
 }
 
 .table td:not(.buttons) {
+   white-space: nowrap;
    overflow: hidden;
    text-overflow: ellipsis;
-   white-space: nowrap;
 }
+
 .table tbody tr:nth-child(odd) {
    background: var(--color-alternate-item-background);
 }
@@ -65,9 +65,9 @@ un efecto visual que no le afecta */
 }
 
 .table .data label {
-   display: none;
    font-weight: 700;
    margin-bottom: 0.3rem;
+   display: none;
 }
 
 @media screen and (max-width: 768px) {
@@ -78,20 +78,19 @@ un efecto visual que no le afecta */
    .table .scroll {
       max-height: none;
    }
-   
+
    .table thead {
       display: none;
    }
-
+   
    .table tr {
-      position: relative;
       display: block;
       padding: 1rem;
    }
-   
+
    .table td {
       display: block;
-   } 
+   }
 
    .table .heading {
       font-size: 1.8rem;
