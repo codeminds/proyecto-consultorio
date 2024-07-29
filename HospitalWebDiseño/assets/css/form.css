@@ -37,12 +37,6 @@
    padding: 0.4rem 0.5rem;
 }
 
-.form-field input:not([type="radio"]):not([type="checkbox"]):focus,
-.form-field select:focus,
-.form-field textarea:focus {
-   border-color: var(--color-form-field-focus);
-}
-
 .form-field select option {
    background: var(--color-form-field-option);
 }
@@ -50,6 +44,12 @@
 .form-field textarea {
    resize: none;
    min-height: 15rem;
+}
+
+.form-field input:not([type="radio"]):not([type="checkbox"]):focus,
+.form-field select:focus,
+.form-field textarea:focus {
+   border-color: var(--color-form-field-focus);
 }
 
 .form-field label.check {

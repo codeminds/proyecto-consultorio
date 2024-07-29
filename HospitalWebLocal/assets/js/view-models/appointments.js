@@ -216,7 +216,7 @@ class ViewModel extends BaseViewModel {
             firstName: document.forms.patientFilter.firstName.value,
             lastName: document.forms.patientFilter.lastName.value,
             tel: document.forms.patientFilter.tel.value,
-            email: document.forms.patientFilter.email.value,
+            email: document.forms.patientFilter.email.value
          }
       };
 

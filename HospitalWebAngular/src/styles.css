@@ -65,7 +65,7 @@ h2 {
     border: var(--color-danger-secondary) 0.1rem solid;
     border-radius: 0.2rem;
     color: #fff;
-    animation: fade-in 0.2s ease-out forwards ;
+    animation: fade-in 0.2s ease-out forwards;
 }
 
 .material-symbols-sharp {
